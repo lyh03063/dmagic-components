@@ -1,0 +1,138 @@
+// window.pub_debug=true;//开启调试模式
+
+window.PUB={}
+ window.PUB.domain="http://120.76.160.41:3000"
+ //window.PUB.domain="http://localhost:3000"
+
+import './assets/css/public.css';
+
+
+import Vue from 'vue'
+import 'babel-polyfill'
+import  "./assets/js/mix.js";//注意位置要提前
+
+import axios from "axios";
+window.axios = axios;
+import lodash from 'lodash'//导入lodash方法库
+window.lodash=lodash
+
+import util from "./assets/js/util.js";
+window.util=util;
+
+
+
+
+
+import space from './components/common/space/index.js';   //默认情况下找的是index文件
+Vue.use(space);   //必须有install
+import debug_list from './components/common/debug_list/index.js';   //导入debug_list
+Vue.use(debug_list);   //作为全局组件，必须有install
+import debug_item from './components/common/debug_item/index.js';   //导入debug_item
+Vue.use(debug_item);   //作为全局组件，必须有install
+import ajax_populate from './components/common/ajax_populate/index.js';   //导入ajax_populate
+Vue.use(ajax_populate);   //作为全局组件，必须有install
+import loading from './components/common/loading/index.js';   //导入loading
+Vue.use(loading);   //作为全局组件，必须有install
+
+
+
+
+import Vuex from 'vuex'//导入vuex模块
+Vue.use(Vuex)//应用组件
+
+const store = new Vuex.Store({//定义Vuex的存储对象
+  state: {
+    debug:true,
+    activeMenuIndex: "",//当前激活的菜单index
+    listState: {//存放列表的共享状态，
+
+    }, 
+    defultFindJson: {//存放列表的默认查询参数，
+      // list_article:{articleCategory:3  }
+
+    },   
+  },
+ 
+  mutations: {//变更事件
+    setDebug(state, param) {//设置debug模式
+      state.debug= param;
+      
+    },
+    setListFindJson(state, param) {//设置列表的初始筛选参数值
+      state.defultFindJson[param.listIndex] = param.findJson;
+      //对listState进行整个对象的变更（深拷贝），因为listState是有注册的，可以触发响应
+      let str = JSON.stringify(state.defultFindJson)//对象转换成字符串
+      state.defultFindJson = JSON.parse(str)//字符串转换成对象
+    },
+
+    initListState(state, param) {//改变列表的初始状态值
+      state.listState[param.listIndex] = param.objState;
+      //对listState进行整个对象的变更（深拷贝），因为listState是有注册的，可以触发响应
+      let str = JSON.stringify(state.listState)//对象转换成字符串
+      state.listState = JSON.parse(str)//字符串转换成对象
+    },
+    changeActiveMenu(state, activeMenuIndex) {//改变聚焦菜单
+      state.activeMenuIndex = activeMenuIndex
+    },
+    openDialogAdd(state, listIndex) {//打开新增弹窗事件
+      state.listState[listIndex].isShowDialogAdd = true;
+    },
+    closeDialogAdd(state, listIndex) {//关闭新增弹窗事件
+      state.listState[listIndex].isShowDialogAdd = false;
+    },
+    openDialogDetail(state, param) {//打开详情弹窗事件
+      state.listState[param.listIndex].isShowDialogDetail = true;
+      // state.listState[param.listIndex].tableDataDetail.forEach(doc => {
+      //   //遍历详情弹窗的表格数据
+      //   doc.itemValue = param.row[doc.field]; //修改itemValue
+      // });
+      state.listState[param.listIndex].row = param.row;//将行数据保存到vuex
+    },
+    closeDialogDetail(state, listIndex) {//关闭详情弹窗事件
+      state.listState[listIndex].isShowDialogDetail = false;
+    },
+  }
+})
+
+Vue.prototype.$store = store//让vue实例中可访问$store
+
+window.$store=store;
+// import ElementUI from 'element-ui';
+// import 'element-ui/lib/theme-chalk/index.css';
+
+// Vue.use(ElementUI);
+
+
+import ElementUI from 'element-ui';
+// import 'element-ui/lib/theme-chalk/index.css';
+
+Vue.use(ElementUI);
+
+
+
+
+import App from './App.vue'
+
+
+new Vue({
+  el: '#app',
+  render: h => h(App)
+})
+
+
+document.onkeydown = e => {
+  //绑定ctrl+D事件
+  var keyCode = e.keyCode || e.which || e.charCode;
+  var ctrlKey = e.ctrlKey || e.metaKey;
+  if (ctrlKey && keyCode == 68) {
+    console.log("ctrlKey", ctrlKey);
+    console.log("keyCode", keyCode);
+    // this.toggleDebug();//调用：{切换调试模式函数}
+
+    let debug = window.$store.state.debug;
+    console.log("debug", debug);
+    window.$store.commit("setDebug", !debug);
+    e.preventDefault(); //阻止默认事件
+    return false;
+  }
+};
