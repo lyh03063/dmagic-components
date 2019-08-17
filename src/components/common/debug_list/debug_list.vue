@@ -11,13 +11,11 @@
 </template>
 
 <script>
-
 export default {
-  data: function () {
+  data: function() {
     return {
       isReady: false
-    }
-
+    };
   },
 
   computed: {
@@ -26,13 +24,26 @@ export default {
     }
   },
 
-
-  methods: {
-
-  },
+  methods: {},
   created() {
-    this.isReady = true;//准备好了
+    this.isReady = true; //准备好了
 
+    document.onkeydown = e => {
+    
+      //绑定ctrl+alt+D事件
+      var keyCode = e.keyCode || e.which || e.charCode;
+      var ctrlKey = e.ctrlKey || e.metaKey;
+      var altKey = e.altKey;
+      if (altKey && ctrlKey && keyCode == 68) {
+          console.log("切换调试组件显示！！！！！！！！！！！！");
+ 
+        let debug = this.$store.state.debug;
+   
+        this.$store.commit("setDebug", !debug);
+        e.preventDefault(); //阻止默认事件
+        return false;
+      }
+    };
   }
 };
 </script>

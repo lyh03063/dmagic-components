@@ -2,8 +2,8 @@ var path = require('path')
 var webpack = require('webpack')
 
 module.exports = {
-  //entry: './src/main.js',//这地址用于调试
-  entry: './src/lib/index.js',
+ // entry: './src/main.js',//这地址用于调试
+  entry: './src/lib/index.js',//这地址用于打包
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/dist/',
