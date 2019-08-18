@@ -1,9 +1,20 @@
 var path = require('path')
 var webpack = require('webpack')
 
+const isDev = process.env.NODE_ENV === "development";//变量：{是否为开发环境的flag}
+
+
+console.log("isDev", isDev);
+
+let entryUrl = './src/lib/index.js'//这地址用于打包
+if (isDev) {//如果是开发环境
+  entryUrl = './src/main.js';//这地址用于调试
+}
+
+
 module.exports = {
- // entry: './src/main.js',//这地址用于调试
-  entry: './src/lib/index.js',//这地址用于打包
+  //entry: './src/main.js',//这地址用于调试
+  entry: entryUrl,//这地址用于打包
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/dist/',

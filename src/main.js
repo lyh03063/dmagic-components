@@ -1,8 +1,6 @@
 // window.pub_debug=true;//开启调试模式
+// console.log("2222");
 
-window.PUB={}
- window.PUB.domain="http://120.76.160.41:3000"
- //window.PUB.domain="http://localhost:3000"
 
 import './assets/css/public.css';
 
@@ -34,6 +32,18 @@ Vue.use(ajax_populate);   //作为全局组件，必须有install
 import loading from './components/common/loading/index.js';   //导入loading
 Vue.use(loading);   //作为全局组件，必须有install
 
+import VueRouter from 'vue-router'
+Vue.use(VueRouter)
+
+
+// 3. 创建 router 实例，然后传 `routes` 配置
+const router = new VueRouter({
+  routes: [
+    { path: '/', redirect: '/index' },
+    // { path: '/login', component: login },
+   
+  ]
+})
 
 
 
@@ -116,6 +126,7 @@ import App from './App.vue'
 
 new Vue({
   el: '#app',
-  render: h => h(App)
+  render: h => h(App),
+  router,
 })
 

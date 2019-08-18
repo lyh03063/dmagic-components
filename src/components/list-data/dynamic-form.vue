@@ -116,7 +116,7 @@
               <!--如果是普通json编辑器-->
               <json_editor v-model="formDataNeed[item.prop]" v-else-if="item.type=='jsonEditor'"></json_editor>
               <!--如果是图片上传控件-->
-              <upload_img v-model="formDataNeed[item.prop]" v-else-if="item.type=='upload'"></upload_img>
+              <upload_img v-model="formDataNeed[item.prop]" :upload-config="item.uploadConfig" v-else-if="item.type=='upload'"></upload_img>
               <!--富文本编辑器-->
               <quillEditor
                 v-model="formDataNeed[item.prop]"
@@ -318,7 +318,6 @@ initRecursionProp() {
         let jsonData = {};
         this.cf.formItems.forEach(itemEach => {
           //循环：{表单字段配置数组}
-          console.log("this.docGet#######", this.docGet);
           jsonData[itemEach.prop] = this.docGet[itemEach.prop];
          
         });

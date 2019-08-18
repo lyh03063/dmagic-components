@@ -1,18 +1,13 @@
 <template>
   <div id="app">
-     <dynamicForm :cf="cfForm" v-model="formData">
-
+    <dynamicForm :cf="cfForm" v-model="formData">
       <!--自定义复选框插槽组件-->
       <template v-slot:slot_form_item_diycheckbox="{formData}">
         <checkbox_diy v-model="formData.diycheckbox" :options="options"></checkbox_diy>
       </template>
+    </dynamicForm>
 
-     </dynamicForm>
-
-
-      <listData :cf="cfList">
-     
-    </listData>
+    <listData :cf="cfList"></listData>
   </div>
 </template>
 
@@ -21,9 +16,9 @@ import listData from "./components/list-data/list-data.vue";
 import dynamicForm from "./components/list-data/dynamic-form.vue";
 import checkbox_diy from "./components/form_item/checkbox_diy.vue";
 export default {
-  components:{dynamicForm,checkbox_diy,listData},
-  name: 'app',
-  data () {
+  components: { dynamicForm, checkbox_diy, listData },
+  name: "app",
+  data() {
     return {
       options: [
         { label: "label1", value: "1" },
@@ -69,16 +64,16 @@ export default {
                 {
                   label: "联系人信息2",
                   prop: "extend1",
-                   default: {},
-                   
+                  default: {},
+
                   cfForm: {
-                    col_span:12,
+                    col_span: 12,
                     formItems: [
                       {
                         label: "姓名",
                         prop: "name",
                         type: "input",
-                        col_span:12,
+                        col_span: 12
                       },
                       {
                         label: "下拉框(select)",
@@ -89,7 +84,7 @@ export default {
                           { value: 1, label: "男" },
                           { value: 2, label: "女" }
                         ],
-                        col_span:12,
+                        col_span: 12
                       }
                     ]
                   }
@@ -207,7 +202,23 @@ export default {
           {
             label: "图片上传",
             prop: "prop_upload",
-            type: "upload"
+            type: "upload",
+            uploadConfig: {
+              limit: 3,
+              preview:true,
+              // listType: "text",
+             
+            }
+          },
+          {
+            label: "图片上传2",
+            prop: "prop_upload2",
+            type: "upload",
+            uploadConfig: {
+              limit: 1,
+              listType: "text",
+             
+            }
           },
           {
             label: "json编辑器(jsonEditor)",
@@ -242,7 +253,7 @@ export default {
           { text: "取消222", event: "cancel" }
         ]
       },
-       cfList: {
+      cfList: {
         listIndex: "list_article", //vuex对应的字段~
         focusMenu: true, //进行菜单聚焦
         twoTitle: "其他数据",
@@ -255,11 +266,18 @@ export default {
           detail: "/crossDetail?page=tangball_article",
           delete: "/crossDelete?page=tangball_article" //删除接口
         },
-        dynamicDict: [{ page: "tangball_article_category",populateColumn: "categoryDoc", idColumn: "articleCategory", idColumn2: "P1" }],
+        dynamicDict: [
+          {
+            page: "tangball_article_category",
+            populateColumn: "categoryDoc",
+            idColumn: "articleCategory",
+            idColumn2: "P1"
+          }
+        ],
 
         //-------列配置数组-------
         columns: [
-       {
+          {
             label: "文章标题",
             prop: "articleTitle",
             width: 260
@@ -269,16 +287,15 @@ export default {
             prop: "articleCategory",
             width: 150,
             formatter: function(rowData) {
-             let name= lodash.get(rowData,"categoryDoc.name");
-              return name
+              let name = lodash.get(rowData, "categoryDoc.name");
+              return name;
             }
           },
-          
+
           {
             label: "创建时间",
             prop: "CreateTime",
-            width: 145,
-           
+            width: 145
           },
           {
             label: "其他",
@@ -350,16 +367,14 @@ export default {
           {
             label: "公众号文章地址",
             prop: "extend",
-            path:"wxArticleUrl",
-          },
-         
+            path: "wxArticleUrl"
+          }
         ]
       }
-    }
+    };
   }
-}
+};
 </script>
 
 <style>
-
 </style>
