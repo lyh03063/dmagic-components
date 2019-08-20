@@ -378,7 +378,7 @@ export default {
 
     if (localStorage.isLogin != "1") {
       //如果未登录
-      this.$router.push({ path: "/login" }); //跳转到登录页
+     // this.$router.push({ path: "/login" }); //跳转到登录页
     }
   },
 

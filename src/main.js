@@ -1,21 +1,21 @@
 // window.pub_debug=true;//开启调试模式
 // console.log("2222");
-window.PUB.domain='http://test.dmagic.cn'
+window.PUB.domain = 'http://test.dmagic.cn'
 
 import './assets/css/public.css';
 
 
 import Vue from 'vue'
 import 'babel-polyfill'
-import  "./assets/js/mix.js";//注意位置要提前
+import "./assets/js/mix.js";//注意位置要提前
 
 import axios from "axios";
 window.axios = axios;
 import lodash from 'lodash'//导入lodash方法库
-window.lodash=lodash
+window.lodash = lodash
 
 import util from "./assets/js/util.js";
-window.util=util;
+window.util = util;
 
 
 
@@ -35,13 +35,14 @@ Vue.use(loading);   //作为全局组件，必须有install
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
-
+import form_demo from './page/form_demo.vue';   //导入loading
+import list_demo from './page/list_demo.vue';   //导入loading
 // 3. 创建 router 实例，然后传 `routes` 配置
 const router = new VueRouter({
   routes: [
-    { path: '/', redirect: '/index' },
-    // { path: '/login', component: login },
-   
+    { path: '/', redirect: '/form_demo' },
+    { path: '/form_demo', component: form_demo },
+    { path: '/list_demo', component: list_demo },
   ]
 })
 
@@ -52,21 +53,21 @@ Vue.use(Vuex)//应用组件
 
 const store = new Vuex.Store({//定义Vuex的存储对象
   state: {
-    debug:true,
+    debug: true,
     activeMenuIndex: "",//当前激活的菜单index
     listState: {//存放列表的共享状态，
 
-    }, 
+    },
     defultFindJson: {//存放列表的默认查询参数，
       // list_article:{articleCategory:3  }
 
-    },   
+    },
   },
- 
+
   mutations: {//变更事件
     setDebug(state, param) {//设置debug模式
-      state.debug= param;
-      
+      state.debug = param;
+
     },
     setListFindJson(state, param) {//设置列表的初始筛选参数值
       state.defultFindJson[param.listIndex] = param.findJson;
@@ -106,7 +107,7 @@ const store = new Vuex.Store({//定义Vuex的存储对象
 
 Vue.prototype.$store = store//让vue实例中可访问$store
 
-window.$store=store;
+window.$store = store;
 // import ElementUI from 'element-ui';
 // import 'element-ui/lib/theme-chalk/index.css';
 

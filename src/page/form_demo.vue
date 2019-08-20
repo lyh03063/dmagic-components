@@ -1,32 +1,25 @@
 <template>
-  <div id="app">
-    <el-menu
-      :default-active="activeIndex"
-      class="el-menu-demo"
-      mode="horizontal"
+  <div >
+    <dm_dynamic_form :cf="cfForm" v-model="formData">
+      <!--自定义复选框插槽组件-->
+      <template v-slot:slot_form_item_diycheckbox="{formData}">
+        <checkbox_diy v-model="formData.diycheckbox" :options="options"></checkbox_diy>
+      </template>
+    </dm_dynamic_form>
 
-      :router="true"
-     
-    >
-      <el-menu-item index="1" route="/form_demo">表单</el-menu-item>
-      <el-menu-item index="2" route="/list_demo">列表</el-menu-item>
-    </el-menu>
-    <div class="PT10 PB10 PL10 PR10">
-      <router-view></router-view>
-    </div>
+  
   </div>
 </template>
 
 <script>
-import listData from "./components/list-data/list-data.vue";
-import dynamicForm from "./components/list-data/dynamic-form.vue";
-import checkbox_diy from "./components/form_item/checkbox_diy.vue";
+
+import dm_dynamic_form from "../components/list-data/dynamic-form.vue";
+import checkbox_diy from "../components/form_item/checkbox_diy.vue";
 export default {
-  components: { dynamicForm, checkbox_diy, listData },
-  name: "app",
+  components: { dm_dynamic_form, checkbox_diy},
+
   data() {
     return {
-      activeIndex:"1",
       options: [
         { label: "label1", value: "1" },
         { label: "label2", value: "2" }
@@ -212,8 +205,9 @@ export default {
             type: "upload",
             uploadConfig: {
               limit: 3,
-              preview: true
+              preview:true,
               // listType: "text",
+             
             }
           },
           {
@@ -222,7 +216,8 @@ export default {
             type: "upload",
             uploadConfig: {
               limit: 1,
-              listType: "text"
+              listType: "text",
+             
             }
           },
           {
@@ -256,124 +251,6 @@ export default {
         btns: [
           { text: "提交111", event: "submit", type: "primary", validate: true },
           { text: "取消222", event: "cancel" }
-        ]
-      },
-      cfList: {
-        listIndex: "list_article", //vuex对应的字段~
-        focusMenu: true, //进行菜单聚焦
-        twoTitle: "其他数据",
-        threeTitle: "文章管理",
-        flag: true,
-        url: {
-          list: "/crossList?page=tangball_article", //列表接口
-          add: "/crossAdd?page=tangball_article", //新增接口
-          modify: "/crossModify?page=tangball_article", //修改接口
-          detail: "/crossDetail?page=tangball_article",
-          delete: "/crossDelete?page=tangball_article" //删除接口
-        },
-        dynamicDict: [
-          {
-            page: "tangball_article_category",
-            populateColumn: "categoryDoc",
-            idColumn: "articleCategory",
-            idColumn2: "P1"
-          }
-        ],
-
-        //-------列配置数组-------
-        columns: [
-          {
-            label: "文章标题",
-            prop: "articleTitle",
-            width: 260
-          },
-          {
-            label: "分类名称",
-            prop: "articleCategory",
-            width: 150,
-            formatter: function(rowData) {
-              let name = lodash.get(rowData, "categoryDoc.name");
-              return name;
-            }
-          },
-
-          {
-            label: "创建时间",
-            prop: "CreateTime",
-            width: 145
-          },
-          {
-            label: "其他",
-            prop: "extend",
-            width: 135,
-            formatter: function(extend) {
-              return JSON.stringify(extend.extend);
-            }
-          }
-        ],
-        //-------筛选表单字段数组-------
-        searchFormItems: [
-          {
-            label: "文章分类",
-            prop: "articleCategory",
-            type: "select",
-            ajax: {
-              url: "/crossList?page=tangball_article_category",
-              keyLabel: "name",
-              keyValue: "P1"
-            }
-          },
-          {
-            label: "文章标题",
-            prop: "articleTitle",
-            type: "input_find_vague"
-          }
-          // {
-          //   label: "文章标题",
-          //   prop: "articleTitle",
-          //   type: "input"
-          // },
-        ],
-        //-------详情字段数组-------
-        detailItems: [
-          {
-            label: "标题",
-            prop: "articleTitle",
-            width: 200
-          },
-          {
-            label: "文章详情",
-            prop: "articleContent",
-            type: "html"
-          }
-        ],
-        //-------新增、修改表单字段数组-------
-        formItems: [
-          {
-            label: "文章分类",
-            prop: "articleCategory",
-            type: "select",
-            ajax: {
-              url: "/crossList?page=tangball_article_category",
-              keyLabel: "name",
-              keyValue: "P1"
-            }
-          },
-          {
-            label: "文章标题",
-            prop: "articleTitle",
-            width: 200
-          },
-          {
-            label: "文章详情",
-            prop: "articleContent",
-            type: "editor"
-          },
-          {
-            label: "公众号文章地址",
-            prop: "extend",
-            path: "wxArticleUrl"
-          }
         ]
       }
     };
