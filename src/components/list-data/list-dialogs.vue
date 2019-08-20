@@ -9,6 +9,7 @@
       :before-close="closeDialogDetailFun"
       :append-to-body="true"
     >
+    <template v-if="!cf.customDetail">
       <table class="table-normal WP100" >
         <tr v-for="item in cf.detailItems" :key="item.prop">
           <td class="W100">{{item.label}}</td>
@@ -26,6 +27,12 @@
           </td>
         </tr>
       </table>
+      </template>
+    <!-- 自定义详情插槽 -->
+    <template v-if="cf.customDetail" >
+
+      <slot name="customDetail" :detailData="row"></slot>
+    </template>
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeDialogDetailFun">关 闭</el-button>
       </span>
@@ -114,6 +121,7 @@ export default {
       formAdd: {}, //新增数据的表单数据
       formModify: {}, //修改数据的表单数据
       isShowDialogModify: false, //是否显示修改弹窗
+      beforeModify:{},//修改前数据
       editorOption: {
         //编辑器的配置
         modules: {
@@ -195,7 +203,7 @@ export default {
             this.$parent.getDataList(); //更新数据列表
           }
 
-          this.$emit("after-modify"); //触发外部事件
+          this.$emit("after-modify",this.formModify,this.beforeModify); //触发外部事件
         })
         .catch(function(error) {
           alert("异常:" + error);
@@ -221,7 +229,7 @@ export default {
             this.$parent.getDataList(); //更新数据列表
           }
           this.initFormDataAdd(); //调用：{初始化新增数据表单函数}
-          this.$emit("after-add"); //触发外部事件
+          this.$emit("after-add",response.data.addData); //触发外部事件
         })
         .catch(function(error) {
           alert("异常:" + error);
@@ -229,6 +237,7 @@ export default {
     },
     //-------------显示修改弹窗的函数--------------
     showModify(row) {
+      this.beforeModify = row
       let str = JSON.stringify(row); //转换成字符串
       let rowNew = JSON.parse(str); //转换成对象
 

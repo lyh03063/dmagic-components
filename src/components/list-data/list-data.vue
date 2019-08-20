@@ -119,13 +119,17 @@
     <listDialogs
       ref="listDialogs"
       :cf="cf"
-      @after-add="$emit('after-add')"
-      @after-modify="$emit('after-modify')"
+      @after-add="(data)=>{$emit('after-add',data)}"
+      @after-modify="(newdata,olddata)=>{$emit('after-modify',newdata,olddata)}"
       @after-delete="$emit('after-delete')"
     >
       <template v-slot:[item.slot]="{row}" v-for="item in cf.detailItems">
         <!--根据cf.detailItems循环输出插槽--详情弹窗-->
         <slot :name="item.slot" :row="row" v-if="item.slot"></slot>
+      </template>
+    <!-- 自定义详情弹窗插槽 -->
+      <template v-slot:customDetail="{detailData}">
+        <slot name="customDetail" :detailData="detailData"></slot>
       </template>
 
       <!--这里的for循环的item不要跟上面的重名，否则冲突！！！所以使用formItem-->
@@ -334,7 +338,7 @@ export default {
         findJson: {}
       });
     }
-
+    
     this.Objparam.findJson = findJsonDefault;
     this.Objparam.sortJson = this.cf.sortJsonDefault;
 
@@ -347,7 +351,13 @@ export default {
 
     this.Objparam.selectJson = selectJson;
     /****************************拼装selectJson参数-END****************************/
-
+    
+      // 如果当前页面需要自定义查询接口数据
+      if (this.cf.findJson){
+        this.Objparam.findJson[this.cf.findJson.type]=this.cf.findJson.value
+      }
+    
+    
     let objState = {
       //列表的vuex初始状态对象
       isShowDialogAdd: false, //是否显示新增弹窗
