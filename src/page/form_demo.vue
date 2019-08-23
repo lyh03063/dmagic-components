@@ -1,23 +1,34 @@
 <template>
-  <div >
+  <div>
     <dm_dynamic_form :cf="cfForm" v-model="formData">
       <!--自定义复选框插槽组件-->
       <template v-slot:slot_form_item_diycheckbox="{formData}">
         <checkbox_diy v-model="formData.diycheckbox" :options="options"></checkbox_diy>
       </template>
     </dm_dynamic_form>
-
-  
   </div>
 </template>
 
 <script>
-
 import dm_dynamic_form from "../components/list-data/dynamic-form.vue";
 import checkbox_diy from "../components/form_item/checkbox_diy.vue";
 export default {
-  components: { dm_dynamic_form, checkbox_diy},
-
+  components: { dm_dynamic_form, checkbox_diy },
+  computed: {
+    cfData: function() {
+      return this.$store.state.cfData;
+    }
+  },
+  watch: {
+    cfData: {
+      handler(newName, oldName) {
+        var t_json = JSON.stringify(this.cfData); //：{Json对象转换Json字符串函数}
+        this.cfForm = util.parseJson(t_json);
+      },
+      // immediate: true,
+      deep: true
+    }
+  },
   data() {
     return {
       options: [
@@ -205,9 +216,8 @@ export default {
             type: "upload",
             uploadConfig: {
               limit: 3,
-              preview:true,
+              preview: true
               // listType: "text",
-             
             }
           },
           {
@@ -216,8 +226,7 @@ export default {
             type: "upload",
             uploadConfig: {
               limit: 1,
-              listType: "text",
-             
+              listType: "text"
             }
           },
           {
@@ -254,6 +263,31 @@ export default {
         ]
       }
     };
+  },
+  async mounted() {
+    this.$parent.showCFForm = true;
+    this.$parent.cfForm.formItems = [
+      {
+        label: "标签宽度",
+        prop: "labelWidth",
+      
+      },
+   
+      {
+        label: "表单字段",
+        prop: "formItems",
+        type: "collection"
+      },
+      {
+        label: "按钮",
+        prop: "btns",
+        type: "collection"
+      },
+    ];
+
+    var strJson = util.stringify(this.cfForm);
+    let json1 = JSON.parse(strJson);
+    this.$store.commit("setCfData", json1);
   }
 };
 </script>

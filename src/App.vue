@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <div class="    main-box">
-      <div class="left-box"  :style="{'width':showDialog?'60%':'100%'}">
+    <div class="main-box">
+      <div class="left-box" :style="{'width':showDialog?'60%':'100%'}">
         <el-menu
           :default-active="activeIndex"
           class="el-menu-demo"
@@ -15,7 +15,7 @@
           <el-menu-item index="2" route="/list_demo">列表</el-menu-item>
           <el-menu-item index="3" route="/test">测试</el-menu-item>
         </el-menu>
-        <router-view style="padding:10px" ></router-view>
+        <router-view style="padding:10px"></router-view>
       </div>
 
       <div :class="{'side-bar-box':true,'show':showDialog}" v-if="true">
@@ -74,81 +74,6 @@ export default {
         labelWidth: "110px",
         // col_span: 12,
         formItems: [
-          // {
-          //   label: "普通文本框(input)",
-          //   prop: "prop1",
-
-          // },
-
-          {
-            label: "显示查询表单",
-            prop: "isShowSearchForm",
-            type: "radio",
-            default: true,
-            options: [
-              { value: true, label: "是" },
-              { value: false, label: "否" }
-            ]
-          },
-          {
-            label: "显示操作栏",
-            prop: "isShowToolBar",
-            type: "radio",
-            default: true,
-            options: [
-              { value: true, label: "是" },
-              { value: false, label: "否" }
-            ]
-          },
-          {
-            label: "显示面包屑",
-            prop: "isShowBreadcrumb",
-            type: "radio",
-            default: true,
-            options: [
-              { value: true, label: "是" },
-              { value: false, label: "否" }
-            ]
-          },
-          {
-            label: "显示分页",
-            prop: "isShowPageLink",
-            type: "radio",
-            default: true,
-            options: [
-              { value: true, label: "是" },
-              { value: false, label: "否" }
-            ]
-          },
-          {
-            label: "动态数据字典",
-            prop: "dynamicDict",
-            type: "collection"
-          },
-
-          {
-            label: "接口地址",
-            prop: "url",
-            type: "jsonEditor"
-          },
-
-          {
-            label: "列配置",
-            prop: "columns",
-            type: "collection"
-          },
-
-          {
-            label: "详情弹窗字段",
-            prop: "detailItems",
-            type: "collection"
-          },
-
-          {
-            label: "新增、修改表单字段",
-            prop: "formItems",
-            type: "collection"
-          }
         ],
         btns: [
           // { text: "关闭", event: "cancel" }
@@ -167,16 +92,17 @@ export default {
 
 <style>
 .main-box {
-   transition: 0.5s;
+  transition: 0.5s;
   display: flex;
   width: 100%;
   height: 100%;
   position: fixed;
   left: 0;
-  top:0;
+  top: 0;
 }
 .left-box {
   flex: 1;
+  overflow-y: auto
 }
 
 .side-bar-cover {
