@@ -115,6 +115,8 @@
               ></vue-json-editor>
               <!--如果是普通json编辑器-->
               <json_editor v-model="formDataNeed[item.prop]" v-else-if="item.type=='jsonEditor'"></json_editor>
+              <!--如果是collection-->
+              <collection v-model="formDataNeed[item.prop]" v-else-if="item.type=='collection'"></collection>
               <!--如果是图片上传控件-->
               <upload_img v-model="formDataNeed[item.prop]" :upload-config="item.uploadConfig" v-else-if="item.type=='upload'"></upload_img>
               <!--富文本编辑器-->
@@ -178,6 +180,7 @@ import json_editor from "../../components/form_item/json_editor.vue";
 import upload_img from "../../components/form_item/upload_img.vue";
 import time_period from "../../components/form_item/time_period.vue";
 import json_prop from "../../components/form_item/json_prop.vue";
+import collection from "../../components/form_item/collection.vue";
 export default {
   name: "dm_dynamic_form", //组件名，用于递归
   components: {
@@ -189,7 +192,7 @@ export default {
     json_editor,
     upload_img,
     time_period,
-    json_prop
+    json_prop,collection
   },
   props: {
     cf: {

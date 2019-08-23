@@ -1,22 +1,6 @@
 <template>
   <div>
-    <el-button plain @click="dialogCongig" size="mini">列表配置</el-button>
-    <!--xxx弹窗-->
-    <el-dialog
-      custom-class="n-el-dialog"
-      width="65%"
-      title="列表配置"
-      :close-on-press-escape="true"
-      :close-on-click-modal="true"
-      :append-to-body="true"
-      v-bind:visible.sync="showDialog"
-     
-    >
-      <div class>
-        <dm_dynamic_form :cf="cfForm" v-model="cfList" @cancel="showDialog=false"></dm_dynamic_form>
-      </div>
-    </el-dialog>
-
+    <!-- <collection v-model="arr1"></collection> -->
     <dm_list_data :cf="cfList"></dm_list_data>
   </div>
 </template>
@@ -24,93 +8,25 @@
 <script>
 import dm_list_data from "../components/list-data/list-data.vue";
 import dm_dynamic_form from "../components/list-data/dynamic-form.vue";
+import collection from "../components/form_item/collection.vue";
 export default {
-  components: { dm_list_data, dm_dynamic_form },
+  components: { dm_list_data, dm_dynamic_form, collection },
 
   data() {
     return {
-      showDialog: false,
-
-      cfForm: {
-        labelWidth: "150px",
-        col_span:12,
-        formItems: [
-          // {
-          //   label: "普通文本框(input)",
-          //   prop: "prop1",
-
-          // },
-
-          {
-            label: "显示查询表单",
-            prop: "isShowSearchForm",
-            type: "radio",
-            default: true,
-            options: [{ value: true, label: "是" }, { value: false, label: "否" }]
-          },
-           {
-            label: "显示操作栏",
-            prop: "isShowToolBar",
-            type: "radio",
-            default: true,
-            options: [{ value: true, label: "是" }, { value: false, label: "否" }]
-          },
-           {
-            label: "显示面包屑",
-            prop: "isShowBreadcrumb",
-           type: "radio",
-            default: true,
-            options: [{ value: true, label: "是" }, { value: false, label: "否" }]
-
-          },
-           {
-            label: "显示分页",
-            prop: "isShowPageLink",
-           type: "radio",
-            default: true,
-            options: [{ value: true, label: "是" }, { value: false, label: "否" }]
-
-          },
-          {
-            label: "动态数据字典",
-            prop: "dynamicDict",
-            type: "jsonEditor",
-
-          },
+      arr1: [
+        {
+          label: "文章分类",
+          prop: "articleCategory",
+          type: "select",
          
-          {
-            label: "接口地址",
-            prop: "url",
-            type: "jsonEditor",
-
-          },
-         
-          {
-            label: "列配置",
-            prop: "columns",
-            type: "jsonEditor",
-
-          },
-         
-          {
-            label: "详情弹窗字段",
-            prop: "detailItems",
-            type: "jsonEditor",
-
-          },
-         
-          {
-            label: "新增、修改表单字段",
-            prop: "formItems",
-            type: "jsonEditor",
-
-          }
-        ],
-        btns: [
-         
-          // { text: "关闭", event: "cancel" }
-        ]
-      },
+        },
+        {
+          label: "文章标题",
+          prop: "articleTitle",
+          type: "input_find_vague"
+        }
+      ],
       cfList: {
         listIndex: "list_article111111", //vuex对应的字段~
         focusMenu: true, //进行菜单聚焦
@@ -144,7 +60,7 @@ export default {
             label: "分类名称",
             prop: "articleCategory",
             width: 150,
-            formatter: function(rowData) {
+            formatter11111: function(rowData) {
               let name = lodash.get(rowData, "categoryDoc.name");
               return name;
             }
@@ -159,7 +75,7 @@ export default {
             label: "其他",
             prop: "extend",
             width: 135,
-            formatter: function(extend) {
+            formatter11111: function(extend) {
               return JSON.stringify(extend.extend);
             }
           }
@@ -231,10 +147,50 @@ export default {
       }
     };
   },
-  methods:{
-    dialogCongig(){
-      this.showDialog=true;
+
+  computed: {
+    cfData: function() {
+      return this.$store.state.cfData;
     }
+  },
+  watch: {
+    cfData: {
+      handler(newName, oldName) {
+        var t_json = JSON.stringify(this.cfData); //：{Json对象转换Json字符串函数}
+
+        //将带function字符串的还原成真正发function
+        // let json = JSON.parse(t_json, function(k, v) {
+        //   if (v.indexOf && v.indexOf("function") > -1) {
+        //     return eval("(function(){return " + v + " })()");
+        //   }
+        //   return v;
+        // });
+
+        this.cfList = util.parseJson(t_json);
+      },
+      // immediate: true,
+      deep: true
+    }
+  },
+
+  methods: {},
+  async mounted() {
+    this.$parent.showCFForm = true;
+
+    //来自vuex的当前行数据
+    // this.$store.state.listState[this.cf.listIndex].row;
+
+    // var strJson = JSON.stringify(this.cfList, function(key, val) {
+    //   if (typeof val === "function") {
+    //     return val + ""; //将函数代码转换成字符串
+    //   }
+    //   return val;
+    // });
+    var strJson = util.stringify(this.cfList);
+
+    let json1 = JSON.parse(strJson);
+
+    this.$store.commit("setCfData", json1);
   }
 };
 </script>

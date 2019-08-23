@@ -35,14 +35,16 @@ Vue.use(loading);   //作为全局组件，必须有install
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
-import form_demo from './page/form_demo.vue';   //导入loading
-import list_demo from './page/list_demo.vue';   //导入loading
+import form_demo from './page/form_demo.vue';   //导入form_demo
+import list_demo from './page/list_demo.vue';   //导入list_demo
+import test from './page/test.vue';   //导入test
 // 3. 创建 router 实例，然后传 `routes` 配置
 const router = new VueRouter({
   routes: [
     { path: '/', redirect: '/form_demo' },
     { path: '/form_demo', component: form_demo },
     { path: '/list_demo', component: list_demo },
+    { path: '/test', component: test },
   ]
 })
 
@@ -53,7 +55,7 @@ Vue.use(Vuex)//应用组件
 
 const store = new Vuex.Store({//定义Vuex的存储对象
   state: {
-    debug: true,
+    debug: false,
     activeMenuIndex: "",//当前激活的菜单index
     listState: {//存放列表的共享状态，
 
@@ -62,12 +64,19 @@ const store = new Vuex.Store({//定义Vuex的存储对象
       // list_article:{articleCategory:3  }
 
     },
+    cfData:{//组件配置数据
+      isShowSearchForm:false
+    }
   },
 
   mutations: {//变更事件
     setDebug(state, param) {//设置debug模式
       state.debug = param;
 
+    },
+    setCfData(state, param) {//设置组件配置数据
+      state.cfData= param;
+     
     },
     setListFindJson(state, param) {//设置列表的初始筛选参数值
       state.defultFindJson[param.listIndex] = param.findJson;

@@ -1,8 +1,8 @@
 console.log("util#####");
-window.PUB={}
- //window.PUB.domain="http://120.76.160.41:3000"
- window.PUB.domain="http://localhost:3000"
- window.PUB.urlUpload=`${PUB.domain}/api_third_part/qiniu_upload?scope=lawyer_case_management`
+window.PUB = {}
+//window.PUB.domain="http://120.76.160.41:3000"
+window.PUB.domain = "http://localhost:3000"
+window.PUB.urlUpload = `${PUB.domain}/api_third_part/qiniu_upload?scope=lawyer_case_management`
 
 
 let deepCopy = function (obj) {//深拷贝一个Json对象的函数
@@ -146,6 +146,53 @@ async function ajaxPopulate(populateConfig) {
 
 }
 
+
+function stringify(_json) {//函数定义：{json转字符串函数（含function处理）}
+  var strJson = JSON.stringify(_json, function (key, val) {
+    if (typeof val === "function") {
+      return val + ""; //将函数代码转换成字符串
+    }
+    return val;
+  });
+  return strJson
+}
+
+function parseJson(str) {//函数定义：{字符串转json函数（含function还原处理）}
+  //将带function字符串的还原成真正发function
+  let json = JSON.parse(str, function (k, v) {
+    if (v.indexOf && v.indexOf("function") > -1) {
+      return eval("(function(){return " + v + " })()");
+    }
+    return v;
+  });
+  return json;
+}
+
+
+let moveData = function (index, type, list) { //函数：{数据移动函数}-注意调用对象的KEY等配置
+    list = list || this[this.KEY.arrRelate];//KEY配置相关数组
+
+    let objIndex = {
+        "up": index - 1,
+        "down": index + 1,
+        "top": 0,
+        "bottom": list.length,
+
+    }
+
+
+    if ((type == "up" || type == "top") && index < 1) { //如果已到最上
+        return alert("已到最上");
+    } else if ((type == "down" || type == "bottom") && index >= list.length - 1) { //如果已到最上
+        return alert("已到最底");
+    }
+
+    let doc = list[index]
+    list.splice(index, 1); //先删除
+    list.splice(objIndex[type], 0, doc); //再插入
+};
+
+
 export default {
-  deepCopy, type, timeout, getTimeStatus, ajaxPopulate
+  deepCopy, type, timeout, getTimeStatus, ajaxPopulate, stringify,parseJson,moveData
 }

@@ -1,385 +1,248 @@
 <template>
   <div id="app">
-    <el-menu
-      :default-active="activeIndex"
-      class="el-menu-demo"
-      mode="horizontal"
+    <div class="    main-box">
+      <div class="left-box"  :style="{'width':showDialog?'60%':'100%'}">
+        <el-menu
+          :default-active="activeIndex"
+          class="el-menu-demo"
+          mode="horizontal"
+          :router="true"
+          background-color="#545c64"
+          text-color="#fff"
+          active-text-color="#ffd04b"
+        >
+          <el-menu-item index="1" route="/form_demo">表单</el-menu-item>
+          <el-menu-item index="2" route="/list_demo">列表</el-menu-item>
+          <el-menu-item index="3" route="/test">测试</el-menu-item>
+        </el-menu>
+        <router-view style="padding:10px" ></router-view>
+      </div>
 
-      :router="true"
-     
-    >
-      <el-menu-item index="1" route="/form_demo">表单</el-menu-item>
-      <el-menu-item index="2" route="/list_demo">列表</el-menu-item>
-    </el-menu>
-    <div class="PT10 PB10 PL10 PR10">
-      <router-view></router-view>
+      <div :class="{'side-bar-box':true,'show':showDialog}" v-if="true">
+        <i class="el-icon-document-copy btn-copy" :data-clipboard-text="dataConfigForCopy"></i>
+        <i class="el-icon-circle-close btn-close-cf" @click="showDialog=false"></i>
+        <dm_dynamic_form :cf="cfForm" v-model="dataConfig" v-if="showCFForm"></dm_dynamic_form>
+      </div>
+      <!-- <div class="side-bar-cover" v-if="showDialog" @click="showDialog=false"></div> -->
+      <div class="btn-cf" @click="showDialog=true" v-if="!showDialog">
+        配
+        <br />置
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import listData from "./components/list-data/list-data.vue";
-import dynamicForm from "./components/list-data/dynamic-form.vue";
-import checkbox_diy from "./components/form_item/checkbox_diy.vue";
+import dm_dynamic_form from "./components/list-data/dynamic-form.vue";
 export default {
-  components: { dynamicForm, checkbox_diy, listData },
+  components: { dm_dynamic_form },
   name: "app",
+  computed: {
+    cfData: function() {
+      return this.$store.state.cfData;
+    }
+  },
+  watch: {
+    cfData: {
+      handler(newName, oldName) {
+        // alert("1111");
+        this.dataConfig = this.cfData;
+        this.dataConfigForCopy = JSON.stringify(this.dataConfig); //Json对象转换Json字符串
+      },
+      immediate: true,
+      deep: true
+    },
+    dataConfig: {
+      handler(newName, oldName) {
+        //来自vuex的当前行数据
+        // this.$store.state.listState[this.cf.listIndex].row;
+
+        this.$store.commit("setCfData", this.dataConfig);
+      },
+
+      deep: true
+    }
+  },
   data() {
     return {
-      activeIndex:"1",
-      options: [
-        { label: "label1", value: "1" },
-        { label: "label2", value: "2" }
-      ],
-      formData: {
-        extend: { aaa: 1, name: "lucy" },
-        prop_checkbox: [], //复选框字段的默认数组
-        prop1: "abcd",
-        prop_dateTime: "2019-7-24 14:09",
-        diycheckbox: [1]
-      },
+      dataConfigForCopy: "", //用于拷贝的配置字符串
+      dataConfig: {}, //内部组件配置数据
+      activeIndex: "1",
+      showDialog: false,
+      showCFForm: false, //是否显示组件配置表单
       cfForm: {
-        labelWidth: "150px",
+        labelWidth: "110px",
+        // col_span: 12,
         formItems: [
-          //   {
-          //   label: "extend",
-          //   prop: "extend",
-          //   type: "jsonEditor",
+          // {
+          //   label: "普通文本框(input)",
+          //   prop: "prop1",
 
           // },
-          {
-            label: "联系人信息",
-            prop: "extend",
-            default: {},
-            cfForm: {
-              formItems: [
-                {
-                  label: "姓名",
-                  prop: "name",
-                  type: "input"
-                },
-                {
-                  label: "下拉框(select)",
-                  prop: "sex",
-                  type: "select",
-                  default: 2,
-                  options: [
-                    { value: 1, label: "男" },
-                    { value: 2, label: "女" }
-                  ]
-                },
-                {
-                  label: "联系人信息2",
-                  prop: "extend1",
-                  default: {},
 
-                  cfForm: {
-                    col_span: 12,
-                    formItems: [
-                      {
-                        label: "姓名",
-                        prop: "name",
-                        type: "input",
-                        col_span: 12
-                      },
-                      {
-                        label: "下拉框(select)",
-                        prop: "sex",
-                        type: "select",
-                        default: 2,
-                        options: [
-                          { value: 1, label: "男" },
-                          { value: 2, label: "女" }
-                        ],
-                        col_span: 12
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          },
           {
-            label: "负责人信息",
-            // prop: "extend",
-            cfForm: {
-              formItems: [
-                {
-                  label: "姓名",
-                  prop: "name",
-                  type: "input"
-                },
-                {
-                  label: "下拉框(select)",
-                  prop: "sex",
-                  type: "select",
-                  default: 2,
-                  options: [
-                    { value: 1, label: "男" },
-                    { value: 2, label: "女" }
-                  ]
-                }
-              ]
-            }
-          },
-          {
-            label: "纬度",
-            prop: "extend",
-            path: "latitude"
-          },
-          {
-            label: "普通文本框(input)",
-            prop: "prop1",
-            type: "input",
-            default: "默认文本",
-            rules: [
-              { required: true, message: "不能为空" },
-
-              {
-                pattern: /^[\u4E00-\u9FA5]+$/,
-                message: "用户名只能为中文"
-              }
+            label: "显示查询表单",
+            prop: "isShowSearchForm",
+            type: "radio",
+            default: true,
+            options: [
+              { value: true, label: "是" },
+              { value: false, label: "否" }
             ]
           },
           {
-            label: "密码框2(password)",
-            prop: "prop_password",
-            type: "password"
+            label: "显示操作栏",
+            prop: "isShowToolBar",
+            type: "radio",
+            default: true,
+            options: [
+              { value: true, label: "是" },
+              { value: false, label: "否" }
+            ]
           },
           {
-            label: "用于模糊查询文本框(input_find_vague)",
-            prop: "prop_input_find_vague",
-            type: "input_find_vague"
+            label: "显示面包屑",
+            prop: "isShowBreadcrumb",
+            type: "radio",
+            default: true,
+            options: [
+              { value: true, label: "是" },
+              { value: false, label: "否" }
+            ]
           },
           {
-            label: "文本域(textarea)",
-            prop: "prop_textarea",
-            type: "textarea"
+            label: "显示分页",
+            prop: "isShowPageLink",
+            type: "radio",
+            default: true,
+            options: [
+              { value: true, label: "是" },
+              { value: false, label: "否" }
+            ]
           },
           {
-            label: "下拉框(select)",
-            prop: "sex",
-            type: "select",
-            default: 2,
-            options: [{ value: 1, label: "男" }, { value: 2, label: "女" }]
-          },
-          {
-            label: "sex【联动】",
-            prop: "sex_relative",
-            type: "input",
-            //显示条件
-            term: { $or: [{ sex: 2 }, { prop_textarea: 2 }] }
-          },
-          {
-            label: "下拉框(select+ajax)",
-            prop: "prop4",
-            type: "select",
-            ajax: {
-              url: "/crossList?page=mabang-member",
-              param: { a: 1 },
-              keyLabel: "nickName",
-              keyValue: "userName"
-            }
+            label: "动态数据字典",
+            prop: "dynamicDict",
+            type: "collection"
           },
 
           {
-            label: "单选框(radio)",
-            prop: "prop_radio",
-            type: "radio",
-            default: 2,
-            options: [{ value: 1, label: "男" }, { value: 2, label: "女" }]
-          },
-          {
-            label: "复选框(checkbox)",
-            prop: "prop_checkbox",
-            type: "checkbox",
-            default: [2],
-            options: [{ value: 1, label: "男" }, { value: 2, label: "女" }]
-          },
-          {
-            label: "日期时间(dateTime)",
-            prop: "prop_dateTime",
-            type: "dateTime"
-          },
-          {
-            label: "日期选择器(date)",
-            prop: "prop_date",
-            type: "date"
-          },
-          {
-            label: "图片上传",
-            prop: "prop_upload",
-            type: "upload",
-            uploadConfig: {
-              limit: 3,
-              preview: true
-              // listType: "text",
-            }
-          },
-          {
-            label: "图片上传2",
-            prop: "prop_upload2",
-            type: "upload",
-            uploadConfig: {
-              limit: 1,
-              listType: "text"
-            }
-          },
-          {
-            label: "json编辑器(jsonEditor)",
-            prop: "prop_jsonEditor",
+            label: "接口地址",
+            prop: "url",
             type: "jsonEditor"
           },
+
           {
-            label: "json编辑器(vueJsonEditor)",
-            prop: "prop_vueJsonEditor",
-            type: "vueJsonEditor"
+            label: "列配置",
+            prop: "columns",
+            type: "collection"
           },
+
           {
-            label: "富文本编辑器(editor)",
-            prop: "prop_editor",
-            type: "editor"
+            label: "详情弹窗字段",
+            prop: "detailItems",
+            type: "collection"
           },
+
           {
-            label: "自定义组件(slot实现)",
-            prop: "description",
-            slot: "slot_form_item_description",
-            rules: [{ required: true, message: "不能为空" }]
-          },
-          {
-            label: "diycheckbox(slot实现)",
-            prop: "diycheckbox",
-            slot: "slot_form_item_diycheckbox",
-            rules: [{ required: true, message: "不能为空" }]
+            label: "新增、修改表单字段",
+            prop: "formItems",
+            type: "collection"
           }
         ],
         btns: [
-          { text: "提交111", event: "submit", type: "primary", validate: true },
-          { text: "取消222", event: "cancel" }
-        ]
-      },
-      cfList: {
-        listIndex: "list_article", //vuex对应的字段~
-        focusMenu: true, //进行菜单聚焦
-        twoTitle: "其他数据",
-        threeTitle: "文章管理",
-        flag: true,
-        url: {
-          list: "/crossList?page=tangball_article", //列表接口
-          add: "/crossAdd?page=tangball_article", //新增接口
-          modify: "/crossModify?page=tangball_article", //修改接口
-          detail: "/crossDetail?page=tangball_article",
-          delete: "/crossDelete?page=tangball_article" //删除接口
-        },
-        dynamicDict: [
-          {
-            page: "tangball_article_category",
-            populateColumn: "categoryDoc",
-            idColumn: "articleCategory",
-            idColumn2: "P1"
-          }
-        ],
-
-        //-------列配置数组-------
-        columns: [
-          {
-            label: "文章标题",
-            prop: "articleTitle",
-            width: 260
-          },
-          {
-            label: "分类名称",
-            prop: "articleCategory",
-            width: 150,
-            formatter: function(rowData) {
-              let name = lodash.get(rowData, "categoryDoc.name");
-              return name;
-            }
-          },
-
-          {
-            label: "创建时间",
-            prop: "CreateTime",
-            width: 145
-          },
-          {
-            label: "其他",
-            prop: "extend",
-            width: 135,
-            formatter: function(extend) {
-              return JSON.stringify(extend.extend);
-            }
-          }
-        ],
-        //-------筛选表单字段数组-------
-        searchFormItems: [
-          {
-            label: "文章分类",
-            prop: "articleCategory",
-            type: "select",
-            ajax: {
-              url: "/crossList?page=tangball_article_category",
-              keyLabel: "name",
-              keyValue: "P1"
-            }
-          },
-          {
-            label: "文章标题",
-            prop: "articleTitle",
-            type: "input_find_vague"
-          }
-          // {
-          //   label: "文章标题",
-          //   prop: "articleTitle",
-          //   type: "input"
-          // },
-        ],
-        //-------详情字段数组-------
-        detailItems: [
-          {
-            label: "标题",
-            prop: "articleTitle",
-            width: 200
-          },
-          {
-            label: "文章详情",
-            prop: "articleContent",
-            type: "html"
-          }
-        ],
-        //-------新增、修改表单字段数组-------
-        formItems: [
-          {
-            label: "文章分类",
-            prop: "articleCategory",
-            type: "select",
-            ajax: {
-              url: "/crossList?page=tangball_article_category",
-              keyLabel: "name",
-              keyValue: "P1"
-            }
-          },
-          {
-            label: "文章标题",
-            prop: "articleTitle",
-            width: 200
-          },
-          {
-            label: "文章详情",
-            prop: "articleContent",
-            type: "editor"
-          },
-          {
-            label: "公众号文章地址",
-            prop: "extend",
-            path: "wxArticleUrl"
-          }
+          // { text: "关闭", event: "cancel" }
         ]
       }
     };
+  },
+  mounted() {
+    var clipboard = new Clipboard(".btn-copy");
+    clipboard.on("success", e => {
+      this.$message.success("复制成功");
+    });
   }
 };
 </script>
 
 <style>
+.main-box {
+   transition: 0.5s;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  left: 0;
+  top:0;
+}
+.left-box {
+  flex: 1;
+}
+
+.side-bar-cover {
+  z-index: 1;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  background: #999;
+  opacity: 0.5;
+  left: 0;
+  top: 0;
+}
+.side-bar-box {
+  border-left: 1px solid #999;
+  position: relative;
+  height: 100%;
+  /* width: 580px; */
+  background: #fff;
+  right: 0;
+  top: 0;
+  overflow-y: auto;
+  /* height: 500px; */
+  padding: 10px;
+
+  transition: 0.5s;
+  opacity: 0;
+  width: 30px;
+}
+.side-bar-box.show {
+  opacity: 1;
+  width: 500px;
+}
+
+.btn-cf {
+  z-index: 2;
+  width: 30px;
+  text-align: center;
+  padding: 10px 0 10px 0;
+  position: fixed;
+  right: 0;
+  top: 40%;
+  background-color: #f0f0f0;
+  border: 1px #ddd solid;
+  border-radius: 5px 0 0 5px;
+  cursor: pointer;
+}
+
+.btn-close-cf {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
+  font-size: 30px;
+  z-index: 100;
+  color: #666;
+  font-weight: 300;
+}
+
+.btn-copy {
+  font-weight: 300;
+  position: absolute;
+  right: 50px;
+  top: 10px;
+  cursor: pointer;
+  font-size: 28px;
+  z-index: 100;
+  color: #666;
+}
 </style>
