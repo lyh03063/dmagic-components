@@ -15,9 +15,10 @@
         <div class v-else>
           <span>{{doc}}</span>
           <div class="tool-bar" v-if="focusItem==i">
-            <i class="el-icon-top btn-op" title="上移" @click="move(i, 'up')"></i>
-            <i class="el-icon-bottom btn-op" title="下移" @click="move(i, 'down')"></i>
-            <i class="el-icon-delete btn-op" title="删除" @click="deleteData(i)"></i>
+            <i class="el-icon-top btn-op" title="上移" @click="move(i, 'up')" v-if="i>0"></i>
+            <i class="el-icon-bottom btn-op" title="下移" @click="move(i, 'down')" v-if="i<valueNeed.length-1"></i>
+            <i class="el-icon-copy-document btn-op" title="复制" @click="copyData(i)" ></i>
+            <i class="el-icon-delete btn-op" title="删除" @click="deleteData(i)" ></i>
           </div>
         </div>
       </li>
@@ -48,14 +49,20 @@ export default {
       this.editItem="999"
     },
     move: function(index, type) {
+      this.focusItem="999";
       util.moveData(index, type, this.valueNeed);
     },
+    copyData: function(index) {
+      let copy=util.deepCopy(this.valueNeed[index])
+      this.valueNeed.splice(index, 0,copy); //从下标为1的元素开始删除0个元素.
+    },
     deleteData: async function(index) {
-      let clickStatus = await this.$confirm("确定删除该数据？").catch(() => {});
-      if (clickStatus == "confirm") {
-        //如果点击了确定
-        this.valueNeed.splice(index, 1); //从下标为1的元素开始删除1个元素.
-      }
+      this.valueNeed.splice(index, 1); //从下标为1的元素开始删除1个元素.
+      // let clickStatus = await this.$confirm("确定删除该数据？").catch(() => {});
+      // if (clickStatus == "confirm") {
+      //   //如果点击了确定
+        
+      // }
     }
   },
   created() {}

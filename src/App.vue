@@ -1,21 +1,21 @@
 <template>
   <div id="app">
+    <el-menu
+      :default-active="activeIndex"
+      class="el-menu-demo"
+      mode="horizontal"
+      :router="true"
+      background-color="#545c64"
+      text-color="#fff"
+      active-text-color="#ffd04b"
+    >
+      <el-menu-item index="1" route="/form_demo">表单</el-menu-item>
+      <el-menu-item index="2" route="/list_demo">列表</el-menu-item>
+      <el-menu-item index="3" route="/test">测试</el-menu-item>
+    </el-menu>
     <div class="main-box">
       <div class="left-box" :style="{'width':showDialog?'60%':'100%'}">
-        <el-menu
-          :default-active="activeIndex"
-          class="el-menu-demo"
-          mode="horizontal"
-          :router="true"
-          background-color="#545c64"
-          text-color="#fff"
-          active-text-color="#ffd04b"
-        >
-          <el-menu-item index="1" route="/form_demo">表单</el-menu-item>
-          <el-menu-item index="2" route="/list_demo">列表</el-menu-item>
-          <el-menu-item index="3" route="/test">测试</el-menu-item>
-        </el-menu>
-        <router-view style="padding:10px"></router-view>
+        <router-view style="padding:10px;margin-top:70px"></router-view>
       </div>
 
       <div :class="{'side-bar-box':true,'show':showDialog}" v-if="true">
@@ -73,8 +73,7 @@ export default {
       cfForm: {
         labelWidth: "110px",
         // col_span: 12,
-        formItems: [
-        ],
+        formItems: [],
         btns: [
           // { text: "关闭", event: "cancel" }
         ]
@@ -95,16 +94,24 @@ export default {
   transition: 0.5s;
   display: flex;
   width: 100%;
-  height: 100%;
+  height: calc(100% - 70px);
   position: fixed;
   left: 0;
   top: 0;
+  margin: 60px 0 0
 }
 .left-box {
   flex: 1;
-  overflow-y: auto
+  overflow-y: auto;
+  /* position: relative; */
 }
-
+.el-menu-demo {
+  /* position: fixed;
+  left: 0;
+  top:0;
+  width:100% ;
+  z-index: 10; */
+}
 .side-bar-cover {
   z-index: 1;
   position: fixed;
@@ -125,15 +132,16 @@ export default {
   top: 0;
   overflow-y: auto;
   /* height: 500px; */
-  padding: 10px;
 
   transition: 0.5s;
   opacity: 0;
-  width: 30px;
+  width: 0px;
+  padding: 0;
 }
 .side-bar-box.show {
   opacity: 1;
   width: 500px;
+  padding: 10px;
 }
 
 .btn-cf {
