@@ -1,7 +1,7 @@
 console.log("util#####");
 window.PUB = {}
-//window.PUB.domain="http://120.76.160.41:3000"
-window.PUB.domain = "http://localhost:3000"
+window.PUB.domain="http://120.76.160.41:3000"
+//window.PUB.domain = "http://localhost:3000"
 window.PUB.urlUpload = `${PUB.domain}/api_third_part/qiniu_upload?scope=lawyer_case_management`
 
 

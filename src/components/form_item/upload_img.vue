@@ -1,11 +1,13 @@
 <template>
-  <div class>
+  <div class="upload_box">
     <dm_debug_list>
+        <dm_debug_item v-model="isExceed" text="isExceed" />
       <dm_debug_item v-model="valueNeed" text="图片列表" />
       <dm_debug_item v-model="uploadConfigNeed" text="uploadConfigNeed" />
     </dm_debug_list>
-
+      <!-- :file-list="valueNeed"这个会导致出现两次动画 -->
     <el-upload
+    :class="{'exceed':isExceed}"
       :limit="uploadConfigNeed.limit"
       :action="uploadConfigNeed.action"
       :list-type="uploadConfigNeed.listType"
@@ -14,12 +16,13 @@
       :on-success="uploaded"
       :on-exceed="exceed"
       :before-remove="beforeRemove"
-      :file-list="valueNeed"
+
       name="ImgParame"
       v-if="!changeOrder&&uploadConfigNeed"
     >
-      <i class="el-icon-plus" v-if="uploadConfigNeed.listType=='picture-card'"></i>
-      <el-button plain size="mini" v-else>点击上传</el-button>
+     
+        <i class="el-icon-plus" v-if="uploadConfigNeed.listType=='picture-card'"></i>
+        <el-button plain size="mini" v-else>点击上传</el-button>
 
     </el-upload>
     <el-button
@@ -68,6 +71,15 @@ export default {
     };
   },
   computed: {
+    //是否显示上传按钮
+    isExceed() {
+      let flag = false;
+      if (this.uploadConfigNeed) {
+        //图片数量小于限制数量的flag
+        flag = this.valueNeed.length >= this.uploadConfigNeed.limit;
+      }
+      return flag;
+    },
     showtool() {
       let arr = [];
       arr.length = this.valueNeed.length;
@@ -78,6 +90,17 @@ export default {
     uploadConfig: {
       handler(newName, oldName) {
         this.initConfig(); //函数：{初始化配置函数}
+      },
+      immediate: true,
+      deep: true
+    },
+    //这个处理从mounted移到这边，主要是考虑后期value还是有可能为空
+    value: {
+      handler(newName, oldName) {
+        //如果{value}不存在
+        if (!this.value) {
+          this.valueNeed = [];
+        }
       },
       immediate: true,
       deep: true
@@ -133,12 +156,7 @@ export default {
       }
     }
   },
-  created() {
-    //如果{value}不存在
-    if (!this.value) {
-      this.valueNeed = [];
-    }
-  }
+  mounted() {}
 };
 </script>
 
@@ -163,4 +181,15 @@ export default {
   border: 1px solid #c0ccda;
   text-align: center;
 }
+/* 穿透element组件样式 */
+/* 补丁，之前是inline-block，会导致按钮隐藏后还会遗留高度 */
+.exceed >>> .el-upload{
+  display:none
+  /* float: left; */
+  /* display: block; */
+ 
+  /* text-align: left */
+}
+
+
 </style>

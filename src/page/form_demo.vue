@@ -45,6 +45,25 @@ export default {
       cfForm: {
         labelWidth: "150px",
         formItems: [
+          {
+            label: "图片上传2",
+            prop: "prop_upload2",
+            type: "upload",
+            uploadConfig: {
+              limit: 1,
+              listType: "text"
+            }
+          },
+          {
+            label: "图片上传",
+            prop: "prop_upload",
+            type: "upload",
+            uploadConfig: {
+              limit: 3,
+              preview: true,
+             
+            }
+          },
           //   {
           //   label: "extend",
           //   prop: "extend",
@@ -210,25 +229,8 @@ export default {
             prop: "prop_date",
             type: "date"
           },
-          {
-            label: "图片上传",
-            prop: "prop_upload",
-            type: "upload",
-            uploadConfig: {
-              limit: 3,
-              preview: true
-              // listType: "text",
-            }
-          },
-          {
-            label: "图片上传2",
-            prop: "prop_upload2",
-            type: "upload",
-            uploadConfig: {
-              limit: 1,
-              listType: "text"
-            }
-          },
+          
+          
           {
             label: "json编辑器(jsonEditor)",
             prop: "prop_jsonEditor",
