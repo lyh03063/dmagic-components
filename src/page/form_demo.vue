@@ -10,10 +10,10 @@
 </template>
 
 <script>
-import dm_dynamic_form from "../components/list-data/dynamic-form.vue";
+
 import checkbox_diy from "../components/form_item/checkbox_diy.vue";
 export default {
-  components: { dm_dynamic_form, checkbox_diy },
+  components: {  checkbox_diy },
   computed: {
     cfData: function() {
       return this.$store.state.cfData;
@@ -40,7 +40,13 @@ export default {
         prop_checkbox: [], //复选框字段的默认数组
         prop1: "abcd",
         prop_dateTime: "2019-7-24 14:09",
-        diycheckbox: [1]
+        diycheckbox: [1],
+        prop_upload2: [
+          {
+            name: "1323.jpg",
+            url: "http://pwdost5t7.bkt.clouddn.com/201908271817895151_1323.jpg"
+          }
+        ]
       },
       cfForm: {
         labelWidth: "150px",
@@ -50,7 +56,7 @@ export default {
             prop: "prop_upload2",
             type: "upload",
             uploadConfig: {
-              limit: 1,
+              limit: 2,
               listType: "text"
             }
           },
@@ -60,8 +66,7 @@ export default {
             type: "upload",
             uploadConfig: {
               limit: 3,
-              preview: true,
-             
+              preview: true
             }
           },
           //   {
@@ -229,8 +234,7 @@ export default {
             prop: "prop_date",
             type: "date"
           },
-          
-          
+
           {
             label: "json编辑器(jsonEditor)",
             prop: "prop_jsonEditor",
@@ -271,10 +275,9 @@ export default {
     this.$parent.cfForm.formItems = [
       {
         label: "标签宽度",
-        prop: "labelWidth",
-      
+        prop: "labelWidth"
       },
-   
+
       {
         label: "表单字段",
         prop: "formItems",
@@ -284,7 +287,7 @@ export default {
         label: "按钮",
         prop: "btns",
         type: "collection"
-      },
+      }
     ];
 
     var strJson = util.stringify(this.cfForm);

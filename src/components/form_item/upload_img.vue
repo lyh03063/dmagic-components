@@ -1,13 +1,13 @@
 <template>
   <div class="upload_box">
     <dm_debug_list>
-        <dm_debug_item v-model="isExceed" text="isExceed" />
+      <dm_debug_item v-model="isExceed" text="isExceed" />
       <dm_debug_item v-model="valueNeed" text="图片列表" />
       <dm_debug_item v-model="uploadConfigNeed" text="uploadConfigNeed" />
     </dm_debug_list>
-      <!-- :file-list="valueNeed"这个会导致出现两次动画 -->
+    <!-- :file-list="valueNeed"这个会导致出现两次动画 -->
     <el-upload
-    :class="{'exceed':isExceed}"
+      :class="{'exceed':isExceed}"
       :limit="uploadConfigNeed.limit"
       :action="uploadConfigNeed.action"
       :list-type="uploadConfigNeed.listType"
@@ -16,14 +16,12 @@
       :on-success="uploaded"
       :on-exceed="exceed"
       :before-remove="beforeRemove"
-
+      :file-list="valueNeed"
       name="ImgParame"
       v-if="!changeOrder&&uploadConfigNeed"
     >
-     
-        <i class="el-icon-plus" v-if="uploadConfigNeed.listType=='picture-card'"></i>
-        <el-button plain size="mini" v-else>点击上传</el-button>
-
+      <i class="el-icon-plus" v-if="uploadConfigNeed.listType=='picture-card'"></i>
+      <el-button plain size="mini" v-else>点击上传</el-button>
     </el-upload>
     <el-button
       size="mini"
@@ -64,7 +62,8 @@ export default {
   components: { draggable },
   data() {
     return {
-      uploadConfigNeed: this.uploadConfig || {},
+      uploadConfigNeed: null,
+      // uploadConfigNeed: this.uploadConfig || {},
       dialogImageUrl: "",
       dialogVisible: false,
       changeOrder: false
@@ -136,6 +135,9 @@ export default {
       }
     },
     initConfig() {
+
+
+      this.uploadConfigNeed=this.uploadConfig || {};
       //函数：{初始化配置函数}
       let uploadConfigDefault = {
         //默认的上传配置
@@ -183,13 +185,15 @@ export default {
 }
 /* 穿透element组件样式 */
 /* 补丁，之前是inline-block，会导致按钮隐藏后还会遗留高度 */
-.exceed >>> .el-upload{
-  display:none
+.exceed >>> .el-upload {
+  display: none;
   /* float: left; */
   /* display: block; */
- 
+
   /* text-align: left */
 }
-
-
+/* 补丁，删除图片过渡动画，因为可能会出现两次 */
+.upload_box >>> .el-upload-list__item {
+  transition: none ;
+}
 </style>

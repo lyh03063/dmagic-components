@@ -32,6 +32,10 @@ Vue.use(ajax_populate);   //作为全局组件，必须有install
 import loading from './components/common/loading/index.js';   //导入loading
 Vue.use(loading);   //作为全局组件，必须有install
 
+import dm_dynamic_form from './components/list-data/index.js';   //导入dm_dynamic_form
+Vue.use(dm_dynamic_form);   //作为全局组件，必须有install
+
+
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
