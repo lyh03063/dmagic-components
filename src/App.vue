@@ -11,7 +11,8 @@
     >
       <el-menu-item index="1" route="/form_demo">表单</el-menu-item>
       <el-menu-item index="2" route="/list_demo">列表</el-menu-item>
-      <el-menu-item index="3" route="/test">测试</el-menu-item>
+      <el-menu-item index="3" route="/upload_qiniu">上传七牛云</el-menu-item>
+      <el-menu-item index="4" route="/test">测试</el-menu-item>
     </el-menu>
     <div class="main-box">
       <div class="left-box" :style="{'width':showDialog?'60%':'100%'}">
