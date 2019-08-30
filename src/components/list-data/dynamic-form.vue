@@ -116,7 +116,7 @@
               <!--如果是普通json编辑器-->
               <json_editor v-model="formDataNeed[item.prop]" v-else-if="item.type=='jsonEditor'"></json_editor>
               <!--如果是collection-->
-              <collection v-model="formDataNeed[item.prop]" v-else-if="item.type=='collection'"></collection>
+              <collection v-model="formDataNeed[item.prop]" v-else-if="item.type=='collection'" :list-type="item.collectionlistType" :cf-form="item.collectionCfForm"></collection>
               <!--如果是图片上传控件-->
               <upload_img v-model="formDataNeed[item.prop]" :upload-config="item.uploadConfig" v-else-if="item.type=='upload'"></upload_img>
               <!--富文本编辑器-->
@@ -154,7 +154,7 @@
         </template>
 
         <!-- 查询按钮 -->
-        <el-form-item style="display:inline-block;">
+        <el-form-item style="display:inline-block;" v-if="cf.btns&&cf.btns.length">
           <el-button
             :type="item.type"
             @click="btnClick(item.event,item.validate)"
@@ -389,7 +389,25 @@ initRecursionProp() {
 .form-group-box{
   border: 1px #ddd solid;
 border-radius: 5px;
-padding: 10px;
+padding: 10px 10px 15px;
 margin:0 0 20px 0;
 }
+
+
+
+/* 防止最下边的子表单出现过大的间距 */
+
+.el-col-24:last-child .form-group-box{
+margin-bottom:0;
+}
+
+/* 防止最下边的字段出现过大的间距,包括双列情况 */
+.el-col-12:last-child .el-form-item, 
+.el-col-12:nth-last-child(2) .el-form-item, 
+.el-col-24:last-child .el-form-item{
+margin-bottom:0;
+}
+
+
+
 </style>

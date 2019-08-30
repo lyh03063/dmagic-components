@@ -10,10 +10,9 @@
 </template>
 
 <script>
-
 import checkbox_diy from "../components/form_item/checkbox_diy.vue";
 export default {
-  components: {  checkbox_diy },
+  components: { checkbox_diy },
   computed: {
     cfData: function() {
       return this.$store.state.cfData;
@@ -36,6 +35,10 @@ export default {
         { label: "label2", value: "2" }
       ],
       formData: {
+        collection1: [
+          { time: "2019-09-09", money: 100 },
+          { time: "2019-09-11", money: 200 }
+        ],
         extend: { aaa: 1, name: "lucy" },
         prop_checkbox: [], //复选框字段的默认数组
         prop1: "abcd",
@@ -52,6 +55,26 @@ export default {
         labelWidth: "150px",
         formItems: [
           {
+            label: "集合",
+            prop: "collection1",
+            type: "collection",
+            collectionlistType: "form",
+            collectionCfForm: {
+              col_span: 12,
+              formItems: [
+                {
+                  label: "时间",
+                  prop: "time",
+                  type: "date"
+                },
+                {
+                  label: "金额",
+                  prop: "money"
+                }
+              ]
+            }
+          },
+          {
             label: "图片上传2",
             prop: "prop_upload2",
             type: "upload",
@@ -59,209 +82,209 @@ export default {
               limit: 2,
               listType: "text"
             }
-          },
-          {
-            label: "图片上传",
-            prop: "prop_upload",
-            type: "upload",
-            uploadConfig: {
-              limit: 3,
-              preview: true
-            }
-          },
-          //   {
-          //   label: "extend",
-          //   prop: "extend",
-          //   type: "jsonEditor",
-
-          // },
-          {
-            label: "联系人信息",
-            prop: "extend",
-            default: {},
-            cfForm: {
-              formItems: [
-                {
-                  label: "姓名",
-                  prop: "name",
-                  type: "input"
-                },
-                {
-                  label: "下拉框(select)",
-                  prop: "sex",
-                  type: "select",
-                  default: 2,
-                  options: [
-                    { value: 1, label: "男" },
-                    { value: 2, label: "女" }
-                  ]
-                },
-                {
-                  label: "联系人信息2",
-                  prop: "extend1",
-                  default: {},
-
-                  cfForm: {
-                    col_span: 12,
-                    formItems: [
-                      {
-                        label: "姓名",
-                        prop: "name",
-                        type: "input",
-                        col_span: 12
-                      },
-                      {
-                        label: "下拉框(select)",
-                        prop: "sex",
-                        type: "select",
-                        default: 2,
-                        options: [
-                          { value: 1, label: "男" },
-                          { value: 2, label: "女" }
-                        ],
-                        col_span: 12
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          },
-          {
-            label: "负责人信息",
-            // prop: "extend",
-            cfForm: {
-              formItems: [
-                {
-                  label: "姓名",
-                  prop: "name",
-                  type: "input"
-                },
-                {
-                  label: "下拉框(select)",
-                  prop: "sex",
-                  type: "select",
-                  default: 2,
-                  options: [
-                    { value: 1, label: "男" },
-                    { value: 2, label: "女" }
-                  ]
-                }
-              ]
-            }
-          },
-          {
-            label: "纬度",
-            prop: "extend",
-            path: "latitude"
-          },
-          {
-            label: "普通文本框(input)",
-            prop: "prop1",
-            type: "input",
-            default: "默认文本",
-            rules: [
-              { required: true, message: "不能为空" },
-
-              {
-                pattern: /^[\u4E00-\u9FA5]+$/,
-                message: "用户名只能为中文"
-              }
-            ]
-          },
-          {
-            label: "密码框2(password)",
-            prop: "prop_password",
-            type: "password"
-          },
-          {
-            label: "用于模糊查询文本框(input_find_vague)",
-            prop: "prop_input_find_vague",
-            type: "input_find_vague"
-          },
-          {
-            label: "文本域(textarea)",
-            prop: "prop_textarea",
-            type: "textarea"
-          },
-          {
-            label: "下拉框(select)",
-            prop: "sex",
-            type: "select",
-            default: 2,
-            options: [{ value: 1, label: "男" }, { value: 2, label: "女" }]
-          },
-          {
-            label: "sex【联动】",
-            prop: "sex_relative",
-            type: "input",
-            //显示条件
-            term: { $or: [{ sex: 2 }, { prop_textarea: 2 }] }
-          },
-          {
-            label: "下拉框(select+ajax)",
-            prop: "prop4",
-            type: "select",
-            ajax: {
-              url: "/crossList?page=mabang-member",
-              param: { a: 1 },
-              keyLabel: "nickName",
-              keyValue: "userName"
-            }
-          },
-
-          {
-            label: "单选框(radio)",
-            prop: "prop_radio",
-            type: "radio",
-            default: 2,
-            options: [{ value: 1, label: "男" }, { value: 2, label: "女" }]
-          },
-          {
-            label: "复选框(checkbox)",
-            prop: "prop_checkbox",
-            type: "checkbox",
-            default: [2],
-            options: [{ value: 1, label: "男" }, { value: 2, label: "女" }]
-          },
-          {
-            label: "日期时间(dateTime)",
-            prop: "prop_dateTime",
-            type: "dateTime"
-          },
-          {
-            label: "日期选择器(date)",
-            prop: "prop_date",
-            type: "date"
-          },
-
-          {
-            label: "json编辑器(jsonEditor)",
-            prop: "prop_jsonEditor",
-            type: "jsonEditor"
-          },
-          {
-            label: "json编辑器(vueJsonEditor)",
-            prop: "prop_vueJsonEditor",
-            type: "vueJsonEditor"
-          },
-          {
-            label: "富文本编辑器(editor)",
-            prop: "prop_editor",
-            type: "editor"
-          },
-          {
-            label: "自定义组件(slot实现)",
-            prop: "description",
-            slot: "slot_form_item_description",
-            rules: [{ required: true, message: "不能为空" }]
-          },
-          {
-            label: "diycheckbox(slot实现)",
-            prop: "diycheckbox",
-            slot: "slot_form_item_diycheckbox",
-            rules: [{ required: true, message: "不能为空" }]
           }
+          // {
+          //   label: "图片上传",
+          //   prop: "prop_upload",
+          //   type: "upload",
+          //   uploadConfig: {
+          //     limit: 3,
+          //     preview: true
+          //   }
+          // },
+          // //   {
+          // //   label: "extend",
+          // //   prop: "extend",
+          // //   type: "jsonEditor",
+
+          // // },
+          // {
+          //   label: "联系人信息",
+          //   prop: "extend",
+          //   default: {},
+          //   cfForm: {
+          //     formItems: [
+          //       {
+          //         label: "姓名",
+          //         prop: "name",
+          //         type: "input"
+          //       },
+          //       {
+          //         label: "下拉框(select)",
+          //         prop: "sex",
+          //         type: "select",
+          //         default: 2,
+          //         options: [
+          //           { value: 1, label: "男" },
+          //           { value: 2, label: "女" }
+          //         ]
+          //       },
+          //       {
+          //         label: "联系人信息2",
+          //         prop: "extend1",
+          //         default: {},
+
+          //         cfForm: {
+          //           col_span: 12,
+          //           formItems: [
+          //             {
+          //               label: "姓名",
+          //               prop: "name",
+          //               type: "input",
+          //               col_span: 12
+          //             },
+          //             {
+          //               label: "下拉框(select)",
+          //               prop: "sex",
+          //               type: "select",
+          //               default: 2,
+          //               options: [
+          //                 { value: 1, label: "男" },
+          //                 { value: 2, label: "女" }
+          //               ],
+          //               col_span: 12
+          //             }
+          //           ]
+          //         }
+          //       }
+          //     ]
+          //   }
+          // },
+          // {
+          //   label: "负责人信息",
+          //   // prop: "extend",
+          //   cfForm: {
+          //     formItems: [
+          //       {
+          //         label: "姓名",
+          //         prop: "name",
+          //         type: "input"
+          //       },
+          //       {
+          //         label: "下拉框(select)",
+          //         prop: "sex",
+          //         type: "select",
+          //         default: 2,
+          //         options: [
+          //           { value: 1, label: "男" },
+          //           { value: 2, label: "女" }
+          //         ]
+          //       }
+          //     ]
+          //   }
+          // },
+          // {
+          //   label: "纬度",
+          //   prop: "extend",
+          //   path: "latitude"
+          // },
+          // {
+          //   label: "普通文本框(input)",
+          //   prop: "prop1",
+          //   type: "input",
+          //   default: "默认文本",
+          //   rules: [
+          //     { required: true, message: "不能为空" },
+
+          //     {
+          //       pattern: /^[\u4E00-\u9FA5]+$/,
+          //       message: "用户名只能为中文"
+          //     }
+          //   ]
+          // },
+          // {
+          //   label: "密码框2(password)",
+          //   prop: "prop_password",
+          //   type: "password"
+          // },
+          // {
+          //   label: "用于模糊查询文本框(input_find_vague)",
+          //   prop: "prop_input_find_vague",
+          //   type: "input_find_vague"
+          // },
+          // {
+          //   label: "文本域(textarea)",
+          //   prop: "prop_textarea",
+          //   type: "textarea"
+          // },
+          // {
+          //   label: "下拉框(select)",
+          //   prop: "sex",
+          //   type: "select",
+          //   default: 2,
+          //   options: [{ value: 1, label: "男" }, { value: 2, label: "女" }]
+          // },
+          // {
+          //   label: "sex【联动】",
+          //   prop: "sex_relative",
+          //   type: "input",
+          //   //显示条件
+          //   term: { $or: [{ sex: 2 }, { prop_textarea: 2 }] }
+          // },
+          // {
+          //   label: "下拉框(select+ajax)",
+          //   prop: "prop4",
+          //   type: "select",
+          //   ajax: {
+          //     url: "/crossList?page=mabang-member",
+          //     param: { a: 1 },
+          //     keyLabel: "nickName",
+          //     keyValue: "userName"
+          //   }
+          // },
+
+          // {
+          //   label: "单选框(radio)",
+          //   prop: "prop_radio",
+          //   type: "radio",
+          //   default: 2,
+          //   options: [{ value: 1, label: "男" }, { value: 2, label: "女" }]
+          // },
+          // {
+          //   label: "复选框(checkbox)",
+          //   prop: "prop_checkbox",
+          //   type: "checkbox",
+          //   default: [2],
+          //   options: [{ value: 1, label: "男" }, { value: 2, label: "女" }]
+          // },
+          // {
+          //   label: "日期时间(dateTime)",
+          //   prop: "prop_dateTime",
+          //   type: "dateTime"
+          // },
+          // {
+          //   label: "日期选择器(date)",
+          //   prop: "prop_date",
+          //   type: "date"
+          // },
+
+          // {
+          //   label: "json编辑器(jsonEditor)",
+          //   prop: "prop_jsonEditor",
+          //   type: "jsonEditor"
+          // },
+          // {
+          //   label: "json编辑器(vueJsonEditor)",
+          //   prop: "prop_vueJsonEditor",
+          //   type: "vueJsonEditor"
+          // },
+          // {
+          //   label: "富文本编辑器(editor)",
+          //   prop: "prop_editor",
+          //   type: "editor"
+          // },
+          // {
+          //   label: "自定义组件(slot实现)",
+          //   prop: "description",
+          //   slot: "slot_form_item_description",
+          //   rules: [{ required: true, message: "不能为空" }]
+          // },
+          // {
+          //   label: "diycheckbox(slot实现)",
+          //   prop: "diycheckbox",
+          //   slot: "slot_form_item_diycheckbox",
+          //   rules: [{ required: true, message: "不能为空" }]
+          // }
         ],
         btns: [
           { text: "提交111", event: "submit", type: "primary", validate: true },
@@ -281,7 +304,120 @@ export default {
       {
         label: "表单字段",
         prop: "formItems",
-        type: "collection"
+        type: "collection",
+        collectionCfForm: {
+          formItems: [
+            {
+              label: "字段标签",
+              prop: "label"
+            },
+            {
+              label: "字段属性",
+              prop: "prop"
+            },
+            {
+              label: "字段类型",
+              prop: "type",
+              type: "radio",
+              default: "input",
+              options: [
+                { value: "input", label: "文本框" },
+                {
+                  value: "input_find_vague",
+                  label: "文本框(用于列表的模糊查询)"
+                },
+                { value: "textarea", label: "文本域" },
+                { value: "select", label: "下拉框" },
+                { value: "radio", label: "单选框" },
+                { value: "checkbox", label: "复选框" },
+                { value: "date", label: "日期选择器" },
+                { value: "dateTime", label: "日期时间选择器" },
+                { value: "upload", label: "图片/文件上传" },
+                { value: "jsonEditor", label: "json编辑器" },
+                { value: "vueJsonEditor", label: "json编辑器（加强版）" },
+                { value: "editor", label: "富文本编辑器" },
+                { value: "time_period", label: "时间段查询框" },
+                { value: "password", label: "密码框" },
+                { value: "form", label: "子表单" },
+                { value: "collection", label: "集合" }
+              ]
+            },
+            {
+              term: { type: "upload" },
+              label: "上传图片配置",
+              prop: "uploadConfig",
+              type: "jsonEditor",
+              cfForm: {
+                col_span: 12,
+                formItems: [
+                  {
+                    label: "限制数量",
+                    prop: "limit",
+                    type: "input"
+                  },
+                  {
+                    label: "列表类型",
+                    prop: "listType",
+                    type: "radio",
+                    // default: 2,
+                    options: [
+                      { value: "text", label: "text" },
+                      { value: "picture-card", label: "picture-card" }
+                    ]
+                  },
+                  {
+                    label: "是否预览",
+                    prop: "preview",
+                    type: "radio",
+                    // default: false,
+                    options: [
+                      { value: true, label: "是" },
+                      { value: false, label: "否" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              term: { type: "collection" },
+              label: "集合列表类型",
+              prop: "collectionlistType",
+              type: "radio",
+              default: "bar",
+              options: [
+                { value: "bar", label: "bar" },
+                { value: "form", label: "form" }
+              ]
+            },
+            {
+              term: { type: "collection" },
+              label: "集合表单配置",
+              prop: "collectionCfForm",
+              type: "form",
+              cfForm: {
+               
+                formItems: [
+                  {
+                    label: "col_span",
+                    prop: "col_span",
+                    type: "input"
+                  },
+                  {
+                    label: "表单字段",
+                    prop: "formItems",
+                    type: "collection"
+                  }
+                ]
+              }
+            },
+            {
+              term: { type: "form" },
+              label: "子表单",
+              prop: "cfForm",
+              type: "jsonEditor"
+            }
+          ]
+        }
       },
       {
         label: "按钮",
