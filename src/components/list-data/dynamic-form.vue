@@ -26,9 +26,28 @@
           >
             <div v-if="satisfyTerm(item)&&item.cfForm" class="form-group-box">
               <div class="FWB FS16">{{item.label}}</div>
-              <!--递归组件-->
-              <dm_dynamic_form :cf="item.cfForm" v-model="formDataNeed[item.prop]" v-if="item.prop"></dm_dynamic_form>
-              <dm_dynamic_form :cf="item.cfForm" v-model="formDataNeed" v-else></dm_dynamic_form>
+              <!--递归表单组件，如果有配置prop-->
+              <dm_dynamic_form :cf="item.cfForm" v-model="formDataNeed[item.prop]" v-if="item.prop">
+                <!--递归插槽-->
+                <template
+                  v-slot:[formItem.slot]="{formData}"
+                  v-for="formItem in item.cfForm.formItems"
+                >
+                  <!--根据cf.formItems循环输出插槽-->
+                  <slot :name="formItem.slot" :formData="formData" v-if="formItem.slot"></slot>
+                </template>
+              </dm_dynamic_form>
+              <!--递归表单组件，如果没有配置prop-->
+              <dm_dynamic_form :cf="item.cfForm" v-model="formDataNeed" v-else>
+                <!--递归插槽-->
+                <template
+                  v-slot:[formItem.slot]="{formData}"
+                  v-for="formItem in item.cfForm.formItems"
+                >
+                  <!--根据cf.formItems循环输出插槽-->
+                  <slot :name="formItem.slot" :formData="formData" v-if="formItem.slot"></slot>
+                </template>
+              </dm_dynamic_form>
             </div>
 
             <el-form-item
@@ -116,9 +135,18 @@
               <!--如果是普通json编辑器-->
               <json_editor v-model="formDataNeed[item.prop]" v-else-if="item.type=='jsonEditor'"></json_editor>
               <!--如果是collection-->
-              <collection v-model="formDataNeed[item.prop]" v-else-if="item.type=='collection'" :list-type="item.collectionlistType" :cf-form="item.collectionCfForm"></collection>
+              <collection
+                v-model="formDataNeed[item.prop]"
+                v-else-if="item.type=='collection'"
+                :list-type="item.collectionlistType"
+                :cf-form="item.collectionCfForm"
+              ></collection>
               <!--如果是图片上传控件-->
-              <upload_img v-model="formDataNeed[item.prop]" :upload-config="item.uploadConfig" v-else-if="item.type=='upload'"></upload_img>
+              <upload_img
+                v-model="formDataNeed[item.prop]"
+                :upload-config="item.uploadConfig"
+                v-else-if="item.type=='upload'"
+              ></upload_img>
               <!--富文本编辑器-->
               <quillEditor
                 v-model="formDataNeed[item.prop]"
@@ -153,16 +181,27 @@
           </el-col>
         </template>
 
-        <!-- 查询按钮 -->
-        <el-form-item style="display:inline-block;" v-if="cf.btns&&cf.btns.length">
-          <el-button
-            :type="item.type"
-            @click="btnClick(item.event,item.validate)"
-            v-for="(item,index) in cf.btns"
-            :key="index"
-            size="mini"
-          >{{item.text}}</el-button>
-        </el-form-item>
+        <template class v-if="cf.btns&&cf.btns.length">
+          <div class="TAC LH50 clear" v-if="!cf.inline">
+            <el-button
+              :type="item.type"
+              @click="btnClick(item.event,item.validate)"
+              v-for="(item,index) in cf.btns"
+              :key="index"
+              size="normal"
+            >{{item.text}}</el-button>
+          </div>
+          <!-- 查询按钮 -->
+          <el-form-item style="display:inline-block;" v-else>
+            <el-button
+              :type="item.type"
+              @click="btnClick(item.event,item.validate)"
+              v-for="(item,index) in cf.btns"
+              :key="index"
+              size="mini"
+            >{{item.text}}</el-button>
+          </el-form-item>
+        </template>
       </el-row>
     </el-form>
   </div>
@@ -192,7 +231,8 @@ export default {
     json_editor,
     upload_img,
     time_period,
-    json_prop,collection
+    json_prop,
+    collection
   },
   props: {
     cf: {
@@ -215,7 +255,7 @@ export default {
       clearall: false, //控制变为行内块状
       spanIndex: null, //控制span属性值
       isReadyFormData: false, //表单初始化数据是否已备好的逻辑标记
-      formDataNeed: this.value||{},
+      formDataNeed: this.value || {},
       editorOption: {
         //编辑器的配置
         modules: {
@@ -238,23 +278,24 @@ export default {
     value: {
       handler(newName, oldName) {
         console.log("form-value变更");
-        this.formDataNeed = this.value||{};
+        this.formDataNeed = this.value || {};
       },
       deep: true
     }
   },
   methods: {
-         //给递归表单字段做一层空对象的保障
-    
-initRecursionProp() {
-  console.log("initRecursionProp#######");
-      this.cf.formItems.forEach(itemEach => { //循环：{表单字段配置数组}
-                   if (itemEach.cfForm&&itemEach.prop) {//如果是递归字段
-                     this.formDataNeed[itemEach.prop]=this.formDataNeed[itemEach.prop]||{};
+    //给递归表单字段做一层空对象的保障
 
-                     }
-
-                })
+    initRecursionProp() {
+      console.log("initRecursionProp#######");
+      this.cf.formItems.forEach(itemEach => {
+        //循环：{表单字段配置数组}
+        if (itemEach.cfForm && itemEach.prop) {
+          //如果是递归字段
+          this.formDataNeed[itemEach.prop] =
+            this.formDataNeed[itemEach.prop] || {};
+        }
+      });
     },
     satisfyTerm(item) {
       //函数：{返回是否满足显示条件的函数}-用于字段联动
@@ -300,7 +341,6 @@ initRecursionProp() {
     btnClick(eventName, validate) {
       //Q1：需要校验
       if (validate) {
-
         this.$refs.form.validate(valid => {
           if (valid) {
             this.$emit(eventName);
@@ -322,36 +362,33 @@ initRecursionProp() {
         this.cf.formItems.forEach(itemEach => {
           //循环：{表单字段配置数组}
           jsonData[itemEach.prop] = this.docGet[itemEach.prop];
-         
         });
 
         //让初始传入的formData但在formItems中未定义的数据也要保留！！
         let json1 = Object.assign(this.docGet, jsonData); //合并对象
 
         this.formDataNeed = util.deepCopy(json1); //深拷贝，触发完整的双向绑定！！！
-        this.initRecursionProp();//给递归表单字段做一层空对象的保障
+        this.initRecursionProp(); //给递归表单字段做一层空对象的保障
       }
       this.isReadyFormData = true; //***表单初始化数据是否已备好的逻辑标记,某些字段需要等待这个标记为true
     }
   },
-   async created() {
+  async created() {
     this.docGet = this.value || {}; //**** */
-        this.initRecursionProp();//给递归表单字段做一层空对象的保障       
+    this.initRecursionProp(); //给递归表单字段做一层空对象的保障
     this.cf.formItems.forEach(itemEach => {
       //循环：{表单字段配置数组}处理默认值
       this.docGet[itemEach.prop] =
         this.value[itemEach.prop] || itemEach.default;
-
     });
 
     //如果初始化的ajax地址存在
     if (this.cf.urlInit) {
-
       let { data } = await axios({
         //请求接口
         method: "post",
-        url: (PUB.domain||"") + this.cf.urlInit,//注意运算符要用括号
-         data: this.cf.paramInit || {
+        url: (PUB.domain || "") + this.cf.urlInit, //注意运算符要用括号
+        data: this.cf.paramInit || {
           id: this.value.P1
         } //传递参数
       });
@@ -386,28 +423,23 @@ initRecursionProp() {
   float: left;
 }
 
-.form-group-box{
+.form-group-box {
   border: 1px #ddd solid;
-border-radius: 5px;
-padding: 10px 10px 15px;
-margin:0 0 20px 0;
+  border-radius: 5px;
+  padding: 10px 10px 15px;
+  margin: 0 0 20px 0;
 }
-
-
 
 /* 防止最下边的子表单出现过大的间距 */
 
-.el-col-24:last-child .form-group-box{
-margin-bottom:0;
+.el-col-24:last-child .form-group-box {
+  margin-bottom: 0;
 }
 
 /* 防止最下边的字段出现过大的间距,包括双列情况 */
-.el-col-12:last-child .el-form-item, 
-.el-col-12:nth-last-child(2) .el-form-item, 
-.el-col-24:last-child .el-form-item{
-margin-bottom:0;
+.el-col-12:last-child .el-form-item,
+.el-col-12:nth-last-child(2) .el-form-item,
+.el-col-24:last-child .el-form-item {
+  margin-bottom: 0;
 }
-
-
-
 </style>

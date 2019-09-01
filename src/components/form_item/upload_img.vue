@@ -5,7 +5,11 @@
       <dm_debug_item v-model="valueNeed" text="图片列表" />
       <dm_debug_item v-model="uploadConfigNeed" text="uploadConfigNeed" />
     </dm_debug_list>
-    <!-- :file-list="valueNeed"这个会导致出现两次动画 -->
+    <!-- :file-list="valueNeed"这个会导致出现两次动画,但也没办法去掉 -->
+    <!-- 
+
+  name="ImgParame"//这个要注意，直传时不能设置这个
+    -->
     <el-upload
       :class="{'exceed':isExceed}"
       :limit="uploadConfigNeed.limit"
@@ -13,11 +17,13 @@
       :list-type="uploadConfigNeed.listType"
       :on-preview="handlePictureCardPreview"
       :on-remove="handleRemove"
+      :before-remove="beforeRemove" 
       :on-success="uploaded"
       :on-exceed="exceed"
-      :before-remove="beforeRemove"
+      :multiple="true"
+      :before-upload="beforeUpload"
+      :data="postData"
       :file-list="valueNeed"
-      name="ImgParame"
       v-if="!changeOrder&&uploadConfigNeed"
     >
       <i class="el-icon-plus" v-if="uploadConfigNeed.listType=='picture-card'"></i>
@@ -62,8 +68,9 @@ export default {
   components: { draggable },
   data() {
     return {
+      downloadDomain: "", //七牛云下载域名
+      postData: {},
       uploadConfigNeed: null,
-      // uploadConfigNeed: this.uploadConfig || {},
       dialogImageUrl: "",
       dialogVisible: false,
       changeOrder: false
@@ -114,13 +121,61 @@ export default {
     beforeRemove(file, fileList) {
       return this.$confirm(`确定移除 ${file.name}？`);
     },
+    /**
+     * @name 上传前的回调函数
+     * @desc 获取七牛云token,指定返回数据格式
+     * @param 00000
+     */
+
+    async beforeUpload(file) {
+      let time = moment().format("YYYYMMDDHHmmSSsss");
+      //请求获取token接口
+      let { data } = await axios({
+        method: "post",
+        url: PUB.urlGetQiniuToken,
+        data: {
+          options: {
+            //配置项
+            forceSaveKey: true, //使用自定义的key
+            saveKey: `${time}_${file.name}`, //自定义的key
+            //返回数据格式y
+            returnBody: `{"key":   $(key), "hash": $(etag), "w": $(imageInfo.width), "h": $(imageInfo.height), 
+            "size": $(fsize),
+            "bucket": $(bucket),
+            "fname": $(fname),
+            "ext": $(ext),
+            "time": "$(year)-$(mon)-$(day) $(hour):$(min):$(sec) "
+            }`
+          }
+        }
+      });
+      console.log("data", data);
+      let { token, downloadDomain } = data;
+      this.downloadDomain = downloadDomain; //更新七牛云下载域名
+
+      this.postData.token = token;
+      console.log("file", file);
+      const isLt2M = file.size / 1024 / 1024 < 200;
+
+      if (!isLt2M) {
+        this.$message.error("上传文件大小不能超过 200MB!");
+      }
+      return isLt2M;
+    },
     //处理图片上传后的同步
     uploaded(response) {
       console.log("response", response);
-      let { key, downloadDomain, originalname } = response;
-      let url = `${downloadDomain}/${key}`; //图片的绝对路径
-      this.valueNeed.push({ url, name: originalname }); //
+      //  response= util.parseJson(response)//转成json
+      let { key, fname } = response;
+      let url = `${this.downloadDomain}/${key}`; //图片的绝对路径
+      this.valueNeed.push({ url, name: fname }); //
     },
+    // uploaded(response) {
+    //   console.log("response", response);
+    //   let { key, downloadDomain, originalname } = response;
+    //   let url = `${downloadDomain}/${key}`; //图片的绝对路径
+    //   this.valueNeed.push({ url, name: originalname }); //
+    // },
 
     //处理图片删除后的同步
     handleRemove(file, fileList) {
@@ -135,9 +190,7 @@ export default {
       }
     },
     initConfig() {
-
-
-      this.uploadConfigNeed=this.uploadConfig || {};
+      this.uploadConfigNeed = this.uploadConfig || {};
       //函数：{初始化配置函数}
       let uploadConfigDefault = {
         //默认的上传配置
@@ -194,6 +247,6 @@ export default {
 }
 /* 补丁，删除图片过渡动画，因为可能会出现两次 */
 .upload_box >>> .el-upload-list__item {
-  transition: none ;
+  transition: none;
 }
 </style>

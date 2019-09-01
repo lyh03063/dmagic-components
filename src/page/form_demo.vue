@@ -35,15 +35,15 @@ export default {
         { label: "label2", value: "2" }
       ],
       formData: {
-        collection1: [
-          { time: "2019-09-09", money: 100 },
-          { time: "2019-09-11", money: 200 }
-        ],
+        // collection1: [
+        //   { time: "2019-09-09", money: 100 },
+        //   { time: "2019-09-11", money: 200 }
+        // ],
         extend: { aaa: 1, name: "lucy" },
         prop_checkbox: [], //复选框字段的默认数组
         prop1: "abcd",
         prop_dateTime: "2019-7-24 14:09",
-        diycheckbox: [1],
+        diycheckbox: ["1"],
         prop_upload2: [
           {
             name: "1323.jpg",
@@ -54,6 +54,37 @@ export default {
       cfForm: {
         labelWidth: "150px",
         formItems: [
+          {
+            label: "负责人信息",
+            prop: "extend",
+            default:{diycheckbox:[]},
+            cfForm: {
+              formItems: [
+                {
+                  label: "diycheckbox(slot实现)",
+                  prop: "diycheckbox",
+                  slot: "slot_form_item_diycheckbox",
+                  rules: [{ required: true, message: "不能为空" }]
+                },
+                {
+                  label: "姓名",
+                  prop: "name",
+                  type: "input"
+                },
+                {
+                  label: "下拉框(select)",
+                  prop: "sex",
+                  type: "select",
+                  default: 2,
+                  options: [
+                    { value: 1, label: "男" },
+                    { value: 2, label: "女" }
+                  ]
+                }
+              ]
+            }
+          },
+
           {
             label: "集合",
             prop: "collection1",
@@ -82,16 +113,16 @@ export default {
               limit: 2,
               listType: "text"
             }
-          }
-          // {
-          //   label: "图片上传",
-          //   prop: "prop_upload",
-          //   type: "upload",
-          //   uploadConfig: {
-          //     limit: 3,
-          //     preview: true
-          //   }
-          // },
+          },
+          {
+            label: "图片上传",
+            prop: "prop_upload",
+            type: "upload",
+            uploadConfig: {
+              limit: 3,
+              preview: true
+            }
+          },
           // //   {
           // //   label: "extend",
           // //   prop: "extend",
@@ -150,29 +181,7 @@ export default {
           //     ]
           //   }
           // },
-          // {
-          //   label: "负责人信息",
-          //   // prop: "extend",
-          //   cfForm: {
-          //     formItems: [
-          //       {
-          //         label: "姓名",
-          //         prop: "name",
-          //         type: "input"
-          //       },
-          //       {
-          //         label: "下拉框(select)",
-          //         prop: "sex",
-          //         type: "select",
-          //         default: 2,
-          //         options: [
-          //           { value: 1, label: "男" },
-          //           { value: 2, label: "女" }
-          //         ]
-          //       }
-          //     ]
-          //   }
-          // },
+
           // {
           //   label: "纬度",
           //   prop: "extend",
@@ -273,18 +282,6 @@ export default {
           //   prop: "prop_editor",
           //   type: "editor"
           // },
-          // {
-          //   label: "自定义组件(slot实现)",
-          //   prop: "description",
-          //   slot: "slot_form_item_description",
-          //   rules: [{ required: true, message: "不能为空" }]
-          // },
-          // {
-          //   label: "diycheckbox(slot实现)",
-          //   prop: "diycheckbox",
-          //   slot: "slot_form_item_diycheckbox",
-          //   rules: [{ required: true, message: "不能为空" }]
-          // }
         ],
         btns: [
           { text: "提交111", event: "submit", type: "primary", validate: true },
@@ -395,7 +392,6 @@ export default {
               prop: "collectionCfForm",
               type: "form",
               cfForm: {
-               
                 formItems: [
                   {
                     label: "col_span",

@@ -1,8 +1,11 @@
 console.log("util#####");
 window.PUB = {}
-window.PUB.domain="http://120.76.160.41:3000"
-//window.PUB.domain = "http://localhost:3000"
-window.PUB.urlUpload = `${PUB.domain}/api_third_part/qiniu_upload?scope=lawyer_case_management`
+//window.PUB.domain="http://120.76.160.41:3000"
+window.PUB.domain = "http://localhost:3000"
+// window.PUB.urlUpload = `${PUB.domain}/api_third_part/qiniu_upload?scope=test`
+window.PUB.urlUpload = `https://up-z2.qiniup.com`//七牛云上传地址（域名）
+window.PUB.urlGetQiniuToken = `${PUB.domain}/api_third_part/get_qiniu_token?scope=test`
+
 
 
 let deepCopy = function (obj) {//深拷贝一个Json对象的函数

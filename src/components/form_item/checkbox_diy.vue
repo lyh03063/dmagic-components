@@ -6,10 +6,7 @@
       v-for="optionEach in options"
       :key="optionEach.value"
       @click="changeChecked(optionEach.value)"
-    >
-    {{optionEach.label}}
-    </div>
-
+    >{{optionEach.label}}</div>
   </div>
 </template>
 
@@ -30,15 +27,27 @@ export default {
       valueNeed: this.value
     };
   },
+  watch: {
+    value: {
+      handler(newName, oldName) {
+        if (!this.value) {
+     
+          this.valueNeed = [];
+        }
+      },
+      immediate: true,
+      deep: true
+    }
+  },
   methods: {
     changeChecked(value) {
       let index = this.valueNeed.indexOf(value); //索引值
       //Q1:{索引值}大于等于0 ，表示该元素存在于数组，
       if (index >= 0) {
-        this.valueNeed.splice(index, 1);//删除
+        this.valueNeed.splice(index, 1); //删除
         //Q2:否则
       } else {
-        this.valueNeed.push(value);//加入
+        this.valueNeed.push(value); //加入
       }
 
       this.$emit("input", this.valueNeed); //触发双向绑定
@@ -68,9 +77,7 @@ export default {
 }
 /*选中样式*/
 .checked {
- 
-color: white;
-  background-color:red 
-
+  color: white;
+  background-color: red;
 }
 </style>

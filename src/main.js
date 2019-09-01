@@ -14,6 +14,12 @@ window.axios = axios;
 import lodash from 'lodash'//导入lodash方法库
 window.lodash = lodash
 Vue.prototype.$lodash = lodash//让vue实例中可访问$store
+
+import moment from 'moment'//导入moment方法库
+window.moment = moment
+Vue.prototype.$moment = moment//让vue实例中可访问$moment
+
+
 import util from "./assets/js/util.js";
 window.util = util;
 

@@ -1,39 +1,51 @@
 <template>
-  <div class v-if="valueNeed && valueNeed.length">
+  <div class>
     <el-button plain @click="addGroup" size="mini">添加一组</el-button>
-    <dm_space height="8"></dm_space>
-    <ul>
-      <li
-        v-for="(doc,i) in valueNeed"
-        :key="i"
-        :class="{'data-group':true,'edit':editItem==i,'data-form-group':listType=='form'}"
-        @mouseenter="focusItem=i"
-        @mouseleave="focusItem=999"
-        @dblclick="editItem=i"
-      >
-        <div v-if="editItem==i">
-          <!--注意这里v-model要直接绑定valueNeed才行-->
-          <json_editor v-model="valueNeed[i]" @blur="afterBlur"></json_editor>
-        </div>
-        <div class v-else>
-          <dm_dynamic_form :cf="cfForm" v-model="valueNeed[i]" v-if="listType=='form'"></dm_dynamic_form>
-          <span v-else>{{doc}}</span>
-          <div class="tool-bar" v-if="focusItem==i">
-            <i class="el-icon-top btn-op" title="上移" @click="move(i, 'up')" v-if="i>0"></i>
-            <i
-              class="el-icon-bottom btn-op"
-              title="下移"
-              @click="move(i, 'down')"
-              v-if="i<valueNeed.length-1"
-            ></i>
-            <i class="el-icon-edit btn-op" title="编辑" @click="showEditDataDialog(i)" v-if="listType=='bar'"></i>
-            <i class="el-icon-copy-document btn-op" title="复制" @click="copyData(i)" v-if="listType=='bar'"></i>
-            <i class="el-icon-delete btn-op" title="删除" @click="deleteData(i)"></i>
+    <div class v-if="valueNeed && valueNeed.length">
+      <dm_space height="8"></dm_space>
+      <ul>
+        <li
+          v-for="(doc,i) in valueNeed"
+          :key="i"
+          :class="{'data-group':true,'edit':editItem==i,'data-form-group':listType=='form'}"
+          @mouseenter="focusItem=i"
+          @mouseleave="focusItem=999"
+          @dblclick="editItem=i"
+        >
+          <div v-if="editItem==i">
+            <!--注意这里v-model要直接绑定valueNeed才行-->
+            <json_editor v-model="valueNeed[i]" @blur="afterBlur"></json_editor>
           </div>
-        </div>
-      </li>
-      <li></li>
-    </ul>
+          <div class v-else>
+            <dm_dynamic_form :cf="cfForm" v-model="valueNeed[i]" v-if="listType=='form'"></dm_dynamic_form>
+            <span v-else>{{doc}}</span>
+            <div class="tool-bar" v-if="focusItem==i">
+              <i class="el-icon-top btn-op" title="上移" @click="move(i, 'up')" v-if="i>0"></i>
+              <i
+                class="el-icon-bottom btn-op"
+                title="下移"
+                @click="move(i, 'down')"
+                v-if="i<valueNeed.length-1"
+              ></i>
+              <i
+                class="el-icon-edit btn-op"
+                title="编辑"
+                @click="showEditDataDialog(i)"
+                v-if="listType=='bar'"
+              ></i>
+              <i
+                class="el-icon-copy-document btn-op"
+                title="复制"
+                @click="copyData(i)"
+                v-if="listType=='bar'"
+              ></i>
+              <i class="el-icon-delete btn-op" title="删除" @click="deleteData(i)"></i>
+            </div>
+          </div>
+        </li>
+        <li></li>
+      </ul>
+    </div>
 
     <!--修改对象弹窗-->
     <el-dialog
@@ -69,16 +81,28 @@ export default {
     },
 
     cfForm: {
-      type: Object,
+      type: Object
       // default: function() {
       //   return {
-          
+
       //     // btns: [
       //     //   { text: "保存", event: "submit", type: "primary", validate: true },
       //     //   { text: "取消", event: "cancel" }
       //     // ]
       //   };
       // }
+    }
+  },
+  watch: {
+    value: {
+      handler(newName, oldName) {
+        if (!this.value) {//
+        this.valueNeed=[];
+
+        }
+      },
+      immediate: true,
+      deep: true
     }
   },
   data() {
@@ -165,8 +189,8 @@ export default {
   right: 0px;
   top: 0;
   height: 100%;
-  background: rgba(3,3,3,0.5);
-  
+  background: rgba(3, 3, 3, 0.5);
+
   color: #fff;
   padding: 0 10px;
 }
@@ -177,7 +201,7 @@ export default {
   cursor: pointer;
 }
 .btn-op:hover {
- color:yellow
+  color: yellow;
 }
 
 .data-form-group {
@@ -188,14 +212,11 @@ export default {
   padding: 10px 10px 10px 8px;
 }
 
-
-.data-form-group .tool-bar{
+.data-form-group .tool-bar {
   height: 24px;
   line-height: 24px;
-  left:0;
-  right:auto;
-  border-bottom-right-radius: 10px
-
-
+  left: 0;
+  right: auto;
+  border-bottom-right-radius: 10px;
 }
 </style>
