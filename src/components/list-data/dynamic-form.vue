@@ -1,6 +1,6 @@
 <template>
   <div class>
-    <loading height="200" v-if="!isReadyFormData"></loading>
+    <dm_loading height="200" v-if="!isReadyFormData"></dm_loading>
     <!--isReadyFormData为真时才开始渲染表单，保证里面的组件初始化时，表单初始数据已经准备好-->
     <dm_debug_list>
       <dm_debug_item v-model="formDataNeed" text="formDataNeed" />
@@ -148,11 +148,17 @@
                 v-else-if="item.type=='upload'"
               ></upload_img>
               <!--富文本编辑器-->
-              <quillEditor
+              <!-- <quillEditor
                 v-model="formDataNeed[item.prop]"
                 :options="editorOption"
                 v-else-if="item.type=='editor'"
-              ></quillEditor>
+              ></quillEditor> -->
+
+
+               <quill_editor
+                v-model="formDataNeed[item.prop]"
+                v-else-if="item.type=='editor'"
+              ></quill_editor>
               <!--模糊查询文本框-->
               <input_find_vague
                 v-model="formDataNeed[item.prop]"
@@ -208,10 +214,11 @@
 </template>
 
 <script>
-import "quill/dist/quill.core.css";
-import "quill/dist/quill.snow.css";
-import "quill/dist/quill.bubble.css";
-import { quillEditor } from "vue-quill-editor";
+// import "quill/dist/quill.core.css";
+// import "quill/dist/quill.snow.css";
+// import "quill/dist/quill.bubble.css";
+// import { quillEditor } from "vue-quill-editor";
+// import quillConfig from '../../assets/js/quill-config.js'
 import vueJsonEditor from "vue-json-editor";
 import select_ajax from "../../components/form_item/select_ajax.vue";
 import input_find_vague from "../../components/form_item/input_find_vague.vue";
@@ -220,11 +227,12 @@ import upload_img from "../../components/form_item/upload_img.vue";
 import time_period from "../../components/form_item/time_period.vue";
 import json_prop from "../../components/form_item/json_prop.vue";
 import collection from "../../components/form_item/collection.vue";
+import quill_editor from "../../components/form_item/quill_editor.vue";
 export default {
   name: "dm_dynamic_form", //组件名，用于递归
   components: {
     //注册组件
-    quillEditor,
+     quill_editor,
     vueJsonEditor,
     select_ajax,
     input_find_vague,
@@ -256,15 +264,7 @@ export default {
       spanIndex: null, //控制span属性值
       isReadyFormData: false, //表单初始化数据是否已备好的逻辑标记
       formDataNeed: this.value || {},
-      editorOption: {
-        //编辑器的配置
-        modules: {
-          toolbar: [
-            ["bold", "italic", "underline", "strike"],
-            ["link", "image", "video"]
-          ]
-        }
-      }
+      // editorOption: quillConfig
     };
   },
   watch: {
@@ -403,6 +403,8 @@ export default {
       this.clearall = true; //控制是否变为行内块状元素
       this.cf.col_span = null; //控制不分行
     }
+
+     
   }
 };
 </script>

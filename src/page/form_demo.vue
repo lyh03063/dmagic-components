@@ -55,6 +55,11 @@ export default {
         labelWidth: "150px",
         formItems: [
           {
+            label: "富文本编辑器(editor)",
+            prop: "prop_editor",
+            type: "editor"
+          },
+          {
             label: "负责人信息",
             prop: "extend",
             default:{diycheckbox:[]},
@@ -277,11 +282,7 @@ export default {
           //   prop: "prop_vueJsonEditor",
           //   type: "vueJsonEditor"
           // },
-          // {
-          //   label: "富文本编辑器(editor)",
-          //   prop: "prop_editor",
-          //   type: "editor"
-          // },
+          
         ],
         btns: [
           { text: "提交111", event: "submit", type: "primary", validate: true },
