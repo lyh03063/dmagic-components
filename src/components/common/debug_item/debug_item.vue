@@ -117,6 +117,8 @@ export default {
 table.n-table.n-table-debug td,
 table.n-table.n-table-debug th {
   padding: 3px;
+  line-height: 18px;
+
 }
 .changing {
   background: #f60;

@@ -122,13 +122,12 @@ export default {
      */
 
     addGroup() {
-      let obj = {};
+      let obj = {"_exit":true};//_exit是为了防止出现空对象
       this.cfForm.formItems.forEach(itemEach => {
         if (itemEach.default !== null && itemEach.default !== undefined) {
           //如果默认值存在
           obj[itemEach.prop] = itemEach.default;
         }
-        //循环：{000数组}
       });
 
       this.valueNeed.unshift(obj);
