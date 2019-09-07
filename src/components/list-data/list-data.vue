@@ -23,6 +23,8 @@
     <dm_space height="10"></dm_space>
     <!--主列表-->
     <dm_debug_list>
+       <dm_debug_item v-model="cf" text="列表配置" />
+       <dm_debug_item v-model="Objparam" text="列表查询参数" />
       <dm_debug_item v-model="cf.columns" text="列配置" />
       <dm_debug_item v-model="cf.formItems" text="新增/修改表单配置" />
       <dm_debug_item v-model="cf.searchFormItems" text="筛选表单配置" />
