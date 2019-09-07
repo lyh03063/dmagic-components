@@ -14,11 +14,11 @@
       <el-button
         v-if="cf.flag"
         size="mini"
-        type="primary"
+        plain
         @click="$store.commit('openDialogAdd',cf.listIndex)"
       >新增</el-button>
       <dm_space v-else height="32"></dm_space>
-      <el-button @click="deleteSelection()" size="mini" type="primary">删除选中</el-button>
+      <el-button @click="deleteSelection()" size="mini" plain>删除选中</el-button>
     </el-row>
     <dm_space height="10"></dm_space>
     <!--主列表-->
@@ -392,10 +392,13 @@ export default {
 </script>
 
 
-<style >
+<style scoped>
 .search-form-box {
   border: 1px #ebeef5 solid;
   border-radius: 5px;
   padding: 15px 5px 0 12px;
+}
+.el-button+.el-button {
+    margin-left: 0px;
 }
 </style>
