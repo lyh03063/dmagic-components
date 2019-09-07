@@ -234,6 +234,7 @@ export default {
         .catch(function(error) {
           alert("异常:" + error);
         });
+        this.formAdd={}
     },
     //-------------显示修改弹窗的函数--------------
     showModify(row) {
