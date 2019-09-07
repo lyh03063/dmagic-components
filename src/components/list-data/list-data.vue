@@ -14,7 +14,7 @@
       <el-button
         v-if="cf.flag"
         size="mini"
-        plain
+        type="primary"
         @click="$store.commit('openDialogAdd',cf.listIndex)"
       >新增</el-button>
       <dm_space v-else height="32"></dm_space>
@@ -82,7 +82,7 @@
       </template>
 
       <el-table-column label="操作" min-width="150" v-if="cf.isShowOperateColumn">
-        <template slot-scope="scope">
+        <template slot-scope="scope" class="operation-box">
           <el-button
             title="详情"
             @click="showDetail(scope.row)"
@@ -398,7 +398,7 @@ export default {
   border-radius: 5px;
   padding: 15px 5px 0 12px;
 }
-.el-button+.el-button {
+.cell .el-button+.el-button {
     margin-left: 0px;
 }
 </style>
