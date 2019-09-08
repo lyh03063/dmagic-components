@@ -13,6 +13,7 @@ export default {
   data() {
     return {
       cfList: {
+        pageSize:2,
         listIndex: "list_article111111", //vuex对应的字段~
         focusMenu: true, //进行菜单聚焦
         twoTitle: "其他数据",

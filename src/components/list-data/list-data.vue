@@ -1,16 +1,16 @@
 <template>
   <div>
-    <el-breadcrumb separator-class="el-icon-arrow-right" v-if="cf.isShowBreadcrumb">
+    <el-breadcrumb separator-class="el-icon-arrow-right" v-if="cf.isShowBreadcrumb" class="MB12">
       <el-breadcrumb-item :to="{ path: '/listHome' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>{{cf.twoTitle}}</el-breadcrumb-item>
       <el-breadcrumb-item>{{cf.threeTitle}}</el-breadcrumb-item>
     </el-breadcrumb>
 
-    <div class="search-form-box MT12" v-if="cf.isShowSearchForm">
+    <div class="search-form-box MB10" v-if="cf.isShowSearchForm">
       <dynamicForm @submit1="searchList" :cf="cfSearchForm" v-model="Objparam.findJson"></dynamicForm>
     </div>
 
-    <el-row size="mini" class="MT10" v-if="cf.isShowToolBar">
+    <el-row size="mini" class="MB10" v-if="cf.isShowToolBar">
       <el-button
         v-if="cf.flag"
         size="mini"
@@ -20,7 +20,7 @@
       <dm_space v-else height="32"></dm_space>
       <el-button @click="deleteSelection()" size="mini" plain>删除选中</el-button>
     </el-row>
-    <dm_space height="10"></dm_space>
+  
     <!--主列表-->
     <dm_debug_list>
        <dm_debug_item v-model="cf" text="列表配置" />
@@ -113,6 +113,7 @@
         layout="total,prev, pager, next"
         @current-change="handleCurrentChange"
         :total="allCount"
+        :pageSize="Objparam.pageSize"
         style="float:right;margin:10px 0 0 0;"
         v-if="cf.isShowPageLink"
       ></el-pagination>
@@ -179,7 +180,7 @@ export default {
       Objparam: {
         findJson: {},
         pageIndex: 1, //第1页
-        pageSize: 10 //每页10条
+        pageSize: this.cf.pageSize||10 //每页10条
       },
 
       tableData: [] //列表数据
