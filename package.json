@@ -18,6 +18,8 @@
     "element-ui": "^2.11.1",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
+    "quill-image-drop-module": "^1.0.3",
+    "quill-image-resize-module": "^3.0.0",
     "vue": "^2.5.11",
     "vue-json-editor": "^1.4.0",
     "vue-quill-editor": "^3.0.6",
