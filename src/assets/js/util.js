@@ -1,7 +1,8 @@
 console.log("util#####");
 window.PUB = {}
 //window.PUB.domain="http://120.76.160.41:3000"
-window.PUB.domain = "http://localhost:3000"
+// window.PUB.domain = "http://localhost:3000"
+window.PUB.domain='http://test.dmagic.cn'
 // window.PUB.urlUpload = `${PUB.domain}/api_third_part/qiniu_upload?scope=test`
 window.PUB.urlUpload = `https://up-z2.qiniup.com`//七牛云上传地址（域名）
 window.PUB.urlGetQiniuToken = `${PUB.domain}/api_third_part/get_qiniu_token?scope=test`

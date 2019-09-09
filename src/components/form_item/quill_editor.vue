@@ -1,6 +1,8 @@
 <template>
   <div class>
-    <!-- 图片上传组件辅助-->
+    <!--富文本编辑器组件-->
+    <quillEditor v-model="valueNeed" :options="editorOption" ref="myQuillEditor"></quillEditor>
+     <!-- 图片上传组件辅助-->
     <el-upload
       id="quill-upload"
       class="avatar-uploader"
@@ -11,10 +13,8 @@
       :on-success="uploadSuccess"
       :on-error="uploadError"
       :before-upload="beforeUpload"
+      v-show="false"
     ></el-upload>
-    <!--富文本编辑器组件-->
-
-    <quillEditor v-model="valueNeed" :options="editorOption" ref="myQuillEditor"></quillEditor>
   </div>
 </template>
 
@@ -22,8 +22,13 @@
 import "quill/dist/quill.core.css";
 import "quill/dist/quill.snow.css";
 import "quill/dist/quill.bubble.css";
-import { quillEditor } from "vue-quill-editor";
+import { quillEditor,Quill} from "vue-quill-editor";
 import quillConfig from "../../assets/js/quill-config.js";
+import { ImageDrop } from 'quill-image-drop-module'
+import ImageResize from 'quill-image-resize-module'
+Quill.register('modules/imageDrop', ImageDrop)
+Quill.register('modules/imageResize', ImageResize)
+
 // import upload_img from "../../components/form_item/upload_img.vue";
 
 // 工具栏配置
@@ -32,7 +37,7 @@ const toolbarOptions = [
   ['blockquote', 'code-block'],
    [{ list: "ordered" }, { list: "bullet" }],
   ['clean'],                                   // remove formatting button
-  ['sourceEditor'], //新添加的工具
+  [], //新添加的工具
   [{ font: [] }],
   [{ align: [] }],
   ["link", "image", "video"],
@@ -65,11 +70,15 @@ export default {
         placeholder: "",
         theme: "snow", // or 'bubble'
         modules: {
+          imageDrop: true,
+          imageResize: true,
           toolbar: {
             container: toolbarOptions, // 工具栏
             handlers: {
               image: function(value) {
                 if (value) {
+                  console.log(document.querySelector("#quill-upload input"));
+                  
                   document.querySelector("#quill-upload input").click();
                 } else {
                   this.quill.format("image", false);

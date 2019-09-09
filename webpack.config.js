@@ -13,6 +13,12 @@ if (isDev) {//如果是开发环境
 
 
 module.exports = {
+    plugins: [
+      new webpack.ProvidePlugin({
+        'window.Quill': 'quill/dist/quill.js',
+        'Quill': 'quill/dist/quill.js'
+      }),
+    ],
   //entry: './src/main.js',//这地址用于调试
   entry: entryUrl,//这地址用于打包
   output: {
