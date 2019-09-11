@@ -63,6 +63,7 @@
                 <select_ajax
                   class
                   v-model="formDataNeed[item.prop]"
+                  :multiple="item.multiple"
                   :keyLabel="item.ajax.keyLabel"
                   :keyValue="item.ajax.keyValue"
                   :ajaxUrl="item.ajax.url"

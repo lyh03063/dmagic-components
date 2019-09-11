@@ -1,5 +1,5 @@
 <template>
-  <el-select v-model="valueNeed" placeholder="请选择" @change="change" clearable filterable>
+  <el-select :multiple="multiple"  collapse-tags v-model="valueNeed" placeholder="请选择" @change="change" clearable filterable>
     <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
   </el-select>
 </template>
@@ -7,7 +7,11 @@
 <script>
 export default {
   props: {
-    value: [String, Number],
+    multiple: {
+      default: false,
+      type:Boolean,
+    },
+    value: [String, Number,Array],
     ajaxUrl: {
       default: "/crossList?page=mabang-category"
     },

@@ -54,6 +54,18 @@ export default {
       cfForm: {
         labelWidth: "150px",
         formItems: [
+            {
+            label: "下拉框(select+ajax)",
+            prop: "prop4",
+            type: "select",
+            multiple:true,//多选
+            ajax: {
+              url: "/crossList?page=mabang-member",
+              param: { a: 1 },
+              keyLabel: "nickName",
+              keyValue: "userName"
+            }
+          },
           {
             label: "富文本编辑器(editor)",
             prop: "prop_editor",
@@ -235,17 +247,7 @@ export default {
           //   //显示条件
           //   term: { $or: [{ sex: 2 }, { prop_textarea: 2 }] }
           // },
-          // {
-          //   label: "下拉框(select+ajax)",
-          //   prop: "prop4",
-          //   type: "select",
-          //   ajax: {
-          //     url: "/crossList?page=mabang-member",
-          //     param: { a: 1 },
-          //     keyLabel: "nickName",
-          //     keyValue: "userName"
-          //   }
-          // },
+        
 
           // {
           //   label: "单选框(radio)",
