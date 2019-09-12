@@ -35,6 +35,7 @@ export default {
         { label: "label2", value: "2" }
       ],
       formData: {
+        select1: null,
         // collection1: [
         //   { time: "2019-09-09", money: 100 },
         //   { time: "2019-09-11", money: 200 }
@@ -54,11 +55,19 @@ export default {
       cfForm: {
         labelWidth: "150px",
         formItems: [
-            {
+          {
+            label: "下拉框(多选)",
+            prop: "select1",
+            type: "select",
+            // default: [2],
+            multiple: true, //多选
+            options: [{ value: 1, label: "男" }, { value: 2, label: "女" }]
+          },
+          {
             label: "下拉框(select+ajax)",
             prop: "prop4",
             type: "select",
-            multiple:true,//多选
+            multiple: true, //多选
             ajax: {
               url: "/crossList?page=mabang-member",
               param: { a: 1 },
@@ -74,7 +83,7 @@ export default {
           {
             label: "负责人信息",
             prop: "extend",
-            default:{diycheckbox:[]},
+            default: { diycheckbox: [] },
             cfForm: {
               formItems: [
                 {
@@ -93,6 +102,7 @@ export default {
                   prop: "sex",
                   type: "select",
                   default: 2,
+                  // multiple:true,//多选
                   options: [
                     { value: 1, label: "男" },
                     { value: 2, label: "女" }
@@ -139,7 +149,7 @@ export default {
               limit: 3,
               preview: true
             }
-          },
+          }
           // //   {
           // //   label: "extend",
           // //   prop: "extend",
@@ -247,7 +257,6 @@ export default {
           //   //显示条件
           //   term: { $or: [{ sex: 2 }, { prop_textarea: 2 }] }
           // },
-        
 
           // {
           //   label: "单选框(radio)",
@@ -284,7 +293,6 @@ export default {
           //   prop: "prop_vueJsonEditor",
           //   type: "vueJsonEditor"
           // },
-          
         ],
         btns: [
           { text: "提交111", event: "submit", type: "primary", validate: true },

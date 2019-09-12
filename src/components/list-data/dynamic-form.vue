@@ -70,7 +70,7 @@
                   :param="item.ajax.param"
                   v-if="item.ajax"
                 ></select_ajax>
-                <el-select v-model="formDataNeed[item.prop]" v-else clearable>
+                <el-select v-model="formDataNeed[item.prop]" v-else clearable  :multiple="item.multiple" collapse-tags>
                   <el-option
                     :label="option.label"
                     :value="option.value"
@@ -288,7 +288,6 @@ export default {
     //给递归表单字段做一层空对象的保障
 
     initRecursionProp() {
-      console.log("initRecursionProp#######");
       this.cf.formItems.forEach(itemEach => {
         //循环：{表单字段配置数组}
         if (itemEach.cfForm && itemEach.prop) {
@@ -356,7 +355,6 @@ export default {
     },
     //初始化表单函数
     initForm() {
-      console.log("this.docGet", this.docGet);
       if (this.docGet) {
         //ajax获取到的表单数据存在
         let jsonData = {};

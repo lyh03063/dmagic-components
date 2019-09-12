@@ -68,6 +68,14 @@ export default {
         ],
         //-------筛选表单字段数组-------
         searchFormItems: [
+           {
+            label: "下拉框(多选)",
+            prop: "select1",
+            type: "select",
+            // default: [2],
+            multiple: true, //多选
+            options: [{ value: 1, label: "男" }, { value: 2, label: "女" }]
+          },
           {
             label: "文章分类",
             prop: "articleCategory",
