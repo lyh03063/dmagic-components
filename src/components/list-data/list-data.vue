@@ -172,6 +172,7 @@ export default {
         size: "mini",
         inline: true,
         formItems: this.cf.searchFormItems,
+        watch: lodash.get(this.cf, `cfSearchForm.watch`),//监听器配置
         btns: [{ text: "查询", event: "submit1", type: "primary" }]
       },
 
