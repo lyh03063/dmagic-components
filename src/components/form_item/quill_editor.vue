@@ -34,11 +34,13 @@ Quill.register('modules/imageResize', ImageResize)
 // 工具栏配置
 const toolbarOptions = [
   ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+    [{ 'color': [] }, { 'background': [] }],
+    [{ 'font': ['宋体','黑体'] }],//这里是传入的字体配置
   ['blockquote', 'code-block'],
    [{ list: "ordered" }, { list: "bullet" }],
   ['clean'],                                   // remove formatting button
   [], //新添加的工具
-  [{ font: [] }],
+ 
   [{ align: [] }],
   ["link", "image", "video"],
   [
