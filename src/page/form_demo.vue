@@ -60,6 +60,11 @@ export default {
             type: "editor"
           },
           {
+            label: "富文本编辑器(TinyMCE)",
+            prop: "prop_editorTM",
+            type: "editorTM"
+          },
+          {
             label: "负责人信息",
             prop: "extend",
             default:{diycheckbox:[]},
