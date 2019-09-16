@@ -181,6 +181,8 @@ export default {
   mounted() {
     //在mounted钩子里面初始化富文本的样式
     // quillConfig.initButton();
+    console.log('window.PUB.urlUpload',window.PUB.urlUpload);
+    
   }
 };
 </script>

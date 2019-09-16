@@ -179,7 +179,9 @@
                 :options="editorOption"
                 v-else-if="item.type=='editor'"
               ></quillEditor>-->
-
+              <tiny_mce v-model="formDataNeed[item.prop]"
+                v-else-if="item.type=='editorTM'">
+                </tiny_mce>
               <quill_editor v-model="formDataNeed[item.prop]" v-else-if="item.type=='editor'"></quill_editor>
               <!--模糊查询文本框-->
               <input_find_vague
@@ -250,6 +252,7 @@ import time_period from "../../components/form_item/time_period.vue";
 import json_prop from "../../components/form_item/json_prop.vue";
 import collection from "../../components/form_item/collection.vue";
 import quill_editor from "../../components/form_item/quill_editor.vue";
+import tiny_mce from '../../components/form_item/tiny_mce'
 export default {
   name: "dm_dynamic_form", //组件名，用于递归
   components: {
@@ -262,7 +265,8 @@ export default {
     upload_img,
     time_period,
     json_prop,
-    collection
+    collection,
+    tiny_mce
   },
   props: {
     cf: {

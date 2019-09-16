@@ -139,10 +139,15 @@ export default {
             prop: "articleTitle",
             width: 200
           },
+          // {
+          //   label: "文章详情",
+          //   prop: "articleContent",
+          //   type: "editor"
+          // },
           {
             label: "文章详情",
             prop: "articleContent",
-            type: "editor"
+            type: "editorTM"
           },
           {
             label: "公众号文章地址",
