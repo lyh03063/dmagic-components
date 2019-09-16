@@ -103,6 +103,7 @@ export default {
     return {
       //------------------新增表单组件配置--------------
       cfFormAdd: {
+        col_span: lodash.get(this.cf, `cfForm.col_span`,24),//控制显示一行多列
         formItems: this.cf.formItems,
         btns: [
           { text: "新增", event: "submit", type: "primary", validate: true },

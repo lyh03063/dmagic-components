@@ -1,8 +1,14 @@
 <template>
   <div class>
-    <el-button plain @click="addGroup" size="mini">添加一组</el-button>
+    
+<dm_debug_list>
+      <dm_debug_item v-model="showToolbar" text="showToolbar"/>
+
+    </dm_debug_list>
+
+    <el-button class="MB8" plain @click="addGroup" size="mini" v-if="showToolbar">添加一组</el-button>
     <div class v-if="valueNeed && valueNeed.length">
-      <dm_space height="8"></dm_space>
+    
       <ul>
         <li
           v-for="(doc,i) in valueNeed"
@@ -19,7 +25,7 @@
           <div class v-else>
             <dm_dynamic_form :cf="cfForm" v-model="valueNeed[i]" v-if="listType=='form'"></dm_dynamic_form>
             <span v-else>{{doc}}</span>
-            <div class="tool-bar" v-if="focusItem==i">
+            <div class="tool-bar" v-if="focusItem==i&&showToolbar">
               <i class="el-icon-top btn-op" title="上移" @click="move(i, 'up')" v-if="i>0"></i>
               <i
                 class="el-icon-bottom btn-op"
@@ -78,6 +84,9 @@ export default {
   props: {
     listType: {
       default: "bar"
+    },
+    showToolbar:{
+      default: true
     },
 
     cfForm: {

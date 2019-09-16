@@ -35,10 +35,12 @@ export default {
         { label: "label2", value: "2" }
       ],
       formData: {
-        // collection1: [
-        //   { time: "2019-09-09", money: 100 },
-        //   { time: "2019-09-11", money: 200 }
-        // ],
+        percent: 0.12,
+        select1: null,
+        collection2: [
+          { time: "2019-09-09", money: 100 },
+          { time: "2019-09-11", money: 200 }
+        ],
         extend: { aaa: 1, name: "lucy" },
         prop_checkbox: [], //复选框字段的默认数组
         prop1: "abcd",
@@ -53,7 +55,52 @@ export default {
       },
       cfForm: {
         labelWidth: "150px",
+        watch: {
+          //传入监听器
+          complete1(newVal, oldVal) {
+            console.log("complete1111变动");
+            this.value.complete = 123;
+            let influence= {
+              1: { $ne: 0 },
+              2: { $gt: 0, $lt: 1 },
+              3: { $ne: 1 }
+            }
+          }
+        },
         formItems: [
+          {
+            label: "完成情况[被监听]",
+            prop: "complete1",
+            type: "select",
+            toObj: true, //提交（查询）时转成对象，值项应该是json字符串
+            // multiple:true,//多选
+            
+            options: [
+              { value: 1, label: "未开始" }, //complete==0
+              { value: 2, label: "进行中" }, //complete>0&&complete>1
+              { value: 3, label: "已完成" } //complete>0&&complete>1
+            ]
+          },
+          {
+            label: "下拉框(多选)",
+            prop: "select1",
+            type: "select",
+            // default: [2],
+            multiple: true, //多选
+            options: [{ value: 1, label: "男" }, { value: 2, label: "女" }]
+          },
+          {
+            label: "下拉框(select+ajax)",
+            prop: "prop4",
+            type: "select",
+            multiple: true, //多选
+            ajax: {
+              url: "/crossList?page=mabang-member",
+              param: { a: 1 },
+              keyLabel: "nickName",
+              keyValue: "userName"
+            }
+          },
           {
             label: "富文本编辑器(editor)",
             prop: "prop_editor",
@@ -66,10 +113,19 @@ export default {
           },
           {
             label: "负责人信息",
+            label: "拓展",
             prop: "extend",
-            default:{diycheckbox:[]},
+            default: { diycheckbox: [] },
             cfForm: {
+              col_span: 8,
+              labelWidth: "150px",
               formItems: [
+                {
+                  col_span: 24,
+                  label: "百分比",
+                  prop: "percent",
+                  type: "slider"
+                },
                 {
                   label: "diycheckbox(slot实现)",
                   prop: "diycheckbox",
@@ -77,6 +133,7 @@ export default {
                   rules: [{ required: true, message: "不能为空" }]
                 },
                 {
+                  col_span: 24,
                   label: "姓名",
                   prop: "name",
                   type: "input"
@@ -86,6 +143,7 @@ export default {
                   prop: "sex",
                   type: "select",
                   default: 2,
+                  // multiple:true,//多选
                   options: [
                     { value: 1, label: "男" },
                     { value: 2, label: "女" }
@@ -94,12 +152,33 @@ export default {
               ]
             }
           },
-
           {
-            label: "集合",
+            label: "集合（带工具栏）1",
+            style: { "margin-top": "50px" }, //自定义样式
             prop: "collection1",
             type: "collection",
             collectionlistType: "form",
+            collectionCfForm: {
+              col_span: 12,
+              formItems: [
+                {
+                  label: "时间",
+                  prop: "time",
+                  type: "date"
+                },
+                {
+                  label: "金额",
+                  prop: "money"
+                }
+              ]
+            }
+          },
+          {
+            label: "集合（无工具栏）",
+            prop: "collection2",
+            type: "collection",
+            collectionlistType: "form",
+            showToolbar: false, //不显示集合的工具栏
             collectionCfForm: {
               col_span: 12,
               formItems: [
@@ -132,7 +211,7 @@ export default {
               limit: 3,
               preview: true
             }
-          },
+          }
           // //   {
           // //   label: "extend",
           // //   prop: "extend",
@@ -240,17 +319,6 @@ export default {
           //   //显示条件
           //   term: { $or: [{ sex: 2 }, { prop_textarea: 2 }] }
           // },
-          // {
-          //   label: "下拉框(select+ajax)",
-          //   prop: "prop4",
-          //   type: "select",
-          //   ajax: {
-          //     url: "/crossList?page=mabang-member",
-          //     param: { a: 1 },
-          //     keyLabel: "nickName",
-          //     keyValue: "userName"
-          //   }
-          // },
 
           // {
           //   label: "单选框(radio)",
@@ -287,7 +355,6 @@ export default {
           //   prop: "prop_vueJsonEditor",
           //   type: "vueJsonEditor"
           // },
-          
         ],
         btns: [
           { text: "提交111", event: "submit", type: "primary", validate: true },

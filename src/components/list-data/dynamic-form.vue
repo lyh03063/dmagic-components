@@ -20,11 +20,17 @@
           <!--这里搞了个特殊的key，其实可以去掉，但编辑器代码会显示红色错误。-->
           <!--而只使用prop或index则代码会报key重复的错误，很奇怪index也会报key重复-->
           <el-col
-            :span="cf.col_span"
+            :span="item.col_span||cf.col_span"
             :key="item.prop+'_'+index"
-            :class="{clear:spanIndex==index,clearall:clearall}"
+            :class="{clearall:clearall}"
+            :style="getItemStyle(item)"
           >
-            <div v-if="satisfyTerm(item)&&item.cfForm" class="form-group-box">
+            <!-- :style="{'background': 'red', height: '100px'}" -->
+            <!-- clear:spanIndex==index, -->
+            <div
+              v-if="satisfyTerm(item)&&item.cfForm"
+              :class="{'form-group-box':true,'form-group-no-label':!item.label}"
+            >
               <div class="FWB FS16">{{item.label}}</div>
               <!--递归表单组件，如果有配置prop-->
               <dm_dynamic_form :cf="item.cfForm" v-model="formDataNeed[item.prop]" v-if="item.prop">
@@ -63,13 +69,20 @@
                 <select_ajax
                   class
                   v-model="formDataNeed[item.prop]"
+                  :multiple="item.multiple"
                   :keyLabel="item.ajax.keyLabel"
                   :keyValue="item.ajax.keyValue"
                   :ajaxUrl="item.ajax.url"
                   :param="item.ajax.param"
                   v-if="item.ajax"
                 ></select_ajax>
-                <el-select v-model="formDataNeed[item.prop]" v-else clearable>
+                <el-select
+                  v-model="formDataNeed[item.prop]"
+                  v-else
+                  clearable
+                  :multiple="item.multiple"
+                  collapse-tags
+                >
                   <el-option
                     :label="option.label"
                     :value="option.value"
@@ -126,6 +139,18 @@
               ></el-date-picker>
               <!--如果是时间段-->
               <time_period v-model="formDataNeed[item.prop]" v-else-if="item.type=='time_period'"></time_period>
+              <!--如果是百分比滑块-->
+              <el-slider
+                class="ML10 MR50"
+                v-model="formDataNeed[item.prop]"
+                :step="0.1"
+                :max="1"
+                height="30"
+                show-stops
+                v-else-if="item.type=='slider'"
+                :marks="marks"
+              ></el-slider>
+
               <!--如果是vue-json编辑器-->
               <vue-json-editor
                 v-model="formDataNeed[item.prop]"
@@ -139,6 +164,7 @@
                 v-model="formDataNeed[item.prop]"
                 v-else-if="item.type=='collection'"
                 :list-type="item.collectionlistType"
+                :show-toolbar="item.showToolbar"
                 :cf-form="item.collectionCfForm"
               ></collection>
               <!--如果是图片上传控件-->
@@ -152,16 +178,11 @@
                 v-model="formDataNeed[item.prop]"
                 :options="editorOption"
                 v-else-if="item.type=='editor'"
-              ></quillEditor> -->
-
-
-               <quill_editor
-                v-model="formDataNeed[item.prop]"
-                v-else-if="item.type=='editor'"
-              ></quill_editor>
+              ></quillEditor>-->
               <tiny_mce v-model="formDataNeed[item.prop]"
                 v-else-if="item.type=='editorTM'">
                 </tiny_mce>
+              <quill_editor v-model="formDataNeed[item.prop]" v-else-if="item.type=='editor'"></quill_editor>
               <!--模糊查询文本框-->
               <input_find_vague
                 v-model="formDataNeed[item.prop]"
@@ -236,7 +257,7 @@ export default {
   name: "dm_dynamic_form", //组件名，用于递归
   components: {
     //注册组件
-     quill_editor,
+    quill_editor,
     vueJsonEditor,
     select_ajax,
     input_find_vague,
@@ -265,10 +286,23 @@ export default {
   },
   data() {
     return {
+      marks: {
+        0: "0",
+        0.1: "10",
+        0.2: "20",
+        0.3: "30",
+        0.4: "40",
+        0.5: "50",
+        0.6: "60",
+        0.7: "70",
+        0.8: "80",
+        0.9: "90",
+        1: "100"
+      },
       clearall: false, //控制变为行内块状
       spanIndex: null, //控制span属性值
       isReadyFormData: false, //表单初始化数据是否已备好的逻辑标记
-      formDataNeed: this.value || {},
+      formDataNeed: this.value || {}
       // editorOption: quillConfig
     };
   },
@@ -289,10 +323,21 @@ export default {
     }
   },
   methods: {
+    /**
+     * @name 获取该字段样式函数
+     */
+    getItemStyle: function(item) {
+      let styleFinal = {}; //最终的样式对象
+      styleFinal["min-height"] = this.cf.itemMinHeight || "51px"; //字段高度
+      let { style = {} } = item;
+      Object.assign(styleFinal, style); //合并对象
+
+      return styleFinal;
+    },
+
     //给递归表单字段做一层空对象的保障
 
     initRecursionProp() {
-      console.log("initRecursionProp#######");
       this.cf.formItems.forEach(itemEach => {
         //循环：{表单字段配置数组}
         if (itemEach.cfForm && itemEach.prop) {
@@ -360,7 +405,6 @@ export default {
     },
     //初始化表单函数
     initForm() {
-      console.log("this.docGet", this.docGet);
       if (this.docGet) {
         //ajax获取到的表单数据存在
         let jsonData = {};
@@ -402,14 +446,24 @@ export default {
     this.initForm(); //调用：{初始化表单函数}
   },
   mounted() {
+    if (this.cf.watch) {
+      //for of循环遍历对象，for of不能直接处理对象，本质上是同个Object.keys拼装一个新数组进行辅助
+      let obj1 = this.cf.watch;
+      console.log("Object.keys结果", Object.keys(obj1));
+      for (var key of Object.keys(obj1)) {
+        console.log(key + ": " + obj1[key]);
+   
+        // console.log("this.cf.watch####", this.cf.watch);
+        this.$watch(`value.${key}`, this.cf.watch[key]);
+      }
+    }
+
     this.spanIndex = Math.floor(24 / this.cf.col_span);
     if (!this.cf.col_span && this.cf.inline) {
       //如果form表单已经启动了行内模式和不进行分块
       this.clearall = true; //控制是否变为行内块状元素
       this.cf.col_span = null; //控制不分行
     }
-
-     
   }
 };
 </script>
@@ -436,6 +490,12 @@ export default {
   padding: 10px 10px 15px;
   margin: 0 0 20px 0;
 }
+/* 当标签为空时，把边框也去掉 */
+.form-group-no-label {
+  border: none;
+  padding: 0;
+  margin: 0 0 20px 0;
+}
 
 /* 防止最下边的子表单出现过大的间距 */
 
@@ -449,4 +509,17 @@ export default {
 .el-col-24:last-child .el-form-item {
   margin-bottom: 0;
 }
+
+/****************************进度条补丁-START****************************/
+.el-col >>> .el-slider__marks-text {
+  margin-top: 8px;
+  line-height: 32px;
+  /* 不换行 */
+  word-break: keep-all;
+}
+
+.el-col >>> .el-slider__runway {
+  margin: 15px 0 0 0;
+}
+/****************************进度条补丁-END****************************/
 </style>

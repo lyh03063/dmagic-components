@@ -13,7 +13,19 @@ export default {
   data() {
     return {
       cfList: {
-        pageSize:2,
+        cfSearchForm: {
+          watch: {
+            //传入监听器
+            articleCategory(newName, oldName) {
+              console.log("complete1111变动");
+              this.value.articleTitle = newName;
+            }
+          }
+        },
+        cfForm: {
+          col_span: 12 //控制显示一行多列
+        },
+        pageSize: 2,
         listIndex: "list_article111111", //vuex对应的字段~
         focusMenu: true, //进行菜单聚焦
         twoTitle: "其他数据",
@@ -68,6 +80,14 @@ export default {
         ],
         //-------筛选表单字段数组-------
         searchFormItems: [
+          {
+            label: "下拉框(多选)",
+            prop: "select1",
+            type: "select",
+            // default: [2],
+            multiple: true, //多选
+            options: [{ value: 1, label: "男" }, { value: 2, label: "女" }]
+          },
           {
             label: "文章分类",
             prop: "articleCategory",
@@ -228,7 +248,6 @@ export default {
       }
     ];
 
-    
     var strJson = util.stringify(this.cfList);
     let json1 = JSON.parse(strJson);
     this.$store.commit("setCfData", json1);

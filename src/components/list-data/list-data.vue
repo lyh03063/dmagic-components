@@ -20,11 +20,11 @@
       <dm_space v-else height="32"></dm_space>
       <el-button @click="deleteSelection()" size="mini" plain>删除选中</el-button>
     </el-row>
-  
+
     <!--主列表-->
     <dm_debug_list>
-       <dm_debug_item v-model="cf" text="列表配置" />
-       <dm_debug_item v-model="Objparam" text="列表查询参数" />
+      <dm_debug_item v-model="cf" text="列表配置" />
+      <dm_debug_item v-model="Objparam" text="列表查询参数" />
       <dm_debug_item v-model="cf.columns" text="列配置" />
       <dm_debug_item v-model="cf.formItems" text="新增/修改表单配置" />
       <dm_debug_item v-model="cf.searchFormItems" text="筛选表单配置" />
@@ -33,6 +33,7 @@
       <dm_debug_item v-model="tableData" text="列表数据" />
     </dm_debug_list>
     <el-table
+     highlight-current-row
       ref="multipleTable"
       :data="tableData"
       border
@@ -130,7 +131,7 @@
         <!--根据cf.detailItems循环输出插槽--详情弹窗-->
         <slot :name="item.slot" :row="row" v-if="item.slot"></slot>
       </template>
-    <!-- 自定义详情弹窗插槽 -->
+      <!-- 自定义详情弹窗插槽 -->
       <template v-slot:customDetail="{detailData}">
         <slot name="customDetail" :detailData="detailData"></slot>
       </template>
@@ -171,6 +172,7 @@ export default {
         size: "mini",
         inline: true,
         formItems: this.cf.searchFormItems,
+        watch: lodash.get(this.cf, `cfSearchForm.watch`),//监听器配置
         btns: [{ text: "查询", event: "submit1", type: "primary" }]
       },
 
@@ -180,7 +182,7 @@ export default {
       Objparam: {
         findJson: {},
         pageIndex: 1, //第1页
-        pageSize: this.cf.pageSize||10 //每页10条
+        pageSize: this.cf.pageSize || 10 //每页10条
       },
 
       tableData: [] //列表数据
@@ -286,18 +288,35 @@ export default {
     },
     //-------------ajax获取数据列表函数--------------
     async getDataList() {
+      console.log("this.Objparam.findJson.select1#####", this.Objparam.findJson.select1);
+      /****************************将空数组处理成null-START****************************/
+      //for of循环遍历对象，for of不能直接处理对象，本质上是同个Object.keys拼装一个新数组进行辅助
+      let obj1 = this.Objparam.findJson;
+      //将空数组处理成null******
+      for (var key of Object.keys(obj1)) {
+        let type = util.type(obj1[key]);
+        console.log("obj1[key]", obj1[key]);
+        if (type == "array" && obj1[key].length === 0) {
+          //如果是空数组
+          obj1[key] = null;
+        }
+      }
+      /****************************将空数组处理成null-END****************************/
+
+console.log("this.Objparam.findJson.select1#####222", this.Objparam.findJson.select1);
+      console.log("this.Objparam￥￥￥￥￥￥￥", this.Objparam);
       let { data } = await axios({
         //请求接口
         method: "post",
         url: PUB.domain + this.cf.url.list,
         data: this.Objparam
       });
+
+      console.log("this.Objparam.findJson.select1#####333", this.Objparam.findJson.select1);
       let { list, page } = data; //解构赋值
       this.tableData = list;
       this.page = page;
       this.allCount = page.allCount; //更改总数据量
-
-      console.log("ajaxPopulate-1");
 
       if (this.cf.dynamicDict) {
         //如果{填充配置数组}存在.
@@ -314,8 +333,7 @@ export default {
           });
         }
       }
-      this.$emit("after-search",this.tableData); //触发外部事件
-      console.log("ajaxPopulate-2");
+      this.$emit("after-search", this.tableData); //触发外部事件
     }
   },
 
@@ -341,7 +359,7 @@ export default {
         findJson: {}
       });
     }
-    
+
     this.Objparam.findJson = findJsonDefault;
     this.Objparam.sortJson = this.cf.sortJsonDefault;
 
@@ -354,13 +372,12 @@ export default {
 
     this.Objparam.selectJson = selectJson;
     /****************************拼装selectJson参数-END****************************/
-    
-      // 如果当前页面需要自定义查询接口数据
-      if (this.cf.findJson){
-        this.Objparam.findJson[this.cf.findJson.type]=this.cf.findJson.value
-      }
-    
-    
+
+    // 如果当前页面需要自定义查询接口数据
+    if (this.cf.findJson) {
+      this.Objparam.findJson[this.cf.findJson.type] = this.cf.findJson.value;
+    }
+
     let objState = {
       //列表的vuex初始状态对象
       isShowDialogAdd: false, //是否显示新增弹窗
@@ -381,11 +398,14 @@ export default {
 
     if (localStorage.isLogin != "1") {
       //如果未登录
-     // this.$router.push({ path: "/login" }); //跳转到登录页
+      // this.$router.push({ path: "/login" }); //跳转到登录页
     }
   },
 
-  mounted() {
+  async mounted() {
+    await util.timeout(30); //延迟,处理getDataList中处理空数组字段需要，
+    console.log("神奇！！");
+    //不加这一句的话一开始空数组是undefined，但提交时却变成 []，神奇！！
     //等待模板加载后，
     this.getDataList(); //第一次加载此函数，页面才不会空
   }
@@ -399,7 +419,7 @@ export default {
   border-radius: 5px;
   padding: 15px 5px 0 12px;
 }
-.cell .el-button+.el-button {
-    margin-left: 0px;
+.cell .el-button + .el-button {
+  margin-left: 0px;
 }
 </style>
