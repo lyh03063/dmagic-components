@@ -16,6 +16,9 @@ import 'tinymce/plugins/table'// 插入表格插件
 import 'tinymce/plugins/lists'// 列表插件
 import 'tinymce/plugins/autoresize'
 import 'tinymce/plugins/code'
+import 'tinymce/plugins/link'
+import 'tinymce/plugins/autolink'
+import 'tinymce/plugins/nonbreaking'
 export default {
   components:{
         Editor
@@ -36,16 +39,17 @@ export default {
         language_url: '/tinymce/langs/zh_CN.js',
         language: 'zh_CN',
         skin_url: '/tinymce/skins/ui/oxide',
-        plugins:'lists image  table  autoresize code',
+        plugins:'lists image  table  autoresize code link autolink',
         menubar: false,
-        // statusbar: false,
-        toolbar:'undo redo |  formatselect | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | lists image  table code | removeformat',
+        statusbar: false,
+        toolbar:'undo redo |  formatselect | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | lists image  table code link| removeformat',
         autoresize_bottom_margin: 10, 
         max_height:400,
         min_height:200,
         autoresize_on_init: true,
         autoresize_overflow_padding: 10,
-        images_upload_handler: this.uploadingImg
+        images_upload_handler: this.uploadingImg,
+        default_link_target: "_blank"
       },
       myValue:this.value
     }

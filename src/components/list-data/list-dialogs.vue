@@ -91,11 +91,12 @@
 </template>
 
 <script>
-import dynamicForm from "./dynamic-form";
+// import dynamicForm from "./dynamic-form";
 export default {
   components: {
     //注册组件
-    dynamicForm
+    // dynamicForm
+    dynamicForm:resolve => {require(['./dynamic-form'], resolve)}
   },
   props: ["cf"],
 
