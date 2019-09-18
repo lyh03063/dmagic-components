@@ -242,7 +242,7 @@
 // import "quill/dist/quill.bubble.css";
 // import { quillEditor } from "vue-quill-editor";
 // import quillConfig from '../../assets/js/quill-config.js'
-// import vueJsonEditor from "vue-json-editor";
+import vueJsonEditor from "vue-json-editor";
 import select_ajax from "../../components/form_item/select_ajax.vue";
 import input_find_vague from "../../components/form_item/input_find_vague.vue";
 import json_editor from "../../components/form_item/json_editor.vue";
@@ -250,14 +250,15 @@ import upload_img from "../../components/form_item/upload_img.vue";
 import time_period from "../../components/form_item/time_period.vue";
 import json_prop from "../../components/form_item/json_prop.vue";
 import collection from "../../components/form_item/collection.vue";
-// import quill_editor from "../../components/form_item/quill_editor.vue";
-// import tiny_mce from '../../components/form_item/tiny_mce'
+import quill_editor from "../../components/form_item/quill_editor.vue";
+import tiny_mce from '../../components/form_item/tiny_mce'
 
 export default {
   name: "dm_dynamic_form", //组件名，用于递归
   components: {
     //注册组件
-    vueJsonEditor:resolve => {require(['vue-json-editor'], resolve)},
+    vueJsonEditor:vueJsonEditor,
+    // vueJsonEditor:resolve => {require(['vue-json-editor'], resolve)},
     // select_ajax:resolve => {require(['../../components/form_item/select_ajax.vue'], resolve)},
     // input_find_vague:resolve => {require(['../../components/form_item/input_find_vague.vue'], resolve)},
     // json_editor:resolve => {require(['../../components/form_item/json_editor.vue'], resolve)},
@@ -273,8 +274,10 @@ export default {
     time_period,
     json_prop,
     collection,
-    quill_editor:resolve => {require(['../../components/form_item/quill_editor.vue'], resolve)},
-    tiny_mce:resolve => {require(['../../components/form_item/tiny_mce'], resolve)}
+    quill_editor,
+    tiny_mce,
+    // quill_editor:resolve => {require(['../../components/form_item/quill_editor.vue'], resolve)},
+    // tiny_mce:resolve => {require(['../../components/form_item/tiny_mce'], resolve)}
   },
   props: {
     cf: {
