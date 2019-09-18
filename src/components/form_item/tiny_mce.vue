@@ -19,6 +19,7 @@ import 'tinymce/plugins/code'
 import 'tinymce/plugins/link'
 import 'tinymce/plugins/autolink'
 import 'tinymce/plugins/nonbreaking'
+import 'tinymce/plugins/codesample'
 export default {
   components:{
         Editor
@@ -39,10 +40,10 @@ export default {
         language_url: '/tinymce/langs/zh_CN.js',
         language: 'zh_CN',
         skin_url: '/tinymce/skins/ui/oxide',
-        plugins:'lists image  table  autoresize code link autolink',
+        plugins:'lists image  table  autoresize code link autolink codesample',
         menubar: false,
         statusbar: false,
-        toolbar:'undo redo |  formatselect | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | lists image  table code link| removeformat',
+        toolbar:'undo redo |  formatselect | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | lists image  table code link codesample| removeformat',
         autoresize_bottom_margin: 10, 
         max_height:400,
         min_height:200,
