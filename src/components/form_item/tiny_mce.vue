@@ -25,7 +25,7 @@ export default {
         Editor
     },
     name:'tinymce',
-    props:['value'],
+    props:['value','showToolbar'],
     watch:{
     myValue:{
       handler(){
@@ -101,6 +101,12 @@ export default {
   },
   mounted(){
     tinymce.init({});
+    
+  },
+  created(){
+    if (!this.showToolbar) {
+      this.init.toolbar = false
+    }
   }
 };
 </script>

@@ -180,7 +180,8 @@
                 v-else-if="item.type=='editor'"
               ></quillEditor>-->
               <tiny_mce v-model="formDataNeed[item.prop]"
-                v-else-if="item.type=='editorTM'">
+                v-else-if="item.type=='editorTM'"
+                :showToolbar='true'>
                 </tiny_mce>
               <quill_editor v-model="formDataNeed[item.prop]" v-else-if="item.type=='editor'"></quill_editor>
               <!--模糊查询文本框-->

@@ -22,6 +22,10 @@
             <div v-else-if="item.formatter" v-html="item.formatter(row)"></div>
             <!--否则如果该字段带type是html，使用html原文输出-->
             <div v-else-if="item.type=='html'" v-html="row[item.prop]"></div>
+            <tiny_mce v-model="row[item.prop]"
+                v-else-if="item.type=='editorTM'"
+                :showToolbar='false'>
+                </tiny_mce>
             <!--否则，正常输出-->
             <template v-else>{{row[item.prop]}}</template>
           </td>
@@ -92,11 +96,13 @@
 
 <script>
 // import dynamicForm from "./dynamic-form";
+import tiny_mce from '../../components/form_item/tiny_mce'
 export default {
   components: {
     //注册组件
     // dynamicForm
-    dynamicForm:resolve => {require(['./dynamic-form'], resolve)}
+    dynamicForm:resolve => {require(['./dynamic-form'], resolve)},
+    tiny_mce
   },
   props: ["cf"],
 
