@@ -50,7 +50,9 @@ export default {
         autoresize_on_init: true,
         autoresize_overflow_padding: 10,
         images_upload_handler: this.uploadingImg,
-        default_link_target: "_blank"
+        default_link_target: "_blank",
+        // theme : "advanced",
+        readonly : 1
       },
       myValue:this.value
     }
@@ -101,7 +103,20 @@ export default {
   },
   mounted(){
     tinymce.init({});
-    
+    // tinymce.activeEditor.getBody().setAttribute('contenteditable', false);
+    if (!this.showToolbar) {
+      let execute =false
+      let time = setInterval(() => {
+        if (tinymce.activeEditor.getBody()!=null) {
+        execute = true
+        tinymce.activeEditor.getBody().setAttribute('contenteditable', false)
+        }
+        if (execute) {
+            clearInterval(time)
+        }
+   
+      }, 100);
+    }
   },
   created(){
     if (!this.showToolbar) {
