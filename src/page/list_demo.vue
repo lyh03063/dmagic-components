@@ -124,6 +124,11 @@ export default {
             label: "文章详情",
             prop: "articleContent",
             type: "editorTM"
+          },
+          {
+            label: "文章详情2",
+            prop: "articleContent",
+            type: "html"
           }
         ],
         //-------新增、修改表单字段数组-------

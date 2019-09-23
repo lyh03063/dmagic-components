@@ -432,4 +432,9 @@ export default {
 .cell .el-button + .el-button {
   margin-left: 0px;
 }
+
+body  .table-normal td{
+  line-height: 150%
+
+}
 </style>

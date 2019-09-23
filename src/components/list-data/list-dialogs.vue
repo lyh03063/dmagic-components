@@ -5,7 +5,7 @@
       title="查看详情"
       :visible.sync="isShowDialogDetail"
       v-if="isShowDialogDetail"
-      width="80%"
+      width="95%"
       :before-close="closeDialogDetailFun"
       :append-to-body="true"
     >
@@ -13,7 +13,7 @@
       <table class="table-normal WP100" >
         <tr v-for="item in cf.detailItems" :key="item.prop">
           <td class="W100">{{item.label}}</td>
-          <td>
+          <td style="line-height:150%">
             <!--如果是slot-->
             <!-- <slot :name="'slot_detail_item_'+item.prop" v-if="item.slot" ></slot> -->
 
