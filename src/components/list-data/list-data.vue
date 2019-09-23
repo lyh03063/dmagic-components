@@ -7,7 +7,7 @@
     </el-breadcrumb>
 
     <div class="search-form-box MB10" v-if="cf.isShowSearchForm">
-      <dynamicForm @submit1="searchList" :cf="cfSearchForm" v-model="Objparam.findJson"></dynamicForm>
+      <dynamicForm @submit1="searchList" :cf="cfSearchForm" v-model="objParam.findJson"></dynamicForm>
     </div>
 
     <el-row size="mini" class="MB10" v-if="cf.isShowToolBar">
@@ -23,8 +23,9 @@
 
     <!--主列表-->
     <dm_debug_list>
-      <dm_debug_item v-model="cf" text="列表配置" />
-      <dm_debug_item v-model="Objparam" text="列表查询参数" />
+      <dm_debug_item v-model="cf" text="list-data列表配置" />
+      <dm_debug_item v-model="cf.objParamAddon" text="附加的列表查询参数" />
+      <dm_debug_item v-model="objParam" text="列表查询参数" />
       <dm_debug_item v-model="cf.columns" text="列配置" />
       <dm_debug_item v-model="cf.formItems" text="新增/修改表单配置" />
       <dm_debug_item v-model="cf.searchFormItems" text="筛选表单配置" />
@@ -33,7 +34,7 @@
       <dm_debug_item v-model="tableData" text="列表数据" />
     </dm_debug_list>
     <el-table
-     highlight-current-row
+      highlight-current-row
       ref="multipleTable"
       :data="tableData"
       border
@@ -114,7 +115,7 @@
         layout="total,prev, pager, next"
         @current-change="handleCurrentChange"
         :total="allCount"
-        :pageSize="Objparam.pageSize"
+        :pageSize="objParam.pageSize"
         style="float:right;margin:10px 0 0 0;"
         v-if="cf.isShowPageLink"
       ></el-pagination>
@@ -172,14 +173,14 @@ export default {
         size: "mini",
         inline: true,
         formItems: this.cf.searchFormItems,
-        watch: lodash.get(this.cf, `cfSearchForm.watch`),//监听器配置
+        watch: lodash.get(this.cf, `cfSearchForm.watch`), //监听器配置
         btns: [{ text: "查询", event: "submit1", type: "primary" }]
       },
 
       //------------------列表的数据总量--------------
       allCount: 20,
       //------------------ajax请求数据列表的传参对象--------------
-      Objparam: {
+      objParam: {
         findJson: {},
         pageIndex: 1, //第1页
         pageSize: this.cf.pageSize || 10 //每页10条
@@ -188,6 +189,19 @@ export default {
       tableData: [] //列表数据
     };
   },
+
+  watch: {
+    "cf.objParamAddon": {
+      handler(newName, oldName) {
+        console.log("cf.objParamAddon变动了###");
+        Object.assign(this.objParam, this.cf.objParamAddon); //合并对象
+        this.objParam=util.deepCopy( this.objParam)//深拷贝强制更新
+      },
+      immediate: true,
+      deep: true
+    }
+  },
+
   methods: {
     // 删除选中数据的方法
     deleteSelection() {
@@ -283,19 +297,17 @@ export default {
 
     //-------------处理分页变动函数--------------
     handleCurrentChange(pageIndex) {
-      this.Objparam.pageIndex = pageIndex; //改变ajax传参的第几页
+      this.objParam.pageIndex = pageIndex; //改变ajax传参的第几页
       this.getDataList(); //第一次加载此函数，页面才不会空
     },
     //-------------ajax获取数据列表函数--------------
     async getDataList() {
-      console.log("this.Objparam.findJson.select1#####", this.Objparam.findJson.select1);
       /****************************将空数组处理成null-START****************************/
       //for of循环遍历对象，for of不能直接处理对象，本质上是同个Object.keys拼装一个新数组进行辅助
-      let obj1 = this.Objparam.findJson;
+      let obj1 = this.objParam.findJson;
       //将空数组处理成null******
       for (var key of Object.keys(obj1)) {
         let type = util.type(obj1[key]);
-        console.log("obj1[key]", obj1[key]);
         if (type == "array" && obj1[key].length === 0) {
           //如果是空数组
           obj1[key] = null;
@@ -303,16 +315,14 @@ export default {
       }
       /****************************将空数组处理成null-END****************************/
 
-console.log("this.Objparam.findJson.select1#####222", this.Objparam.findJson.select1);
-      console.log("this.Objparam￥￥￥￥￥￥￥", this.Objparam);
       let { data } = await axios({
         //请求接口
         method: "post",
         url: PUB.domain + this.cf.url.list,
-        data: this.Objparam
+        data: this.objParam
       });
 
-      console.log("this.Objparam.findJson.select1#####333", this.Objparam.findJson.select1);
+    
       let { list, page } = data; //解构赋值
       this.tableData = list;
       this.page = page;
@@ -360,8 +370,8 @@ console.log("this.Objparam.findJson.select1#####222", this.Objparam.findJson.sel
       });
     }
 
-    this.Objparam.findJson = findJsonDefault;
-    this.Objparam.sortJson = this.cf.sortJsonDefault;
+    this.objParam.findJson = findJsonDefault;
+    this.objParam.sortJson = this.cf.sortJsonDefault;
 
     /****************************拼装selectJson参数-START****************************/
     let selectJson = { P1: 1 }; //P1有时候在列表不显示，但也一定要加上
@@ -370,12 +380,12 @@ console.log("this.Objparam.findJson.select1#####222", this.Objparam.findJson.sel
       selectJson[columnEach.prop] = 1;
     });
 
-    this.Objparam.selectJson = selectJson;
+    this.objParam.selectJson = selectJson;
     /****************************拼装selectJson参数-END****************************/
 
     // 如果当前页面需要自定义查询接口数据
     if (this.cf.findJson) {
-      this.Objparam.findJson[this.cf.findJson.type] = this.cf.findJson.value;
+      this.objParam.findJson[this.cf.findJson.type] = this.cf.findJson.value;
     }
 
     let objState = {

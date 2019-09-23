@@ -13,6 +13,10 @@ export default {
   data() {
     return {
       cfList: {
+        //列表接口的附加参数
+        objParamAddon: {
+          aaa: 1111
+        },
         cfSearchForm: {
           watch: {
             //传入监听器

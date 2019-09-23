@@ -9,9 +9,7 @@ window.PUB.urlGetQiniuToken = `${PUB.domain}/api_third_part/get_qiniu_token?scop
 window.util = {}
 //#region deepCopy:深拷贝函数
 util.deepCopy = function (obj) {//深拷贝一个Json对象的函数
-  let str = JSON.stringify(obj);//json对象转字符串
-  let objNew = JSON.parse(str); //字符串转json对象
-  return objNew
+  return lodash.cloneDeep(obj);
 }
 //#endregion
 //#region type:返回对象数据类型函数
@@ -168,11 +166,13 @@ util.moveData = function (index, type, list) { //函数：{数据移动函数}-�
 };
 //#endregion
 //#region sortByArrId:根据id数组重排集合的函数
-util.sortByArrId = function(param) {
+util.sortByArrId = function (param) {
   let { list, idKey = "P1", arrId } = param;
   if (!(list && list.length && arrId && arrId.length)) return list;
   var dict = lodash.keyBy(list, idKey); //转成数据字段，方便重排
-  return arrId.map(id => dict[id]); //获取排序后的列表数据
+  let arrNeed = arrId.map(id => dict[id]); //获取排序后的列表数据
+  arrNeed = arrNeed.filter(doc => doc)//过滤null的数据
+  return arrNeed; //获取排序后的列表数据
 };
 //#endregion
 export default util
