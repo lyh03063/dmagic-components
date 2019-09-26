@@ -24,11 +24,12 @@
             :key="item.prop+'_'+index"
             :class="{clearall:clearall}"
             :style="getItemStyle(item)"
+            v-if="satisfyTerm(item)"
           >
             <!-- :style="{'background': 'red', height: '100px'}" -->
             <!-- clear:spanIndex==index, -->
             <div
-              v-if="satisfyTerm(item)&&item.cfForm"
+              v-if="item.cfForm"
               :class="{'form-group-box':true,'form-group-no-label':!item.label}"
             >
               <div class="FWB FS16">{{item.label}}</div>
@@ -60,7 +61,7 @@
               :label="item.label"
               :prop="item.prop"
               :rules="item.rules||[]"
-              v-if="satisfyTerm(item)&&!item.cfForm"
+              v-if="!item.cfForm"
             >
               <!--slot自定义组件-注意是isReadyFormData为真时才开始渲染-->
               <slot :name="item.slot" :formData="value" v-if="item.slot"></slot>

@@ -72,6 +72,7 @@ export default {
             label: "完成情况[被监听]",
             prop: "complete1",
             type: "select",
+            notSubmit: true,//不提交
             toObj: true, //提交（查询）时转成对象，值项应该是json字符串
             // multiple:true,//多选
             

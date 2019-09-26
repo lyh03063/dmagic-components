@@ -193,9 +193,8 @@ export default {
   watch: {
     "cf.objParamAddon": {
       handler(newName, oldName) {
-        console.log("cf.objParamAddon变动了###");
         Object.assign(this.objParam, this.cf.objParamAddon); //合并对象
-        this.objParam=util.deepCopy( this.objParam)//深拷贝强制更新
+        this.objParam = util.deepCopy(this.objParam); //深拷贝强制更新
       },
       immediate: true,
       deep: true
@@ -302,9 +301,11 @@ export default {
     },
     //-------------ajax获取数据列表函数--------------
     async getDataList() {
+      //最终需要提交的参数
+      let objParamFinal = util.deepCopy(this.objParam); //深拷贝,后续处理数据避免影响查询表单
       /****************************将空数组处理成null-START****************************/
       //for of循环遍历对象，for of不能直接处理对象，本质上是同个Object.keys拼装一个新数组进行辅助
-      let obj1 = this.objParam.findJson;
+      let obj1 = objParamFinal.findJson;
       //将空数组处理成null******
       for (var key of Object.keys(obj1)) {
         let type = util.type(obj1[key]);
@@ -312,17 +313,23 @@ export default {
           //如果是空数组
           obj1[key] = null;
         }
+        //是否需要删除
+        let isDelete = lodash.get(this.cf, `deleteFindJson.${key}`);
+        if (isDelete) {
+          //如果需要删除
+          delete obj1[key];
+        }
       }
+
       /****************************将空数组处理成null-END****************************/
 
       let { data } = await axios({
         //请求接口
         method: "post",
         url: PUB.domain + this.cf.url.list,
-        data: this.objParam
+        data: objParamFinal
       });
 
-    
       let { list, page } = data; //解构赋值
       this.tableData = list;
       this.page = page;
@@ -378,6 +385,12 @@ export default {
 
     this.cf.columns.forEach(columnEach => {
       selectJson[columnEach.prop] = 1;
+      //如果依赖字段存在**
+      if (columnEach.requireProp && columnEach.requireProp.length) {
+        columnEach.requireProp.forEach(rPropEach => {
+          selectJson[rPropEach] = 1;
+        });
+      }
     });
 
     this.objParam.selectJson = selectJson;
@@ -433,8 +446,7 @@ export default {
   margin-left: 0px;
 }
 
-body  .table-normal td{
-  line-height: 150%
-
+body .table-normal td {
+  line-height: 150%;
 }
 </style>

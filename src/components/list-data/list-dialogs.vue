@@ -119,6 +119,7 @@ export default {
       },
       //------------------修改表单组件配置--------------
       cfFormModify: {
+        col_span: lodash.get(this.cf, `cfForm.col_span`,24),//控制显示一行多列
         urlInit: this.cf.url.detail,
         formItems: this.cf.formItems,
         btns: [

@@ -13,6 +13,10 @@ export default {
   data() {
     return {
       cfList: {
+        deleteFindJson: {
+          //ajax查询参数中需要删除的参数
+          articleTitle: true
+        },
         //列表接口的附加参数
         objParamAddon: {
           aaa: 1111
@@ -61,6 +65,7 @@ export default {
           {
             label: "分类名称",
             prop: "articleCategory",
+             requireProp:["articleContent"],//依赖文章详情，列表需返回该字段
             width: 150,
             formatter11111: function(rowData) {
               let name = lodash.get(rowData, "categoryDoc.name");
@@ -144,9 +149,10 @@ export default {
             }
           },
           {
-            label: "文章标题",
+            label: "文章标题11",
             prop: "articleTitle",
-            width: 200
+            width: 200,
+           
           },
           // {
           //   label: "文章详情",
@@ -154,6 +160,7 @@ export default {
           //   type: "editor"
           // },
           {
+             term:{articleTitle:"123"},
             label: "文章详情",
             prop: "articleContent",
             type: "editorTM"
