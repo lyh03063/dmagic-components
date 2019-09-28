@@ -332,7 +332,8 @@ export default {
         console.log("form-value变更");
         this.formDataNeed = this.value || {};
       },
-      deep: true
+      deep: true,
+       immediate: true,
     }
   },
   methods: {

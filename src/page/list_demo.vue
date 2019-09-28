@@ -1,6 +1,8 @@
 <template>
   <div>
-    <dm_list_data :cf="cfList"></dm_list_data>
+    <el-button plain @click="setAddInit" size="mini">设置formDataAddInit</el-button>
+
+    <dm_list_data :cf="cfList" @after-modify="afterModify"></dm_list_data>
   </div>
 </template>
 
@@ -26,12 +28,20 @@ export default {
             //传入监听器
             articleCategory(newName, oldName) {
               console.log("complete1111变动");
-              this.value.articleTitle = newName;
+              this.value.articleTitle = { a: 1 };
             }
           }
         },
         cfForm: {
-          col_span: 12 //控制显示一行多列
+          col_span: 12, //控制显示一行多列
+          watch: {
+            //传入监听器
+            extend(newName, oldName) {
+              console.log("watch-extend变化");
+
+              this.value.articleTitle = this.value.articleTitle + "a";
+            }
+          }
         },
         pageSize: 2,
         listIndex: "list_article111111", //vuex对应的字段~
@@ -65,7 +75,7 @@ export default {
           {
             label: "分类名称",
             prop: "articleCategory",
-             requireProp:["articleContent"],//依赖文章详情，列表需返回该字段
+            requireProp: ["articleContent"], //依赖文章详情，列表需返回该字段
             width: 150,
             formatter11111: function(rowData) {
               let name = lodash.get(rowData, "categoryDoc.name");
@@ -151,8 +161,7 @@ export default {
           {
             label: "文章标题11",
             prop: "articleTitle",
-            width: 200,
-           
+            width: 200
           },
           // {
           //   label: "文章详情",
@@ -160,7 +169,7 @@ export default {
           //   type: "editor"
           // },
           {
-             term:{articleTitle:"123"},
+            term: { articleTitle: "123" },
             label: "文章详情",
             prop: "articleContent",
             type: "editorTM"
@@ -169,6 +178,12 @@ export default {
             label: "公众号文章地址",
             prop: "extend",
             path: "wxArticleUrl"
+          },
+
+          {
+            label: "extend",
+            prop: "extend",
+            type: "jsonEditor"
           }
         ]
       }
@@ -191,7 +206,16 @@ export default {
     }
   },
 
-  methods: {},
+  methods: {
+    afterModify(param, param1) {
+      console.log("afterModify");
+      console.log("修改后的数据:", param);
+      console.log("修改前的数据:", param1);
+    },
+    setAddInit() {
+      this.cfList.formDataAddInit = { a: 1, b: 2, articleTitle: "234" };
+    }
+  },
   async mounted() {
     this.$parent.showCFForm = true;
     this.$parent.cfForm.formItems = [
