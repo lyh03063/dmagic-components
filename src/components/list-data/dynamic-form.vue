@@ -180,10 +180,11 @@
                 :options="editorOption"
                 v-else-if="item.type=='editor'"
               ></quillEditor>-->
-              <tiny_mce v-model="formDataNeed[item.prop]"
+              <tiny_mce
+                v-model="formDataNeed[item.prop]"
                 v-else-if="item.type=='editorTM'"
-                :showToolbar='true'>
-                </tiny_mce>
+                :showToolbar="true"
+              ></tiny_mce>
               <quill_editor v-model="formDataNeed[item.prop]" v-else-if="item.type=='editor'"></quill_editor>
               <!--模糊查询文本框-->
               <input_find_vague
@@ -201,6 +202,14 @@
               <!--json字段输入框，根据prop中是否包含点符号来判断-->
               <json_prop v-model="formDataNeed[item.prop]" :prop="item.path" v-else-if="item.path" />
 
+              <!--数字框-->
+              <el-input-number
+                v-model="formDataNeed[item.prop]"
+                :controls-position="item.controlsPosition||'right'"
+                :min="item.max"
+                :max="item.min"
+                v-else-if="item.type=='number'"
+              ></el-input-number>
               <!-- <json_prop
               v-model="formDataNeed[item.prop.split('.')[0]]"
               :prop="item.prop.split('.')[1]"
@@ -253,13 +262,13 @@ import time_period from "../../components/form_item/time_period.vue";
 import json_prop from "../../components/form_item/json_prop.vue";
 import collection from "../../components/form_item/collection.vue";
 import quill_editor from "../../components/form_item/quill_editor.vue";
-import tiny_mce from '../../components/form_item/tiny_mce'
+import tiny_mce from "../../components/form_item/tiny_mce";
 
 export default {
   name: "dm_dynamic_form", //组件名，用于递归
   components: {
     //注册组件
-    vueJsonEditor:vueJsonEditor,
+    vueJsonEditor: vueJsonEditor,
     // vueJsonEditor:resolve => {require(['vue-json-editor'], resolve)},
     // select_ajax:resolve => {require(['../../components/form_item/select_ajax.vue'], resolve)},
     // input_find_vague:resolve => {require(['../../components/form_item/input_find_vague.vue'], resolve)},
@@ -277,7 +286,7 @@ export default {
     json_prop,
     collection,
     quill_editor,
-    tiny_mce,
+    tiny_mce
     // quill_editor:resolve => {require(['../../components/form_item/quill_editor.vue'], resolve)},
     // tiny_mce:resolve => {require(['../../components/form_item/tiny_mce'], resolve)}
   },
@@ -333,7 +342,7 @@ export default {
         this.formDataNeed = this.value || {};
       },
       deep: true,
-       immediate: true,
+      immediate: true
     }
   },
   methods: {
@@ -466,7 +475,7 @@ export default {
       console.log("Object.keys结果", Object.keys(obj1));
       for (var key of Object.keys(obj1)) {
         console.log(key + ": " + obj1[key]);
-   
+
         // console.log("this.cf.watch####", this.cf.watch);
         this.$watch(`value.${key}`, this.cf.watch[key]);
       }

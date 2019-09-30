@@ -2,7 +2,7 @@
   <div>
     <el-button plain @click="setAddInit" size="mini">设置formDataAddInit</el-button>
 
-    <dm_list_data :cf="cfList" @after-modify="afterModify"></dm_list_data>
+    <dm_list_data :cf="cfList" @after-add="afterAdd" @after-modify="afterModify"></dm_list_data>
   </div>
 </template>
 
@@ -207,6 +207,11 @@ export default {
   },
 
   methods: {
+    afterAdd(param, param1) {
+      console.log("afterAdd");
+      console.log("新增后的数据:", param);
+      console.log("新增前的数据:", param1);
+    },
     afterModify(param, param1) {
       console.log("afterModify");
       console.log("修改后的数据:", param);

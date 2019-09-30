@@ -124,7 +124,7 @@
     <listDialogs
       ref="listDialogs"
       :cf="cf"
-      @after-add="(data)=>{$emit('after-add',data)}"
+      @after-add="(data,olddata)=>{$emit('after-add',data,olddata)}"
       @after-modify="(newdata,olddata)=>{$emit('after-modify',newdata,olddata)}"
       @after-delete="$emit('after-delete')"
     >
