@@ -2,7 +2,15 @@
   <div>
     <el-button plain @click="setAddInit" size="mini">设置formDataAddInit</el-button>
 
-    <dm_list_data :cf="cfList" @after-modify="afterModify"></dm_list_data>
+    <dm_list_data :cf="cfList" @after-modify="afterModify"
+     @after-show-Dialog-Add="showAdd" 
+     @after-show-Dialog-Modify='showModify'
+     @after-show-Dialog-Detail='showDetail'>
+      <template v-slot:slot_form_expand_articleTitle="{row}">
+        {{row}}
+      </template>
+    </dm_list_data>
+    
   </div>
 </template>
 
@@ -49,6 +57,7 @@ export default {
         twoTitle: "其他数据",
         threeTitle: "文章管理",
         flag: true,
+        expand:true,
         url: {
           list: "/crossList?page=tangball_article", //列表接口
           add: "/crossAdd?page=tangball_article", //新增接口
@@ -64,6 +73,39 @@ export default {
             idColumn2: "P1"
           }
         ],
+        expands:[
+          {
+            label: "文章标题",
+            prop: "articleTitle",
+            width: 260,
+            slot:'slot_form_expand_articleTitle'
+          },
+          {
+            label: "分类名称",
+            prop: "articleCategory",
+            requireProp: ["articleContent"], //依赖文章详情，列表需返回该字段
+            width: 150,
+            formatter11111: function(rowData) {
+              let name = lodash.get(rowData, "categoryDoc.name");
+              return name;
+            }
+          },
+
+          {
+            label: "创建时间",
+            prop: "CreateTime",
+            width: 145
+          },
+          {
+            label: "其他",
+            prop: "extend",
+            width: 135,
+            formatter11111: function(extend) {
+              return JSON.stringify(extend.extend);
+            }
+          }
+        ],
+
 
         //-------列配置数组-------
         columns: [
@@ -214,6 +256,33 @@ export default {
     },
     setAddInit() {
       this.cfList.formDataAddInit = { a: 1, b: 2, articleTitle: "234" };
+    },
+    showAdd(){
+      this.cfList.formItems = [
+        {
+            label: "文章标题11",
+            prop: "articleTitle",
+            width: 200
+          }
+      ]
+    },
+    showModify(){
+      this.cfList.formItems = [
+        {
+            label: "文章标题11",
+            prop: "articleTitle",
+            width: 200
+          }
+      ]
+    },
+    showDetail(){
+      this.cfList.detailItems = [
+        {
+            label: "文章标题11",
+            prop: "articleTitle",
+            width: 200
+          }
+      ]
     }
   },
   async mounted() {

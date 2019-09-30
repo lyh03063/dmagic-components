@@ -155,6 +155,17 @@ export default {
       },
       immediate: true,
       deep: true
+    },
+    // 当父组件的配置改变时里面的配置随之改变
+    "cf.formItems": {
+      //监听新增表单的初始化数据
+      handler(newName, oldName) {
+        console.log('newName',newName);
+        this.cfFormAdd.formItems = newName
+        this.cfFormModify.formItems = newName //调用：{初始化新增数据表单函数}
+      },
+      immediate: true,
+      deep: true
     }
   },
   computed: {
@@ -252,6 +263,7 @@ export default {
     },
     //-------------显示修改弹窗的函数--------------
     showModify(row) {
+      this.$emit('after-show-Dialog-Modify',row)
       this.beforeModify = row;
       let str = JSON.stringify(row); //转换成字符串
       let rowNew = JSON.parse(str); //转换成对象

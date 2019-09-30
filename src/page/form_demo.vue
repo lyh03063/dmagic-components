@@ -212,7 +212,7 @@ export default {
               limit: 3,
               preview: true
             }
-          }
+          },
           // //   {
           // //   label: "extend",
           // //   prop: "extend",
@@ -351,11 +351,11 @@ export default {
           //   prop: "prop_jsonEditor",
           //   type: "jsonEditor"
           // },
-          // {
-          //   label: "json编辑器(vueJsonEditor)",
-          //   prop: "prop_vueJsonEditor",
-          //   type: "vueJsonEditor"
-          // },
+          {
+            label: "json编辑器(vueJsonEditor)",
+            prop: "prop_vueJsonEditor",
+            type: "vueJsonEditor"
+          },
         ],
         btns: [
           { text: "提交111", event: "submit", type: "primary", validate: true },

@@ -15,7 +15,7 @@
         v-if="cf.flag"
         size="mini"
         type="primary"
-        @click="$store.commit('openDialogAdd',cf.listIndex)"
+        @click="showAdd"
       >新增</el-button>
       <dm_space v-else height="32"></dm_space>
       <el-button @click="deleteSelection()" size="mini" plain>删除选中</el-button>
@@ -44,6 +44,21 @@
       style="width: 100%;"
     >
       <el-table-column label="id" prop="P1" :width="40" type="selection"></el-table-column>
+      <el-table-column  :width="40" type="expand" v-if="cf.expand">
+        <template slot-scope="props">
+          <div v-for="(item,index) in cf.expands" :key="index">
+            
+            <div>
+              <span style="display:inline-block;width: 80px;">
+              {{item.label}}：</span>
+              <slot :name="item.slot" :row="props.row" v-if="item.slot"></slot>
+              <!--Q2:有formatter-->
+              <span class v-else-if="item.formatter">{{item.formatter(props.row)}}</span>
+              <span v-else>{{props.row[item.prop]}}</span>
+            </div>
+          </div>
+        </template>
+      </el-table-column>
 
       <template class v-for="(column,index) in cf.columns">
         <!--Q1:column.type存在-->
@@ -127,6 +142,7 @@
       @after-add="(data)=>{$emit('after-add',data)}"
       @after-modify="(newdata,olddata)=>{$emit('after-modify',newdata,olddata)}"
       @after-delete="$emit('after-delete')"
+      @after-show-Dialog-Modify="(row)=>{$emit('after-show-Dialog-Modify',row)}"
     >
       <template v-slot:[item.slot]="{row}" v-for="item in cf.detailItems">
         <!--根据cf.detailItems循环输出插槽--详情弹窗-->
@@ -202,6 +218,10 @@ export default {
   },
 
   methods: {
+    showAdd(){
+      this.$emit('after-show-Dialog-Add')
+      this.$store.commit('openDialogAdd',this.cf.listIndex)
+    },
     // 删除选中数据的方法
     deleteSelection() {
       //  得到选中的数据对象
@@ -247,7 +267,7 @@ export default {
         });
         row = data.Doc;
       }
-
+      this.$emit('after-show-Dialog-Detail',row)
       this.$store.commit("openDialogDetail", {
         listIndex: this.cf.listIndex,
         row: row
@@ -444,6 +464,7 @@ export default {
 }
 .cell .el-button + .el-button {
   margin-left: 0px;
+  
 }
 
 body .table-normal td {
