@@ -1,5 +1,11 @@
 <template>
   <div>
+    
+<dm_debug_list>
+      <dm_debug_item v-model="test" text="test"/>
+
+    </dm_debug_list>
+
     <dm_dynamic_form :cf="cfForm" v-model="formData">
       <!--自定义复选框插槽组件-->
       <template v-slot:slot_form_item_diycheckbox="{formData}">
@@ -30,6 +36,7 @@ export default {
   },
   data() {
     return {
+      test:null,
       options: [
         { label: "label1", value: "1" },
         { label: "label2", value: "2" }
