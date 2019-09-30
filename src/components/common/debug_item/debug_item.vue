@@ -1,16 +1,21 @@
 <template>
+
   <tr>
     <td class>
       <span class="debug-text" :title="pathNeed">{{pathNeed}}</span>
+      <!-- <JsonViewer :value="JSON.parse(getValueStr(pathNeed))" class="valueShowInTip"></JsonViewer> -->
     </td>
     <td class>
       <span class="debug-text" :title="text">{{text}}</span>
     </td>
     <td class="PSR" :class="{'changing':isChanging}" @dblclick="isEdit=true">
-      <el-tooltip class="item MR6 PSA L3 T2" effect="dark" placement="left">
+      <el-tooltip class="item MR6 PSA L3 T2" effect="light" placement="left" >
         <i class="el-icon-view"></i>
         <div slot="content">
-          <pre class="valueShowInTip">{{getValueStr(pathNeed)}}</pre>
+          <JsonViewer  
+          :expand-depth=2
+          :value="JSON.parse(getValueStr(pathNeed))" class="valueShowInTip"></JsonViewer>
+          <!-- <pre class="valueShowInTip">{{getValueStr(pathNeed)}}</pre> -->
         </div>
       </el-tooltip>
 
@@ -33,14 +38,16 @@
       </div>
     </td>
   </tr>
+  
 </template>
 
 <script>
 import json_editor from "../../../components/form_item/json_editor.vue";
+import JsonViewer from 'vue-json-viewer'
 export default {
   components: {
     //注册组件
-    json_editor
+    json_editor,JsonViewer
   },
   mixins: [MIX.form_item], //混入
   props: ["path", "text", "value"],
@@ -108,11 +115,26 @@ export default {
   padding: 0 0 0 18px;
   word-break: break-all;
 }
-
+/* 属性值颜色 */
+/* .valueShowInTip /deep/ .jv-code .jv-node .jv-key{
+  color:white
+} */
+/* 大扩号颜色 */
+/* .valueShowInTip /deep/ .jv-code .jv-node .jv-item.jv-object{
+  color:white
+} */
+/*中括号颜色 */
+/* .valueShowInTip /deep/ .jv-code .jv-node .jv-item.jv-array{
+  color:white
+} */
 .valueShowInTip {
   overflow-y: auto;
   max-height: 350px;
   font-size: 16px;
+  /* background-color: */
+}
+.jv-container.jv-light .jv-item.jv-object{
+  width: 100%;
 }
 table.n-table.n-table-debug td,
 table.n-table.n-table-debug th {
