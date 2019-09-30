@@ -12,10 +12,11 @@
       <el-tooltip class="item MR6 PSA L3 T2" effect="light" placement="left" >
         <i class="el-icon-view"></i>
         <div slot="content">
+          <pre class="valueShowInTip" v-if="getDataType(pathNeed)=='null'">{{getValueStr(pathNeed)}}</pre>
           <JsonViewer  
           :expand-depth=2
-          :value="JsonTransition(getValueStr(pathNeed))" class="valueShowInTip"></JsonViewer>
-          <!-- <pre class="valueShowInTip">{{getValueStr(pathNeed)}}</pre> -->
+          :value="getValueStr(pathNeed)" class="valueShowInTip" v-else ></JsonViewer>
+          <!--  -->
         </div>
       </el-tooltip>
 
@@ -85,25 +86,26 @@ export default {
       await util.timeout(300); //延迟
       this.isChanging = false;
     },
+    getDataType(path) {
+      let data = this.valueNeed;
+      let type = util.type(data);
+      return type;
+    },
     getValueStr(path) {
       let data = this.valueNeed;
       let type = util.type(data);
       let arrType = ["object", "array"];
       if (arrType.includes(type)) {
         //如果类型是对象或数组
-        data = JSON.stringify(data, null, 4); //{Json对象转换Json字符串函数}-后面两个参数可以设置缩进
+       // data = JSON.stringify(data, null, 4); //{Json对象转换Json字符串函数}-后面两个参数可以设置缩进
+      }else if(type=="null") {
+        data = "null"; //转成字符串
       } else {
         data += ""; //转成字符串
       }
       return data;
     },
-    JsonTransition(str){
-      if (str) {
-        return JSON.parse(str)
-      }else{
-        return {}
-      }
-    }
+ 
   },
   created() {
     //获取v-model变量名（表达式）

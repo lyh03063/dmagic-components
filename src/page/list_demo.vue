@@ -249,6 +249,11 @@ export default {
   },
 
   methods: {
+    afterAdd(param, param1) {
+      console.log("afterAdd");
+      console.log("新增后的数据:", param);
+      console.log("新增前的数据:", param1);
+    },
     afterModify(param, param1) {
       console.log("afterModify");
       console.log("修改后的数据:", param);

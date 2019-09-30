@@ -1,5 +1,11 @@
 <template>
   <div>
+    
+<dm_debug_list>
+      <dm_debug_item v-model="test" text="test"/>
+
+    </dm_debug_list>
+
     <dm_dynamic_form :cf="cfForm" v-model="formData">
       <!--自定义复选框插槽组件-->
       <template v-slot:slot_form_item_diycheckbox="{formData}">
@@ -30,11 +36,13 @@ export default {
   },
   data() {
     return {
+      test:null,
       options: [
         { label: "label1", value: "1" },
         { label: "label2", value: "2" }
       ],
       formData: {
+        num1:"55",
         percent: 0.12,
         select1: null,
         collection2: [
@@ -69,6 +77,11 @@ export default {
         },
         formItems: [
           {
+            label: "数字",
+            prop: "num1",
+            type: "number"
+          },
+          {
             label: "完成情况[被监听]",
             prop: "complete1",
             type: "select",
@@ -102,11 +115,7 @@ export default {
               keyValue: "userName"
             }
           },
-          {
-            label: "富文本编辑器(editor)",
-            prop: "prop_editor",
-            type: "editor"
-          },
+          
           {
             label: "富文本编辑器(TinyMCE)",
             prop: "prop_editorTM",

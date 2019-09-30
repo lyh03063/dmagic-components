@@ -122,7 +122,7 @@ export default {
       },
       //------------------修改表单组件配置--------------
       cfFormModify: {
-         watch: lodash.get(this.cf, `cfForm.watch`), //监听器配置
+        watch: lodash.get(this.cf, `cfForm.watch`), //监听器配置
         col_span: lodash.get(this.cf, `cfForm.col_span`, 24), //控制显示一行多列
         urlInit: this.cf.url.detail,
         formItems: this.cf.formItems,
@@ -184,7 +184,7 @@ export default {
   },
   methods: {
     initFormDataAdd() {
-      console.log("initFormDataAdd$$$$$$");
+      console.log("initFormDataAdd#");
       //函数：{初始化新增数据表单函数}
       if (!this.cf.formDataAddInit) {
         return;
@@ -203,8 +203,8 @@ export default {
     },
 
     //-------------修改数据的函数--------------
-    modifyData() {
-      axios({
+    async modifyData() {
+      let response = await axios({
         //请求接口
         method: "post",
         url: PUB.domain + this.cf.url.modify,
@@ -215,51 +215,46 @@ export default {
           },
           modifyJson: this.formModify
         } //传递参数
-      })
-        .then(response => {
-          this.$message({
-            message: "修改数据成功",
-            duration: 1500,
-            type: "success"
-          });
-          this.isShowDialogModify = false; //关闭弹窗
-          //如果{增删改操作后是否自动刷新}为真
-          if (this.cf.isRefreshAfterCUD) {
-            this.$parent.getDataList(); //更新数据列表
-          }
+      });
+      this.$message({
+        message: "修改数据成功",
+        duration: 1500,
+        type: "success"
+      });
+      this.isShowDialogModify = false; //关闭弹窗
+      //如果{增删改操作后是否自动刷新}为真
+      if (this.cf.isRefreshAfterCUD) {
+        this.$parent.getDataList(); //更新数据列表
+      }
 
-          this.$emit("after-modify", this.formModify, this.beforeModify); //触发外部事件
-        })
-        .catch(function(error) {
-          alert("异常:" + error);
-        });
+      this.$emit("after-modify", this.formModify, this.beforeModify); //触发外部事件
     },
     //-------------新增数据的函数--------------
-    addData() {
-      axios({
+    async addData() {
+      let response = await axios({
         //请求接口
         method: "post",
         url: PUB.domain + this.cf.url.add,
         data: { data: this.formAdd } //传递参数
-      })
-        .then(response => {
-          this.$message({
-            message: "新增成功",
-            duration: 1500,
-            type: "success"
-          });
-          this.closeDialogAddFun(); //关闭弹窗
-          //如果{增删改操作后是否自动刷新}为真
-          if (this.cf.isRefreshAfterCUD) {
-            this.$parent.getDataList(); //更新数据列表
-          }
-          this.initFormDataAdd(); //调用：{初始化新增数据表单函数}
-          this.$emit("after-add", response.data.addData); //触发外部事件
-        })
-        .catch(function(error) {
-          alert("异常:" + error);
-        });
-      this.formAdd = {};
+      });
+
+      this.$message({
+        message: "新增成功",
+        duration: 1500,
+        type: "success"
+      });
+
+      //触发外部事件-把新增前后的数据都传过去
+      this.$emit("after-add", response.data.addData, this.formAdd);
+
+      this.closeDialogAddFun(); //关闭弹窗
+      //如果{增删改操作后是否自动刷新}为真
+      if (this.cf.isRefreshAfterCUD) {
+        this.$parent.getDataList(); //更新数据列表
+      }
+
+      this.initFormDataAdd(); //调用：{初始化新增数据表单函数}
+      // this.formAdd = {};
     },
     //-------------显示修改弹窗的函数--------------
     showModify(row) {
