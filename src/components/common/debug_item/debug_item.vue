@@ -14,7 +14,7 @@
         <div slot="content">
           <JsonViewer  
           :expand-depth=2
-          :value="JSON.parse(getValueStr(pathNeed))" class="valueShowInTip"></JsonViewer>
+          :value="JsonTransition(getValueStr(pathNeed))" class="valueShowInTip"></JsonViewer>
           <!-- <pre class="valueShowInTip">{{getValueStr(pathNeed)}}</pre> -->
         </div>
       </el-tooltip>
@@ -96,6 +96,13 @@ export default {
         data += ""; //转成字符串
       }
       return data;
+    },
+    JsonTransition(str){
+      if (str) {
+        return JSON.parse(str)
+      }else{
+        return {}
+      }
     }
   },
   created() {
