@@ -255,6 +255,7 @@ export default {
     },
     async showDetail(row) {
       //判断详情接口是否存在，如果存在，进行ajax请求
+      this.$emit('after-show-Dialog-Detail',row)
       if (this.cf.url.detail) {
         //如果{000}000
         let { data } = await axios({
@@ -267,7 +268,7 @@ export default {
         });
         row = data.Doc;
       }
-      this.$emit('after-show-Dialog-Detail',row)
+      
       this.$store.commit("openDialogDetail", {
         listIndex: this.cf.listIndex,
         row: row
