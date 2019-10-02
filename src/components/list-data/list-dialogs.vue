@@ -22,6 +22,11 @@
               <div v-else-if="item.formatter" v-html="item.formatter(row)"></div>
               <!--否则如果该字段带type是html，使用html原文输出-->
               <div v-else-if="item.type=='html'" v-html="row[item.prop]"></div>
+              <div v-else-if="item.type=='htmlJson'"  v-highlight>
+                <pre>
+                    <code  v-html="row[item.prop]"></code>
+                </pre>
+              </div>
               <tiny_mce
                 v-model="row[item.prop]"
                 v-else-if="item.type=='editorTM'"

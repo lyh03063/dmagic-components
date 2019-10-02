@@ -140,7 +140,18 @@ import ElementUI from 'element-ui';
 
 Vue.use(ElementUI);
 
+// 代码高亮插件
+import hljs from 'highlight.js';
+import javascript from 'highlight.js/lib/languages/javascript';
+hljs.registerLanguage('javascript', javascript);
+import 'highlight.js/styles/github.css' //样式文件
 
+Vue.directive('highlight',function (el) {
+  let highlight = el.querySelectorAll('pre code');
+  highlight.forEach((block)=>{
+      hljs.highlightBlock(block)
+  })
+})
 
 
 import App from './App.vue'
