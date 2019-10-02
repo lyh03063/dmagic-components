@@ -1,9 +1,7 @@
 <template>
   <div>
-    
-<dm_debug_list>
-      <dm_debug_item v-model="test" text="test"/>
-
+    <dm_debug_list>
+      <dm_debug_item v-model="test" text="test" />
     </dm_debug_list>
 
     <dm_dynamic_form :cf="cfForm" v-model="formData">
@@ -17,6 +15,7 @@
 
 <script>
 import checkbox_diy from "../components/form_item/checkbox_diy.vue";
+let T;
 export default {
   components: { checkbox_diy },
   computed: {
@@ -29,6 +28,7 @@ export default {
       handler(newName, oldName) {
         var t_json = JSON.stringify(this.cfData); //：{Json对象转换Json字符串函数}
         this.cfForm = util.parseJson(t_json);
+        
       },
       // immediate: true,
       deep: true
@@ -36,13 +36,13 @@ export default {
   },
   data() {
     return {
-      test:null,
+      test: null,
       options: [
         { label: "label1", value: "1" },
         { label: "label2", value: "2" }
       ],
       formData: {
-        num1:"55",
+        num1: "55",
         percent: 0.12,
         select1: null,
         collection2: [
@@ -68,11 +68,16 @@ export default {
           complete1(newVal, oldVal) {
             console.log("complete1111变动");
             this.value.complete = 123;
-            let influence= {
+            let influence = {
               1: { $ne: 0 },
               2: { $gt: 0, $lt: 1 },
               3: { $ne: 1 }
-            }
+            };
+
+            console.log("T:", T);
+            let item_prop4 = T.cfForm.formItems.find(item => item.prop == "prop4");
+            console.log("item_prop4:", item_prop4);
+            item_prop4.ajax.param.a += 1;
           }
         },
         formItems: [
@@ -85,10 +90,10 @@ export default {
             label: "完成情况[被监听]",
             prop: "complete1",
             type: "select",
-            notSubmit: true,//不提交
+            notSubmit: true, //不提交
             toObj: true, //提交（查询）时转成对象，值项应该是json字符串
             // multiple:true,//多选
-            
+
             options: [
               { value: 1, label: "未开始" }, //complete==0
               { value: 2, label: "进行中" }, //complete>0&&complete>1
@@ -115,7 +120,7 @@ export default {
               keyValue: "userName"
             }
           },
-          
+
           {
             label: "富文本编辑器(TinyMCE)",
             prop: "prop_editorTM",
@@ -364,7 +369,7 @@ export default {
             label: "json编辑器(vueJsonEditor)",
             prop: "prop_vueJsonEditor",
             type: "vueJsonEditor"
-          },
+          }
         ],
         btns: [
           { text: "提交111", event: "submit", type: "primary", validate: true },
@@ -372,6 +377,9 @@ export default {
         ]
       }
     };
+  },
+  created() {
+    T = this;
   },
   async mounted() {
     this.$parent.showCFForm = true;
