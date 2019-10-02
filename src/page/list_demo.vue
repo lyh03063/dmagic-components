@@ -180,7 +180,7 @@ export default {
           {
             label: "文章详情",
             prop: "articleContent",
-            type: "editorTM"
+            type: "htmlJson"
           },
           {
             label: "文章详情2",
@@ -215,6 +215,12 @@ export default {
             label: "文章详情",
             prop: "articleContent",
             type: "editorTM"
+          },
+          {
+            label: "文章详情",
+            prop: "articleContent",
+            type: "editorTM",
+            col_span:24
           },
           {
             label: "公众号文章地址",
@@ -262,33 +268,33 @@ export default {
     setAddInit() {
       this.cfList.formDataAddInit = { a: 1, b: 2, articleTitle: "234" };
     },
-    showAdd(){
-      this.cfList.formItems = [
-        {
-            label: "文章标题11",
-            prop: "articleTitle",
-            width: 200
-          }
-      ]
-    },
-    showModify(){
-      this.cfList.formItems = [
-        {
-            label: "文章标题11",
-            prop: "articleTitle",
-            width: 200
-          }
-      ]
-    },
-    showDetail(){
-      this.cfList.detailItems = [
-        {
-            label: "文章标题11",
-            prop: "articleTitle",
-            width: 200
-          }
-      ]
-    }
+    // showAdd(){
+    //   this.cfList.formItems = [
+    //     {
+    //         label: "文章标题11",
+    //         prop: "articleTitle",
+    //         width: 200
+    //       }
+    //   ]
+    // },
+    // showModify(){
+    //   this.cfList.formItems = [
+    //     {
+    //         label: "文章标题11",
+    //         prop: "articleTitle",
+    //         width: 200
+    //       }
+    //   ]
+    // },
+    // showDetail(){
+    //   this.cfList.detailItems = [
+    //     {
+    //         label: "文章标题11",
+    //         prop: "articleTitle",
+    //         width: 200
+    //       }
+    //   ]
+    // }
   },
   async mounted() {
     this.$parent.showCFForm = true;
