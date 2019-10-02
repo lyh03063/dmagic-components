@@ -98,6 +98,7 @@
 // import dynamicForm from "./dynamic-form";
 import tiny_mce from "../../components/form_item/tiny_mce";
 export default {
+  name: "list_dialogs", //组件名，用于递归
   components: {
     //注册组件
     // dynamicForm

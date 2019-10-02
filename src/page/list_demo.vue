@@ -2,12 +2,16 @@
   <div>
     <el-button plain @click="setAddInit" size="mini">设置formDataAddInit</el-button>
 
-    <dm_list_data :cf="cfList" @after-modify="afterModify"
+    <dm_list_data ref="list1" :cf="cfList" @after-modify="afterModify"
+    @after-delete="afterDelete"
      @after-show-Dialog-Add="showAdd" 
      @after-show-Dialog-Modify='showModify'
      @after-show-Dialog-Detail='showDetail'>
       <template v-slot:slot_form_expand_articleTitle="{row}">
         {{row}}
+
+     
+        <el-link type="primary" @click="fold(row)">收起</el-link>
       </template>
     </dm_list_data>
     
@@ -15,6 +19,7 @@
 </template>
 
 <script>
+let T;
 import dm_list_data from "../components/list-data/list-data.vue";
 import dm_dynamic_form from "../components/list-data/dynamic-form.vue";
 export default {
@@ -75,9 +80,9 @@ export default {
         ],
         expands:[
           {
-            label: "文章标题",
+            label: "",
             prop: "articleTitle",
-            width: 260,
+        
             slot:'slot_form_expand_articleTitle'
           },
           {
@@ -88,20 +93,6 @@ export default {
             formatter11111: function(rowData) {
               let name = lodash.get(rowData, "categoryDoc.name");
               return name;
-            }
-          },
-
-          {
-            label: "创建时间",
-            prop: "CreateTime",
-            width: 145
-          },
-          {
-            label: "其他",
-            prop: "extend",
-            width: 135,
-            formatter11111: function(extend) {
-              return JSON.stringify(extend.extend);
             }
           }
         ],
@@ -249,6 +240,16 @@ export default {
   },
 
   methods: {
+    fold(row){
+   
+      T.$refs.list1.$refs.table.toggleRowExpansion(row, false)
+
+    },
+     afterDelete(param, param1) {
+      console.log("afterDelete");
+      console.log("删除的数据:", param);
+    
+    },
     afterAdd(param, param1) {
       console.log("afterAdd");
       console.log("新增后的数据:", param);
@@ -289,6 +290,9 @@ export default {
           }
       ]
     }
+  },
+  created(){
+    T=this;
   },
   async mounted() {
     this.$parent.showCFForm = true;

@@ -11,12 +11,7 @@
     </div>
 
     <el-row size="mini" class="MB10" v-if="cf.isShowToolBar">
-      <el-button
-        v-if="cf.flag"
-        size="mini"
-        type="primary"
-        @click="showAdd"
-      >新增</el-button>
+      <el-button v-if="cf.flag" size="mini" type="primary" @click="showAdd">新增</el-button>
       <dm_space v-else height="32"></dm_space>
       <el-button @click="deleteSelection()" size="mini" plain>删除选中</el-button>
     </el-row>
@@ -35,22 +30,22 @@
     </dm_debug_list>
     <el-table
       highlight-current-row
-      ref="multipleTable"
+      ref="table"
       :data="tableData"
       border
       :stripe="true"
       :cell-style="{padding:'3px'}"
       :header-cell-style="{padding:'6px'}"
       style="width: 100%;"
+      
     >
       <el-table-column label="id" prop="P1" :width="40" type="selection"></el-table-column>
-      <el-table-column  :width="40" type="expand" v-if="cf.expand">
+      <el-table-column :width="40" type="expand" v-if="cf.expand">
         <template slot-scope="props">
           <div v-for="(item,index) in cf.expands" :key="index">
-            
             <div>
-              <span style="display:inline-block;width: 80px;">
-              {{item.label}}：</span>
+              <span style="display:inline-block;width: 80px;">{{item.label}}：</span>
+              <!--Q1:有slot-->
               <slot :name="item.slot" :row="props.row" v-if="item.slot"></slot>
               <!--Q2:有formatter-->
               <span class v-else-if="item.formatter">{{item.formatter(props.row)}}</span>
@@ -135,13 +130,12 @@
         v-if="cf.isShowPageLink"
       ></el-pagination>
     </div>
-
+    <!-- @after-delete="$emit('after-delete')" -->
     <listDialogs
       ref="listDialogs"
       :cf="cf"
       @after-add="(data,olddata)=>{$emit('after-add',data,olddata)}"
       @after-modify="(newdata,olddata)=>{$emit('after-modify',newdata,olddata)}"
-      @after-delete="$emit('after-delete')"
       @after-show-Dialog-Modify="(row)=>{$emit('after-show-Dialog-Modify',row)}"
     >
       <template v-slot:[item.slot]="{row}" v-for="item in cf.detailItems">
@@ -169,6 +163,7 @@ import listDialogs from "./list-dialogs";
 import dynamicForm from "./dynamic-form";
 // import { log } from "util";
 export default {
+  name: "dm_list_data", //组件名，用于递归
   components: { listDialogs, dynamicForm }, //注册组件
   props: {
     cf: {
@@ -218,14 +213,14 @@ export default {
   },
 
   methods: {
-    showAdd(){
-      this.$emit('after-show-Dialog-Add')
-      this.$store.commit('openDialogAdd',this.cf.listIndex)
+    showAdd() {
+      this.$emit("after-show-Dialog-Add");
+      this.$store.commit("openDialogAdd", this.cf.listIndex);
     },
     // 删除选中数据的方法
     deleteSelection() {
       //  得到选中的数据对象
-      var selects = this.$refs.multipleTable.selection;
+      var selects = this.$refs.table.selection;
       //  有选中的就遍历得到P1，进行批量删除
       if (selects.length > 0) {
         var arr = [];
@@ -255,9 +250,9 @@ export default {
     },
     async showDetail(row) {
       //判断详情接口是否存在，如果存在，进行ajax请求
-      this.$emit('after-show-Dialog-Detail',row)
+      this.$emit("after-show-Dialog-Detail", row);
       if (this.cf.url.detail) {
-        //如果{000}000
+        //如果{详情ajax地址}存在
         let { data } = await axios({
           //请求接口
           method: "post",
@@ -268,7 +263,7 @@ export default {
         });
         row = data.Doc;
       }
-      
+
       this.$store.commit("openDialogDetail", {
         listIndex: this.cf.listIndex,
         row: row
@@ -282,7 +277,18 @@ export default {
         type: "warning"
       }).catch(() => {});
 
+      let deleteData=[]  ;//删除的数据，统一为数组格式
       if (clickStatus == "confirm") {
+        let idType = util.type(dataId);
+        //如果是id数组（批量删除）
+        if (idType == "array") {
+          deleteData=this.tableData.filter(doc=>dataId.includes(doc.P1))
+        } else {
+          deleteData=[this.tableData.find(doc=>doc.P1==dataId)]
+          
+        }
+       deleteData= util.deepCopy(deleteData)
+
         //用户点击了确认
         await axios({
           //请求接口
@@ -303,7 +309,7 @@ export default {
           duration: 1500,
           type: "success"
         });
-        this.$emit("after-delete"); //触发外部事件
+        this.$emit("after-delete",deleteData); //触发外部事件
         //如果{增删改操作后是否自动刷新}为真
         if (this.cf.isRefreshAfterCUD) {
           this.getDataList(); //更新数据列表
@@ -465,7 +471,6 @@ export default {
 }
 .cell .el-button + .el-button {
   margin-left: 0px;
-  
 }
 
 body .table-normal td {

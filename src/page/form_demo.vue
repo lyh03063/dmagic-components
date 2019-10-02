@@ -17,6 +17,7 @@
 import checkbox_diy from "../components/form_item/checkbox_diy.vue";
 let T;
 export default {
+  name:"form_demo",
   components: { checkbox_diy },
   computed: {
     cfData: function() {
@@ -28,7 +29,6 @@ export default {
       handler(newName, oldName) {
         var t_json = JSON.stringify(this.cfData); //：{Json对象转换Json字符串函数}
         this.cfForm = util.parseJson(t_json);
-        
       },
       // immediate: true,
       deep: true
@@ -36,6 +36,72 @@ export default {
   },
   data() {
     return {
+      dictEnroolTeam: {
+        "16": {
+          _id: "5d8dd92899aefd5e14b3ece8",
+          P1: 16,
+          createMemberId: 57,
+          matchId: 86,
+          member: [
+            { phone: "1341502", sex: 1, name: "lfhh" },
+            { phone: "13415028975", sex: 1, name: "lxc" }
+          ],
+          CreateUser: "匿名",
+          name: "唐球",
+          orderId: "20190927174056365"
+        },
+        "18": {
+          _id: "5d8f0c783eaaa91a1dbea4b7",
+          P1: 18,
+          matchId: 86,
+          name: "aa",
+          member: [{ name: "sss", sex: 1, phone: "13415028976" }],
+          orderId: "EO1569655913515",
+          CreateUser: "匿名"
+        },
+        "19": {
+          _id: "5d8f631b3eaaa91a1dbea4c6",
+          P1: 19,
+          name: "西游队",
+          createMemberId: 91,
+          matchId: 86,
+          member: [
+            { _exit: true, name: "孙悟空", sex: "1", phone: "13100000001" },
+            { _exit: true, name: "猪八戒", phone: "13100000004", sex: "1" },
+            { _exit: true, name: "唐僧", phone: "13100000003", sex: "1" },
+            { _exit: true, name: "白骨精", sex: "2", phone: "13100000002" }
+          ],
+          CreateUser: "匿名",
+          orderId: "t2"
+        },
+        "20": {
+          _id: "5d8f652e3eaaa91a1dbea4c9",
+          P1: 20,
+          name: "海贼队",
+          createMemberId: 92,
+          matchId: 86,
+          member: [
+            { phone: "13100001004", sex: "1", name: "乌索普", _exit: true },
+            { phone: "13100001003", sex: "2", name: "娜美", _exit: true },
+            { phone: "13100001002", sex: "2", name: "乔巴", _exit: true },
+            { phone: "13100001001", sex: "1", name: "路飞", _exit: true }
+          ],
+          CreateUser: "匿名",
+          orderId: "t1"
+        },
+        "23": {
+          _id: "5d91b42030d3ca2327ff8358",
+          P1: 23,
+          matchId: 86,
+          name: "1311",
+          member: [
+            { phone: "", sex: 1, name: "222" },
+            { phone: "", sex: 1, name: "11111" }
+          ],
+          orderId: "EO1569829896020",
+          CreateUser: "匿名"
+        }
+      },
       test: null,
       options: [
         { label: "label1", value: "1" },
@@ -75,12 +141,76 @@ export default {
             };
 
             console.log("T:", T);
-            let item_prop4 = T.cfForm.formItems.find(item => item.prop == "prop4");
+            let item_prop4 = T.cfForm.formItems.find(
+              item => item.prop == "prop4"
+            );
             console.log("item_prop4:", item_prop4);
             item_prop4.ajax.param.a += 1;
+          },
+          teamId(newVal, oldVal) {
+            console.log("teamId变动####");
+            //***修改participantsId下拉框字段的ajax配置
+            let itemParticipantsId = T.cfForm.formItems.find(
+              item => item.prop == "participantsId"
+            );
+
+            let { member } = T.dictEnroolTeam[newVal];
+
+            let arrPhone = member.map(doc => doc.phone);
+            console.log("arrPhone:", arrPhone);
+            // delete itemParticipantsId.ajax;
+            // itemParticipantsId.options = [];
+
+            itemParticipantsId.ajax.param = {
+              findJson: { phone: { $in: arrPhone } }
+            };
+
+            // console.log(
+            //   "itemParticipantsId.ajax.param:",
+            //   itemParticipantsId.ajax.param
+            // );
+            // // itemParticipantsId.ajax.param.aaa =itemParticipantsId.ajax.param.aaa||222;
+            // // itemParticipantsId.ajax.param.aaa++
+            // itemParticipantsId.ajax.param = {
+            //   findJson: { phone: { $in: ["13100000001"] } }
+            // };
           }
         },
         formItems: [
+          {
+            label: "所属球队",
+            prop: "teamId",
+            type: "select",
+            ajax: {
+              param: { aaa: 123 },
+              url: "/crossList?page=tangball_team",
+              keyLabel: "name",
+              keyValue: "P1"
+            }
+          },
+          {
+            label: "参赛人Id",
+            prop: "participantsId",
+            type: "select",
+            ajax: {
+              url: "/crossList?page=tangball_member",
+              keyLabel: "name",
+              keyValue: "P1",
+              param: { aaa: 111 }
+            }
+          },
+          {
+            label: "下拉框(select+ajax)",
+            prop: "prop4",
+            type: "select",
+            multiple: true, //多选
+            ajax: {
+              url: "/crossList?page=mabang-member",
+              param: { a: 1 },
+              keyLabel: "nickName",
+              keyValue: "userName"
+            }
+          },
           {
             label: "数字",
             prop: "num1",
@@ -107,18 +237,6 @@ export default {
             // default: [2],
             multiple: true, //多选
             options: [{ value: 1, label: "男" }, { value: 2, label: "女" }]
-          },
-          {
-            label: "下拉框(select+ajax)",
-            prop: "prop4",
-            type: "select",
-            multiple: true, //多选
-            ajax: {
-              url: "/crossList?page=mabang-member",
-              param: { a: 1 },
-              keyLabel: "nickName",
-              keyValue: "userName"
-            }
           },
 
           {
