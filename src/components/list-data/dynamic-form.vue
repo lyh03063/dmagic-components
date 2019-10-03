@@ -477,7 +477,7 @@ export default {
         console.log(key + ": " + obj1[key]);
 
         // console.log("this.cf.watch####", this.cf.watch);
-        this.$watch(`value.${key}`, this.cf.watch[key]);
+        this.$watch(`value.${key}`, this.cf.watch[key],{immediate:true});
       }
     }
 

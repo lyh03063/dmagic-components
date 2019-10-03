@@ -175,4 +175,11 @@ util.sortByArrId = function (param) {
   return arrNeed; //获取排序后的列表数据
 };
 //#endregion
+//#region getTimeRandom:返回带时间戳的随机数
+util.getTimeRandom = function () {
+  return moment().format("YYYYMMDDHHmmSSsss_")+ lodash.random(99999)
+};
+//#endregion
+
+
 export default util

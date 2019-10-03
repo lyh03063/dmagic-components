@@ -11,7 +11,7 @@
     >
       <template v-if="!cf.customDetail">
         <table class="table-normal WP100">
-          <tr v-for="item in cf.detailItems" :key="item.prop">
+          <tr v-for="(item,index) in cf.detailItems" :key="index">
             <td class="W100">{{item.label}}</td>
             <td style="line-height:150%">
               <!--如果是slot-->

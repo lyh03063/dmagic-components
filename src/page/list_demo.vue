@@ -50,7 +50,7 @@ export default {
           watch: {
             //传入监听器
             extend(newName, oldName) {
-              console.log("watch-extend变化");
+              console.log("watch-extend变化######################");
 
               this.value.articleTitle = this.value.articleTitle + "a";
             }

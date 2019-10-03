@@ -1,18 +1,17 @@
 <template>
   <div class>
-    
-<dm_debug_list>
-      <dm_debug_item v-model="showToolbar" text="showToolbar"/>
-
+    <dm_debug_list>
+      <dm_debug_item v-model="showToolbar" text="showToolbar" />
+      <dm_debug_item v-model="valueNeed" text="valueNeed" />
     </dm_debug_list>
+    <!-- 这里不能使用MB8样式，会被element自带覆盖 -->
+    <el-button plain @click="addGroup" size="mini" v-if="showToolbar" style="margin-bottom:8px">添加一组</el-button>
 
-    <el-button class="MB8" plain @click="addGroup" size="mini" v-if="showToolbar">添加一组</el-button>
     <div class v-if="valueNeed && valueNeed.length">
-    
       <ul>
         <li
           v-for="(doc,i) in valueNeed"
-          :key="i"
+          :key="doc.__id"
           :class="{'data-group':true,'edit':editItem==i,'data-form-group':listType=='form'}"
           @mouseenter="focusItem=i"
           @mouseleave="focusItem=999"
@@ -23,7 +22,12 @@
             <json_editor v-model="valueNeed[i]" @blur="afterBlur"></json_editor>
           </div>
           <div class v-else>
-            <dm_dynamic_form :cf="cfForm" v-model="valueNeed[i]" v-if="listType=='form'"></dm_dynamic_form>
+            <dm_dynamic_form
+              ref="dynamicForm"
+              :cf="cfForm"
+              v-model="valueNeed[i]"
+              v-if="listType=='form'"
+            ></dm_dynamic_form>
             <span v-else>{{doc}}</span>
             <div class="tool-bar" v-if="focusItem==i&&showToolbar">
               <i class="el-icon-top btn-op" title="上移" @click="move(i, 'up')" v-if="i>0"></i>
@@ -76,6 +80,7 @@
 import json_editor from "../../components/form_item/json_editor.vue";
 
 export default {
+  name: "collection",
   components: {
     //注册组件
     json_editor
@@ -85,7 +90,7 @@ export default {
     listType: {
       default: "bar"
     },
-    showToolbar:{
+    showToolbar: {
       default: true
     },
 
@@ -105,9 +110,9 @@ export default {
   watch: {
     value: {
       handler(newName, oldName) {
-        if (!this.value) {//
-        this.valueNeed=[];
-
+        if (!this.value) {
+          //
+          this.valueNeed = [];
         }
       },
       immediate: true,
@@ -131,7 +136,10 @@ export default {
      */
 
     addGroup() {
-      let obj = {"_exit":true};//_exit是为了防止出现空对象
+      console.log("addGroup:");
+
+      //__id为了防止新增一组时出现残留值
+      let obj = { _exit: true, __id: util.getTimeRandom() }; //_exit是为了防止出现空对象
       this.cfForm.formItems.forEach(itemEach => {
         if (itemEach.default !== null && itemEach.default !== undefined) {
           //如果默认值存在
@@ -140,6 +148,7 @@ export default {
       });
 
       this.valueNeed.unshift(obj);
+      this.valueNeed = util.deepCopy(this.valueNeed);
     },
     /**
      * @name 显示修改对象弹窗的函数

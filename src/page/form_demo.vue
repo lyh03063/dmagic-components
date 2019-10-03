@@ -17,7 +17,7 @@
 import checkbox_diy from "../components/form_item/checkbox_diy.vue";
 let T;
 export default {
-  name:"form_demo",
+  name: "form_demo",
   components: { checkbox_diy },
   computed: {
     cfData: function() {
@@ -164,19 +164,35 @@ export default {
             itemParticipantsId.ajax.param = {
               findJson: { phone: { $in: arrPhone } }
             };
-
-            // console.log(
-            //   "itemParticipantsId.ajax.param:",
-            //   itemParticipantsId.ajax.param
-            // );
-            // // itemParticipantsId.ajax.param.aaa =itemParticipantsId.ajax.param.aaa||222;
-            // // itemParticipantsId.ajax.param.aaa++
-            // itemParticipantsId.ajax.param = {
-            //   findJson: { phone: { $in: ["13100000001"] } }
-            // };
           }
         },
         formItems: [
+          {
+            label: "小组成员",
+            prop: "groupMember",
+            type: "collection",
+            collectionlistType: "form",
+            collectionCfForm: {
+              col_span: 12,
+              formItems: [
+                {
+                  label: "球队id",
+                  prop: "id",
+                  type: "select",
+                  // default:19,
+                  ajax: {
+                    url: "/crossList?page=tangball_team",
+                    keyLabel: "name",
+                    keyValue: "P1"
+                  }
+                },{
+                  label: "姓名",
+                  prop: "name",
+                  
+                }
+              ]
+            }
+          },
           {
             label: "所属球队",
             prop: "teamId",
