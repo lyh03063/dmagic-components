@@ -2,19 +2,22 @@
   <div>
     <el-button plain @click="setAddInit" size="mini">设置formDataAddInit</el-button>
 
-    <dm_list_data ref="list1" :cf="cfList" @after-modify="afterModify"
-    @after-delete="afterDelete"
-     @after-show-Dialog-Add="showAdd" 
-     @after-show-Dialog-Modify='showModify'
-     @after-show-Dialog-Detail='showDetail'>
+    <dm_list_data
+      ref="list1"
+      :cf="cfList"
+      @after-modify="afterModify"
+      @after-delete="afterDelete"
+      @after-show-Dialog-Add="showAdd"
+      @after-show-Dialog-Modify="showModify"
+      @after-show-Dialog-Detail="showDetail"
+      @bacth-btn-click="bacthBtnClick"
+      @single-btn-click="singlebtnClick"
+    >
       <template v-slot:slot_form_expand_articleTitle="{row}">
         {{row}}
-
-     
         <el-link type="primary" @click="fold(row)">收起</el-link>
       </template>
     </dm_list_data>
-    
   </div>
 </template>
 
@@ -28,6 +31,33 @@ export default {
   data() {
     return {
       cfList: {
+        singleBtns: {
+          // detail:false,
+          // modify:false,
+          delete: false, //配置基础按钮隐藏（默认显示）
+          addon: [
+            {
+              title: "单项操作（圆形按钮）",
+              circle: true,
+              icon: "el-icon-user-solid" ,
+              eventType: "singleOP1" ,
+
+            },
+            { title: "单项操作（普通按钮）", text: "操作" , eventType: "singleOP2",}
+          ]
+        },
+        bactchBtns: {
+          // add: false, //配置基础按钮隐藏（默认显示）
+          delete: false, //配置基础按钮隐藏（默认显示）
+          addon: [
+            {
+              text: "批量操作（需选中数据）",
+              eventType: "bacthOP1",
+              needSelect: true
+            },
+            { text: "其他操作（不需选中数据）", eventType: "bacthOP2" }
+          ]
+        },
         deleteFindJson: {
           //ajax查询参数中需要删除的参数
           articleTitle: true
@@ -62,7 +92,7 @@ export default {
         twoTitle: "其他数据",
         threeTitle: "文章管理",
         flag: true,
-        expand:true,
+        expand: true,
         url: {
           list: "/crossList?page=tangball_article", //列表接口
           add: "/crossAdd?page=tangball_article", //新增接口
@@ -78,12 +108,12 @@ export default {
             idColumn2: "P1"
           }
         ],
-        expands:[
+        expands: [
           {
             label: "",
             prop: "articleTitle",
-        
-            slot:'slot_form_expand_articleTitle'
+
+            slot: "slot_form_expand_articleTitle"
           },
           {
             label: "分类名称",
@@ -96,7 +126,6 @@ export default {
             }
           }
         ],
-
 
         //-------列配置数组-------
         columns: [
@@ -211,7 +240,7 @@ export default {
             label: "文章详情",
             prop: "articleContent",
             type: "editorTM",
-            col_span:24
+            col_span: 24
           },
           {
             label: "公众号文章地址",
@@ -246,15 +275,28 @@ export default {
   },
 
   methods: {
-    fold(row){
-   
-      T.$refs.list1.$refs.table.toggleRowExpansion(row, false)
-
+    /**
+     * @name 单项操作按钮点击函数
+     */
+    singlebtnClick: function(eventType,row) {
+console.log("bacthBtnClick-singlebtnClick:", eventType);
+      
+      console.log("row:####", row);
     },
-     afterDelete(param, param1) {
+    /**
+     * @name 批量操作按钮点击函数
+     */
+    bacthBtnClick: function(eventType, selection) {
+      console.log("bacthBtnClick-eventType:", eventType);
+      console.log("selection:####", selection);
+    },
+
+    fold(row) {
+      T.$refs.list1.$refs.table.toggleRowExpansion(row, false);
+    },
+    afterDelete(param, param1) {
       console.log("afterDelete");
       console.log("删除的数据:", param);
-    
     },
     afterAdd(param, param1) {
       console.log("afterAdd");
@@ -269,16 +311,16 @@ export default {
     setAddInit() {
       this.cfList.formDataAddInit = { a: 1, b: 2, articleTitle: "234" };
     },
-    showAdd(){
+    showAdd() {
       this.cfList.formItems = [
         {
-            label: "文章标题11",
-            prop: "articleTitle",
-            width: 200
-          }
-      ]
+          label: "文章标题11",
+          prop: "articleTitle",
+          width: 200
+        }
+      ];
     },
-    showModify(){
+    showModify() {
       // this.cfList.formItems = [
       //   {
       //       label: "文章标题11",
@@ -287,18 +329,18 @@ export default {
       //     }
       // ]
     },
-    showDetail(){
+    showDetail() {
       this.cfList.detailItems = [
         {
-            label: "文章标题11",
-            prop: "articleTitle",
-            width: 200
-          }
-      ]
+          label: "文章标题11",
+          prop: "articleTitle",
+          width: 200
+        }
+      ];
     }
   },
-  created(){
-    T=this;
+  created() {
+    T = this;
   },
   async mounted() {
     this.$parent.showCFForm = true;

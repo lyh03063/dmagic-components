@@ -1,5 +1,13 @@
 <template>
   <div>
+    <dm_debug_list>
+      <dm_debug_item v-model="cf" text="list-data列表配置" />
+      <dm_debug_item v-model="cf.objParamAddon" text="附加的列表查询参数" />
+      <dm_debug_item v-model="objParam" text="列表查询参数" />
+      <dm_debug_item v-model="cf.searchFormItems" text="筛选表单配置" />
+      <dm_debug_item v-model="cf.dynamicDict" text="动态数据字典配置" />
+      <dm_debug_item v-model="tableData" text="列表数据" />
+    </dm_debug_list>
     <el-breadcrumb separator-class="el-icon-arrow-right" v-if="cf.isShowBreadcrumb" class="MB12">
       <el-breadcrumb-item :to="{ path: '/listHome' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>{{cf.twoTitle}}</el-breadcrumb-item>
@@ -9,25 +17,28 @@
     <div class="search-form-box MB10" v-if="cf.isShowSearchForm">
       <dynamicForm @submit1="searchList" :cf="cfSearchForm" v-model="objParam.findJson"></dynamicForm>
     </div>
-
+<!-- v-if="cf.flag"这个规则去掉 -->
     <el-row size="mini" class="MB10" v-if="cf.isShowToolBar">
-      <el-button v-if="cf.flag" size="mini" type="primary" @click="showAdd">新增</el-button>
+      <el-button  size="mini" type="primary" @click="showAdd"
+      v-if="!($lodash.get(cf, `bactchBtns.add`)===false)"
+      >新增</el-button>
       <dm_space v-else height="32"></dm_space>
-      <el-button @click="deleteSelection()" size="mini" plain>删除选中</el-button>
+      <el-button @click="deleteSelection()" size="mini" plain 
+      v-if="!($lodash.get(cf, `bactchBtns.delete`)===false)">删除选中</el-button>
+      <template class v-if="$lodash.hasIn(cf, 'bactchBtns.addon')">
+        <el-button
+          :type="item.type"
+          @click="btnBtnClick(item.eventType,item.needSelect)"
+          v-for="(item,index) in cf.bactchBtns.addon"
+          :key="index"
+          size="mini"
+          plain
+        >{{item.text}}</el-button>
+      </template>
     </el-row>
 
     <!--主列表-->
-    <dm_debug_list>
-      <dm_debug_item v-model="cf" text="list-data列表配置" />
-      <dm_debug_item v-model="cf.objParamAddon" text="附加的列表查询参数" />
-      <dm_debug_item v-model="objParam" text="列表查询参数" />
-      <dm_debug_item v-model="cf.columns" text="列配置" />
-      <dm_debug_item v-model="cf.formItems" text="新增/修改表单配置" />
-      <dm_debug_item v-model="cf.searchFormItems" text="筛选表单配置" />
-      <dm_debug_item v-model="cf.detailItems" text="详情弹窗字段配置" />
-      <dm_debug_item v-model="cf.dynamicDict" text="动态数据字典配置" />
-      <dm_debug_item v-model="tableData" text="列表数据" />
-    </dm_debug_list>
+
     <el-table
       highlight-current-row
       ref="table"
@@ -37,7 +48,6 @@
       :cell-style="{padding:'3px'}"
       :header-cell-style="{padding:'6px'}"
       style="width: 100%;"
-      
     >
       <el-table-column label="id" prop="P1" :width="40" type="selection"></el-table-column>
       <el-table-column :width="40" type="expand" v-if="cf.expand">
@@ -101,6 +111,7 @@
             icon="el-icon-notebook-2"
             circle
             size="mini"
+            v-if="!($lodash.get(cf, `singleBtns.detail`)===false)"
           ></el-button>
           <el-button
             title="编辑"
@@ -108,6 +119,7 @@
             size="mini"
             circle
             @click="$refs.listDialogs.showModify(scope.row)"
+            v-if="!($lodash.get(cf, `singleBtns.modify`)===false)"
           ></el-button>
           <el-button
             title="删除"
@@ -115,7 +127,24 @@
             size="mini"
             circle
             @click="confirmDelete(scope.row.P1)"
+            v-if="!($lodash.get(cf, `singleBtns.delete`)===false)"
           ></el-button>
+
+          <template class v-if="$lodash.hasIn(cf, 'singleBtns.addon')">
+            <el-button
+              :type="item.type"
+              :title="item.title"
+              @click="singleBtnClick(item.eventType,scope.row)"
+              v-for="(item,index) in cf.singleBtns.addon"
+              :icon="item.icon"
+              :key="index"
+              size="mini"
+              :circle="item.circle"
+              class="MR5"
+            >
+              <template class v-if="!item.circle">{{item.text}}</template>
+            </el-button>
+          </template>
         </template>
       </el-table-column>
     </el-table>
@@ -213,6 +242,24 @@ export default {
   },
 
   methods: {
+    //自定义单项操作按钮的点击事件
+    singleBtnClick(eventType, row) {
+
+      this.$emit("single-btn-click",eventType, row);
+    },
+    //自定义批量操作按钮的点击事件
+    btnBtnClick(eventType, needSelect) {
+ 
+      if (!needSelect) return this.$emit("bacth-btn-click",eventType); //抛出自定义事件
+      //  得到选中的数据对象
+      var selection = this.$refs.table.selection;
+      //  有选中的就遍历得到P1，进行批量删除
+      if (selection.length > 0) {
+        this.$emit("bacth-btn-click",eventType, selection); //抛出自定义事件
+      } else {
+        this.$message({ message: "未选中数据", type: "error" });
+      }
+    },
     showAdd() {
       this.$emit("after-show-Dialog-Add");
       this.$store.commit("openDialogAdd", this.cf.listIndex);
@@ -234,6 +281,7 @@ export default {
         this.$message({ message: "请先选中要删除的数据", type: "success" });
       }
     },
+    //统计字段筛选数据并跳转页面函数
     filterData(param) {
       let { pid, listIndex, targetIdKey } = param;
       //函数：{筛选数据函数}
@@ -277,17 +325,16 @@ export default {
         type: "warning"
       }).catch(() => {});
 
-      let deleteData=[]  ;//删除的数据，统一为数组格式
+      let deleteData = []; //删除的数据，统一为数组格式
       if (clickStatus == "confirm") {
         let idType = util.type(dataId);
         //如果是id数组（批量删除）
         if (idType == "array") {
-          deleteData=this.tableData.filter(doc=>dataId.includes(doc.P1))
+          deleteData = this.tableData.filter(doc => dataId.includes(doc.P1));
         } else {
-          deleteData=[this.tableData.find(doc=>doc.P1==dataId)]
-          
+          deleteData = [this.tableData.find(doc => doc.P1 == dataId)];
         }
-       deleteData= util.deepCopy(deleteData)
+        deleteData = util.deepCopy(deleteData);
 
         //用户点击了确认
         await axios({
@@ -309,7 +356,7 @@ export default {
           duration: 1500,
           type: "success"
         });
-        this.$emit("after-delete",deleteData); //触发外部事件
+        this.$emit("after-delete", deleteData); //触发外部事件
         //如果{增删改操作后是否自动刷新}为真
         if (this.cf.isRefreshAfterCUD) {
           this.getDataList(); //更新数据列表
