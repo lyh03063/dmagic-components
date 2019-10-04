@@ -49,8 +49,8 @@ export default {
           col_span: 12, //控制显示一行多列
           watch: {
             //传入监听器
-            extend(newName, oldName) {
-              console.log("watch-extend变化######################");
+            articleCategory(newName, oldName) {
+              console.log("watch-articleCategory变化######################123");
 
               this.value.articleTitle = this.value.articleTitle + "a";
             }
@@ -269,33 +269,33 @@ export default {
     setAddInit() {
       this.cfList.formDataAddInit = { a: 1, b: 2, articleTitle: "234" };
     },
-    // showAdd(){
-    //   this.cfList.formItems = [
-    //     {
-    //         label: "文章标题11",
-    //         prop: "articleTitle",
-    //         width: 200
-    //       }
-    //   ]
-    // },
-    // showModify(){
-    //   this.cfList.formItems = [
-    //     {
-    //         label: "文章标题11",
-    //         prop: "articleTitle",
-    //         width: 200
-    //       }
-    //   ]
-    // },
-    // showDetail(){
-    //   this.cfList.detailItems = [
-    //     {
-    //         label: "文章标题11",
-    //         prop: "articleTitle",
-    //         width: 200
-    //       }
-    //   ]
-    // }
+    showAdd(){
+      this.cfList.formItems = [
+        {
+            label: "文章标题11",
+            prop: "articleTitle",
+            width: 200
+          }
+      ]
+    },
+    showModify(){
+      // this.cfList.formItems = [
+      //   {
+      //       label: "文章标题11",
+      //       prop: "articleTitle",
+      //       width: 200
+      //     }
+      // ]
+    },
+    showDetail(){
+      this.cfList.detailItems = [
+        {
+            label: "文章标题11",
+            prop: "articleTitle",
+            width: 200
+          }
+      ]
+    }
   },
   created(){
     T=this;

@@ -472,11 +472,12 @@ export default {
     if (this.cf.watch) {
       //for of循环遍历对象，for of不能直接处理对象，本质上是同个Object.keys拼装一个新数组进行辅助
       let obj1 = this.cf.watch;
-      console.log("Object.keys结果", Object.keys(obj1));
+    
       for (var key of Object.keys(obj1)) {
         console.log(key + ": " + obj1[key]);
 
         // console.log("this.cf.watch####", this.cf.watch);
+        
         this.$watch(`value.${key}`, this.cf.watch[key],{immediate:true});
       }
     }
