@@ -2,17 +2,10 @@
   <div>
     <el-button plain @click="setAddInit" size="mini">设置formDataAddInit</el-button>
 
-    <dm_list_data
-      ref="list1"
-      :cf="cfList"
-      @after-modify="afterModify"
-      @after-delete="afterDelete"
-      @after-show-Dialog-Add="showAdd"
-      @after-show-Dialog-Modify="showModify"
-      @after-show-Dialog-Detail="showDetail"
-      @bacth-btn-click="bacthBtnClick"
-      @single-btn-click="singlebtnClick"
-    >
+    <dm_list_data :cf="cfList" @after-modify="afterModify"
+     @after-show-Dialog-Add="showAdd"
+     @after-show-Dialog-Modify='showModify'
+     @after-show-Dialog-Detail='showDetail'>
       <template v-slot:slot_form_expand_articleTitle="{row}">
         {{row}}
         <el-link type="primary" @click="fold(row)">收起</el-link>
@@ -87,7 +80,7 @@ export default {
           }
         },
         pageSize: 2,
-        listIndex: "list_article111111", //vuex对应的字段~
+        listIndex: "list_demo", //vuex对应的字段~
         focusMenu: true, //进行菜单聚焦
         twoTitle: "其他数据",
         threeTitle: "文章管理",
@@ -280,7 +273,7 @@ export default {
      */
     singlebtnClick: function(eventType,row) {
 console.log("bacthBtnClick-singlebtnClick:", eventType);
-      
+
       console.log("row:####", row);
     },
     /**

@@ -54,7 +54,7 @@ export default {
             forceSaveKey: true,//使用自定义的key
             saveKey: `${time}_${file.name}`,//自定义的key
             //返回数据格式y
-            returnBody: `{"key":   $(key), "hash": $(etag), "w": $(imageInfo.width), "h": $(imageInfo.height), 
+            returnBody: `{"key":   $(key), "hash": $(etag), "w": $(imageInfo.width), "h": $(imageInfo.height),
             "size": $(fsize),
             "bucket": $(bucket),
             "fname": $(fname),
@@ -82,6 +82,7 @@ export default {
     }
   },
   async created() {
+    this.$store.commit("changeActiveMenu",'upload_qiniu');
     // var token;
     // var policy = {};
     // var bucketName = "test";
