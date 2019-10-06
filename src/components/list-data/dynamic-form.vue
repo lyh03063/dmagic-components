@@ -63,10 +63,16 @@
               :rules="item.rules||[]"
               v-if="!item.cfForm"
             >
+              <!--component自定义组件-用于派成的权限树--->
+              <component
+                :is="item.component"
+                v-model="formDataNeed[item.prop]"
+                v-if="item.component"
+              ></component>
               <!--slot自定义组件-注意是isReadyFormData为真时才开始渲染-->
-              <slot :name="item.slot" :formData="value" v-if="item.slot"></slot>
+              <slot :name="item.slot" :formData="value" v-else-if="item.slot"></slot>
               <!--下拉框-->
-              <div class v-else-if="item.type=='select'">
+              <template class v-else-if="item.type=='select'">
                 <select_ajax
                   class
                   v-model="formDataNeed[item.prop]"
@@ -91,7 +97,7 @@
                     :key="option.value"
                   ></el-option>
                 </el-select>
-              </div>
+              </template>
 
               <!--单选框-->
               <el-radio-group v-model="formDataNeed[item.prop]" v-else-if="item.type=='radio'">
@@ -206,17 +212,18 @@
               <el-input-number
                 v-model="formDataNeed[item.prop]"
                 :controls-position="item.controlsPosition||'right'"
-                :min="item.max"
-                :max="item.min"
+                :min="item.min"
+                :max="item.max"
+                :class="{'hide-btn':item.hideBtn}"
                 v-else-if="item.type=='number'"
               ></el-input-number>
-              <!-- <json_prop
-              v-model="formDataNeed[item.prop.split('.')[0]]"
-              :prop="item.prop.split('.')[1]"
-              v-else-if="item.prop.includes('.')"
-              />-->
+
+              <span v-else-if="item.type=='text'" :style="item.style">{{formDataNeed[item.prop]}}</span>
+
               <!--普通文本框-->
               <el-input v-model="formDataNeed[item.prop]" v-else></el-input>
+              <!--提示-->
+              <i class="el-icon-question" :title="item.tips" style="color:#999" v-if="item.tips"></i>
             </el-form-item>
           </el-col>
         </template>
@@ -411,16 +418,28 @@ export default {
 
       return flag;
     },
-    btnClick(eventName, validate) {
-      //Q1：需要校验
-      if (validate) {
+    //表单校验方法，支持promise
+    validate() {
+      var promise = new Promise((resolve, reject) => {
         this.$refs.form.validate(valid => {
           if (valid) {
-            this.$emit(eventName);
+            resolve(true);
           } else {
-            return false;
+            resolve(false);
           }
         });
+      });
+      return promise;
+    },
+    async btnClick(eventName, validate) {
+      //Q1：需要校验
+      if (validate) {
+        let valid = await this.validate(); //校验结果
+        if (valid) {
+          this.$emit(eventName);
+        } else {
+          return false;
+        }
       } else {
         //Q2：不需要校验
         this.$emit(eventName);
@@ -472,13 +491,13 @@ export default {
     if (this.cf.watch) {
       //for of循环遍历对象，for of不能直接处理对象，本质上是同个Object.keys拼装一个新数组进行辅助
       let obj1 = this.cf.watch;
-    
+
       for (var key of Object.keys(obj1)) {
         console.log(key + ": " + obj1[key]);
 
         // console.log("this.cf.watch####", this.cf.watch);
-        
-        this.$watch(`value.${key}`, this.cf.watch[key],{immediate:true});
+
+        this.$watch(`value.${key}`, this.cf.watch[key], { immediate: true });
       }
     }
 
@@ -546,4 +565,14 @@ export default {
   margin: 15px 0 0 0;
 }
 /****************************进度条补丁-END****************************/
+
+/****************************数字输入框隐藏操作按钮-START****************************/
+.hide-btn >>> [role="button"] {
+  display: none;
+}
+
+.hide-btn >>> .el-input__inner {
+  padding-right: 15px;
+}
+/****************************数字输入框隐藏操作按钮-END****************************/
 </style>

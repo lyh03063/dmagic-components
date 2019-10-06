@@ -148,6 +148,7 @@ export default {
             item_prop4.ajax.param.a += 1;
           },
           teamId(newVal, oldVal) {
+            if(!newVal)return 
             console.log("teamId变动####");
             //***修改participantsId下拉框字段的ajax配置
             let itemParticipantsId = T.cfForm.formItems.find(
@@ -167,6 +168,19 @@ export default {
           }
         },
         formItems: [
+           {
+            label: "普通文本框(input)",
+            prop: "prop1",
+            type: "input",
+            default: "默认文本",
+            rules: [
+              { required: true, message: "不能为空" },
+              {
+                pattern: /^[\u4E00-\u9FA5]+$/,
+                message: "用户名只能为中文"
+              }
+            ]
+          },
           {
             label: "小组成员",
             prop: "groupMember",
@@ -185,10 +199,10 @@ export default {
                     keyLabel: "name",
                     keyValue: "P1"
                   }
-                },{
+                },
+                {
                   label: "姓名",
-                  prop: "name",
-                  
+                  prop: "name"
                 }
               ]
             }
@@ -227,10 +241,36 @@ export default {
               keyValue: "userName"
             }
           },
-          {
-            label: "数字",
+            {
+            label: "设置component",
             prop: "num1",
-            type: "number"
+            type: "text",
+
+            component:"el-input"
+          
+          },
+          {
+            label: "文本字段",
+            prop: "num1",
+            type: "text",
+            style: {color:"#f00"},
+            tips:"跟下方数字相同"
+          
+          },
+          {
+            label: "数字(隐藏操作按钮)",
+            prop: "num1",
+            type: "number",
+            min: 0,
+            max: 3,
+            hideBtn: true
+          },
+          {
+            label: "数字22",
+            prop: "num2",
+            type: "number",
+            min: 0,
+            max: 3
           },
           {
             label: "完成情况[被监听]",
@@ -425,20 +465,7 @@ export default {
           //   prop: "extend",
           //   path: "latitude"
           // },
-          // {
-          //   label: "普通文本框(input)",
-          //   prop: "prop1",
-          //   type: "input",
-          //   default: "默认文本",
-          //   rules: [
-          //     { required: true, message: "不能为空" },
-
-          //     {
-          //       pattern: /^[\u4E00-\u9FA5]+$/,
-          //       message: "用户名只能为中文"
-          //     }
-          //   ]
-          // },
+         
           // {
           //   label: "密码框2(password)",
           //   prop: "prop_password",

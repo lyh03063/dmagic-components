@@ -22,7 +22,7 @@
       <el-button  size="mini" type="primary" @click="showAdd"
       v-if="!($lodash.get(cf, `bactchBtns.add`)===false)"
       >新增</el-button>
-      <dm_space v-else height="32"></dm_space>
+   
       <el-button @click="deleteSelection()" size="mini" plain 
       v-if="!($lodash.get(cf, `bactchBtns.delete`)===false)">删除选中</el-button>
       <template class v-if="$lodash.hasIn(cf, 'bactchBtns.addon')">
@@ -35,6 +35,10 @@
           plain
         >{{item.text}}</el-button>
       </template>
+      
+      <span class="" v-html="$lodash.get(cf, `bactchBtns.tips.text`)" v-if="$lodash.get(cf, `bactchBtns.tips`)" :style="getTipsStyle(cf)" >
+     
+    </span>
     </el-row>
 
     <!--主列表-->
@@ -242,6 +246,13 @@ export default {
   },
 
   methods: {
+    //获取提示样式的函数
+    getTipsStyle(cf) {
+      let styleAdd=lodash.get(this.cf, `bactchBtns.tips.style`)
+      let style={"color":"#f90"}
+     return Object.assign(style,styleAdd);//合并对象
+      
+    },
     //自定义单项操作按钮的点击事件
     singleBtnClick(eventType, row) {
 
@@ -278,7 +289,7 @@ export default {
         this.confirmDelete(arr);
         // 没有选中的数据提示用户
       } else {
-        this.$message({ message: "请先选中要删除的数据", type: "success" });
+        this.$message({ message: "请先选中要删除的数据", type: "error" });
       }
     },
     //统计字段筛选数据并跳转页面函数

@@ -31,6 +31,7 @@ export default {
   data() {
     return {
       cfList: {
+        //单项操作按钮的配置
         singleBtns: {
           // detail:false,
           // modify:false,
@@ -46,6 +47,7 @@ export default {
             { title: "单项操作（普通按钮）", text: "操作" , eventType: "singleOP2",}
           ]
         },
+         //批量操作按钮的配置
         bactchBtns: {
           // add: false, //配置基础按钮隐藏（默认显示）
           delete: false, //配置基础按钮隐藏（默认显示）
@@ -56,7 +58,11 @@ export default {
               needSelect: true
             },
             { text: "其他操作（不需选中数据）", eventType: "bacthOP2" }
-          ]
+          ],
+          tips:{
+            text:"提示语123",
+            // style:{"color":"#3a0"}
+          }
         },
         deleteFindJson: {
           //ajax查询参数中需要删除的参数
@@ -75,6 +81,14 @@ export default {
             }
           }
         },
+        //新增修改弹窗的一些配置
+        cfDialogForm: {
+          tips:{
+            text:"1,表单的提示语1<br/> 2,表单的提示语2",
+            style:{"padding-left":"200px"}
+          }
+          
+        },
         cfForm: {
           col_span: 12, //控制显示一行多列
           watch: {
@@ -91,7 +105,6 @@ export default {
         focusMenu: true, //进行菜单聚焦
         twoTitle: "其他数据",
         threeTitle: "文章管理",
-        flag: true,
         expand: true,
         url: {
           list: "/crossList?page=tangball_article", //列表接口
@@ -276,7 +289,7 @@ export default {
 
   methods: {
     /**
-     * @name 单项操作按钮点击函数
+     * @name 自定义单项操作按钮点击函数
      */
     singlebtnClick: function(eventType,row) {
 console.log("bacthBtnClick-singlebtnClick:", eventType);
@@ -284,7 +297,7 @@ console.log("bacthBtnClick-singlebtnClick:", eventType);
       console.log("row:####", row);
     },
     /**
-     * @name 批量操作按钮点击函数
+     * @name 自定义批量操作按钮点击函数
      */
     bacthBtnClick: function(eventType, selection) {
       console.log("bacthBtnClick-eventType:", eventType);

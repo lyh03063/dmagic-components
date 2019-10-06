@@ -63,7 +63,10 @@
         </dm_debug_list>
       </div>
 
-      <br />
+<!--表单提示语-->
+    <div class="" v-html="$lodash.get(cf, `cfDialogForm.tips.text`)" v-if="$lodash.get(cf, `cfDialogForm.tips`)" :style="getTipsStyle(cf)" >
+     
+    </div>
 
       <dynamicForm v-model="formAdd" :cf="cfFormAdd" @submit="addData" @cancel="closeDialogAddFun">
         <template v-slot:[item.slot]="{formData}" v-for="item in cf.formItems">
@@ -84,6 +87,10 @@
       <dm_debug_list level-up="1">
         <dm_debug_item v-model="formModify" text="修改表单的绑定数据" />
       </dm_debug_list>
+      <!--表单提示语-->
+    <div class="" v-html="$lodash.get(cf, `cfDialogForm.tips.text`)" v-if="$lodash.get(cf, `cfDialogForm.tips`)" :style="getTipsStyle(cf)" >
+     
+    </div>
       <dynamicForm
         v-model="formModify"
         :cf="cfFormModify"
@@ -189,6 +196,13 @@ export default {
     }
   },
   methods: {
+    //获取提示样式的函数
+    getTipsStyle(cf) {
+      let styleAdd=lodash.get(this.cf, `cfDialogForm.tips.style`)
+      let style={"padding":"10px 10px 10px 100px","color":"#f60"}
+     return Object.assign(style,styleAdd);//合并对象
+      
+    },
     initFormDataAdd() {
       console.log("initFormDataAdd#");
       //函数：{初始化新增数据表单函数}
