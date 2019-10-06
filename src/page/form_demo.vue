@@ -202,7 +202,8 @@ export default {
                 },
                 {
                   label: "姓名",
-                  prop: "name"
+                  prop: "name",
+
                 }
               ]
             }
@@ -543,6 +544,7 @@ export default {
     T = this;
   },
   async mounted() {
+    this.$store.commit("changeActiveMenu",'form_demo');
     this.$parent.showCFForm = true;
     this.$parent.cfForm.formItems = [
       {

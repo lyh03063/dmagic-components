@@ -88,7 +88,7 @@ const store = new Vuex.Store({//定义Vuex的存储对象
     },
     setCfData(state, param) {//设置组件配置数据
       state.cfData= param;
-     
+
     },
     setListFindJson(state, param) {//设置列表的初始筛选参数值
       state.defultFindJson[param.listIndex] = param.findJson;

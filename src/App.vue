@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <el-menu
-      :default-active="activeIndex"
+      :default-active="activeMenuIndex"
       class="el-menu-demo"
       mode="horizontal"
       :router="true"
@@ -9,10 +9,10 @@
       text-color="#fff"
       active-text-color="#ffd04b"
     >
-      <el-menu-item index="1" route="/form_demo">表单</el-menu-item>
-      <el-menu-item index="2" route="/list_demo">列表</el-menu-item>
-      <el-menu-item index="3" route="/upload_qiniu">上传七牛云</el-menu-item>
-      <el-menu-item index="4" route="/test">测试</el-menu-item>
+      <el-menu-item index="form_demo" route="/form_demo">表单</el-menu-item>
+      <el-menu-item index="list_demo" route="/list_demo">列表</el-menu-item>
+      <el-menu-item index="upload_qiniu" route="/upload_qiniu">上传七牛云</el-menu-item>
+      <el-menu-item index="test" route="/test">测试</el-menu-item>
     </el-menu>
     <div class="main-box">
       <div class="left-box" :style="{'width':showDialog?'60%':'100%'}">
@@ -39,6 +39,12 @@ export default {
   components: { dm_dynamic_form },
   name: "app",
   computed: {
+    activeMenuIndex() {
+      // //
+      // return '2'
+      // //当前激活的菜单index
+       return this.$store.state.activeMenuIndex; //从vuex的store里面读取值
+    },
     cfData: function() {
       return this.$store.state.cfData;
     }
@@ -68,7 +74,7 @@ export default {
     return {
       dataConfigForCopy: "", //用于拷贝的配置字符串
       dataConfig: {}, //内部组件配置数据
-      activeIndex: "1",
+      // activeIndex: "1",
       showDialog: false,
       showCFForm: false, //是否显示组件配置表单
       cfForm: {

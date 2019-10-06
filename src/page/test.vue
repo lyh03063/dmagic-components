@@ -22,7 +22,7 @@ export default {
 
   data() {
     return {
-     
+
       collectionData: [
         { time: "2019-09-09", money: 100 },
         { time: "2019-09-11", money: 200 }
@@ -77,6 +77,9 @@ export default {
      //通过深拷贝强制更新，此方法性能不好，会触发该对象的所有子属性的监听触发
      this.obj=util.deepCopy(this.obj)
     }
+  },
+  created(){
+    this.$store.commit("changeActiveMenu",'test');
   },
   async mounted() {}
 };
