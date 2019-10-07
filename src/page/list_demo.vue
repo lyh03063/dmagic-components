@@ -24,7 +24,7 @@ export default {
   data() {
     return {
       cfList: {
-        //单项操作按钮的配置
+        //列表单项操作按钮的配置
         singleBtns: {
           // detail:false,
           // modify:false,
@@ -74,7 +74,7 @@ export default {
             }
           }
         },
-        //新增修改弹窗的一些配置
+        //新增修改弹窗的配置
         cfDialogForm: {
           tips:{
             text:"1,表单的提示语1<br/> 2,表单的提示语2",
@@ -82,6 +82,7 @@ export default {
           }
           
         },
+        //新增修改表单的配置
         cfForm: {
           col_span: 12, //控制显示一行多列
           watch: {
@@ -96,9 +97,9 @@ export default {
         pageSize: 2,
         listIndex: "list_demo", //vuex对应的字段~
         focusMenu: true, //进行菜单聚焦
-        twoTitle: "其他数据",
-        threeTitle: "文章管理",
-        expand: true,
+        twoTitle: "其他数据",//面包屑1级菜单
+        threeTitle: "文章管理",//面包屑2级菜单
+        expand: true,//是否展开行
         url: {
           list: "/crossList?page=tangball_article", //列表接口
           add: "/crossAdd?page=tangball_article", //新增接口
@@ -114,6 +115,7 @@ export default {
             idColumn2: "P1"
           }
         ],
+        //expands展开行的显示字段配置
         expands: [
           {
             label: "",

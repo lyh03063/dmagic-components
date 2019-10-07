@@ -385,7 +385,7 @@ export default {
             }
           },
           {
-            label: "图片上传2",
+            label: "文件上传2",
             prop: "prop_upload2",
             type: "upload",
             uploadConfig: {
