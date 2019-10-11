@@ -178,8 +178,17 @@ util.sortByArrId = function(param) {
   return arrNeed; //获取排序后的列表数据
 };
 //#endregion
-
-
+//#region toFixed/money:将数字转换成保留小数点，默认2位
+util.toFixed = function (num, length = 2) {
+  let result;
+  if (isNaN(num)||num==0||num===undefined) {//结果为数字
+      num = 0;
+  }
+  result = Number(num.toFixed(length));
+  return result
+}
+util.money=util.toFixed;
+//#endregion
 //#region getTimeRandom:返回带时间戳的随机数
 util.getTimeRandom = function () {
   return moment().format("YYYYMMDDHHmmSSsss_")+ lodash.random(99999)

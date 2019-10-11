@@ -1,6 +1,4 @@
-// window.pub_debug=true;//开启调试模式
-// console.log("2222");
-window.PUB.domain = 'http://test.dmagic.cn'
+
 
 import './assets/css/public.css';
 

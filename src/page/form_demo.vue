@@ -168,6 +168,30 @@ export default {
           }
         },
         formItems: [
+          {
+            label: "文本字段",
+            prop: "num1",
+            type: "text",
+            style: {color:"#f00"},
+            tips:"跟下方数字相同"
+          
+          },
+          {
+            label: "数字(隐藏操作按钮)",
+            prop: "num1",
+            type: "number",
+            min: 0,
+            max: 100,
+            hideBtn: true,
+            frequencyOptions:[{value:1},{value:2},{value:3},{value:4},{value:5},{value:6},{value:7},{value:8},{value:9},{value:10},{value:11},{value:12},{value:13},{value:0.14}]
+          },
+          {
+            label: "数字22",
+            prop: "num2",
+            type: "number",
+            min: 0,
+            max: 3
+          },
            {
             label: "普通文本框(input)",
             prop: "prop1",
@@ -250,29 +274,7 @@ export default {
             component:"el-input"
           
           },
-          {
-            label: "文本字段",
-            prop: "num1",
-            type: "text",
-            style: {color:"#f00"},
-            tips:"跟下方数字相同"
           
-          },
-          {
-            label: "数字(隐藏操作按钮)",
-            prop: "num1",
-            type: "number",
-            min: 0,
-            max: 3,
-            hideBtn: true
-          },
-          {
-            label: "数字22",
-            prop: "num2",
-            type: "number",
-            min: 0,
-            max: 3
-          },
           {
             label: "完成情况[被监听]",
             prop: "complete1",

@@ -56,13 +56,18 @@
                 </template>
               </dm_dynamic_form>
             </div>
-
+ <!-- :label="item.label" -->
             <el-form-item
-              :label="item.label"
+             
               :prop="item.prop"
               :rules="item.rules||[]"
               v-if="!item.cfForm"
             >
+            <!--通过插槽方式实现字段标签-->
+             <label slot="label">{{item.label}}
+                <!--提示-->
+              <i class="el-icon-question" :title="item.tips" style="color:#999" v-if="item.tips"></i>
+             </label>
               <!--component自定义组件-用于派成的权限树--->
               <component
                 :is="item.component"
@@ -222,8 +227,23 @@
 
               <!--普通文本框-->
               <el-input v-model="formDataNeed[item.prop]" v-else></el-input>
-              <!--提示-->
-              <i class="el-icon-question" :title="item.tips" style="color:#999" v-if="item.tips"></i>
+             
+
+              <template class v-if="item.frequencyOptions">
+                <el-popover placement="top-start" width="200" trigger="hover">
+                  <!--候选值列表-->
+                  <i
+                    class="frequency-option e"
+                    v-for="(option,i) in item.frequencyOptions"
+                    :key="i"
+                    @click="formDataNeed[item.prop]=option.value"
+                  >
+                    {{option.label
+                    ||option.value}}
+                  </i>
+                  <el-button slot="reference" icon="el-icon-more"></el-button>
+                </el-popover>
+              </template>
             </el-form-item>
           </el-col>
         </template>
@@ -575,4 +595,16 @@ export default {
   padding-right: 15px;
 }
 /****************************数字输入框隐藏操作按钮-END****************************/
+.frequency-option {
+  display: inline-block;
+  border: 1px #ddd solid;
+  border-radius: 5px;
+  line-height: 1;
+  padding: 5px 8px;
+  background-color: #f0f0f0;
+  margin: 0 5px 5px;
+  cursor: pointer;
+  color: #999;
+  font-style: normal;
+}
 </style>

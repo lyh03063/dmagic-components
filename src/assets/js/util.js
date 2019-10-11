@@ -1,8 +1,8 @@
 
 window.PUB = {}
-//window.PUB.domain="http://120.76.160.41:3000"
+window.PUB.domain="http://120.76.160.41:3000"
 // window.PUB.domain = "http://localhost:3000"
-window.PUB.domain = 'http://test.dmagic.cn'
+//window.PUB.domain = 'http://test.dmagic.cn'
 // window.PUB.urlUpload = `${PUB.domain}/api_third_part/qiniu_upload?scope=test`
 window.PUB.urlUpload = `https://up-z2.qiniup.com`//七牛云上传地址（域名）
 window.PUB.urlGetQiniuToken = `${PUB.domain}/api_third_part/get_qiniu_token?scope=test`
@@ -181,5 +181,14 @@ util.getTimeRandom = function () {
 };
 //#endregion
 
+//#region toFixed/money:将数字转换成保留小数点，默认2位
+util.toFixed = function (num, length = 2) {
+  let result;
+  if (isNaN(num)||num==0||num===undefined) {//结果为数字
+      num = 0;
+  }
+  result = Number(num.toFixed(length));
+  return result
+}
 
 export default util
