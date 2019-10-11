@@ -183,7 +183,11 @@ export default {
             min: 0,
             max: 100,
             hideBtn: true,
-            frequencyOptions:[{value:1},{value:2},{value:3},{value:4},{value:5},{value:6},{value:7},{value:8},{value:9},{value:10},{value:11},{value:12},{value:13},{value:0.14}]
+            frequency:{
+              sytle:{width:'48px'},
+              options:[{value:1},{value:2},{value:3},{value:4},{value:5},{value:6},{value:7},{value:8},{value:9},{value:10},{value:11},{value:12},{value:13},{value:0.14}]
+            }
+            
           },
           {
             label: "数字22",

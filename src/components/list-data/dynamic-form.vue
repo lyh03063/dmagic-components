@@ -223,20 +223,21 @@
                 v-else-if="item.type=='number'"
               ></el-input-number>
 
-              <span v-else-if="item.type=='text'" :style="item.style">{{formDataNeed[item.prop]}}</span>
+              <span class="PR5" v-else-if="item.type=='text'" :style="item.style">{{formDataNeed[item.prop]}}</span>
 
               <!--普通文本框-->
               <el-input v-model="formDataNeed[item.prop]" v-else></el-input>
              
 
-              <template class v-if="item.frequencyOptions">
-                <el-popover placement="top-start" width="200" trigger="hover">
+              <template class v-if="item.frequency">
+                <el-popover placement="bottom-start" width="200" trigger="hover" v-model="visibleFrequency[item.prop]" :open-delay="0">
                   <!--候选值列表-->
                   <i
-                    class="frequency-option e"
-                    v-for="(option,i) in item.frequencyOptions"
+                    :class="['frequency-option',{focus:formDataNeed[item.prop]==option.value}] "
+                    v-for="(option,i) in item.frequency.options"
                     :key="i"
-                    @click="formDataNeed[item.prop]=option.value"
+                    @click="formDataNeed[item.prop]=option.value;visibleFrequency[item.prop]=false"
+                    :style="item.frequency.sytle||{'width':'48px'}"
                   >
                     {{option.label
                     ||option.value}}
@@ -335,6 +336,7 @@ export default {
   },
   data() {
     return {
+      visibleFrequency:{},//候选项可见性
       marks: {
         0: "0",
         0.1: "10",
@@ -595,6 +597,9 @@ export default {
   padding-right: 15px;
 }
 /****************************数字输入框隐藏操作按钮-END****************************/
+
+
+ /****************************常用值选项-START****************************/
 .frequency-option {
   display: inline-block;
   border: 1px #ddd solid;
@@ -606,5 +611,17 @@ export default {
   cursor: pointer;
   color: #999;
   font-style: normal;
+  text-align: center
 }
+.frequency-option:hover {
+  border: 1px #f60 solid;
+
+}
+
+.frequency-option.focus {
+  border: 1px #3a0 solid;
+}
+ /****************************常用值选项-END****************************/
+
+
 </style>
