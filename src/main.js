@@ -31,13 +31,16 @@ import debug_list from './components/common/debug_list/index.js';   //导入debu
 Vue.use(debug_list);   //作为全局组件，必须有install
 import debug_item from './components/common/debug_item/index.js';   //导入debug_item
 Vue.use(debug_item);   //作为全局组件，必须有install
-import ajax_populate from './components/common/ajax_populate/index.js';   //导入ajax_populate
-Vue.use(ajax_populate);   //作为全局组件，必须有install
+import dm_ajax_populate from './components/common/ajax_populate/index.js';   //导入ajax_populate
+Vue.use(dm_ajax_populate);   //作为全局组件，必须有install
 import loading from './components/common/loading/index.js';   //导入loading
 Vue.use(loading);   //作为全局组件，必须有install
 
-import dm_dynamic_form from './components/list-data/index.js';   //导入dm_dynamic_form
-Vue.use(dm_dynamic_form);   //作为全局组件，必须有install
+//**** 导入dm_dynamic_form和dm_list_data和 dm_ajax_populate*/
+import form_and_list from './components/list-data/index.js';   //
+Vue.use(form_and_list);   //作为全局组件，必须有install
+
+
 
 
 import VueRouter from 'vue-router'

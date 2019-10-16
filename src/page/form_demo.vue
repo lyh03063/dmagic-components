@@ -16,6 +16,79 @@
 <script>
 import checkbox_diy from "../components/form_item/checkbox_diy.vue";
 let T;
+
+let cfListSelectActicle = {
+  //选择列表配置
+  dataName: "文章",
+  valueKey: "P1",
+  labelKey: "articleTitle",
+  pageName: "tangball_article",
+  cfList: {
+    pageSize: 10,
+    focusMenu: false, //进行菜单聚焦
+    isShowBreadcrumb: false, //面包屑
+    isShowToolBar: false, //批量操作栏
+    isShowOperateColumn: false, //单项操作列
+    isRefreshAfterCUD: false, //是否在增删改操作后自动更新列表
+    isMultipleSelect: false, //不支持多选
+    url: {
+      list: "/crossList?page=tangball_article" //列表接口
+    },
+    dynamicDict: [
+      {
+        page: "tangball_article_category",
+        populateColumn: "categoryDoc",
+        idColumn: "articleCategory",
+        idColumn2: "P1"
+      }
+    ],
+    //-------列配置数组-------
+    columns: [
+      {
+        label: "文章标题aaa",
+        prop: "articleTitle",
+        width: 260
+      },
+      {
+        label: "分类名称",
+        prop: "articleCategory",
+        requireProp: ["articleContent"], //依赖文章详情，列表需返回该字段
+        width: "auto",
+        formatter: function(rowData) {
+          let name = lodash.get(rowData, "categoryDoc.name");
+          return name;
+        }
+      }
+    ],
+    //-------筛选表单字段数组-------
+    searchFormItems: [
+      {
+        label: "下拉框(多选)",
+        prop: "select1",
+        type: "select",
+        // default: [2],
+        multiple: true, //多选
+        options: [{ value: 1, label: "男" }, { value: 2, label: "女" }]
+      },
+      {
+        label: "文章分类",
+        prop: "articleCategory",
+        type: "select",
+        ajax: {
+          url: "/crossList?page=tangball_article_category",
+          keyLabel: "name",
+          keyValue: "P1"
+        }
+      },
+      {
+        label: "文章标题",
+        prop: "articleTitle",
+        type: "input_find_vague"
+      }
+    ]
+  }
+};
+
 export default {
   name: "form_demo",
   components: { checkbox_diy },
@@ -108,6 +181,8 @@ export default {
         { label: "label2", value: "2" }
       ],
       formData: {
+        memberId:221,
+        // prop_select_list_data: 122,
         num1: "55",
         percent: 0.12,
         select1: null,
@@ -148,7 +223,7 @@ export default {
             item_prop4.ajax.param.a += 1;
           },
           teamId(newVal, oldVal) {
-            if(!newVal)return 
+            if (!newVal) return;
             console.log("teamId变动####");
             //***修改participantsId下拉框字段的ajax配置
             let itemParticipantsId = T.cfForm.formItems.find(
@@ -168,13 +243,26 @@ export default {
           }
         },
         formItems: [
+           {
+            label: "会员ajax_populate",
+            prop: "memberId",
+            type: "ajax_populate",
+            cfAjaxPopulate: {"populateKey":"name","page":"tangball_member"},
+           
+          },
+          {
+            label: "选择列表",
+            prop: "prop_select_list_data",
+            type: "select_list_data",
+            cfSelectList: cfListSelectActicle,
+              rules: [{ required: true, message: "能为空" }]
+          },
           {
             label: "文本字段",
             prop: "num1",
             type: "text",
-            style: {color:"#f00"},
-            tips:"跟下方数字相同"
-          
+            style: { color: "#f00" },
+            tips: "跟下方数字相同"
           },
           {
             label: "数字(隐藏操作按钮)",
@@ -183,11 +271,25 @@ export default {
             min: 0,
             max: 100,
             hideBtn: true,
-            frequency:{
-              sytle:{width:'48px'},
-              options:[{value:1},{value:2},{value:3},{value:4},{value:5},{value:6},{value:7},{value:8},{value:9},{value:10},{value:11},{value:12},{value:13},{value:0.14}]
+            frequency: {
+              sytle: { width: "48px" },
+              options: [
+                { value: 1 },
+                { value: 2 },
+                { value: 3 },
+                { value: 4 },
+                { value: 5 },
+                { value: 6 },
+                { value: 7 },
+                { value: 8 },
+                { value: 9 },
+                { value: 10 },
+                { value: 11 },
+                { value: 12 },
+                { value: 13 },
+                { value: 0.14 }
+              ]
             }
-            
           },
           {
             label: "数字22",
@@ -196,7 +298,7 @@ export default {
             min: 0,
             max: 3
           },
-           {
+          {
             label: "普通文本框(input)",
             prop: "prop1",
             type: "input",
@@ -230,8 +332,7 @@ export default {
                 },
                 {
                   label: "姓名",
-                  prop: "name",
-
+                  prop: "name"
                 }
               ]
             }
@@ -270,15 +371,14 @@ export default {
               keyValue: "userName"
             }
           },
-            {
+          {
             label: "设置component",
             prop: "num1",
             type: "text",
 
-            component:"el-input"
-          
+            component: "el-input"
           },
-          
+
           {
             label: "完成情况[被监听]",
             prop: "complete1",
@@ -472,7 +572,7 @@ export default {
           //   prop: "extend",
           //   path: "latitude"
           // },
-         
+
           // {
           //   label: "密码框2(password)",
           //   prop: "prop_password",
@@ -550,7 +650,7 @@ export default {
     T = this;
   },
   async mounted() {
-    this.$store.commit("changeActiveMenu",'form_demo');
+    this.$store.commit("changeActiveMenu", "form_demo");
     this.$parent.showCFForm = true;
     this.$parent.cfForm.formItems = [
       {

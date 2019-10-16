@@ -1,6 +1,6 @@
 <template>
   <span>
-    <slot :doc="doc">{{text}}</slot>
+    <slot :doc="doc"><span :title="id">{{text}}</span></slot>
   </span>
 </template>
 

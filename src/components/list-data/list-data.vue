@@ -17,14 +17,21 @@
     <div class="search-form-box MB10" v-if="cf.isShowSearchForm">
       <dynamicForm @submit1="searchList" :cf="cfSearchForm" v-model="objParam.findJson"></dynamicForm>
     </div>
-<!-- v-if="cf.flag"这个规则去掉 -->
+    <!-- v-if="cf.flag"这个规则去掉 -->
     <el-row size="mini" class="MB10" v-if="cf.isShowToolBar">
-      <el-button  size="mini" type="primary" @click="showAdd"
-      v-if="!($lodash.get(cf, `bactchBtns.add`)===false)"
+      <el-button
+        size="mini"
+        type="primary"
+        @click="showAdd"
+        v-if="!($lodash.get(cf, `bactchBtns.add`)===false)"
       >新增</el-button>
-   
-      <el-button @click="deleteSelection()" size="mini" plain 
-      v-if="!($lodash.get(cf, `bactchBtns.delete`)===false)">删除选中</el-button>
+
+      <el-button
+        @click="deleteSelection()"
+        size="mini"
+        plain
+        v-if="!($lodash.get(cf, `bactchBtns.delete`)===false)"
+      >删除选中</el-button>
       <template class v-if="$lodash.hasIn(cf, 'bactchBtns.addon')">
         <el-button
           :type="item.type"
@@ -35,10 +42,13 @@
           plain
         >{{item.text}}</el-button>
       </template>
-      
-      <span class="" v-html="$lodash.get(cf, `bactchBtns.tips.text`)" v-if="$lodash.get(cf, `bactchBtns.tips`)" :style="getTipsStyle(cf)" >
-     
-    </span>
+
+      <span
+        class
+        v-html="$lodash.get(cf, `bactchBtns.tips.text`)"
+        v-if="$lodash.get(cf, `bactchBtns.tips`)"
+        :style="getTipsStyle(cf)"
+      ></span>
     </el-row>
 
     <!--主列表-->
@@ -52,8 +62,9 @@
       :cell-style="{padding:'3px'}"
       :header-cell-style="{padding:'6px'}"
       style="width: 100%;"
+      @selection-change="selectionChange"
     >
-      <el-table-column label="id" prop="P1" :width="40" type="selection"></el-table-column>
+      <el-table-column label="id" prop="P1" :width="40" type="selection" v-if="cf.isShowCheckedBox"></el-table-column>
       <el-table-column :width="40" type="expand" v-if="cf.expand">
         <template slot-scope="props">
           <div v-for="(item,index) in cf.expands" :key="index">
@@ -246,27 +257,34 @@ export default {
   },
 
   methods: {
+    //选择数据
+    selectionChange(val) {
+
+      console.log("selectionChange");
+      if(this.cf.isMultipleSelect)return;
+      if (val.length > 1) {
+        this.$refs.table.clearSelection();
+        this.$refs.table.toggleRowSelection(val.pop());
+      } 
+    },
     //获取提示样式的函数
     getTipsStyle(cf) {
-      let styleAdd=lodash.get(this.cf, `bactchBtns.tips.style`)
-      let style={"color":"#f90"}
-     return Object.assign(style,styleAdd);//合并对象
-      
+      let styleAdd = lodash.get(this.cf, `bactchBtns.tips.style`);
+      let style = { color: "#f90" };
+      return Object.assign(style, styleAdd); //合并对象
     },
     //自定义单项操作按钮的点击事件
     singleBtnClick(eventType, row) {
-
-      this.$emit("single-btn-click",eventType, row);
+      this.$emit("single-btn-click", eventType, row);
     },
     //自定义批量操作按钮的点击事件
     btnBtnClick(eventType, needSelect) {
- 
-      if (!needSelect) return this.$emit("bacth-btn-click",eventType); //抛出自定义事件
+      if (!needSelect) return this.$emit("bacth-btn-click", eventType); //抛出自定义事件
       //  得到选中的数据对象
       var selection = this.$refs.table.selection;
       //  有选中的就遍历得到P1，进行批量删除
       if (selection.length > 0) {
-        this.$emit("bacth-btn-click",eventType, selection); //抛出自定义事件
+        this.$emit("bacth-btn-click", eventType, selection); //抛出自定义事件
       } else {
         this.$message({ message: "未选中数据", type: "error" });
       }
@@ -440,6 +458,8 @@ export default {
   },
 
   created() {
+     this.cf.isMultipleSelect === false || (this.cf.isMultipleSelect = true);
+    this.cf.isShowCheckedBox === false || (this.cf.isShowCheckedBox = true);
     this.cf.isShowSearchForm === false || (this.cf.isShowSearchForm = true);
     this.cf.isShowBreadcrumb === false || (this.cf.isShowBreadcrumb = true);
     this.cf.isShowPageLink === false || (this.cf.isShowPageLink = true);

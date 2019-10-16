@@ -92,6 +92,10 @@ export default {
 
               this.value.articleTitle = this.value.articleTitle + "a";
             }
+          },
+          cfFormAdd:{
+            col_span: 24, //控制显示一行多列
+
           }
         },
         pageSize: 2,
@@ -229,7 +233,7 @@ export default {
             }
           },
           {
-            label: "文章标题11",
+            label: "文章标题22",
             prop: "articleTitle",
             width: 200
           },

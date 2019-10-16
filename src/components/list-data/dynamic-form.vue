@@ -56,18 +56,14 @@
                 </template>
               </dm_dynamic_form>
             </div>
- <!-- :label="item.label" -->
-            <el-form-item
-             
-              :prop="item.prop"
-              :rules="item.rules||[]"
-              v-if="!item.cfForm"
-            >
-            <!--通过插槽方式实现字段标签-->
-             <label slot="label">{{item.label}}
+            <!-- :label="item.label" -->
+            <el-form-item :prop="item.prop" :rules="item.rules||[]" v-if="!item.cfForm">
+              <!--通过插槽方式实现字段标签-->
+              <label slot="label">
+                {{item.label}}
                 <!--提示-->
-              <i class="el-icon-question" :title="item.tips" style="color:#999" v-if="item.tips"></i>
-             </label>
+                <i class="el-icon-question" :title="item.tips" style="color:#999" v-if="item.tips"></i>
+              </label>
               <!--component自定义组件-用于派成的权限树--->
               <component
                 :is="item.component"
@@ -103,6 +99,13 @@
                   ></el-option>
                 </el-select>
               </template>
+
+              <!--弹窗选择列表-->
+              <select_list_data
+                v-model="formDataNeed[item.prop]"
+                :cf="item.cfSelectList"
+                v-else-if="item.type=='select_list_data'"
+              ></select_list_data>
 
               <!--单选框-->
               <el-radio-group v-model="formDataNeed[item.prop]" v-else-if="item.type=='radio'">
@@ -222,15 +225,33 @@
                 :class="{'hide-btn':item.hideBtn}"
                 v-else-if="item.type=='number'"
               ></el-input-number>
+              <!--文本-->
 
-              <span class="PR5" v-else-if="item.type=='text'" :style="item.style">{{formDataNeed[item.prop]}}</span>
+              <span
+                class="PR5"
+                v-else-if="item.type=='text'"
+                :style="item.style"
+              >{{formDataNeed[item.prop]}}</span>
+              
+              <!--ajax_populate-->
+              <dm_ajax_populate
+                v-else-if="item.type=='ajax_populate'"
+                :id="formDataNeed[item.prop]"
+                :populateKey="$lodash.get(item, `cfAjaxPopulate.populateKey`)"
+                :page="$lodash.get(item, `cfAjaxPopulate.page`)"
+              ></dm_ajax_populate>
 
               <!--普通文本框-->
               <el-input v-model="formDataNeed[item.prop]" v-else></el-input>
-             
 
               <template class v-if="item.frequency">
-                <el-popover placement="bottom-start" width="200" trigger="hover" v-model="visibleFrequency[item.prop]" :open-delay="0">
+                <el-popover
+                  placement="bottom-start"
+                  width="200"
+                  trigger="hover"
+                  v-model="visibleFrequency[item.prop]"
+                  :open-delay="0"
+                >
                   <!--候选值列表-->
                   <i
                     :class="['frequency-option',{focus:formDataNeed[item.prop]==option.value}] "
@@ -291,10 +312,11 @@ import json_prop from "../../components/form_item/json_prop.vue";
 import collection from "../../components/form_item/collection.vue";
 import quill_editor from "../../components/form_item/quill_editor.vue";
 import tiny_mce from "../../components/form_item/tiny_mce";
-
+import select_list_data from "../../components/form_item/select_list_data.vue";
 export default {
   name: "dm_dynamic_form", //组件名，用于递归
   components: {
+    select_list_data,
     //注册组件
     vueJsonEditor: vueJsonEditor,
     // vueJsonEditor:resolve => {require(['vue-json-editor'], resolve)},
@@ -315,6 +337,7 @@ export default {
     collection,
     quill_editor,
     tiny_mce
+
     // quill_editor:resolve => {require(['../../components/form_item/quill_editor.vue'], resolve)},
     // tiny_mce:resolve => {require(['../../components/form_item/tiny_mce'], resolve)}
   },
@@ -336,7 +359,7 @@ export default {
   },
   data() {
     return {
-      visibleFrequency:{},//候选项可见性
+      visibleFrequency: {}, //候选项可见性
       marks: {
         0: "0",
         0.1: "10",
@@ -598,8 +621,7 @@ export default {
 }
 /****************************数字输入框隐藏操作按钮-END****************************/
 
-
- /****************************常用值选项-START****************************/
+/****************************常用值选项-START****************************/
 .frequency-option {
   display: inline-block;
   border: 1px #ddd solid;
@@ -611,17 +633,14 @@ export default {
   cursor: pointer;
   color: #999;
   font-style: normal;
-  text-align: center
+  text-align: center;
 }
 .frequency-option:hover {
   border: 1px #f60 solid;
-
 }
 
 .frequency-option.focus {
   border: 1px #3a0 solid;
 }
- /****************************常用值选项-END****************************/
-
-
+/****************************常用值选项-END****************************/
 </style>
