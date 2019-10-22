@@ -31,6 +31,7 @@
             <div
               v-if="item.cfForm"
               :class="{'form-group-box':true,'form-group-no-label':!item.label}"
+              :style="item.style"
             >
               <div class="FWB FS16">{{item.label}}</div>
               <!--递归表单组件，如果有配置prop-->
@@ -591,12 +592,17 @@ export default {
   margin-bottom: 0;
 }
 
-/* 防止最下边的字段出现过大的间距,包括双列情况 */
+/* 防止最下边的字段出现过大的间距,包括双列情况 ，这个很难的-多层级嵌套时还是有问题*/
 .el-col-12:last-child .el-form-item,
 .el-col-12:nth-last-child(2) .el-form-item,
 .el-col-24:last-child .el-form-item {
   margin-bottom: 0;
 }
+
+/* 20191018增加-用于多层级嵌套表单 */
+/* .el-form-item {
+  margin-bottom: 0;
+} */
 
 /****************************进度条补丁-START****************************/
 .el-col >>> .el-slider__marks-text {

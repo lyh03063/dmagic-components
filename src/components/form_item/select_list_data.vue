@@ -10,7 +10,7 @@
     </dm_debug_list>
     <span :title="valueNeed">{{label||valueNeed}}</span>
 
-    <el-input placeholder="辅助文本框，用于更新校验" ref="input_help" style="width:0px;"></el-input>
+    <el-input placeholder="隐藏辅助文本框，用于更新校验" ref="input_help" style="width:0px;height:0px;overflow:hidden"></el-input>
     <el-button plain @click="isShowDialog=true" size="mini">选择{{cf.dataName||"数据"}}</el-button>
 
     <!--选择数据弹窗-->
@@ -77,7 +77,12 @@ export default {
         this.selectData,
         `[0].${this.cf.labelKey || "name"}`
       );
-
+      // await this.$nextTick(); //延迟到视图更新
+      //       this.$parent.$parent.$forceUpdate()//强制视图更新
+      // this.$parent.$forceUpdate()//强制视图更新
+      // this.$forceUpdate()//强制视图更新
+      //弹窗内的表单元素聚焦会触发字段的校验，但赋值后并不消失，forceUpdate方法不管用
+      //这里用到一个辅助的el-input组件的聚焦失焦来解决
       this.$refs.input_help.focus();
       await this.$nextTick(); //延迟到视图更新
       this.$refs.input_help.blur();

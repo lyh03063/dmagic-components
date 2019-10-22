@@ -17,6 +17,61 @@
 import checkbox_diy from "../components/form_item/checkbox_diy.vue";
 let T;
 
+
+//函数定义：{获取菜单权限表单配置函数}
+function getFormMenuGPower({ menuName = "XXX" }) {
+  
+
+  return {
+    col_span: 4,
+    labelWidth: "10px",
+    formItems: [
+      {
+        label: "",
+        prop: "menuName",
+        default: menuName,
+        col_span: 4,
+        type: "text"
+      },
+      {
+        label: "",
+        prop: "add",
+        col_span: 3,
+        type: "checkbox",
+        default: false,
+        options: [{ value: "1", label: "添加" }]
+      },
+      {
+        label: "",
+        prop: "modify",
+        col_span: 3,
+        type: "checkbox",
+        default: false,
+        options: [{ value: "1", label: "修改" }]
+      },
+      {
+        label: "",
+        prop: "search",
+        col_span: 3,
+        type: "checkbox",
+        default: false,
+        options: [{ value: "1", label: "查询" }]
+      },
+      {
+        label: "",
+        prop: "delete",
+        col_span: 3,
+        type: "checkbox",
+        default: false,
+        options: [{ value: "1", label: "删除" }]
+      }
+    ]
+  };
+}
+
+let styleMenuPowerItem = `margin-bottom:10px;padding:0 5px`;
+let styleMenuGPowerItem = `margin-bottom:0;border:none;padding:0`;
+
 let cfListSelectActicle = {
   //选择列表配置
   dataName: "文章",
@@ -109,79 +164,33 @@ export default {
   },
   data() {
     return {
-      dictEnroolTeam: {
-        "16": {
-          _id: "5d8dd92899aefd5e14b3ece8",
-          P1: 16,
-          createMemberId: 57,
-          matchId: 86,
-          member: [
-            { phone: "1341502", sex: 1, name: "lfhh" },
-            { phone: "13415028975", sex: 1, name: "lxc" }
-          ],
-          CreateUser: "匿名",
-          name: "唐球",
-          orderId: "20190927174056365"
-        },
-        "18": {
-          _id: "5d8f0c783eaaa91a1dbea4b7",
-          P1: 18,
-          matchId: 86,
-          name: "aa",
-          member: [{ name: "sss", sex: 1, phone: "13415028976" }],
-          orderId: "EO1569655913515",
-          CreateUser: "匿名"
-        },
-        "19": {
-          _id: "5d8f631b3eaaa91a1dbea4c6",
-          P1: 19,
-          name: "西游队",
-          createMemberId: 91,
-          matchId: 86,
-          member: [
-            { _exit: true, name: "孙悟空", sex: "1", phone: "13100000001" },
-            { _exit: true, name: "猪八戒", phone: "13100000004", sex: "1" },
-            { _exit: true, name: "唐僧", phone: "13100000003", sex: "1" },
-            { _exit: true, name: "白骨精", sex: "2", phone: "13100000002" }
-          ],
-          CreateUser: "匿名",
-          orderId: "t2"
-        },
-        "20": {
-          _id: "5d8f652e3eaaa91a1dbea4c9",
-          P1: 20,
-          name: "海贼队",
-          createMemberId: 92,
-          matchId: 86,
-          member: [
-            { phone: "13100001004", sex: "1", name: "乌索普", _exit: true },
-            { phone: "13100001003", sex: "2", name: "娜美", _exit: true },
-            { phone: "13100001002", sex: "2", name: "乔巴", _exit: true },
-            { phone: "13100001001", sex: "1", name: "路飞", _exit: true }
-          ],
-          CreateUser: "匿名",
-          orderId: "t1"
-        },
-        "23": {
-          _id: "5d91b42030d3ca2327ff8358",
-          P1: 23,
-          matchId: 86,
-          name: "1311",
-          member: [
-            { phone: "", sex: 1, name: "222" },
-            { phone: "", sex: 1, name: "11111" }
-          ],
-          orderId: "EO1569829896020",
-          CreateUser: "匿名"
-        }
-      },
-      test: null,
-      options: [
-        { label: "label1", value: "1" },
-        { label: "label2", value: "2" }
-      ],
       formData: {
-        memberId:221,
+        power: {
+          matchCenter: {
+            list_match: {  add: true, delete: true },
+            list_achievement: {  add: true, delete: true },
+            list_enroll: {  add: true, delete: true },
+            list_rule: {  add: true, delete: true },
+            list_team: {  add: true, delete: true }
+          },
+          memberCenter: {
+            list_member: {  add: true, delete: true }
+          },
+          newsCenter: {
+            list_article: {  add: true, delete: true },
+            list_article_category: {
+              add: true,
+              delete: true
+            },
+            list_recommend: {  add: true, delete: true },
+            list_recommend: {  add: true, delete: true }
+          },
+          venue: {
+            list_venue: {  add: true, delete: true },
+            list_area: {  add: true, delete: true }
+          }
+        },
+        memberId: 221,
         // prop_select_list_data: 122,
         num1: "55",
         percent: 0.12,
@@ -242,20 +251,173 @@ export default {
             };
           }
         },
+
         formItems: [
-           {
+          {
+            label: "权限",
+
+            prop: "power",
+            default: {},
+            cfForm: {
+              labelWidth: "150px",
+              formItems: [
+                {
+                  label: "赛事中心",
+                  prop: "matchCenter",
+                  style: styleMenuGPowerItem,
+                  default: {},
+                  cfForm: {
+                    col_span: 12,
+                    formItems: [
+                      {
+                        // label: "赛事列表",
+                        prop: "list_match",
+                        style: styleMenuPowerItem,
+                        cfForm: getFormMenuGPower({menuName:"赛事列表"})
+                      },
+                      {
+                        // label: "成绩列表",
+                        prop: "list_achievement",
+                        style: styleMenuPowerItem,
+                        cfForm: getFormMenuGPower({menuName:"成绩列表"})
+                      },
+                      {
+                        prop: "list_enroll",
+                        style: styleMenuPowerItem,
+                        cfForm: getFormMenuGPower({menuName:"报名列表"})
+                      },
+                      {
+                        prop: "list_rule",
+                        style: styleMenuPowerItem,
+                        cfForm: getFormMenuGPower({menuName:"规则库"})
+                      },
+                      {
+                        prop: "list_team",
+                        style: styleMenuPowerItem,
+                        cfForm: getFormMenuGPower({menuName:"球队"})
+                      }
+                    ]
+                  }
+                },
+                {
+                  label: "球员信息库",
+                  prop: "memberCenter",
+                  style: styleMenuGPowerItem,
+                  default: {},
+                  cfForm: {
+                    col_span: 12,
+                    formItems: [
+                      {
+                        // label: "资讯列表",
+                        prop: "list_member",
+                        style: styleMenuPowerItem,
+                        cfForm: getFormMenuGPower({menuName:"球员"})
+                      }
+                    ]
+                  }
+                },
+                {
+                  label: "资讯中心",
+                  prop: "newsCenter",
+                  style: styleMenuGPowerItem,
+                  default: {},
+                  cfForm: {
+                    col_span: 12,
+                    formItems: [
+                      {
+                        // label: "资讯列表",
+                        prop: "list_article",
+                        style: styleMenuPowerItem,
+                        cfForm: getFormMenuGPower({menuName:"资讯列表"})
+                      },
+                      {
+                        // label: "资讯分类",
+                        prop: "list_article_category",
+                        style: styleMenuPowerItem,
+                        cfForm: getFormMenuGPower({menuName:"资讯分类"})
+                      }
+                    ]
+                  }
+                },
+                {
+                  label: "招商管理",
+                  prop: "sponsorCenter",
+                  style: styleMenuGPowerItem,
+                  default: {},
+                  cfForm: {
+                    col_span: 12,
+                    formItems: [
+                      {
+                        prop: "list_sponsor",
+                        style: styleMenuPowerItem,
+                        cfForm: getFormMenuGPower({menuName:"赞助商"})
+                      },
+                      {
+                        prop: "list_sponsorship",
+                        style: styleMenuPowerItem,
+                        cfForm: getFormMenuGPower({menuName:"赛事赞助"})
+                      }
+                    ]
+                  }
+                },
+                {
+                  label: "系统消息",
+                  prop: "msgCenter",
+                  style: styleMenuGPowerItem,
+                  default: {},
+                  cfForm: {
+                    col_span: 12,
+                    formItems: [
+                      {
+                        prop: "list_msg",
+                        style: styleMenuPowerItem,
+                        cfForm: getFormMenuGPower({menuName:"消息列表"})
+                      },
+                      {
+                        prop: "list_msg_read",
+                        style: styleMenuPowerItem,
+                        cfForm: getFormMenuGPower({menuName:"消息已读记录"})
+                      }
+                    ]
+                  }
+                },
+                {
+                  label: "系统管理",
+                  prop: "systemManage",
+                  style: styleMenuGPowerItem,
+                  default: {},
+                  cfForm: {
+                    col_span: 12,
+                    formItems: [
+                      {
+                        prop: "list_admin",
+                        style: styleMenuPowerItem,
+                        cfForm: getFormMenuGPower({menuName:"管理员"})
+                      },
+                      {
+                        prop: "list_role",
+                        style: styleMenuPowerItem,
+                        cfForm: getFormMenuGPower({menuName:"角色"})
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+
+          {
             label: "会员ajax_populate",
             prop: "memberId",
             type: "ajax_populate",
-            cfAjaxPopulate: {"populateKey":"name","page":"tangball_member"},
-           
+            cfAjaxPopulate: { populateKey: "name", page: "tangball_member" }
           },
           {
             label: "选择列表",
             prop: "prop_select_list_data",
             type: "select_list_data",
             cfSelectList: cfListSelectActicle,
-              rules: [{ required: true, message: "能为空" }]
+            rules: [{ required: true, message: "能为空" }]
           },
           {
             label: "文本字段",
@@ -643,7 +805,78 @@ export default {
           { text: "提交111", event: "submit", type: "primary", validate: true },
           { text: "取消222", event: "cancel" }
         ]
-      }
+      },
+      dictEnroolTeam: {
+        "16": {
+          _id: "5d8dd92899aefd5e14b3ece8",
+          P1: 16,
+          createMemberId: 57,
+          matchId: 86,
+          member: [
+            { phone: "1341502", sex: 1, name: "lfhh" },
+            { phone: "13415028975", sex: 1, name: "lxc" }
+          ],
+          CreateUser: "匿名",
+          name: "唐球",
+          orderId: "20190927174056365"
+        },
+        "18": {
+          _id: "5d8f0c783eaaa91a1dbea4b7",
+          P1: 18,
+          matchId: 86,
+          name: "aa",
+          member: [{ name: "sss", sex: 1, phone: "13415028976" }],
+          orderId: "EO1569655913515",
+          CreateUser: "匿名"
+        },
+        "19": {
+          _id: "5d8f631b3eaaa91a1dbea4c6",
+          P1: 19,
+          name: "西游队",
+          createMemberId: 91,
+          matchId: 86,
+          member: [
+            { _exit: true, name: "孙悟空", sex: "1", phone: "13100000001" },
+            { _exit: true, name: "猪八戒", phone: "13100000004", sex: "1" },
+            { _exit: true, name: "唐僧", phone: "13100000003", sex: "1" },
+            { _exit: true, name: "白骨精", sex: "2", phone: "13100000002" }
+          ],
+          CreateUser: "匿名",
+          orderId: "t2"
+        },
+        "20": {
+          _id: "5d8f652e3eaaa91a1dbea4c9",
+          P1: 20,
+          name: "海贼队",
+          createMemberId: 92,
+          matchId: 86,
+          member: [
+            { phone: "13100001004", sex: "1", name: "乌索普", _exit: true },
+            { phone: "13100001003", sex: "2", name: "娜美", _exit: true },
+            { phone: "13100001002", sex: "2", name: "乔巴", _exit: true },
+            { phone: "13100001001", sex: "1", name: "路飞", _exit: true }
+          ],
+          CreateUser: "匿名",
+          orderId: "t1"
+        },
+        "23": {
+          _id: "5d91b42030d3ca2327ff8358",
+          P1: 23,
+          matchId: 86,
+          name: "1311",
+          member: [
+            { phone: "", sex: 1, name: "222" },
+            { phone: "", sex: 1, name: "11111" }
+          ],
+          orderId: "EO1569829896020",
+          CreateUser: "匿名"
+        }
+      },
+      test: null,
+      options: [
+        { label: "label1", value: "1" },
+        { label: "label2", value: "2" }
+      ]
     };
   },
   created() {

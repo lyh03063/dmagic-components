@@ -194,3 +194,63 @@ util.getTimeRandom = function () {
   return moment().format("YYYYMMDDHHmmSSsss_")+ lodash.random(99999)
 };
 //#endregion
+
+//#region handelItem:处理字段数组的某个字段配置的函数
+
+util.handelItem = function (cf) {
+  let { action, items, prop, itemNew } = cf;
+  let index = items.findIndex(item => item.prop == prop);
+  if (action=="replace") {//Q1:replace
+    this.$set(items, index, itemNew); //修改memberId对应的字段配置
+  } else { //Q2:
+
+  }
+
+}
+//#endregion
+//#region setListPower:根据当前角色权限设置列表配置的函数
+
+util.setListPower = function (cfList) {
+
+  let { powerPath } = cfList;
+  if (!powerPath) return cfList
+  console.log("powerPath:", powerPath);
+
+  let hasPowerAdd = lodash.get(window.rolePower, `${powerPath}.add`);
+  if (!hasPowerAdd) {
+    //如果没有新增权限
+    lodash.set(cfList, `bactchBtns.add`, false);
+  }
+  let hasPowerDelete = lodash.get(window.rolePower, `${powerPath}.delete`);
+  if (!hasPowerDelete) {
+    //如果没有删除权限
+    lodash.set(cfList, `bactchBtns.delete`, false);
+    lodash.set(cfList, `singleBtns.delete`, false);
+  }
+
+  let hasPowerModify = lodash.get(window.rolePower, `${powerPath}.modify`);
+  if (!hasPowerModify) {
+    //如果没有修改权限
+    lodash.set(cfList, `singleBtns.modify`, false);
+  }
+  return cfList
+};
+//#endregion
+
+//#region setLocalStorageObj:设置一个对象到LocalStorage函数
+util.setLocalStorageObj = function (key, val) {
+
+  if (util.type(val) == "array" || util.type(val) == "object") {//Q1:数据类型是数组活对虾
+    val = JSON.stringify(val);//Json对象转换Json字符串
+  }
+  localStorage[key]=val
+
+}
+//#endregion
+
+//#region getLocalStorageObj:从LocalStorage获取一个对象的函数
+util.getLocalStorageObj = function (key) {
+  return JSON.parse(localStorage[key]);//
+ 
+ }
+//#endregion

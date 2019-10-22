@@ -2,10 +2,14 @@
   <div>
     <el-button plain @click="setAddInit" size="mini">设置formDataAddInit</el-button>
 
-    <dm_list_data :cf="cfList" @after-modify="afterModify"
-     @after-show-Dialog-Add="showAdd"
-     @after-show-Dialog-Modify='showModify'
-     @after-show-Dialog-Detail='showDetail'>
+    <dm_list_data
+      :cf="cfList"
+      @after-modify="afterModify"
+      @after-show-Dialog-Add="showAdd"
+      @after-show-Dialog-Modify="showModify"
+      @after-show-Dialog-Detail="showDetail"
+    >
+      <template #slot_in_toolbar>插槽内容</template>
       <template v-slot:slot_form_expand_articleTitle="{row}">
         {{row}}
         <el-link type="primary" @click="fold(row)">收起</el-link>
@@ -33,14 +37,17 @@ export default {
             {
               title: "单项操作（圆形按钮）",
               circle: true,
-              icon: "el-icon-user-solid" ,
-              eventType: "singleOP1" ,
-
+              icon: "el-icon-user-solid",
+              eventType: "singleOP1"
             },
-            { title: "单项操作（普通按钮）", text: "操作" , eventType: "singleOP2",}
+            {
+              title: "单项操作（普通按钮）",
+              text: "操作",
+              eventType: "singleOP2"
+            }
           ]
         },
-         //批量操作按钮的配置
+        //批量操作按钮的配置
         bactchBtns: {
           // add: false, //配置基础按钮隐藏（默认显示）
           delete: false, //配置基础按钮隐藏（默认显示）
@@ -50,10 +57,19 @@ export default {
               eventType: "bacthOP1",
               needSelect: true
             },
-            { text: "其他操作（不需选中数据）", eventType: "bacthOP2" }
+            { text: "其他操作（不需选中数据）", eventType: "bacthOP2" },
+
+            {
+              type: "primary",
+              uiType: "link",
+              text: "新窗口打开页面",
+              target: "_blank",
+              url: "http://www.baidu.com"
+            },
+            { uiType: "slot", slot: "slot_in_toolbar" }
           ],
-          tips:{
-            text:"提示语123",
+          tips: {
+            text: "提示语123"
             // style:{"color":"#3a0"}
           }
         },
@@ -76,11 +92,10 @@ export default {
         },
         //新增修改弹窗的配置
         cfDialogForm: {
-          tips:{
-            text:"1,表单的提示语1<br/> 2,表单的提示语2",
-            style:{"padding-left":"200px"}
+          tips: {
+            text: "1,表单的提示语1<br/> 2,表单的提示语2",
+            style: { "padding-left": "200px" }
           }
-          
         },
         //新增修改表单的配置
         cfForm: {
@@ -93,17 +108,16 @@ export default {
               this.value.articleTitle = this.value.articleTitle + "a";
             }
           },
-          cfFormAdd:{
-            col_span: 24, //控制显示一行多列
-
+          cfFormAdd: {
+            col_span: 24 //控制显示一行多列
           }
         },
         pageSize: 2,
         listIndex: "list_demo", //vuex对应的字段~
         focusMenu: true, //进行菜单聚焦
-        twoTitle: "其他数据",//面包屑1级菜单
-        threeTitle: "文章管理",//面包屑2级菜单
-        expand: true,//是否展开行
+        twoTitle: "其他数据", //面包屑1级菜单
+        threeTitle: "文章管理", //面包屑2级菜单
+        expand: true, //是否展开行
         url: {
           list: "/crossList?page=tangball_article", //列表接口
           add: "/crossAdd?page=tangball_article", //新增接口
@@ -290,8 +304,8 @@ export default {
     /**
      * @name 自定义单项操作按钮点击函数
      */
-    singlebtnClick: function(eventType,row) {
-console.log("bacthBtnClick-singlebtnClick:", eventType);
+    singlebtnClick: function(eventType, row) {
+      console.log("bacthBtnClick-singlebtnClick:", eventType);
 
       console.log("row:####", row);
     },

@@ -33,14 +33,20 @@
         v-if="!($lodash.get(cf, `bactchBtns.delete`)===false)"
       >删除选中</el-button>
       <template class v-if="$lodash.hasIn(cf, 'bactchBtns.addon')">
-        <el-button
-          :type="item.type"
-          @click="btnBtnClick(item.eventType,item.needSelect)"
-          v-for="(item,index) in cf.bactchBtns.addon"
-          :key="index"
-          size="mini"
-          plain
-        >{{item.text}}</el-button>
+        <template class v-for="(item,index) in cf.bactchBtns.addon">
+          <a class="ML10" :target="item.target" :href="item.url" :key="index" v-if="item.uiType=='link'">
+            <el-button :type="item.type" size="mini" :plain="item.plain">{{item.text}}</el-button>
+          </a>
+          <slot class="" v-else-if="item.uiType=='slot'" :name="item.slot" ></slot>
+          <el-button
+            v-else
+            :type="item.type"
+            @click="btnBtnClick(item.eventType,item.needSelect)"
+            :key="index"
+            size="mini"
+            :plain="item.plain"
+          >{{item.text}}</el-button>
+        </template>
       </template>
 
       <span
@@ -118,7 +124,7 @@
         </el-table-column>
       </template>
 
-      <el-table-column label="操作" min-width="150" v-if="cf.isShowOperateColumn">
+      <el-table-column fixed="right" label="操作" min-width="120" v-if="cf.isShowOperateColumn">
         <template slot-scope="scope" class="operation-box">
           <el-button
             title="详情"
@@ -259,13 +265,12 @@ export default {
   methods: {
     //选择数据
     selectionChange(val) {
-
       console.log("selectionChange");
-      if(this.cf.isMultipleSelect)return;
+      if (this.cf.isMultipleSelect) return;
       if (val.length > 1) {
         this.$refs.table.clearSelection();
         this.$refs.table.toggleRowSelection(val.pop());
-      } 
+      }
     },
     //获取提示样式的函数
     getTipsStyle(cf) {
@@ -458,7 +463,7 @@ export default {
   },
 
   created() {
-     this.cf.isMultipleSelect === false || (this.cf.isMultipleSelect = true);
+    this.cf.isMultipleSelect === false || (this.cf.isMultipleSelect = true);
     this.cf.isShowCheckedBox === false || (this.cf.isShowCheckedBox = true);
     this.cf.isShowSearchForm === false || (this.cf.isShowSearchForm = true);
     this.cf.isShowBreadcrumb === false || (this.cf.isShowBreadcrumb = true);
