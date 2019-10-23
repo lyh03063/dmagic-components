@@ -2,18 +2,38 @@
   <div>
     <el-button plain @click="setAddInit" size="mini">设置formDataAddInit</el-button>
 
+    <el-button plain @click="toggleList" size="mini">切换列表</el-button>
+    <el-button plain @click="isShowList2=!isShowList2" size="mini">切换列表2</el-button>
     <dm_list_data
+      v-if="isShowList1"
       :cf="cfList"
       @after-modify="afterModify"
       @after-show-Dialog-Add="showAdd"
       @after-show-Dialog-Modify="showModify"
       @after-show-Dialog-Detail="showDetail"
     >
-      <template #slot_in_toolbar>插槽内容</template>
+      <template #slot_in_toolbar="{data:{tableData}}">插槽内容可显示tableData</template>
       <template v-slot:slot_form_expand_articleTitle="{row}">
         {{row}}
         <el-link type="primary" @click="fold(row)">收起</el-link>
       </template>
+      <template #slot_column_CreateTime="data">插槽</template>
+    </dm_list_data>
+
+    <dm_list_data
+      :cf="cfList2"
+      @after-modify="afterModify"
+      @after-show-Dialog-Add="showAdd"
+      @after-show-Dialog-Modify="showModify"
+      @after-show-Dialog-Detail="showDetail"
+      v-if="!flag"
+    >
+      <template #slot_in_toolbar="{data:{tableData}}">插槽内容可显示tableData</template>
+      <template v-slot:slot_form_expand_articleTitle="{row}">
+        {{row}}
+        <el-link type="primary" @click="fold(row)">收起</el-link>
+      </template>
+      <template #slot_column_CreateTime="data">插槽</template>
     </dm_list_data>
   </div>
 </template>
@@ -27,7 +47,16 @@ export default {
 
   data() {
     return {
+      isShowList1: true,
+      isShowList2:false,
+      cfList2: {},
       cfList: {
+        pageSize: 2,
+        listIndex: "list_demo", //vuex对应的字段~
+        focusMenu: true, //进行菜单聚焦
+        twoTitle: "其他数据", //面包屑1级菜单
+        threeTitle: "文章管理", //面包屑2级菜单
+        expand: true, //是否展开行
         //列表单项操作按钮的配置
         singleBtns: {
           // detail:false,
@@ -44,6 +73,12 @@ export default {
               title: "单项操作（普通按钮）",
               text: "操作",
               eventType: "singleOP2"
+            },
+            {
+              uiType: "link",
+              text: "新窗口打开页面",
+              target: "_blank",
+              url: "http://www.baidu.com?id=" //这里要配置好参数名，内部会把参数加进来
             }
           ]
         },
@@ -112,12 +147,7 @@ export default {
             col_span: 24 //控制显示一行多列
           }
         },
-        pageSize: 2,
-        listIndex: "list_demo", //vuex对应的字段~
-        focusMenu: true, //进行菜单聚焦
-        twoTitle: "其他数据", //面包屑1级菜单
-        threeTitle: "文章管理", //面包屑2级菜单
-        expand: true, //是否展开行
+
         url: {
           list: "/crossList?page=tangball_article", //列表接口
           add: "/crossAdd?page=tangball_article", //新增接口
@@ -156,9 +186,10 @@ export default {
         //-------列配置数组-------
         columns: [
           {
-            label: "文章标题",
+            label: "文章标题2",
             prop: "articleTitle",
-            width: 260
+            width: 260,
+            fixed: true
           },
           {
             label: "分类名称",
@@ -174,7 +205,8 @@ export default {
           {
             label: "创建时间",
             prop: "CreateTime",
-            width: 145
+            width: 145,
+            slot: "slot_column_CreateTime"
           },
           {
             label: "其他",
@@ -183,6 +215,29 @@ export default {
             formatter11111: function(extend) {
               return JSON.stringify(extend.extend);
             }
+          },
+          {
+            label: "其他",
+            prop: "extend",
+            width: 135,
+            formatter11111: function(extend) {
+              return JSON.stringify(extend.extend);
+            }
+          },
+          {
+            label: "其他",
+            prop: "extend",
+            width: 335
+          },
+          {
+            label: "其他",
+            prop: "extend",
+            width: 335
+          },
+          {
+            label: "其他",
+            prop: "extend",
+            width: 335
           }
         ],
         //-------筛选表单字段数组-------
@@ -287,6 +342,9 @@ export default {
   computed: {
     cfData: function() {
       return this.$store.state.cfData;
+    },
+     flag: function() {
+      return true;
     }
   },
   watch: {
@@ -301,6 +359,14 @@ export default {
   },
 
   methods: {
+    async toggleList(){
+      let result=!this.isShowList1;
+      this.isShowList1=null;
+       
+      await this.$nextTick();//延迟到视图更新
+ 
+      this.isShowList1=result
+    },
     /**
      * @name 自定义单项操作按钮点击函数
      */
@@ -367,6 +433,12 @@ export default {
   },
   created() {
     T = this;
+    T.cfList2 = Object.assign({}, T.cfList, {
+      listIndex: "list_demo2", //vuex对应的字段~
+      focusMenu: true, //进行菜单聚焦
+      twoTitle: "aaa", //面包屑1级菜单
+      threeTitle: "bbb" //面包屑2级菜单
+    });
   },
   async mounted() {
     this.$parent.showCFForm = true;
