@@ -6,28 +6,32 @@
 </template>
 
 <script>
-export default {//用于列表模糊查询的组件
+export default {
+  //用于列表模糊查询的组件
   props: {
     value: [Object]
   },
   data() {
     return {
-      valueNeed: this.value,
-   
+      valueNeed: this.value
     };
   },
   methods: {
     change() {
-      this.$emit("input", {
-        $regex: this.valueNeed,
-        $options: "i"
-      }); //触发双向绑定
+     let valueFinal = null;//最终改变外部value的值
+      //如果valueNeed存在
+      if (this.valueNeed) {
+        valueFinal = {
+          $regex: this.valueNeed,
+          $options: "i"
+        };
+      }
+      this.$emit("input", valueFinal); //触发双向绑定
     }
   },
   created() {
     //如果{value}存在
     if (this.value) {
-      
       this.valueNeed = this.value.$regex;
     }
   }

@@ -165,6 +165,7 @@ export default {
   data() {
     return {
       formData: {
+       
         power: {
           matchCenter: {
             list_match: {  add: true, delete: true },
@@ -253,6 +254,11 @@ export default {
         },
 
         formItems: [
+           {
+            label: "用于模糊查询文本框(input_find_vague)",
+            prop: "prop_input_find_vague",
+            type: "input_find_vague"
+          },
           {
             label: "权限",
 
@@ -740,11 +746,7 @@ export default {
           //   prop: "prop_password",
           //   type: "password"
           // },
-          // {
-          //   label: "用于模糊查询文本框(input_find_vague)",
-          //   prop: "prop_input_find_vague",
-          //   type: "input_find_vague"
-          // },
+          
           // {
           //   label: "文本域(textarea)",
           //   prop: "prop_textarea",

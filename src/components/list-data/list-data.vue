@@ -34,10 +34,16 @@
       >删除选中</el-button>
       <template class v-if="$lodash.hasIn(cf, 'bactchBtns.addon')">
         <template class v-for="(item,index) in cf.bactchBtns.addon">
-          <a class="ML10" :target="item.target" :href="item.url" :key="index" v-if="item.uiType=='link'">
+          <a
+            class="ML10 MR10"
+            :target="item.target"
+            :href="item.url"
+            :key="index"
+            v-if="item.uiType=='link'"
+          >
             <el-button :type="item.type" size="mini" :plain="item.plain">{{item.text}}</el-button>
           </a>
-          <slot class="" v-else-if="item.uiType=='slot'" :name="item.slot" ></slot>
+          <slot class v-else-if="item.uiType=='slot'" :name="item.slot" :data="$data"></slot>
           <el-button
             v-else
             :type="item.type"
@@ -70,8 +76,8 @@
       style="width: 100%;"
       @selection-change="selectionChange"
     >
-      <el-table-column label="id" prop="P1" :width="40" type="selection" v-if="cf.isShowCheckedBox"></el-table-column>
-      <el-table-column :width="40" type="expand" v-if="cf.expand">
+      <el-table-column fixed label="id" prop="P1" :width="40" type="selection" v-if="cf.isShowCheckedBox"></el-table-column>
+      <el-table-column :width="40" type="expand" v-if="cf.expand" fixed>
         <template slot-scope="props">
           <div v-for="(item,index) in cf.expands" :key="index">
             <div>
@@ -87,24 +93,19 @@
       </el-table-column>
 
       <template class v-for="(column,index) in cf.columns">
-        <!--Q1:column.type存在-->
-        <el-table-column
-          :label="column.label"
-          type="index"
-          :width="column.width"
-          :key="index"
-          v-if="column.type"
-        ></el-table-column>
-        <!--Q2:column.type不存在-->
+        
+        <!--这里不能使用v-bind=“column”,slot会冲突，这点没设计好！！-->
         <el-table-column
           :prop="column.prop"
           :label="column.label"
           :width="column.width"
           :type="column.type"
+          :fixed="column.fixed"
+          :formatter="column.formatter"
           :show-overflow-tooltip="true"
           :key="index"
-          :formatter="column.formatter"
-          v-else
+          
+       
         >
           <template slot-scope="scope">
             <!--Q1:有插槽-->
@@ -152,19 +153,36 @@
           ></el-button>
 
           <template class v-if="$lodash.hasIn(cf, 'singleBtns.addon')">
-            <el-button
-              :type="item.type"
-              :title="item.title"
-              @click="singleBtnClick(item.eventType,scope.row)"
-              v-for="(item,index) in cf.singleBtns.addon"
-              :icon="item.icon"
-              :key="index"
-              size="mini"
-              :circle="item.circle"
-              class="MR5"
-            >
-              <template class v-if="!item.circle">{{item.text}}</template>
-            </el-button>
+            <template class v-for="(item,index) in cf.singleBtns.addon">
+              <a
+                :class="item.class"
+                :target="item.target"
+                :href="item.url+scope.row.P1"
+                :key="index"
+                v-if="item.uiType=='link'"
+              >
+                <el-button
+                  :type="item.type"
+                  :icon="item.icon"
+                  size="mini"
+                  :plain="item.plain"
+                  :title="item.title"
+                >{{item.text}}</el-button>
+              </a>
+              <el-button
+                v-else
+                :type="item.type"
+                :title="item.title"
+                @click="singleBtnClick(item.eventType,scope.row)"
+                :icon="item.icon"
+                :key="index"
+                size="mini"
+                :circle="item.circle"
+                class="MR5"
+              >
+                <template class v-if="!item.circle">{{item.text}}</template>
+              </el-button>
+            </template>
           </template>
         </template>
       </el-table-column>
@@ -463,6 +481,7 @@ export default {
   },
 
   created() {
+     alert("created");
     this.cf.isMultipleSelect === false || (this.cf.isMultipleSelect = true);
     this.cf.isShowCheckedBox === false || (this.cf.isShowCheckedBox = true);
     this.cf.isShowSearchForm === false || (this.cf.isShowSearchForm = true);
@@ -523,16 +542,14 @@ export default {
       listIndex: this.cf.listIndex,
       objState: objState
     });
+    alert("initListState");
 
     if (this.cf.focusMenu) {
       //如果需要聚焦菜单
       this.$store.commit("changeActiveMenu", this.cf.listIndex); //菜单聚焦
     }
 
-    if (localStorage.isLogin != "1") {
-      //如果未登录
-      // this.$router.push({ path: "/login" }); //跳转到登录页
-    }
+   
   },
 
   async mounted() {
