@@ -17,11 +17,8 @@
 import checkbox_diy from "../components/form_item/checkbox_diy.vue";
 let T;
 
-
-//函数定义：{获取菜单权限表单配置函数}
+//函数定义：{获取菜单权限表单配置(标准版)函数}
 function getFormMenuGPower({ menuName = "XXX" }) {
-  
-
   return {
     col_span: 4,
     labelWidth: "10px",
@@ -64,6 +61,31 @@ function getFormMenuGPower({ menuName = "XXX" }) {
         type: "checkbox",
         default: false,
         options: [{ value: "1", label: "删除" }]
+      }
+    ]
+  };
+}
+
+//函数定义：{获取菜单权限表单配置(简单版)函数}
+function getFormMenuGPowerSimple({ menuName = "XXX" }) {
+  return {
+    col_span: 4,
+    labelWidth: "10px",
+    formItems: [
+      {
+        label: "",
+        prop: "menuName",
+        default: menuName,
+        col_span: 4,
+        type: "text"
+      },
+      {
+        label: "",
+        prop: "search",
+        col_span: 3,
+        type: "checkbox",
+        default: false,
+        options: [{ value: "1", label: "查看" }]
       }
     ]
   };
@@ -165,30 +187,33 @@ export default {
   data() {
     return {
       formData: {
-       
+        power_paicheng: {
+          
+        },
+
         power: {
           matchCenter: {
-            list_match: {  add: true, delete: true },
-            list_achievement: {  add: true, delete: true },
-            list_enroll: {  add: true, delete: true },
-            list_rule: {  add: true, delete: true },
-            list_team: {  add: true, delete: true }
+            list_match: { add: true, delete: true },
+            list_achievement: { add: true, delete: true },
+            list_enroll: { add: true, delete: true },
+            list_rule: { add: true, delete: true },
+            list_team: { add: true, delete: true }
           },
           memberCenter: {
-            list_member: {  add: true, delete: true }
+            list_member: { add: true, delete: true }
           },
           newsCenter: {
-            list_article: {  add: true, delete: true },
+            list_article: { add: true, delete: true },
             list_article_category: {
               add: true,
               delete: true
             },
-            list_recommend: {  add: true, delete: true },
-            list_recommend: {  add: true, delete: true }
+            list_recommend: { add: true, delete: true },
+            list_recommend: { add: true, delete: true }
           },
           venue: {
-            list_venue: {  add: true, delete: true },
-            list_area: {  add: true, delete: true }
+            list_venue: { add: true, delete: true },
+            list_area: { add: true, delete: true }
           }
         },
         memberId: 221,
@@ -214,51 +239,146 @@ export default {
       },
       cfForm: {
         labelWidth: "150px",
-        watch: {
-          //传入监听器
-          complete1(newVal, oldVal) {
-            console.log("complete1111变动");
-            this.value.complete = 123;
-            let influence = {
-              1: { $ne: 0 },
-              2: { $gt: 0, $lt: 1 },
-              3: { $ne: 1 }
-            };
-
-            console.log("T:", T);
-            let item_prop4 = T.cfForm.formItems.find(
-              item => item.prop == "prop4"
-            );
-            console.log("item_prop4:", item_prop4);
-            item_prop4.ajax.param.a += 1;
-          },
-          teamId(newVal, oldVal) {
-            if (!newVal) return;
-            console.log("teamId变动####");
-            //***修改participantsId下拉框字段的ajax配置
-            let itemParticipantsId = T.cfForm.formItems.find(
-              item => item.prop == "participantsId"
-            );
-
-            let { member } = T.dictEnroolTeam[newVal];
-
-            let arrPhone = member.map(doc => doc.phone);
-            console.log("arrPhone:", arrPhone);
-            // delete itemParticipantsId.ajax;
-            // itemParticipantsId.options = [];
-
-            itemParticipantsId.ajax.param = {
-              findJson: { phone: { $in: arrPhone } }
-            };
-          }
-        },
 
         formItems: [
-           {
-            label: "用于模糊查询文本框(input_find_vague)",
-            prop: "prop_input_find_vague",
-            type: "input_find_vague"
+          {
+            label: "派成权限",
+
+            prop: "power_paicheng",
+            default: {},
+            cfForm: {
+              labelWidth: "150px",
+              formItems: [
+                {
+                  label: "首页",
+                  prop: "home",
+                  style: styleMenuGPowerItem,
+                  default: {},
+                  cfForm: {
+                    col_span: 12,
+                    formItems: [
+                      {
+                        prop: "home",
+                        style: styleMenuPowerItem,
+                        cfForm: getFormMenuGPowerSimple({ menuName: "首页" })
+                      },
+                      {
+                        prop: "companyIntro",
+                        style: styleMenuPowerItem,
+                        cfForm: getFormMenuGPowerSimple({
+                          menuName: "公司介绍"
+                        })
+                      }
+                    ]
+                  }
+                },
+                {
+                  label: "基础数据",
+                  prop: "baseData",
+                  style: styleMenuGPowerItem,
+                  default: {},
+                  cfForm: {
+                    col_span: 12,
+                    formItems: [
+                      {
+                        prop: "list_projectBid",
+                        style: styleMenuPowerItem,
+                        cfForm: getFormMenuGPower({ menuName: "项目信息" })
+                      },
+                      {
+                        prop: "list_projectContract",
+                        style: styleMenuPowerItem,
+                        cfForm: getFormMenuGPower({ menuName: "项目合同" })
+                      },
+                      {
+                        prop: "list_operator",
+                        style: styleMenuPowerItem,
+                        cfForm: getFormMenuGPower({ menuName: "经办人" })
+                      },
+                      {
+                        prop: "list_partyA",
+                        style: styleMenuPowerItem,
+                        cfForm: getFormMenuGPower({ menuName: "甲方" })
+                      }
+                    ]
+                  }
+                },
+                {
+                  label: "财务管理",
+                  prop: "financial",
+                  style: styleMenuGPowerItem,
+                  default: {},
+                  cfForm: {
+                    col_span: 12,
+                    formItems: [
+                      {
+                        prop: "list_invoice",
+                        style: styleMenuPowerItem,
+                        cfForm: getFormMenuGPower({ menuName: "开票" })
+                      },
+                      {
+                        prop: "list_return",
+                        style: styleMenuPowerItem,
+                        cfForm: getFormMenuGPower({ menuName: "回款记录" })
+                      },
+                      {
+                        prop: "list_payNotice",
+                        style: styleMenuPowerItem,
+                        cfForm: getFormMenuGPower({ menuName: "付款通知" })
+                      }
+                    ]
+                  }
+                },
+                {
+                  label: "运营台账",
+                  prop: "ledger",
+                  style: styleMenuGPowerItem,
+                  default: {},
+                  cfForm: {
+                    col_span: 12,
+                    formItems: [
+                      {
+                        prop: "performanceStatistics",
+                        style: styleMenuPowerItem,
+                        cfForm: getFormMenuGPowerSimple({
+                          menuName: "人员绩效"
+                        })
+                      },
+                      {
+                        prop: "bussinessOperationMonthly",
+                        style: styleMenuPowerItem,
+                        cfForm: getFormMenuGPowerSimple({
+                          menuName: "业务经营情况"
+                        })
+                      }
+                    ]
+                  }
+                },
+                {
+                  label: "系统管理",
+                  prop: "systemManage",
+                  style: styleMenuGPowerItem,
+                  default: {},
+                  cfForm: {
+                    col_span: 12,
+                    formItems: [
+                      {
+                        prop: "list_member",
+                        style: styleMenuPowerItem,
+                        cfForm: getFormMenuGPower({ menuName: "管理员" })
+                      },
+                      {
+                        prop: "list_role",
+                        style: styleMenuPowerItem,
+                        cfForm: getFormMenuGPower({ menuName: "角色" })
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
           },
+
           {
             label: "权限",
 
@@ -279,28 +399,28 @@ export default {
                         // label: "赛事列表",
                         prop: "list_match",
                         style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPower({menuName:"赛事列表"})
+                        cfForm: getFormMenuGPower({ menuName: "赛事列表" })
                       },
                       {
                         // label: "成绩列表",
                         prop: "list_achievement",
                         style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPower({menuName:"成绩列表"})
+                        cfForm: getFormMenuGPower({ menuName: "成绩列表" })
                       },
                       {
                         prop: "list_enroll",
                         style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPower({menuName:"报名列表"})
+                        cfForm: getFormMenuGPower({ menuName: "报名列表" })
                       },
                       {
                         prop: "list_rule",
                         style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPower({menuName:"规则库"})
+                        cfForm: getFormMenuGPower({ menuName: "规则库" })
                       },
                       {
                         prop: "list_team",
                         style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPower({menuName:"球队"})
+                        cfForm: getFormMenuGPower({ menuName: "球队" })
                       }
                     ]
                   }
@@ -317,7 +437,7 @@ export default {
                         // label: "资讯列表",
                         prop: "list_member",
                         style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPower({menuName:"球员"})
+                        cfForm: getFormMenuGPower({ menuName: "球员" })
                       }
                     ]
                   }
@@ -334,13 +454,13 @@ export default {
                         // label: "资讯列表",
                         prop: "list_article",
                         style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPower({menuName:"资讯列表"})
+                        cfForm: getFormMenuGPower({ menuName: "资讯列表" })
                       },
                       {
                         // label: "资讯分类",
                         prop: "list_article_category",
                         style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPower({menuName:"资讯分类"})
+                        cfForm: getFormMenuGPower({ menuName: "资讯分类" })
                       }
                     ]
                   }
@@ -356,12 +476,12 @@ export default {
                       {
                         prop: "list_sponsor",
                         style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPower({menuName:"赞助商"})
+                        cfForm: getFormMenuGPower({ menuName: "赞助商" })
                       },
                       {
                         prop: "list_sponsorship",
                         style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPower({menuName:"赛事赞助"})
+                        cfForm: getFormMenuGPower({ menuName: "赛事赞助" })
                       }
                     ]
                   }
@@ -377,12 +497,12 @@ export default {
                       {
                         prop: "list_msg",
                         style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPower({menuName:"消息列表"})
+                        cfForm: getFormMenuGPower({ menuName: "消息列表" })
                       },
                       {
                         prop: "list_msg_read",
                         style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPower({menuName:"消息已读记录"})
+                        cfForm: getFormMenuGPower({ menuName: "消息已读记录" })
                       }
                     ]
                   }
@@ -398,18 +518,24 @@ export default {
                       {
                         prop: "list_admin",
                         style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPower({menuName:"管理员"})
+                        cfForm: getFormMenuGPower({ menuName: "管理员" })
                       },
                       {
                         prop: "list_role",
                         style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPower({menuName:"角色"})
+                        cfForm: getFormMenuGPower({ menuName: "角色" })
                       }
                     ]
                   }
                 }
               ]
             }
+          },
+
+          {
+            label: "用于模糊查询文本框(input_find_vague)",
+            prop: "prop_input_find_vague",
+            type: "input_find_vague"
           },
 
           {
@@ -441,22 +567,7 @@ export default {
             hideBtn: true,
             frequency: {
               sytle: { width: "48px" },
-              options: [
-                { value: 1 },
-                { value: 2 },
-                { value: 3 },
-                { value: 4 },
-                { value: 5 },
-                { value: 6 },
-                { value: 7 },
-                { value: 8 },
-                { value: 9 },
-                { value: 10 },
-                { value: 11 },
-                { value: 12 },
-                { value: 13 },
-                { value: 0.14 }
-              ]
+              options: [{ value: 1 }, { value: 2 }, { value: 3 }]
             }
           },
           {
@@ -505,28 +616,7 @@ export default {
               ]
             }
           },
-          {
-            label: "所属球队",
-            prop: "teamId",
-            type: "select",
-            ajax: {
-              param: { aaa: 123 },
-              url: "/crossList?page=tangball_team",
-              keyLabel: "name",
-              keyValue: "P1"
-            }
-          },
-          {
-            label: "参赛人Id",
-            prop: "participantsId",
-            type: "select",
-            ajax: {
-              url: "/crossList?page=tangball_member",
-              keyLabel: "name",
-              keyValue: "P1",
-              param: { aaa: 111 }
-            }
-          },
+
           {
             label: "下拉框(select+ajax)",
             prop: "prop4",
@@ -676,127 +766,7 @@ export default {
               preview: true
             }
           },
-          // //   {
-          // //   label: "extend",
-          // //   prop: "extend",
-          // //   type: "jsonEditor",
 
-          // // },
-          // {
-          //   label: "联系人信息",
-          //   prop: "extend",
-          //   default: {},
-          //   cfForm: {
-          //     formItems: [
-          //       {
-          //         label: "姓名",
-          //         prop: "name",
-          //         type: "input"
-          //       },
-          //       {
-          //         label: "下拉框(select)",
-          //         prop: "sex",
-          //         type: "select",
-          //         default: 2,
-          //         options: [
-          //           { value: 1, label: "男" },
-          //           { value: 2, label: "女" }
-          //         ]
-          //       },
-          //       {
-          //         label: "联系人信息2",
-          //         prop: "extend1",
-          //         default: {},
-
-          //         cfForm: {
-          //           col_span: 12,
-          //           formItems: [
-          //             {
-          //               label: "姓名",
-          //               prop: "name",
-          //               type: "input",
-          //               col_span: 12
-          //             },
-          //             {
-          //               label: "下拉框(select)",
-          //               prop: "sex",
-          //               type: "select",
-          //               default: 2,
-          //               options: [
-          //                 { value: 1, label: "男" },
-          //                 { value: 2, label: "女" }
-          //               ],
-          //               col_span: 12
-          //             }
-          //           ]
-          //         }
-          //       }
-          //     ]
-          //   }
-          // },
-
-          // {
-          //   label: "纬度",
-          //   prop: "extend",
-          //   path: "latitude"
-          // },
-
-          // {
-          //   label: "密码框2(password)",
-          //   prop: "prop_password",
-          //   type: "password"
-          // },
-          
-          // {
-          //   label: "文本域(textarea)",
-          //   prop: "prop_textarea",
-          //   type: "textarea"
-          // },
-          // {
-          //   label: "下拉框(select)",
-          //   prop: "sex",
-          //   type: "select",
-          //   default: 2,
-          //   options: [{ value: 1, label: "男" }, { value: 2, label: "女" }]
-          // },
-          // {
-          //   label: "sex【联动】",
-          //   prop: "sex_relative",
-          //   type: "input",
-          //   //显示条件
-          //   term: { $or: [{ sex: 2 }, { prop_textarea: 2 }] }
-          // },
-
-          // {
-          //   label: "单选框(radio)",
-          //   prop: "prop_radio",
-          //   type: "radio",
-          //   default: 2,
-          //   options: [{ value: 1, label: "男" }, { value: 2, label: "女" }]
-          // },
-          // {
-          //   label: "复选框(checkbox)",
-          //   prop: "prop_checkbox",
-          //   type: "checkbox",
-          //   default: [2],
-          //   options: [{ value: 1, label: "男" }, { value: 2, label: "女" }]
-          // },
-          // {
-          //   label: "日期时间(dateTime)",
-          //   prop: "prop_dateTime",
-          //   type: "dateTime"
-          // },
-          // {
-          //   label: "日期选择器(date)",
-          //   prop: "prop_date",
-          //   type: "date"
-          // },
-
-          // {
-          //   label: "json编辑器(jsonEditor)",
-          //   prop: "prop_jsonEditor",
-          //   type: "jsonEditor"
-          // },
           {
             label: "json编辑器(vueJsonEditor)",
             prop: "prop_vueJsonEditor",

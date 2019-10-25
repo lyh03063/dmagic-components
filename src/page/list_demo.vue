@@ -2,10 +2,11 @@
   <div>
     <el-button plain @click="setAddInit" size="mini">设置formDataAddInit</el-button>
 
-    <el-button plain @click="toggleList" size="mini">切换列表</el-button>
-    <el-button plain @click="isShowList2=!isShowList2" size="mini">切换列表2</el-button>
+    <dm_debug_list>
+      <dm_debug_item v-model="visible" text="visible" />
+    </dm_debug_list>
+
     <dm_list_data
-      v-if="isShowList1"
       :cf="cfList"
       @after-modify="afterModify"
       @after-show-Dialog-Add="showAdd"
@@ -17,23 +18,13 @@
         {{row}}
         <el-link type="primary" @click="fold(row)">收起</el-link>
       </template>
-      <template #slot_column_CreateTime="data">插槽</template>
-    </dm_list_data>
+      <template #slot_column_CreateTime="{row}">
+        <el-popover placement="top-start" width="200" trigger="click" v-model="visible[row.P1]">
+          <!--候选值列表-->
 
-    <dm_list_data
-      :cf="cfList2"
-      @after-modify="afterModify"
-      @after-show-Dialog-Add="showAdd"
-      @after-show-Dialog-Modify="showModify"
-      @after-show-Dialog-Detail="showDetail"
-      v-if="!flag"
-    >
-      <template #slot_in_toolbar="{data:{tableData}}">插槽内容可显示tableData</template>
-      <template v-slot:slot_form_expand_articleTitle="{row}">
-        {{row}}
-        <el-link type="primary" @click="fold(row)">收起</el-link>
+          <el-button slot="reference" icon="el-icon-more">插槽{{row.P1}}</el-button>
+        </el-popover>
       </template>
-      <template #slot_column_CreateTime="data">插槽</template>
     </dm_list_data>
   </div>
 </template>
@@ -47,9 +38,7 @@ export default {
 
   data() {
     return {
-      isShowList1: true,
-      isShowList2:false,
-      cfList2: {},
+      visible: {},
       cfList: {
         pageSize: 2,
         listIndex: "list_demo", //vuex对应的字段~
@@ -61,13 +50,18 @@ export default {
         singleBtns: {
           // detail:false,
           // modify:false,
-          delete: false, //配置基础按钮隐藏（默认显示）
+          //delete: false, //配置基础按钮隐藏（默认显示）
           addon: [
+            util.cfList.sBtns.detail,
+            util.cfList.sBtns.modify,
+            util.cfList.sBtns.delete,
             {
               title: "单项操作（圆形按钮）",
-              circle: true,
-              icon: "el-icon-user-solid",
-              eventType: "singleOP1"
+              eventType: "singleOP1",
+              cfElBtn: {
+                circle: true,
+                icon: "el-icon-user-solid"
+              }
             },
             {
               title: "单项操作（普通按钮）",
@@ -83,23 +77,31 @@ export default {
           ]
         },
         //批量操作按钮的配置
-        bactchBtns: {
+        batchBtns: {
           // add: false, //配置基础按钮隐藏（默认显示）
-          delete: false, //配置基础按钮隐藏（默认显示）
+          // delete: false, //配置基础按钮隐藏（默认显示）
           addon: [
+            util.cfList.bBtns.add,
+            util.cfList.bBtns.delete,
             {
               text: "批量操作（需选中数据）",
               eventType: "bacthOP1",
-              needSelect: true
+              needSelect: true,
+              cfElBtn: {
+                icon: "el-icon-user-solid"
+              }
             },
             { text: "其他操作（不需选中数据）", eventType: "bacthOP2" },
 
             {
-              type: "primary",
               uiType: "link",
               text: "新窗口打开页面",
               target: "_blank",
-              url: "http://www.baidu.com"
+              url: "http://www.baidu.com",
+              cfElBtn: {
+                type: "primary",
+                icon: "el-icon-user-solid"
+              }
             },
             { uiType: "slot", slot: "slot_in_toolbar" }
           ],
@@ -343,7 +345,7 @@ export default {
     cfData: function() {
       return this.$store.state.cfData;
     },
-     flag: function() {
+    flag: function() {
       return true;
     }
   },
@@ -359,13 +361,13 @@ export default {
   },
 
   methods: {
-    async toggleList(){
-      let result=!this.isShowList1;
-      this.isShowList1=null;
-       
-      await this.$nextTick();//延迟到视图更新
- 
-      this.isShowList1=result
+    async toggleList() {
+      let result = !this.isShowList1;
+      this.isShowList1 = null;
+
+      await this.$nextTick(); //延迟到视图更新
+
+      this.isShowList1 = result;
     },
     /**
      * @name 自定义单项操作按钮点击函数

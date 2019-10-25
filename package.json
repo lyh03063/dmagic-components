@@ -1,7 +1,7 @@
 {
   "name": "dmagic-components",
   "description": "A Vue.js project",
-  "version": "1.7.8",
+  "version": "1.8.0",
   "author": "lyh <113381161@qq.com>",
   "main": "dist/vue-dm-components.js",
   "license": "MIT",

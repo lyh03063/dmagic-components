@@ -19,46 +19,30 @@
     </div>
     <!-- v-if="cf.flag"这个规则去掉 -->
     <el-row size="mini" class="MB10" v-if="cf.isShowToolBar">
-      <el-button
-        size="mini"
-        type="primary"
-        @click="showAdd"
-        v-if="!($lodash.get(cf, `bactchBtns.add`)===false)"
-      >新增</el-button>
-
-      <el-button
-        @click="deleteSelection()"
-        size="mini"
-        plain
-        v-if="!($lodash.get(cf, `bactchBtns.delete`)===false)"
-      >删除选中</el-button>
-      <template class v-if="$lodash.hasIn(cf, 'bactchBtns.addon')">
-        <template class v-for="(item,index) in cf.bactchBtns.addon">
+      <template class v-if="$lodash.hasIn(cf, 'batchBtns.addon')">
+        <template class v-for="(item,index) in cf.batchBtns.addon">
+          <slot class v-if="item.uiType=='slot'" :name="item.slot" :data="$data"></slot>
           <a
-            class="ML10 MR10"
+            class="MR10"
             :target="item.target"
-            :href="item.url"
+            :href="item.url||'javascript:;'"
             :key="index"
-            v-if="item.uiType=='link'"
-          >
-            <el-button :type="item.type" size="mini" :plain="item.plain">{{item.text}}</el-button>
-          </a>
-          <slot class v-else-if="item.uiType=='slot'" :name="item.slot" :data="$data"></slot>
-          <el-button
             v-else
-            :type="item.type"
-            @click="btnBtnClick(item.eventType,item.needSelect)"
-            :key="index"
-            size="mini"
-            :plain="item.plain"
-          >{{item.text}}</el-button>
+          >
+            <el-button
+              v-bind="item.cfElBtn"
+              @click="batchBtnClick(item.eventType,item.needSelect)"
+              :key="index"
+              size="mini"
+            >{{$lodash.get(item, `cfElBtn.text`)||item.text}}</el-button>
+          </a>
         </template>
       </template>
 
       <span
         class
-        v-html="$lodash.get(cf, `bactchBtns.tips.text`)"
-        v-if="$lodash.get(cf, `bactchBtns.tips`)"
+        v-html="$lodash.get(cf, `batchBtns.tips.text`)"
+        v-if="$lodash.get(cf, `batchBtns.tips`)"
         :style="getTipsStyle(cf)"
       ></span>
     </el-row>
@@ -76,7 +60,14 @@
       style="width: 100%;"
       @selection-change="selectionChange"
     >
-      <el-table-column fixed label="id" prop="P1" :width="40" type="selection" v-if="cf.isShowCheckedBox"></el-table-column>
+      <el-table-column
+        fixed
+        label="id"
+        prop="P1"
+        :width="40"
+        type="selection"
+        v-if="cf.isShowCheckedBox"
+      ></el-table-column>
       <el-table-column :width="40" type="expand" v-if="cf.expand" fixed>
         <template slot-scope="props">
           <div v-for="(item,index) in cf.expands" :key="index">
@@ -92,8 +83,7 @@
         </template>
       </el-table-column>
 
-      <template class v-for="(column,index) in cf.columns">
-        
+      <template class v-for="column in cf.columns">
         <!--这里不能使用v-bind=“column”,slot会冲突，这点没设计好！！-->
         <el-table-column
           :prop="column.prop"
@@ -103,9 +93,7 @@
           :fixed="column.fixed"
           :formatter="column.formatter"
           :show-overflow-tooltip="true"
-          :key="index"
-          
-       
+          :key="column.__id"
         >
           <template slot-scope="scope">
             <!--Q1:有插槽-->
@@ -125,63 +113,30 @@
         </el-table-column>
       </template>
 
-      <el-table-column fixed="right" label="操作" min-width="120" v-if="cf.isShowOperateColumn">
+      <el-table-column fixed="right" label="操作" min-width="140" v-if="cf.isShowOperateColumn">
         <template slot-scope="scope" class="operation-box">
-          <el-button
-            title="详情"
-            @click="showDetail(scope.row)"
-            icon="el-icon-notebook-2"
-            circle
-            size="mini"
-            v-if="!($lodash.get(cf, `singleBtns.detail`)===false)"
-          ></el-button>
-          <el-button
-            title="编辑"
-            icon="el-icon-edit"
-            size="mini"
-            circle
-            @click="$refs.listDialogs.showModify(scope.row)"
-            v-if="!($lodash.get(cf, `singleBtns.modify`)===false)"
-          ></el-button>
-          <el-button
-            title="删除"
-            icon="el-icon-close"
-            size="mini"
-            circle
-            @click="confirmDelete(scope.row.P1)"
-            v-if="!($lodash.get(cf, `singleBtns.delete`)===false)"
-          ></el-button>
-
           <template class v-if="$lodash.hasIn(cf, 'singleBtns.addon')">
             <template class v-for="(item,index) in cf.singleBtns.addon">
               <a
                 :class="item.class"
                 :target="item.target"
-                :href="item.url+scope.row.P1"
+                :title="item.title"
+                :href="item.url?item.url+scope.row.P1:'javascript:;'"
                 :key="index"
-                v-if="item.uiType=='link'"
               >
                 <el-button
-                  :type="item.type"
-                  :icon="item.icon"
+                  v-bind="item.cfElBtn"
+                  @click="singleBtnClick(item.eventType,scope.row)"
+                  :key="index"
                   size="mini"
-                  :plain="item.plain"
-                  :title="item.title"
-                >{{item.text}}</el-button>
+                  class="MR5"
+                >
+                  <template
+                    class
+                    v-if="!($lodash.get(item, `cfElBtn.circle`))"
+                  >{{$lodash.get(item, `cfElBtn.text`)||item.text}}</template>
+                </el-button>
               </a>
-              <el-button
-                v-else
-                :type="item.type"
-                :title="item.title"
-                @click="singleBtnClick(item.eventType,scope.row)"
-                :icon="item.icon"
-                :key="index"
-                size="mini"
-                :circle="item.circle"
-                class="MR5"
-              >
-                <template class v-if="!item.circle">{{item.text}}</template>
-              </el-button>
             </template>
           </template>
         </template>
@@ -292,7 +247,7 @@ export default {
     },
     //获取提示样式的函数
     getTipsStyle(cf) {
-      let styleAdd = lodash.get(this.cf, `bactchBtns.tips.style`);
+      let styleAdd = lodash.get(this.cf, `batchBtns.tips.style`);
       let style = { color: "#f90" };
       return Object.assign(style, styleAdd); //合并对象
     },
@@ -301,16 +256,30 @@ export default {
       this.$emit("single-btn-click", eventType, row);
     },
     //自定义批量操作按钮的点击事件
-    btnBtnClick(eventType, needSelect) {
-      if (!needSelect) return this.$emit("bacth-btn-click", eventType); //抛出自定义事件
-      //  得到选中的数据对象
-      var selection = this.$refs.table.selection;
-      //  有选中的就遍历得到P1，进行批量删除
-      if (selection.length > 0) {
-        this.$emit("bacth-btn-click", eventType, selection); //抛出自定义事件
+    batchBtnClick(eventType, needSelect) {
+      if (needSelect) {
+        //  得到选中的数据对象
+        var selection = this.$refs.table.selection;
+        //  有选中的就遍历得到P1，进行批量删除
+        if (selection.length > 0) {
+          this.$emit("bacth-btn-click", eventType, selection); //抛出自定义事件
+        } else {
+          return this.$message({ message: "未选中数据", type: "error" });
+        }
+
+        if (eventType == "delete") {
+          //批量删除
+
+          this.deleteSelection();
+        }
       } else {
-        this.$message({ message: "未选中数据", type: "error" });
+        if (eventType == "add") {
+          //新增
+          this.showAdd();
+        }
       }
+
+      return this.$emit("bacth-btn-click", eventType); //抛出自定义事件
     },
     showAdd() {
       this.$emit("after-show-Dialog-Add");
@@ -329,8 +298,6 @@ export default {
         //  调用方法删除数据
         this.confirmDelete(arr);
         // 没有选中的数据提示用户
-      } else {
-        this.$message({ message: "请先选中要删除的数据", type: "error" });
       }
     },
     //统计字段筛选数据并跳转页面函数
@@ -481,7 +448,6 @@ export default {
   },
 
   created() {
-     alert("created");
     this.cf.isMultipleSelect === false || (this.cf.isMultipleSelect = true);
     this.cf.isShowCheckedBox === false || (this.cf.isShowCheckedBox = true);
     this.cf.isShowSearchForm === false || (this.cf.isShowSearchForm = true);
@@ -513,6 +479,7 @@ export default {
     let selectJson = { P1: 1 }; //P1有时候在列表不显示，但也一定要加上
 
     this.cf.columns.forEach(columnEach => {
+      columnEach.__id = util.getTimeRandom();
       selectJson[columnEach.prop] = 1;
       //如果依赖字段存在**
       if (columnEach.requireProp && columnEach.requireProp.length) {
@@ -542,14 +509,41 @@ export default {
       listIndex: this.cf.listIndex,
       objState: objState
     });
-    alert("initListState");
 
     if (this.cf.focusMenu) {
       //如果需要聚焦菜单
       this.$store.commit("changeActiveMenu", this.cf.listIndex); //菜单聚焦
     }
 
-   
+    //添加标准批量操作按钮
+    let batchBtnsAddon = lodash.get(this.cf, `batchBtns.addon`);
+    if (!batchBtnsAddon) {
+      lodash.set(this.cf, `batchBtns.addon`, [
+        util.cfList.bBtns.add,
+        util.cfList.bBtns.delete
+      ]);
+    }
+
+    //添加标准单选操作按钮
+    let singleBtnsAddon = lodash.get(this.cf, `singleBtns.addon`);
+    if (!singleBtnsAddon) {
+      lodash.set(this.cf, `singleBtns.addon`, [
+        util.cfList.sBtns.detail,
+        util.cfList.sBtns.modify,
+        util.cfList.sBtns.delete
+      ]);
+    }
+
+    //监听标准的单选操作按钮事件
+    this.$on("single-btn-click", function(eventType, row) {
+      if (eventType == "delete") {
+        this.confirmDelete(row.P1);
+      } else if (eventType == "modify") {
+        this.$refs.listDialogs.showModify(row);
+      } else if (eventType == "detail") {
+        this.showDetail(row);
+      }
+    });
   },
 
   async mounted() {

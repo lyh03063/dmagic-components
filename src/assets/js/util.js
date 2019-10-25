@@ -1,6 +1,6 @@
 
 window.PUB = {}
-window.PUB.domain="http://120.76.160.41:3000"
+window.PUB.domain = "http://120.76.160.41:3000"
 // window.PUB.domain = "http://localhost:3000"
 //window.PUB.domain = 'http://test.dmagic.cn'
 // window.PUB.urlUpload = `${PUB.domain}/api_third_part/qiniu_upload?scope=test`
@@ -177,15 +177,15 @@ util.sortByArrId = function (param) {
 //#endregion
 //#region getTimeRandom:返回带时间戳的随机数
 util.getTimeRandom = function () {
-  return moment().format("YYYYMMDDHHmmSSsss_")+ lodash.random(99999)
+  return moment().format("YYYYMMDDHHmmSSsss_") + lodash.random(99999)
 };
 //#endregion
 
 //#region toFixed/money:将数字转换成保留小数点，默认2位
 util.toFixed = function (num, length = 2) {
   let result;
-  if (isNaN(num)||num==0||num===undefined) {//结果为数字
-      num = 0;
+  if (isNaN(num) || num == 0 || num === undefined) {//结果为数字
+    num = 0;
   }
   result = Number(num.toFixed(length));
   return result
@@ -197,7 +197,7 @@ util.toFixed = function (num, length = 2) {
 util.handelItem = function (cf) {
   let { action, items, prop, itemNew } = cf;
   let index = items.findIndex(item => item.prop == prop);
-  if (action=="replace") {//Q1:replace
+  if (action == "replace") {//Q1:replace
     this.$set(items, index, itemNew); //修改memberId对应的字段配置
   } else { //Q2:
 
@@ -218,12 +218,12 @@ util.setListPower = function (cfList) {
   let hasPowerAdd = lodash.get(window.rolePower, `${powerPath}.add`);
   if (!hasPowerAdd) {
     //如果没有新增权限
-    lodash.set(cfList, `bactchBtns.add`, false);
+    lodash.set(cfList, `batchBtns.add`, false);
   }
   let hasPowerDelete = lodash.get(window.rolePower, `${powerPath}.delete`);
   if (!hasPowerDelete) {
     //如果没有删除权限
-    lodash.set(cfList, `bactchBtns.delete`, false);
+    lodash.set(cfList, `batchBtns.delete`, false);
     lodash.set(cfList, `singleBtns.delete`, false);
   }
 
@@ -242,7 +242,7 @@ util.setLocalStorageObj = function (key, val) {
   if (util.type(val) == "array" || util.type(val) == "object") {//Q1:数据类型是数组活对虾
     val = JSON.stringify(val);//Json对象转换Json字符串
   }
-  localStorage[key]=val
+  localStorage[key] = val
 
 }
 //#endregion
@@ -250,11 +250,60 @@ util.setLocalStorageObj = function (key, val) {
 //#region getLocalStorageObj:从LocalStorage获取一个对象的函数
 util.getLocalStorageObj = function (key) {
   return JSON.parse(localStorage[key]);//
- 
- }
+
+}
 //#endregion
 
 
+//#region cfList:标准列表的一些配置项
+util.cfList = {}
+util.cfList.bBtns = {}
+
+util.cfList.bBtns.add = {
+  text: "新增",
+  eventType: "add",
+  cfElBtn: {
+    type: "primary",
+  }
+}
+util.cfList.bBtns.delete = {
+  text: "删除选中",
+  eventType: "delete",
+  needSelect: true,
+  cfElBtn: {}
+}
+
+util.cfList.sBtns = {}
+
+
+
+util.cfList.sBtns.detail = {
+  title: "详情",
+  eventType: "detail",
+  cfElBtn: {
+    circle: true,
+    icon: "el-icon-notebook-2"
+  }
+}
+util.cfList.sBtns.modify = {
+  title: "编辑",
+  eventType: "modify",
+  cfElBtn: {
+    circle: true,
+    icon: "el-icon-edit"
+  }
+}
+util.cfList.sBtns.delete = {
+  title: "删除",
+  eventType: "delete",
+  cfElBtn: {
+    circle: true,
+    icon: "el-icon-close"
+  }
+}
+
+
+//#endregion
 
 
 export default util

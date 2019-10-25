@@ -219,12 +219,12 @@ util.setListPower = function (cfList) {
   let hasPowerAdd = lodash.get(window.rolePower, `${powerPath}.add`);
   if (!hasPowerAdd) {
     //如果没有新增权限
-    lodash.set(cfList, `bactchBtns.add`, false);
+    lodash.set(cfList, `batchBtns.add`, false);
   }
   let hasPowerDelete = lodash.get(window.rolePower, `${powerPath}.delete`);
   if (!hasPowerDelete) {
     //如果没有删除权限
-    lodash.set(cfList, `bactchBtns.delete`, false);
+    lodash.set(cfList, `batchBtns.delete`, false);
     lodash.set(cfList, `singleBtns.delete`, false);
   }
 
@@ -253,4 +253,54 @@ util.getLocalStorageObj = function (key) {
   return JSON.parse(localStorage[key]);//
  
  }
+//#endregion
+
+
+//#region cfList:标准列表的一些配置项
+util.cfList = {}
+util.cfList.bBtns = {}
+util.cfList.bBtns.add = {
+  text: "新增",
+  eventType: "add",
+  cfElBtn: {
+    type: "primary",
+  }
+}
+util.cfList.bBtns.delete = {
+  text: "删除选中",
+  eventType: "delete",
+  needSelect: true,
+  cfElBtn: {}
+}
+
+util.cfList.sBtns = {}
+
+
+
+util.cfList.sBtns.detail = {
+  title: "详情",
+  eventType: "detail",
+  cfElBtn: {
+    circle: true,
+    icon: "el-icon-notebook-2"
+  }
+}
+util.cfList.sBtns.modify = {
+  title: "编辑",
+  eventType: "modify",
+  cfElBtn: {
+    circle: true,
+    icon: "el-icon-edit"
+  }
+}
+util.cfList.sBtns.delete = {
+  title: "删除",
+  eventType: "delete",
+  cfElBtn: {
+    circle: true,
+    icon: "el-icon-close"
+  }
+}
+
+
 //#endregion
