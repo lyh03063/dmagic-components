@@ -40,6 +40,7 @@ export default {
     return {
       visible: {},
       cfList: {
+        powerPath:"newsCenter.list_article",
         pageSize: 2,
         listIndex: "list_demo", //vuex对应的字段~
         focusMenu: true, //进行菜单聚焦

@@ -195,42 +195,49 @@ util.toFixed = function (num, length = 2) {
 //#region handelItem:处理字段数组的某个字段配置的函数
 
 util.handelItem = function (cf) {
-  let { action, items, prop, itemNew } = cf;
-  let index = items.findIndex(item => item.prop == prop);
+  let { action, items, prop, itemNew,key="prop" } = cf;
+  if(!items)return;
+  let index = items.findIndex(item => item[key] == prop);
+  if (index<0) return;//找不到目标，return
   if (action == "replace") {//Q1:replace
     this.$set(items, index, itemNew); //修改memberId对应的字段配置
-  } else { //Q2:
-
+  } else if (action == "delete") { //Q2:delete
+    items.splice(index, 1)
   }
 
 }
+// 
 //#endregion
 
 
-//#region setListPower:根据当前角色权限设置列表配置的函数
+//#region setListPower:根据当前角色权限设置列表配置的函数-需要用到window.rolePower变量
 
 util.setListPower = function (cfList) {
 
   let { powerPath } = cfList;
   if (!powerPath) return cfList
-  console.log("powerPath:", powerPath);
 
   let hasPowerAdd = lodash.get(window.rolePower, `${powerPath}.add`);
+  //如果没有新增权限
   if (!hasPowerAdd) {
-    //如果没有新增权限
-    lodash.set(cfList, `batchBtns.add`, false);
+    //删除新增按钮
+    util.handelItem({items:cfList.batchBtns.addon,action:"delete",key:"eventType",prop:"add"})
   }
   let hasPowerDelete = lodash.get(window.rolePower, `${powerPath}.delete`);
+   //如果没有删除权限
   if (!hasPowerDelete) {
-    //如果没有删除权限
-    lodash.set(cfList, `batchBtns.delete`, false);
-    lodash.set(cfList, `singleBtns.delete`, false);
+    //删除单项删除按钮
+    util.handelItem({items:cfList.singleBtns.addon,action:"delete",key:"eventType",prop:"delete"})
+    //删除批量删除按钮
+    util.handelItem({items:cfList.batchBtns.addon,action:"delete",key:"eventType",prop:"delete"})
   }
 
   let hasPowerModify = lodash.get(window.rolePower, `${powerPath}.modify`);
+   //如果没有修改权限
   if (!hasPowerModify) {
-    //如果没有修改权限
-    lodash.set(cfList, `singleBtns.modify`, false);
+    //删除单选修改按钮
+    util.handelItem({items:cfList.singleBtns.addon,action:"delete",key:"eventType",prop:"modify"})
+   
   }
   return cfList
 };
@@ -249,7 +256,7 @@ util.setLocalStorageObj = function (key, val) {
 
 //#region getLocalStorageObj:从LocalStorage获取一个对象的函数
 util.getLocalStorageObj = function (key) {
-  if(!localStorage[key])return false;
+  if (!localStorage[key]) return false;
   return JSON.parse(localStorage[key]);//
 
 }

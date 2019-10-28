@@ -534,6 +534,9 @@ export default {
       ]);
     }
 
+
+     util.setListPower(this.cf);//调用：{根据当前角色权限设置列表配置的函数}
+
     //监听标准的单选操作按钮事件
     this.$on("single-btn-click", function(eventType, row) {
       if (eventType == "delete") {
