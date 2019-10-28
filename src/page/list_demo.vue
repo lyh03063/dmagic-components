@@ -46,6 +46,11 @@ export default {
         twoTitle: "其他数据", //面包屑1级菜单
         threeTitle: "文章管理", //面包屑2级菜单
         expand: true, //是否展开行
+        //操作列配置
+        columnOperate:{
+          'min-width':200
+
+        },
         //列表单项操作按钮的配置
         singleBtns: {
           // detail:false,

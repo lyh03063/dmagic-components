@@ -113,7 +113,7 @@
         </el-table-column>
       </template>
 
-      <el-table-column fixed="right" label="操作" min-width="140" v-if="cf.isShowOperateColumn">
+      <el-table-column fixed="right" label="操作" :min-width="$lodash.get(cf, `columnOperate['min-width']`,140)" v-if="cf.isShowOperateColumn">
         <template slot-scope="scope" class="operation-box">
           <template class v-if="$lodash.hasIn(cf, 'singleBtns.addon')">
             <template class v-for="(item,index) in cf.singleBtns.addon">
@@ -129,7 +129,7 @@
                   @click="singleBtnClick(item.eventType,scope.row)"
                   :key="index"
                   size="mini"
-                  class="MR5"
+                  style="margin-right:5px"
                 >
                   <template
                     class

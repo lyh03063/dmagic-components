@@ -248,12 +248,15 @@ util.setLocalStorageObj = function (key, val) {
 }
 //#endregion
 
+
 //#region getLocalStorageObj:从LocalStorage获取一个对象的函数
 util.getLocalStorageObj = function (key) {
+  if(!localStorage[key])return false;
   return JSON.parse(localStorage[key]);//
- 
- }
+
+}
 //#endregion
+
 
 
 //#region cfList:标准列表的一些配置项
