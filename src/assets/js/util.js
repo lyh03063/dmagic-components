@@ -194,6 +194,7 @@ util.toFixed = function (num, length = 2) {
 
 //#region handelItem:处理字段数组的某个字段配置的函数
 
+
 util.handelItem = function (cf) {
   let { action, items, prop, itemNew,key="prop" } = cf;
   if(!items)return;

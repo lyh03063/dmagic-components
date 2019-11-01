@@ -2,7 +2,11 @@
   <div>
     <dm_debug_list></dm_debug_list>
 
+    <codemirror v-model="code" :options="cmOptions" ref="myCm"></codemirror>
+
     {{selectData}}
+    <el-button plain @click="formatCode" size="mini">格式化</el-button>
+
     <el-button plain @click="isShowDialog=true" size="mini">选择数据</el-button>
 
     <!--选择数据弹窗-->
@@ -36,11 +40,79 @@
 import dm_list_data from "../components/list-data/list-data.vue";
 import dm_dynamic_form from "../components/list-data/dynamic-form.vue";
 import collection from "../components/form_item/collection.vue";
+
+
+import { codemirror } from "vue-codemirror";
+import "codemirror/lib/codemirror.css";
+// 引入主题后还需要在 options 中指定主题才会生效
+
+import "codemirror/theme/lucario.css"; //黑背景主题
+/**
+ * 
+eclipse.css,base16-light.css
+更多主题查看https://codemirror.net/theme/
+ */
+
+import "codemirror/mode/javascript/javascript";
+// import "aaaaa";
+
+import "codemirror/addon/selection/active-line"; //高亮当前行
+import "codemirror/addon/fold/foldgutter"; //代码折叠-一定要引用
+import "codemirror/addon/fold/foldgutter.css"; //代码折叠样式一定要引用
+import "codemirror/addon/fold/brace-fold.js"; //代码折叠-一定要引用
+
 export default {
-  components: { dm_list_data, dm_dynamic_form, collection },
+  components: { dm_list_data, dm_dynamic_form, collection, codemirror },
 
   data() {
     return {
+      cmOptions: {
+        // codemirror options
+        tabSize: 4,
+        mode: "text/javascript",
+        theme: "lucario",
+        styleActiveLine: true, //当前行高亮
+        lineNumbers: true,
+        lineWrapping: true, //代码折叠
+        matchBrackets: true,
+        // line: true,
+        // autoCloseBrackets: true,
+        foldGutter: true,
+        gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+
+        // more codemirror options, 更多 codemirror 的高级配置...
+      },
+      code: `
+        var name="张三";
+        function fun0000(_json) {//函数定义：{000函数}
+            _json = _json|| {}; //变量定义：{传参json}
+            var aaa = _json.aaa; //变量定义：{000}
+        }
+        // 自定义列组件
+    Vue.component('swipe-img', {
+        props: {
+            index: {
+                type: Number
+            }
+        },
+        data() {
+            return {
+                test:99,
+            };
+        },
+        methods: {
+            handle(method) { //函数：{处理单条数据函数}
+            }
+        },
+        created() {
+            alert("2222");
+        }
+    })
+    new Vue({ el: '#app' })
+         
+      
+      `,
+
       selectData: [],
       isShowDialog: false, //是否显示弹窗
       cfList: {
@@ -155,15 +227,30 @@ export default {
       }
     };
   },
-
+  computed: {
+    cm() {
+      return this.$refs.myCm.codemirror;
+    }
+  },
   methods: {
+    formatCode() {
+      let T=this;
+      console.log("T.cm:", T.cm);
+      //T.cm.setValue("aaaaa")编辑器设置代码
+      // this.cm.commands["selectAll"]();
+      function getSelectedRange() {
+        return { from: T.cm.getCursor(true), to: T.cm.getCursor(false) };
+      }
+
+      var range =  getSelectedRange();
+      T.cm.autoFormatRange(range.from, range.to);
+    },
     //函数：{确认选择数据函数}
     confirmSelect() {
       //获取选中的数据，此处可优化，使用selection-change事件
       let selection = this.$refs.listSelectData.$refs.table.selection;
       console.log("selection:", selection);
       if (!selection.length) return this.$message.error("未选择任何数据");
-
       this.selectData = util.deepCopy(selection);
       this.isShowDialog = false;
     }
@@ -174,4 +261,8 @@ export default {
 </script>
 
 <style>
-</style>
+        .CodeMirror{
+            font-size: 16px;
+            font-family:Arial;
+        }
+    </style>

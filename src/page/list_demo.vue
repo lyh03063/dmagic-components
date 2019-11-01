@@ -40,7 +40,7 @@ export default {
     return {
       visible: {},
       cfList: {
-        powerPath:"newsCenter.list_article",
+        // powerPath:"newsCenter.list_article",
         pageSize: 2,
         listIndex: "list_demo", //vuex对应的字段~
         focusMenu: true, //进行菜单聚焦
@@ -90,7 +90,7 @@ export default {
             util.cfList.bBtns.add,
             util.cfList.bBtns.delete,
             {
-              text: "批量操作（需选中数据）",
+              text: "批量操作（需选数据）",
               eventType: "bacthOP1",
               needSelect: true,
               cfElBtn: {

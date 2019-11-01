@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="list-data-box">
     <dm_debug_list>
       <dm_debug_item v-model="cf" text="list-data列表配置" />
       <dm_debug_item v-model="cf.objParamAddon" text="附加的列表查询参数" />
@@ -50,13 +50,14 @@
     <!--主列表-->
 
     <el-table
+    v-bind="cf.cfElTable"
       highlight-current-row
       ref="table"
       :data="tableData"
       border
       :stripe="true"
-      :cell-style="{padding:'3px'}"
-      :header-cell-style="{padding:'6px'}"
+      :cell-style="{padding:'5px'}"
+      :header-cell-style="{padding:'5px'}"
       style="width: 100%;"
       @selection-change="selectionChange"
     >
@@ -113,7 +114,12 @@
         </el-table-column>
       </template>
 
-      <el-table-column fixed="right" label="操作" :min-width="$lodash.get(cf, `columnOperate['min-width']`,140)" v-if="cf.isShowOperateColumn">
+      <el-table-column
+        fixed="right"
+        label="操作"
+        :min-width="$lodash.get(cf, `columnOperate['min-width']`,140)"
+        v-if="cf.isShowOperateColumn"
+      >
         <template slot-scope="scope" class="operation-box">
           <template class v-if="$lodash.hasIn(cf, 'singleBtns.addon')">
             <template class v-for="(item,index) in cf.singleBtns.addon">
@@ -157,6 +163,7 @@
     <listDialogs
       ref="listDialogs"
       :cf="cf"
+      :tableData="tableData"
       @after-add="(data,olddata)=>{$emit('after-add',data,olddata)}"
       @after-modify="(newdata,olddata)=>{$emit('after-modify',newdata,olddata)}"
       @after-show-Dialog-Modify="(row)=>{$emit('after-show-Dialog-Modify',row)}"
@@ -189,6 +196,7 @@ export default {
   name: "dm_list_data", //组件名，用于递归
   components: { listDialogs, dynamicForm }, //注册组件
   props: {
+    value: Array, //绑定的静态数据
     cf: {
       //列表的配置
       type: Object,
@@ -225,6 +233,7 @@ export default {
   },
 
   watch: {
+   
     "cf.objParamAddon": {
       handler(newName, oldName) {
         Object.assign(this.objParam, this.cf.objParamAddon); //合并对象
@@ -354,21 +363,37 @@ export default {
           deleteData = [this.tableData.find(doc => doc.P1 == dataId)];
         }
         deleteData = util.deepCopy(deleteData);
-
-        //用户点击了确认
-        await axios({
-          //请求接口
-          method: "post",
-          url: PUB.domain + this.cf.url.delete,
-          data: {
-            findJson: {
-              //用于定位要修改的数据
-              P1: dataId
-            }
-          } //传递参数
-        }).catch(function(error) {
-          alert("异常:" + error);
-        });
+        //Q1:{删除数据接口}存在
+        if (this.cf.url.delete) {
+          //用户点击了确认
+          await axios({
+            //请求接口
+            method: "post",
+            url: PUB.domain + this.cf.url.delete,
+            data: {
+              findJson: {
+                //用于定位要修改的数据
+                P1: dataId
+              }
+            } //传递参数
+          }).catch(function(error) {
+            alert("异常:" + error);
+          });
+          //Q2:{删除数据接口}不存在
+          //如果{增删改操作后是否自动刷新}为真
+          if (this.cf.isRefreshAfterCUD) {
+            this.getDataList(); //更新数据列表
+          }
+        } else {
+   
+          let arrId = deleteData.map(doc => doc.P1); //删除的id数组
+          console.log("arrId:", arrId);
+          //过滤出剩余数据
+          this.tableData = this.tableData.filter(
+            doc => !arrId.includes(doc.P1)
+          );
+          console.log("this.tableData:", this.tableData);
+        }
 
         this.$message({
           message: "删除成功",
@@ -376,10 +401,6 @@ export default {
           type: "success"
         });
         this.$emit("after-delete", deleteData); //触发外部事件
-        //如果{增删改操作后是否自动刷新}为真
-        if (this.cf.isRefreshAfterCUD) {
-          this.getDataList(); //更新数据列表
-        }
       }
     },
     //-------------查询列表的函数--------------
@@ -416,17 +437,21 @@ export default {
 
       /****************************将空数组处理成null-END****************************/
 
-      let { data } = await axios({
-        //请求接口
-        method: "post",
-        url: PUB.domain + this.cf.url.list,
-        data: objParamFinal
-      });
+      this.tableData = this.value; //提取静态数据
+      if (this.cf.url.list) {
+        //Q1:{列表接口地址}存在
+        let { data } = await axios({
+          //请求接口
+          method: "post",
+          url: PUB.domain + this.cf.url.list,
+          data: objParamFinal
+        });
 
-      let { list, page } = data; //解构赋值
-      this.tableData = list;
-      this.page = page;
-      this.allCount = page.allCount; //更改总数据量
+        let { list, page } = data; //解构赋值
+        this.tableData = list;
+        this.page = page;
+        this.allCount = page.allCount; //更改总数据量
+      }
 
       if (this.cf.dynamicDict) {
         //如果{填充配置数组}存在.
@@ -448,6 +473,13 @@ export default {
   },
 
   created() {
+    console.log("this.cf:", this.cf);
+     //列表配置对象样式
+      this.cf.cfElTable=this.cf.cfElTable||{}
+      //表头样式
+      this.cf.cfElTable["header-row-class-name"]= this.cf.cfElTable["header-row-class-name"]||"n-table-head"
+      this.cf.cfElTable["row-class-name"]= this.cf.cfElTable["row-class-name"]||"n-table-row"
+
     this.cf.isMultipleSelect === false || (this.cf.isMultipleSelect = true);
     this.cf.isShowCheckedBox === false || (this.cf.isShowCheckedBox = true);
     this.cf.isShowSearchForm === false || (this.cf.isShowSearchForm = true);
@@ -534,8 +566,7 @@ export default {
       ]);
     }
 
-
-     util.setListPower(this.cf);//调用：{根据当前角色权限设置列表配置的函数}
+    util.setListPower(this.cf); //调用：{根据当前角色权限设置列表配置的函数}
 
     //监听标准的单选操作按钮事件
     this.$on("single-btn-click", function(eventType, row) {
@@ -561,6 +592,18 @@ export default {
 
 
 <style scoped>
+
+ /* n-table样式-针对element组件 */
+.list-data-box >>> .n-table-head .cell {
+  padding: 0;
+  font-weight: normal;
+}
+.list-data-box >>> .n-table-row >>> .cell {
+  padding: 0;
+  font-weight: normal;
+}
+
+
 .search-form-box {
   border: 1px #ebeef5 solid;
   border-radius: 5px;

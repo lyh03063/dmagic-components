@@ -226,6 +226,16 @@
                 :class="{'hide-btn':item.hideBtn}"
                 v-else-if="item.type=='number'"
               ></el-input-number>
+
+              <!--numberRange数字范围-->
+
+              <template class v-else-if="item.type=='numberRange'">
+                    <!--如果prop存在-->
+                <number_range class=""  v-model="formDataNeed[item.prop]" v-bind="item" v-if="item.prop" ></number_range>
+                  <!--如果prop不存在，传入整个formDataNeed-->
+                <number_range class=""  v-model="formDataNeed" v-bind="item" v-else ></number_range>
+              </template>
+
               <!--文本-->
 
               <span
@@ -233,7 +243,7 @@
                 v-else-if="item.type=='text'"
                 :style="item.style"
               >{{formDataNeed[item.prop]}}</span>
-              
+
               <!--ajax_populate-->
               <dm_ajax_populate
                 v-else-if="item.type=='ajax_populate'"
@@ -314,6 +324,7 @@ import collection from "../../components/form_item/collection.vue";
 import quill_editor from "../../components/form_item/quill_editor.vue";
 import tiny_mce from "../../components/form_item/tiny_mce";
 import select_list_data from "../../components/form_item/select_list_data.vue";
+import number_range from "../../components/form_item/number_range.vue";
 export default {
   name: "dm_dynamic_form", //组件名，用于递归
   components: {
@@ -337,7 +348,8 @@ export default {
     json_prop,
     collection,
     quill_editor,
-    tiny_mce
+    tiny_mce,
+    number_range
 
     // quill_editor:resolve => {require(['../../components/form_item/quill_editor.vue'], resolve)},
     // tiny_mce:resolve => {require(['../../components/form_item/tiny_mce'], resolve)}
@@ -394,8 +406,8 @@ export default {
         console.log("form-value变更");
         this.formDataNeed = this.value || {};
       },
-      deep: true,
-      immediate: true
+      deep: true
+      // immediate: true
     }
   },
   methods: {
@@ -539,10 +551,7 @@ export default {
       let obj1 = this.cf.watch;
 
       for (var key of Object.keys(obj1)) {
-        console.log(key + ": " + obj1[key]);
-
-        // console.log("this.cf.watch####", this.cf.watch);
-
+        //增加监听器
         this.$watch(`value.${key}`, this.cf.watch[key], { immediate: true });
       }
     }

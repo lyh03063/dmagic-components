@@ -11,6 +11,7 @@
     >
       <el-menu-item index="form_demo" route="/form_demo">表单</el-menu-item>
       <el-menu-item index="list_demo" route="/list_demo">列表</el-menu-item>
+       <el-menu-item index="list_static_demo" route="/list_static_demo">静态列表</el-menu-item>
       <el-menu-item index="upload_qiniu" route="/upload_qiniu">上传七牛云</el-menu-item>
       <el-menu-item index="test" route="/test">测试</el-menu-item>
     </el-menu>

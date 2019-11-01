@@ -242,295 +242,317 @@ export default {
 
         formItems: [
           {
-            label: "派成权限",
-
-            prop: "power_paicheng",
-            default: {},
-            cfForm: {
-              labelWidth: "150px",
-              formItems: [
-                {
-                  label: "首页",
-                  prop: "home",
-                  style: styleMenuGPowerItem,
-                  default: {},
-                  cfForm: {
-                    col_span: 12,
-                    formItems: [
-                      {
-                        prop: "home",
-                        style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPowerSimple({ menuName: "首页" })
-                      },
-                      {
-                        prop: "companyIntro",
-                        style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPowerSimple({
-                          menuName: "公司介绍"
-                        })
-                      }
-                    ]
-                  }
-                },
-                {
-                  label: "基础数据",
-                  prop: "baseData",
-                  style: styleMenuGPowerItem,
-                  default: {},
-                  cfForm: {
-                    col_span: 12,
-                    formItems: [
-                      {
-                        prop: "list_projectBid",
-                        style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPower({ menuName: "项目信息" })
-                      },
-                      {
-                        prop: "list_projectContract",
-                        style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPower({ menuName: "项目合同" })
-                      },
-                      {
-                        prop: "list_operator",
-                        style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPower({ menuName: "经办人" })
-                      },
-                      {
-                        prop: "list_partyA",
-                        style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPower({ menuName: "甲方" })
-                      }
-                    ]
-                  }
-                },
-                {
-                  label: "财务管理",
-                  prop: "financial",
-                  style: styleMenuGPowerItem,
-                  default: {},
-                  cfForm: {
-                    col_span: 12,
-                    formItems: [
-                      {
-                        prop: "list_invoice",
-                        style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPower({ menuName: "开票" })
-                      },
-                      {
-                        prop: "list_return",
-                        style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPower({ menuName: "回款记录" })
-                      },
-                      {
-                        prop: "list_payNotice",
-                        style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPower({ menuName: "付款通知" })
-                      }
-                    ]
-                  }
-                },
-                {
-                  label: "运营台账",
-                  prop: "ledger",
-                  style: styleMenuGPowerItem,
-                  default: {},
-                  cfForm: {
-                    col_span: 12,
-                    formItems: [
-                      {
-                        prop: "performanceStatistics",
-                        style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPowerSimple({
-                          menuName: "人员绩效"
-                        })
-                      },
-                      {
-                        prop: "bussinessOperationMonthly",
-                        style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPowerSimple({
-                          menuName: "业务经营情况"
-                        })
-                      }
-                    ]
-                  }
-                },
-                {
-                  label: "系统管理",
-                  prop: "systemManage",
-                  style: styleMenuGPowerItem,
-                  default: {},
-                  cfForm: {
-                    col_span: 12,
-                    formItems: [
-                      {
-                        prop: "list_member",
-                        style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPower({ menuName: "管理员" })
-                      },
-                      {
-                        prop: "list_role",
-                        style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPower({ menuName: "角色" })
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
+            label: "数字范围",
+            prop111: "prop_numberRange",
+            type: "numberRange",
+            default: {"maxN":4,"minN":1},
+            keyMax:"maxN",
+            keyMin:"minN"
+           
           },
-
           {
-            label: "权限",
-
-            prop: "power",
-            default: {},
-            cfForm: {
-              labelWidth: "150px",
-              formItems: [
-                {
-                  label: "赛事中心",
-                  prop: "matchCenter",
-                  style: styleMenuGPowerItem,
-                  default: {},
-                  cfForm: {
-                    col_span: 12,
-                    formItems: [
-                      {
-                        // label: "赛事列表",
-                        prop: "list_match",
-                        style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPower({ menuName: "赛事列表" })
-                      },
-                      {
-                        // label: "成绩列表",
-                        prop: "list_achievement",
-                        style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPower({ menuName: "成绩列表" })
-                      },
-                      {
-                        prop: "list_enroll",
-                        style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPower({ menuName: "报名列表" })
-                      },
-                      {
-                        prop: "list_rule",
-                        style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPower({ menuName: "规则库" })
-                      },
-                      {
-                        prop: "list_team",
-                        style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPower({ menuName: "球队" })
-                      }
-                    ]
-                  }
-                },
-                {
-                  label: "球员信息库",
-                  prop: "memberCenter",
-                  style: styleMenuGPowerItem,
-                  default: {},
-                  cfForm: {
-                    col_span: 12,
-                    formItems: [
-                      {
-                        // label: "资讯列表",
-                        prop: "list_member",
-                        style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPower({ menuName: "球员" })
-                      }
-                    ]
-                  }
-                },
-                {
-                  label: "资讯中心",
-                  prop: "newsCenter",
-                  style: styleMenuGPowerItem,
-                  default: {},
-                  cfForm: {
-                    col_span: 12,
-                    formItems: [
-                      {
-                        // label: "资讯列表",
-                        prop: "list_article",
-                        style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPower({ menuName: "资讯列表" })
-                      },
-                      {
-                        // label: "资讯分类",
-                        prop: "list_article_category",
-                        style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPower({ menuName: "资讯分类" })
-                      }
-                    ]
-                  }
-                },
-                {
-                  label: "招商管理",
-                  prop: "sponsorCenter",
-                  style: styleMenuGPowerItem,
-                  default: {},
-                  cfForm: {
-                    col_span: 12,
-                    formItems: [
-                      {
-                        prop: "list_sponsor",
-                        style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPower({ menuName: "赞助商" })
-                      },
-                      {
-                        prop: "list_sponsorship",
-                        style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPower({ menuName: "赛事赞助" })
-                      }
-                    ]
-                  }
-                },
-                {
-                  label: "系统消息",
-                  prop: "msgCenter",
-                  style: styleMenuGPowerItem,
-                  default: {},
-                  cfForm: {
-                    col_span: 12,
-                    formItems: [
-                      {
-                        prop: "list_msg",
-                        style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPower({ menuName: "消息列表" })
-                      },
-                      {
-                        prop: "list_msg_read",
-                        style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPower({ menuName: "消息已读记录" })
-                      }
-                    ]
-                  }
-                },
-                {
-                  label: "系统管理",
-                  prop: "systemManage",
-                  style: styleMenuGPowerItem,
-                  default: {},
-                  cfForm: {
-                    col_span: 12,
-                    formItems: [
-                      {
-                        prop: "list_admin",
-                        style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPower({ menuName: "管理员" })
-                      },
-                      {
-                        prop: "list_role",
-                        style: styleMenuPowerItem,
-                        cfForm: getFormMenuGPower({ menuName: "角色" })
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
+            label: "普通文本框(input)",
+            prop: "prop1",
+            type: "input",
+            default: "默认文本",
+            rules: [
+              { required: true, message: "不能为空" },
+              {
+                pattern: /^[\u4E00-\u9FA5]+$/,
+                message: "用户名只能为中文"
+              }
+            ]
           },
+          // {
+          //   label: "派成权限",
+
+          //   prop: "power_paicheng",
+          //   default: {},
+          //   cfForm: {
+          //     labelWidth: "150px",
+          //     formItems: [
+          //       {
+          //         label: "首页",
+          //         prop: "home",
+          //         style: styleMenuGPowerItem,
+          //         default: {},
+          //         cfForm: {
+          //           col_span: 12,
+          //           formItems: [
+          //             {
+          //               prop: "home",
+          //               style: styleMenuPowerItem,
+          //               cfForm: getFormMenuGPowerSimple({ menuName: "首页" })
+          //             },
+          //             {
+          //               prop: "companyIntro",
+          //               style: styleMenuPowerItem,
+          //               cfForm: getFormMenuGPowerSimple({
+          //                 menuName: "公司介绍"
+          //               })
+          //             }
+          //           ]
+          //         }
+          //       },
+          //       {
+          //         label: "基础数据",
+          //         prop: "baseData",
+          //         style: styleMenuGPowerItem,
+          //         default: {},
+          //         cfForm: {
+          //           col_span: 12,
+          //           formItems: [
+          //             {
+          //               prop: "list_projectBid",
+          //               style: styleMenuPowerItem,
+          //               cfForm: getFormMenuGPower({ menuName: "项目信息" })
+          //             },
+          //             {
+          //               prop: "list_projectContract",
+          //               style: styleMenuPowerItem,
+          //               cfForm: getFormMenuGPower({ menuName: "项目合同" })
+          //             },
+          //             {
+          //               prop: "list_operator",
+          //               style: styleMenuPowerItem,
+          //               cfForm: getFormMenuGPower({ menuName: "经办人" })
+          //             },
+          //             {
+          //               prop: "list_partyA",
+          //               style: styleMenuPowerItem,
+          //               cfForm: getFormMenuGPower({ menuName: "甲方" })
+          //             }
+          //           ]
+          //         }
+          //       },
+          //       {
+          //         label: "财务管理",
+          //         prop: "financial",
+          //         style: styleMenuGPowerItem,
+          //         default: {},
+          //         cfForm: {
+          //           col_span: 12,
+          //           formItems: [
+          //             {
+          //               prop: "list_invoice",
+          //               style: styleMenuPowerItem,
+          //               cfForm: getFormMenuGPower({ menuName: "开票" })
+          //             },
+          //             {
+          //               prop: "list_return",
+          //               style: styleMenuPowerItem,
+          //               cfForm: getFormMenuGPower({ menuName: "回款记录" })
+          //             },
+          //             {
+          //               prop: "list_payNotice",
+          //               style: styleMenuPowerItem,
+          //               cfForm: getFormMenuGPower({ menuName: "付款通知" })
+          //             }
+          //           ]
+          //         }
+          //       },
+          //       {
+          //         label: "运营台账",
+          //         prop: "ledger",
+          //         style: styleMenuGPowerItem,
+          //         default: {},
+          //         cfForm: {
+          //           col_span: 12,
+          //           formItems: [
+          //             {
+          //               prop: "performanceStatistics",
+          //               style: styleMenuPowerItem,
+          //               cfForm: getFormMenuGPowerSimple({
+          //                 menuName: "人员绩效"
+          //               })
+          //             },
+          //             {
+          //               prop: "bussinessOperationMonthly",
+          //               style: styleMenuPowerItem,
+          //               cfForm: getFormMenuGPowerSimple({
+          //                 menuName: "业务经营情况"
+          //               })
+          //             }
+          //           ]
+          //         }
+          //       },
+          //       {
+          //         label: "系统管理",
+          //         prop: "systemManage",
+          //         style: styleMenuGPowerItem,
+          //         default: {},
+          //         cfForm: {
+          //           col_span: 12,
+          //           formItems: [
+          //             {
+          //               prop: "list_member",
+          //               style: styleMenuPowerItem,
+          //               cfForm: getFormMenuGPower({ menuName: "管理员" })
+          //             },
+          //             {
+          //               prop: "list_role",
+          //               style: styleMenuPowerItem,
+          //               cfForm: getFormMenuGPower({ menuName: "角色" })
+          //             }
+          //           ]
+          //         }
+          //       }
+          //     ]
+          //   }
+          // },
+
+          // {
+          //   label: "权限",
+
+          //   prop: "power",
+          //   default: {},
+          //   cfForm: {
+          //     labelWidth: "150px",
+          //     formItems: [
+          //       {
+          //         label: "赛事中心",
+          //         prop: "matchCenter",
+          //         style: styleMenuGPowerItem,
+          //         default: {},
+          //         cfForm: {
+          //           col_span: 12,
+          //           formItems: [
+          //             {
+          //               // label: "赛事列表",
+          //               prop: "list_match",
+          //               style: styleMenuPowerItem,
+          //               cfForm: getFormMenuGPower({ menuName: "赛事列表" })
+          //             },
+          //             {
+          //               // label: "成绩列表",
+          //               prop: "list_achievement",
+          //               style: styleMenuPowerItem,
+          //               cfForm: getFormMenuGPower({ menuName: "成绩列表" })
+          //             },
+          //             {
+          //               prop: "list_enroll",
+          //               style: styleMenuPowerItem,
+          //               cfForm: getFormMenuGPower({ menuName: "报名列表" })
+          //             },
+          //             {
+          //               prop: "list_rule",
+          //               style: styleMenuPowerItem,
+          //               cfForm: getFormMenuGPower({ menuName: "规则库" })
+          //             },
+          //             {
+          //               prop: "list_team",
+          //               style: styleMenuPowerItem,
+          //               cfForm: getFormMenuGPower({ menuName: "球队" })
+          //             }
+          //           ]
+          //         }
+          //       },
+          //       {
+          //         label: "球员信息库",
+          //         prop: "memberCenter",
+          //         style: styleMenuGPowerItem,
+          //         default: {},
+          //         cfForm: {
+          //           col_span: 12,
+          //           formItems: [
+          //             {
+          //               // label: "资讯列表",
+          //               prop: "list_member",
+          //               style: styleMenuPowerItem,
+          //               cfForm: getFormMenuGPower({ menuName: "球员" })
+          //             }
+          //           ]
+          //         }
+          //       },
+          //       {
+          //         label: "资讯中心",
+          //         prop: "newsCenter",
+          //         style: styleMenuGPowerItem,
+          //         default: {},
+          //         cfForm: {
+          //           col_span: 12,
+          //           formItems: [
+          //             {
+          //               // label: "资讯列表",
+          //               prop: "list_article",
+          //               style: styleMenuPowerItem,
+          //               cfForm: getFormMenuGPower({ menuName: "资讯列表" })
+          //             },
+          //             {
+          //               // label: "资讯分类",
+          //               prop: "list_article_category",
+          //               style: styleMenuPowerItem,
+          //               cfForm: getFormMenuGPower({ menuName: "资讯分类" })
+          //             }
+          //           ]
+          //         }
+          //       },
+          //       {
+          //         label: "招商管理",
+          //         prop: "sponsorCenter",
+          //         style: styleMenuGPowerItem,
+          //         default: {},
+          //         cfForm: {
+          //           col_span: 12,
+          //           formItems: [
+          //             {
+          //               prop: "list_sponsor",
+          //               style: styleMenuPowerItem,
+          //               cfForm: getFormMenuGPower({ menuName: "赞助商" })
+          //             },
+          //             {
+          //               prop: "list_sponsorship",
+          //               style: styleMenuPowerItem,
+          //               cfForm: getFormMenuGPower({ menuName: "赛事赞助" })
+          //             }
+          //           ]
+          //         }
+          //       },
+          //       {
+          //         label: "系统消息",
+          //         prop: "msgCenter",
+          //         style: styleMenuGPowerItem,
+          //         default: {},
+          //         cfForm: {
+          //           col_span: 12,
+          //           formItems: [
+          //             {
+          //               prop: "list_msg",
+          //               style: styleMenuPowerItem,
+          //               cfForm: getFormMenuGPower({ menuName: "消息列表" })
+          //             },
+          //             {
+          //               prop: "list_msg_read",
+          //               style: styleMenuPowerItem,
+          //               cfForm: getFormMenuGPower({ menuName: "消息已读记录" })
+          //             }
+          //           ]
+          //         }
+          //       },
+          //       {
+          //         label: "系统管理",
+          //         prop: "systemManage",
+          //         style: styleMenuGPowerItem,
+          //         default: {},
+          //         cfForm: {
+          //           col_span: 12,
+          //           formItems: [
+          //             {
+          //               prop: "list_admin",
+          //               style: styleMenuPowerItem,
+          //               cfForm: getFormMenuGPower({ menuName: "管理员" })
+          //             },
+          //             {
+          //               prop: "list_role",
+          //               style: styleMenuPowerItem,
+          //               cfForm: getFormMenuGPower({ menuName: "角色" })
+          //             }
+          //           ]
+          //         }
+          //       }
+          //     ]
+          //   }
+          // },
 
           {
             label: "用于模糊查询文本框(input_find_vague)",
@@ -577,19 +599,7 @@ export default {
             min: 0,
             max: 3
           },
-          {
-            label: "普通文本框(input)",
-            prop: "prop1",
-            type: "input",
-            default: "默认文本",
-            rules: [
-              { required: true, message: "不能为空" },
-              {
-                pattern: /^[\u4E00-\u9FA5]+$/,
-                message: "用户名只能为中文"
-              }
-            ]
-          },
+          
           {
             label: "小组成员",
             prop: "groupMember",

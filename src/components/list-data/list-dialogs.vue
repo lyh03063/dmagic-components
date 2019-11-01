@@ -22,9 +22,9 @@
               <div v-else-if="item.formatter" v-html="item.formatter(row)"></div>
               <!--否则如果该字段带type是html，使用html原文输出-->
               <div v-else-if="item.type=='html'" v-html="row[item.prop]"></div>
-              <div v-else-if="item.type=='htmlJson'"  v-highlight>
+              <div v-else-if="item.type=='htmlJson'" v-highlight>
                 <pre>
-                    <code  v-html="row[item.prop]"></code>
+                    <code v-html="row[item.prop]"></code>
                 </pre>
               </div>
               <tiny_mce
@@ -63,10 +63,13 @@
         </dm_debug_list>
       </div>
 
-<!--表单提示语-->
-    <div class="" v-html="$lodash.get(cf, `cfDialogForm.tips.text`)" v-if="$lodash.get(cf, `cfDialogForm.tips`)" :style="getTipsStyle(cf)" >
-     
-    </div>
+      <!--表单提示语-->
+      <div
+        class
+        v-html="$lodash.get(cf, `cfDialogForm.tips.text`)"
+        v-if="$lodash.get(cf, `cfDialogForm.tips`)"
+        :style="getTipsStyle(cf)"
+      ></div>
 
       <dynamicForm v-model="formAdd" :cf="cfFormAdd" @submit="addData" @cancel="closeDialogAddFun">
         <template v-slot:[item.slot]="{formData}" v-for="item in cf.formItems">
@@ -88,9 +91,12 @@
         <dm_debug_item v-model="formModify" text="修改表单的绑定数据" />
       </dm_debug_list>
       <!--表单提示语-->
-    <div class="" v-html="$lodash.get(cf, `cfDialogForm.tips.text`)" v-if="$lodash.get(cf, `cfDialogForm.tips`)" :style="getTipsStyle(cf)" >
-     
-    </div>
+      <div
+        class
+        v-html="$lodash.get(cf, `cfDialogForm.tips.text`)"
+        v-if="$lodash.get(cf, `cfDialogForm.tips`)"
+        :style="getTipsStyle(cf)"
+      ></div>
       <dynamicForm
         v-model="formModify"
         :cf="cfFormModify"
@@ -119,7 +125,7 @@ export default {
     },
     tiny_mce
   },
-  props: ["cf"],
+  props: ["cf", "tableData"],
 
   data: function() {
     return {
@@ -173,9 +179,9 @@ export default {
     "cf.formItems": {
       //监听新增表单的初始化数据
       handler(newName, oldName) {
-        console.log('newName',newName);
-        this.cfFormAdd.formItems = newName
-        this.cfFormModify.formItems = newName //调用：{初始化新增数据表单函数}
+        console.log("newName", newName);
+        this.cfFormAdd.formItems = newName;
+        this.cfFormModify.formItems = newName; //调用：{初始化新增数据表单函数}
       },
       immediate: true,
       deep: true
@@ -196,12 +202,12 @@ export default {
     }
   },
   methods: {
+    handelItem: util.handelItem,
     //获取提示样式的函数
     getTipsStyle(cf) {
-      let styleAdd=lodash.get(this.cf, `cfDialogForm.tips.style`)
-      let style={"padding":"10px 10px 10px 100px","color":"#f60"}
-     return Object.assign(style,styleAdd);//合并对象
-      
+      let styleAdd = lodash.get(this.cf, `cfDialogForm.tips.style`);
+      let style = { padding: "10px 10px 10px 100px", color: "#f60" };
+      return Object.assign(style, styleAdd); //合并对象
     },
     initFormDataAdd() {
       console.log("initFormDataAdd#");
@@ -224,18 +230,31 @@ export default {
 
     //-------------修改数据的函数--------------
     async modifyData() {
-      let response = await axios({
-        //请求接口
-        method: "post",
-        url: PUB.domain + this.cf.url.modify,
-        data: {
-          findJson: {
-            //用于定位要修改的数据
-            P1: this.dataIdModify
-          },
-          modifyJson: this.formModify
-        } //传递参数
-      });
+      //Q1：{修改数据接口地址}存在
+      if (this.cf.url.modify) {
+        let response = await axios({
+          //请求接口
+          method: "post",
+          url: PUB.domain + this.cf.url.modify,
+          data: {
+            findJson: {
+              //用于定位要修改的数据
+              P1: this.dataIdModify
+            },
+            modifyJson: this.formModify
+          } //传递参数
+        });
+        //Q2：{修改数据接口地址}不存在
+      } else {
+        //修改静态列表的数据
+        this.handelItem({
+          action: "replace",
+          items: this.tableData,
+          itemNew: this.formModify,
+          key: "P1",
+          prop: this.dataIdModify
+        });
+      }
       this.$message({
         message: "修改数据成功",
         duration: 1500,
@@ -246,26 +265,40 @@ export default {
       if (this.cf.isRefreshAfterCUD) {
         this.$parent.getDataList(); //更新数据列表
       }
-
       this.$emit("after-modify", this.formModify, this.beforeModify); //触发外部事件
     },
     //-------------新增数据的函数--------------
     async addData() {
-      let response = await axios({
-        //请求接口
-        method: "post",
-        url: PUB.domain + this.cf.url.add,
-        data: { data: this.formAdd } //传递参数
-      });
+      //如果{新增数据接口地址}存在
+      if (this.cf.url.add) {
+        let response = await axios({
+          //请求接口
+          method: "post",
+          url: PUB.domain + this.cf.url.add,
+          data: { data: this.formAdd } //传递参数
+        });
+
+        //触发外部事件-把新增前后的数据都传过去
+        this.$emit("after-add", response.data.addData, this.formAdd);
+        //Q2:{新增数据接口地址}不存在
+      } else {
+        let idMax = 1;
+        //如果列表有数据
+        if (this.tableData.length) {
+          let arrId = this.tableData.map(doc => doc.P1); //id数组
+          idMax = Math.max(...arrId) + 1; //获取最大id
+        }
+
+        this.formAdd.P1 = idMax; //补充P1
+        this.tableData.unshift(this.formAdd); //静态数据列表追加一条数据
+        this.$emit("after-add", this.formAdd);
+      }
 
       this.$message({
         message: "新增成功",
         duration: 1500,
         type: "success"
       });
-
-      //触发外部事件-把新增前后的数据都传过去
-      this.$emit("after-add", response.data.addData, this.formAdd);
 
       this.closeDialogAddFun(); //关闭弹窗
       //如果{增删改操作后是否自动刷新}为真
@@ -278,7 +311,7 @@ export default {
     },
     //-------------显示修改弹窗的函数--------------
     showModify(row) {
-      this.$emit('after-show-Dialog-Modify',row)
+      this.$emit("after-show-Dialog-Modify", row);
       this.beforeModify = row;
       let str = JSON.stringify(row); //转换成字符串
       let rowNew = JSON.parse(str); //转换成对象
