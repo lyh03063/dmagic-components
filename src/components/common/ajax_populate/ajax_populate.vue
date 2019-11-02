@@ -1,6 +1,8 @@
 <template>
   <span>
-    <slot :doc="doc"><span :title="id">{{text}}</span></slot>
+    <slot :doc="doc">
+      <span :title="id">{{text}}</span>
+    </slot>
   </span>
 </template>
 
@@ -44,12 +46,13 @@ export default {
   methods: {
     async ajaxGetData() {
       if (!this.ajax.url) return;
-      if (!(this.id || this.ajax.param)) return;
-      this.keyExit = `${this.page}__${this.idKey}__${this.id}`;
+      if (!this.id) return;
+      if (!(this.id || this.ajax.param)) return; //??
+      this.keyExit = `${this.page}__${this.idKey}__${this.id}`; //用于缓存数据的id
 
       if (this.ajax.param) {
-        let str= JSON.stringify(this.ajax.param)
-        this.keyExit +=`__${str}`
+        let str = JSON.stringify(this.ajax.param);
+        this.keyExit += `__${str}`;
       }
 
       console.log("this.keyExit", this.keyExit);

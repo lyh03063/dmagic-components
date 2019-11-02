@@ -1,11 +1,18 @@
 <template>
   <div>
     <dm_debug_list></dm_debug_list>
+tangball_franchisee：
+    <dm_ajax_populate
+            :id="2"
+            populateKey="name"
+            page="tangball_franchisee"
+
+          ></dm_ajax_populate>
 
     <codemirror v-model="code" :options="cmOptions" ref="myCm"></codemirror>
 
     {{selectData}}
-    <el-button plain @click="formatCode" size="mini">格式化</el-button>
+    <el-button plain @click="formatCode" size="mini" class="MT10">格式化</el-button>
 
     <el-button plain @click="isShowDialog=true" size="mini">选择数据</el-button>
 

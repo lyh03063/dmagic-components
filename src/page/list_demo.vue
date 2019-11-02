@@ -40,309 +40,226 @@ export default {
     return {
       visible: {},
       cfList: {
-        // powerPath:"newsCenter.list_article",
-        pageSize: 2,
-        listIndex: "list_demo", //vuex对应的字段~
-        focusMenu: true, //进行菜单聚焦
-        twoTitle: "其他数据", //面包屑1级菜单
-        threeTitle: "文章管理", //面包屑2级菜单
-        expand: true, //是否展开行
-        //操作列配置
-        columnOperate:{
-          'min-width':200
-
+        listIndex: "list_projectContract",
+        isShowBreadcrumb: false,
+        flag: true,
+        sortJsonDefault: { _id: -1 },
+        findJsonDefault: { $or: [{ bidStatus: 4 }, { bidStatus: 6 }] },
+         url: {
+          list: "/crossList?page=paicheng_project", //列表接口
+          add: "/crossAdd?page=paicheng_project", //新增接口
+          modify: "/crossModify?page=paicheng_project", //修改接口
+          detail: "/crossDetail?page=paicheng_project",
+          delete: "/crossDelete?page=paicheng_project" //删除接口
         },
-        //列表单项操作按钮的配置
-        singleBtns: {
-          // detail:false,
-          // modify:false,
-          //delete: false, //配置基础按钮隐藏（默认显示）
+        columnOperate: { "min-width": 150 },
+        batchBtns: {
           addon: [
-            util.cfList.sBtns.detail,
-            util.cfList.sBtns.modify,
-            util.cfList.sBtns.delete,
             {
-              title: "单项操作（圆形按钮）",
-              eventType: "singleOP1",
-              cfElBtn: {
-                circle: true,
-                icon: "el-icon-user-solid"
-              }
+              type: "primary",
+              uiType: "link",
+              text: "新增项目",
+              target: "_blank",
+              url: "/projectDetail"
             },
+            { text: "导出Excel", eventType: "export-excel" },
+            { uiType: "slot", slot: "slot_in_toolbar" }
+          ]
+        },
+        singleBtns: {
+          addon: [
             {
-              title: "单项操作（普通按钮）",
-              text: "操作",
-              eventType: "singleOP2"
+              title: "删除",
+              eventType: "delete",
+              cfElBtn: { circle: true, icon: "el-icon-close" }
             },
             {
               uiType: "link",
-              text: "新窗口打开页面",
+              text: "项目详情",
               target: "_blank",
-              url: "http://www.baidu.com?id=" //这里要配置好参数名，内部会把参数加进来
+              url: "/projectDetail?projectId="
             }
           ]
         },
-        //批量操作按钮的配置
-        batchBtns: {
-          // add: false, //配置基础按钮隐藏（默认显示）
-          // delete: false, //配置基础按钮隐藏（默认显示）
-          addon: [
-            util.cfList.bBtns.add,
-            util.cfList.bBtns.delete,
-            {
-              text: "批量操作（需选数据）",
-              eventType: "bacthOP1",
-              needSelect: true,
-              cfElBtn: {
-                icon: "el-icon-user-solid"
-              }
-            },
-            { text: "其他操作（不需选中数据）", eventType: "bacthOP2" },
-
-            {
-              uiType: "link",
-              text: "新窗口打开页面",
-              target: "_blank",
-              url: "http://www.baidu.com",
-              cfElBtn: {
-                type: "primary",
-                icon: "el-icon-user-solid"
-              }
-            },
-            { uiType: "slot", slot: "slot_in_toolbar" }
-          ],
-          tips: {
-            text: "提示语123"
-            // style:{"color":"#3a0"}
-          }
-        },
-        deleteFindJson: {
-          //ajax查询参数中需要删除的参数
-          articleTitle: true
-        },
-        //列表接口的附加参数
-        objParamAddon: {
-          aaa: 1111
-        },
-        cfSearchForm: {
-          watch: {
-            //传入监听器
-            articleCategory(newName, oldName) {
-              console.log("complete1111变动");
-              this.value.articleTitle = { a: 1 };
-            }
-          }
-        },
-        //新增修改弹窗的配置
-        cfDialogForm: {
-          tips: {
-            text: "1,表单的提示语1<br/> 2,表单的提示语2",
-            style: { "padding-left": "200px" }
-          }
-        },
-        //新增修改表单的配置
-        cfForm: {
-          col_span: 12, //控制显示一行多列
-          watch: {
-            //传入监听器
-            articleCategory(newName, oldName) {
-              console.log("watch-articleCategory变化######################123");
-
-              this.value.articleTitle = this.value.articleTitle + "a";
-            }
-          },
-          cfFormAdd: {
-            col_span: 24 //控制显示一行多列
-          }
-        },
-
-        url: {
-          list: "/crossList?page=tangball_article", //列表接口
-          add: "/crossAdd?page=tangball_article", //新增接口
-          modify: "/crossModify?page=tangball_article", //修改接口
-          detail: "/crossDetail?page=tangball_article",
-          delete: "/crossDelete?page=tangball_article" //删除接口
-        },
         dynamicDict: [
           {
-            page: "tangball_article_category",
-            populateColumn: "categoryDoc",
-            idColumn: "articleCategory",
+            page: "paicheng_operator",
+            populateColumn: "operatorDoc",
+            idColumn: "operator",
+            idColumn2: "P1"
+          },
+          {
+            page: "paicheng_partyA",
+            populateColumn: "partyADoc",
+            idColumn: "partyAId",
             idColumn2: "P1"
           }
         ],
-        //expands展开行的显示字段配置
-        expands: [
-          {
-            label: "",
-            prop: "articleTitle",
-
-            slot: "slot_form_expand_articleTitle"
-          },
-          {
-            label: "分类名称",
-            prop: "articleCategory",
-            requireProp: ["articleContent"], //依赖文章详情，列表需返回该字段
-            width: 150,
-            formatter11111: function(rowData) {
-              let name = lodash.get(rowData, "categoryDoc.name");
-              return name;
-            }
-          }
-        ],
-
-        //-------列配置数组-------
         columns: [
           {
-            label: "文章标题2",
-            prop: "articleTitle",
-            width: 260,
-            fixed: true
+            label: "Id",
+            prop: "P1",
+            width: 60,
+            fixed: true,
+            __id: "201911012219024545_87609"
           },
           {
-            label: "分类名称",
-            prop: "articleCategory",
-            requireProp: ["articleContent"], //依赖文章详情，列表需返回该字段
-            width: 150,
-            formatter11111: function(rowData) {
-              let name = lodash.get(rowData, "categoryDoc.name");
-              return name;
-            }
-          },
-
-          {
-            label: "创建时间",
-            prop: "CreateTime",
-            width: 145,
-            slot: "slot_column_CreateTime"
+            label: "项目名称",
+            prop: "projectName",
+            width: 220,
+            fixed: true,
+            slot: "slot_column_projectName",
+            __id: "201911012219024545_34718"
           },
           {
-            label: "其他",
-            prop: "extend",
-            width: 135,
-            formatter11111: function(extend) {
-              return JSON.stringify(extend.extend);
-            }
+            label: "合同号",
+            prop: "contractNumber",
+            width: 100,
+            __id: "201911012219024545_47762"
           },
           {
-            label: "其他",
-            prop: "extend",
-            width: 135,
-            formatter11111: function(extend) {
-              return JSON.stringify(extend.extend);
-            }
+            label: "项目状态",
+            prop: "projectStatus",
+            width: 90,
+            __id: "201911012219024545_14541"
           },
           {
-            label: "其他",
-            prop: "extend",
-            width: 335
+            label: "存风险",
+            prop: "hasRisk",
+            width: 75,
+            __id: "201911012219024545_13192"
           },
           {
-            label: "其他",
-            prop: "extend",
-            width: 335
+            label: "合同状态",
+            prop: "contractStatus",
+            width: 100,
+            __id: "201911012219024545_2371"
           },
           {
-            label: "其他",
-            prop: "extend",
-            width: 335
+            label: "签订时间",
+            prop: "signTime",
+            width: 100,
+            __id: "201911012219024545_4850"
+          },
+          {
+            label: "项目负责人",
+            prop: "operator",
+            width: 80,
+            __id: "201911012219024545_13736"
+          },
+          {
+            label: "发包方",
+            prop: "partyAId",
+            width: 75,
+            __id: "201911012219024545_92249"
+          },
+          {
+            label: "业务类型",
+            prop: "businessType",
+            width: 90,
+            __id: "201911012219024545_63284"
+          },
+          {
+            label: "合同面积 (㎡)",
+            prop: "contractAcreage",
+            width: 120,
+            __id: "201911012219024545_30077"
+          },
+          {
+            label: "合同金额 (元)",
+            requireProp: ["cutPayMoney"],
+            prop: "contractMoney",
+            width: 120,
+            __id: "201911012219024545_92806"
+          },
+          {
+            label: "回款金额 （元）",
+            prop: "returnMoney",
+            width: 100,
+            __id: "201911012219084545_91756"
+          },
+          {
+            label: "开票金额（元）",
+            prop: "invoiceMoney",
+            width: 120,
+            __id: "201911012219084545_74909"
           }
         ],
-        //-------筛选表单字段数组-------
         searchFormItems: [
+          { label: "Id", prop: "P1" },
+          { label: "项目名称", prop: "projectName", type: "input_find_vague" },
+          { label: "合同号", prop: "contractNumber", type: "input" },
           {
-            label: "下拉框(多选)",
-            prop: "select1",
-            type: "select",
-            // default: [2],
-            multiple: true, //多选
-            options: [{ value: 1, label: "男" }, { value: 2, label: "女" }]
-          },
-          {
-            label: "文章分类",
-            prop: "articleCategory",
+            label: "发包方",
+            prop: "partyAId",
             type: "select",
             ajax: {
-              url: "/crossList?page=tangball_article_category",
-              keyLabel: "name",
-              keyValue: "P1"
+              url: "/i162_getList",
+              keyLabel: "companyName",
+              keyValue: "P1",
+              param: { sheetTarget: { pageId: "P1767" } }
             }
           },
           {
-            label: "文章标题",
-            prop: "articleTitle",
-            type: "input_find_vague"
-          }
-          // {
-          //   label: "文章标题",
-          //   prop: "articleTitle",
-          //   type: "input"
-          // },
-        ],
-        //-------详情字段数组-------
-        detailItems: [
-          {
-            label: "标题",
-            prop: "articleTitle",
-            width: 200
-          },
-          {
-            label: "文章详情",
-            prop: "articleContent",
-            type: "htmlJson"
-          },
-          {
-            label: "文章详情2",
-            prop: "articleContent",
-            type: "html"
-          }
-        ],
-        //-------新增、修改表单字段数组-------
-        formItems: [
-          {
-            label: "文章分类",
-            prop: "articleCategory",
+            label: "业务经办",
+            prop: "operator",
             type: "select",
+            options: [],
             ajax: {
-              url: "/crossList?page=tangball_article_category",
-              keyLabel: "name",
-              keyValue: "P1"
+              url: "/i162_getList",
+              " keyLabel": "name",
+              keyValue: "P1",
+              param: { sheetTarget: { pageId: "P1768" } }
             }
           },
+          { label: "签订时间", prop: "signTime", type: "time_period" },
           {
-            label: "文章标题22",
-            prop: "articleTitle",
-            width: 200
-          },
-          // {
-          //   label: "文章详情",
-          //   prop: "articleContent",
-          //   type: "editor"
-          // },
-          {
-            term: { articleTitle: "123" },
-            label: "文章详情",
-            prop: "articleContent",
-            type: "editorTM"
-          },
-          {
-            label: "文章详情",
-            prop: "articleContent",
-            type: "editorTM",
-            col_span: 24
+            label: "业务类型",
+            prop: "businessType",
+            type: "select",
+            options: [
+              { value: 6, label: "自营业务" },
+              { value: 1, label: "自营/平台化" },
+              { value: 2, label: "创新业务" },
+              { value: 3, label: "私人窗" },
+              { value: 4, label: "平台业务" },
+              { value: 5, label: "自营/合伙" }
+            ],
+            multiple: true
           },
           {
-            label: "公众号文章地址",
-            prop: "extend",
-            path: "wxArticleUrl"
+            label: "项目状态",
+            prop: "projectStatus",
+            type: "select",
+            options: [
+              { label: "未开始", value: "0" },
+              { label: "在建", value: "1" },
+              { label: "已完工", value: "2" },
+              { label: "结算后质保", value: "3" },
+              { label: "已结案", value: "4" }
+            ]
           },
-
           {
-            label: "extend",
-            prop: "extend",
-            type: "jsonEditor"
+            label: "存风险",
+            prop: "hasRisk",
+            type: "select",
+            options: [{ label: "否", value: "0" }, { label: "是", value: "1" }]
           }
-        ]
+        ],
+        detailItems: [],
+        formItems: [],
+        cfElTable: {
+          "header-row-class-name": "n-table-head",
+          "row-class-name": "n-table-row"
+        },
+        isMultipleSelect: true,
+        isShowCheckedBox: true,
+        isShowSearchForm: true,
+        isShowPageLink: true,
+        isShowOperateColumn: true,
+        isShowToolBar: true,
+        isRefreshAfterCUD: true,
+        formDataAddInit: {}
       }
     };
   },

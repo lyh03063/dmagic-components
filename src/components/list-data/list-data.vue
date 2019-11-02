@@ -593,12 +593,12 @@ export default {
 
 <style scoped>
 
- /* n-table样式-针对element组件 */
+ /* n-table样式-针对element组件 ,但好像对其他项目没有效果！！*/
 .list-data-box >>> .n-table-head .cell {
   padding: 0;
   font-weight: normal;
 }
-.list-data-box >>> .n-table-row >>> .cell {
+.list-data-box >>> .n-table-row  .cell {
   padding: 0;
   font-weight: normal;
 }

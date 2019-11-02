@@ -1,119 +1,60 @@
-@charset "UTF-8";
-@import "http://at.alicdn.com/t/font_1099951_yu9341bszx.css";
-li {
-    /* 取消列表的点符号 */
-    list-style: none;
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,textarea,p,blockquote,th,td,input{margin:0;padding:0; line-height:normal;  font-family:'microsoft yahei',Verdana,Arial,Helvetica,sans-serif; }
+li{ list-style:none}
+.clearfix:after{content:".";display:block;height:0;clear:both;visibility:hidden}
+.clearfix{*zoom:1}
+/*盒模型优化-注意影响历史数据*/
+*, :after, :before {
+  box-sizing: border-box;
 }
-
-* {
-    /* 对所有标签去掉内外边距 */
-    margin: 0;
-    padding: 0;
-    /* 切换成边框盒子模型 */
-    box-sizing: border-box;
-    /* 全局的字体设置 */
-    font-family: "Arial", "Microsoft YaHei", "黑体", "宋体", sans-serif;
-}
-
-body {
-    font-size: 14px;
-}
-
-a {
-    text-decoration: none;
-    /* 取消下划线 */
-}
-
-a:link, a:visited {
-    /* 超链接颜色 */
-    color: #333333;
-}
-
-a.link-blue:link, a.link-blue:visited {
-    /* linkBlue超链接颜色 */
-    color: blue;
-}
-
-/* table */
-
-table.table-normal {
-    border-collapse: collapse
-}
-
-table.table-normal td, table.table-normal th {
-    border: 1px solid #dddddd;
-    padding: 10px;
-}
-
- /* n-table样式 */
-
- table.n-table {
-  border-collapse: collapse;
-  width: 100%;
-}
-
-table.n-table td,
-table.n-table th {
-  border: 1px solid #dddddd;
-  padding: 10px;
-}
-
-table.n-table.P5 td,
-table.n-table.P5 th {
-  padding: 5px;
-}
-table.n-table.n-table-form td,
-table.n-table.n-table-form th {
-  vertical-align: top;
-  font-size: 14px;
-  line-height: 28px
-}
-table.n-table.n-table-debug td,
-table.n-table.n-table-debug th {
-  border: 1px solid #F56C6C;
-}
-
-
-
-.n-list-group{
-  border: 1px solid #ddd;
-  padding: 10px;
-}
-
-.n-list-group ~ .n-list-group{
-  margin-top:10px
-}
-
-/* 取消下划线 */
-
-/* demo提示说明样式 */
-
-.demo-tips {
-    border: 1px solid #f60;
-    color: #f60;
-    margin: 10px;
-    padding: 10px;
-    line-height: 150%;
-}
-
-.demo-tips p:before {
-    content: "★";
-    margin-right: 5px;
-}
-
-.demo-content {
-    margin: 10px;
-}
-
 [v-cloak] {
-    display: none
+  display: none
 }
 
- /* 饿了么弹窗补丁，取消上方padding */
- .n-el-dialog .el-dialog__body{
-  padding-top:0;
-}
 
+
+  /*浮动和位置等*/
+  .F1{ float:left; }
+  .F2{ float:right}
+  .F3{ float:none}
+  .FL{ float:left; }
+  .FR{ float:right}
+
+  .CL1{ clear:both}
+  .CL{ clear:both}
+  .Cur1{ cursor:pointer}
+  .OF1{ overflow:auto;_height:1%}
+  .OF2{ overflow: hidden;_height:1%}
+  .OF3{ overflow: inherit}
+  .OF4{ overflow: scroll}
+  .OF5{ overflow: visible}
+  .PS1{ position:absolute}
+  .PS2{ position: fixed}
+  .PS3{ position: inherit}
+  .PS4{ position: relative}
+  .PS5{ position: static}
+  .DP1{ display:block}
+  .DP2{ display: none}
+  .DP3{ display: inline-block}
+  .DP4{ display: inline}
+  .M_0{ margin:0 auto;}
+  /*文本控制*/
+  .B{ font-weight:700}
+  .FW1{ font-weight: normal}
+  .FWN{ font-weight: normal}
+  .FWB{ font-weight:700}
+  /*文本对齐*/
+  
+  .TA1{text-align: left}
+  .TA2{text-align: center}
+  .TA3{text-align: right}
+  .TAL{text-align: left}
+  .TAC{text-align: center}
+  .TAR{text-align: right}
+  
+  .FM1{font-family: Verdana,Geneva,sans-serif;}
+  .FM2{ font-family:"Microsoft Yahei"}
+  .FM4{ font-family:"Arial"}
+  
 
 
  /*浮动和位置等*/
@@ -143,117 +84,117 @@ table.n-table.n-table-debug th {
  .TAL{text-align: left}
  .TAC{text-align: center}
  .TAR{text-align: right}
- 
- .FM1{font-family: Verdana,Geneva,sans-serif;}
- .FM2{ font-family:"Microsoft Yahei"}
- .FM3{ font-family:"Arial"}
- 
-
- .MT1{ margin-top: 1px;}
- .MT2{ margin-top: 2px;}
- .MT3{ margin-top: 3px;}
- .MT4{ margin-top: 4px;}
- .MT5{ margin-top: 5px;}
- .MT6{ margin-top: 6px;}
- .MT7{ margin-top: 7px;}
- .MT8{ margin-top: 8px;}
- .MT9{ margin-top: 9px;}
- .MT10{ margin-top: 10px;}
- .MT11{ margin-top: 11px;}
- .MT12{ margin-top: 12px;}
- .MT13{ margin-top: 13px;}
- .MT14{ margin-top: 14px;}
- .MT15{ margin-top: 15px;}
- .MT16{ margin-top: 16px;}
- .MT17{ margin-top: 17px;}
- .MT18{ margin-top: 18px;}
- .MT19{ margin-top: 19px;}
- .MT20{ margin-top: 20px;}
- .MT21{ margin-top: 21px;}
- .MT22{ margin-top: 22px;}
- .MT23{ margin-top: 23px;}
- .MT24{ margin-top: 24px;}
- .MT25{ margin-top: 25px;}
- .MT26{ margin-top: 26px;}
- .MT27{ margin-top: 27px;}
- .MT28{ margin-top: 28px;}
- .MT29{ margin-top: 29px;}
- .MT30{ margin-top: 30px;}
- .MT40{ margin-top: 40px;}
- .MT50{ margin-top: 50px;}
- .MT100{ margin-top: 100px;}
-
- .MR1{ margin-right: 1px;}
- .MR2{ margin-right: 2px;}
- .MR3{ margin-right: 3px;}
- .MR4{ margin-right: 4px;}
- .MR5{ margin-right: 5px;}
- .MR6{ margin-right: 6px;}
- .MR7{ margin-right: 7px;}
- .MR8{ margin-right: 8px;}
- .MR9{ margin-right: 9px;}
- .MR10{ margin-right: 10px;}
- .MR11{ margin-right: 11px;}
- .MR12{ margin-right: 12px;}
- .MR13{ margin-right: 13px;}
- .MR14{ margin-right: 14px;}
- .MR15{ margin-right: 15px;}
- .MR16{ margin-right: 16px;}
- .MR17{ margin-right: 17px;}
- .MR18{ margin-right: 18px;}
- .MR19{ margin-right: 19px;}
- .MR20{ margin-right: 20px;}
- .MR21{ margin-right: 21px;}
- .MR22{ margin-right: 22px;}
- .MR23{ margin-right: 23px;}
- .MR24{ margin-right: 24px;}
- .MR25{ margin-right: 25px;}
- .MR26{ margin-right: 26px;}
- .MR27{ margin-right: 27px;}
- .MR28{ margin-right: 28px;}
- .MR29{ margin-right: 29px;}
- .MR30{ margin-right: 30px;}
- .MR40{ margin-right: 40px;}
- .MR50{ margin-right: 50px;}
- .MR100{ margin-right: 100px;}
-
- .MB1{ margin-bottom: 1px;}
- .MB2{ margin-bottom: 2px;}
- .MB3{ margin-bottom: 3px;}
- .MB4{ margin-bottom: 4px;}
- .MB5{ margin-bottom: 5px;}
- .MB6{ margin-bottom: 6px;}
- .MB7{ margin-bottom: 7px;}
- .MB8{ margin-bottom: 8px;}
- .MB9{ margin-bottom: 9px;}
- .MB10{ margin-bottom: 10px;}
- .MB11{ margin-bottom: 11px;}
- .MB12{ margin-bottom: 12px;}
- .MB13{ margin-bottom: 13px;}
- .MB14{ margin-bottom: 14px;}
- .MB15{ margin-bottom: 15px;}
- .MB16{ margin-bottom: 16px;}
- .MB17{ margin-bottom: 17px;}
- .MB18{ margin-bottom: 18px;}
- .MB19{ margin-bottom: 19px;}
- .MB20{ margin-bottom: 20px;}
- .MB21{ margin-bottom: 21px;}
- .MB22{ margin-bottom: 22px;}
- .MB23{ margin-bottom: 23px;}
- .MB24{ margin-bottom: 24px;}
- .MB25{ margin-bottom: 25px;}
- .MB26{ margin-bottom: 26px;}
- .MB27{ margin-bottom: 27px;}
- .MB28{ margin-bottom: 28px;}
- .MB29{ margin-bottom: 29px;}
- .MB30{ margin-bottom: 30px;}
- .MB40{ margin-bottom: 40px;}
- .MB50{ margin-bottom: 50px;}
- .MB100{ margin-bottom: 100px;}
- 
 
 
-.ML1{ margin-left: 1px;}
+
+
+
+  .MT1{ margin-top: 1px;}
+  .MT2{ margin-top: 2px;}
+  .MT3{ margin-top: 3px;}
+  .MT4{ margin-top: 4px;}
+  .MT5{ margin-top: 5px;}
+  .MT6{ margin-top: 6px;}
+  .MT7{ margin-top: 7px;}
+  .MT8{ margin-top: 8px;}
+  .MT9{ margin-top: 9px;}
+  .MT10{ margin-top: 10px;}
+  .MT11{ margin-top: 11px;}
+  .MT12{ margin-top: 12px;}
+  .MT13{ margin-top: 13px;}
+  .MT14{ margin-top: 14px;}
+  .MT15{ margin-top: 15px;}
+  .MT16{ margin-top: 16px;}
+  .MT17{ margin-top: 17px;}
+  .MT18{ margin-top: 18px;}
+  .MT19{ margin-top: 19px;}
+  .MT20{ margin-top: 20px;}
+  .MT21{ margin-top: 21px;}
+  .MT22{ margin-top: 22px;}
+  .MT23{ margin-top: 23px;}
+  .MT24{ margin-top: 24px;}
+  .MT25{ margin-top: 25px;}
+  .MT26{ margin-top: 26px;}
+  .MT27{ margin-top: 27px;}
+  .MT28{ margin-top: 28px;}
+  .MT29{ margin-top: 29px;}
+  .MT30{ margin-top: 30px;}
+  .MT40{ margin-top: 40px;}
+  .MT50{ margin-top: 50px;}
+  .MT100{ margin-top: 100px;}
+
+
+  .MR1{ margin-right: 1px;}
+  .MR2{ margin-right: 2px;}
+  .MR3{ margin-right: 3px;}
+  .MR4{ margin-right: 4px;}
+  .MR5{ margin-right: 5px;}
+  .MR6{ margin-right: 6px;}
+  .MR7{ margin-right: 7px;}
+  .MR8{ margin-right: 8px;}
+  .MR9{ margin-right: 9px;}
+  .MR10{ margin-right: 10px;}
+  .MR11{ margin-right: 11px;}
+  .MR12{ margin-right: 12px;}
+  .MR13{ margin-right: 13px;}
+  .MR14{ margin-right: 14px;}
+  .MR15{ margin-right: 15px;}
+  .MR16{ margin-right: 16px;}
+  .MR17{ margin-right: 17px;}
+  .MR18{ margin-right: 18px;}
+  .MR19{ margin-right: 19px;}
+  .MR20{ margin-right: 20px;}
+  .MR21{ margin-right: 21px;}
+  .MR22{ margin-right: 22px;}
+  .MR23{ margin-right: 23px;}
+  .MR24{ margin-right: 24px;}
+  .MR25{ margin-right: 25px;}
+  .MR26{ margin-right: 26px;}
+  .MR27{ margin-right: 27px;}
+  .MR28{ margin-right: 28px;}
+  .MR29{ margin-right: 29px;}
+  .MR30{ margin-right: 30px;}
+  .MR40{ margin-right: 40px;}
+  .MR50{ margin-right: 50px;}
+  .MR100{ margin-right: 100px;}
+
+  .MB1{ margin-bottom: 1px;}
+  .MB2{ margin-bottom: 2px;}
+  .MB3{ margin-bottom: 3px;}
+  .MB4{ margin-bottom: 4px;}
+  .MB5{ margin-bottom: 5px;}
+  .MB6{ margin-bottom: 6px;}
+  .MB7{ margin-bottom: 7px;}
+  .MB8{ margin-bottom: 8px;}
+  .MB9{ margin-bottom: 9px;}
+  .MB10{ margin-bottom: 10px;}
+  .MB11{ margin-bottom: 11px;}
+  .MB12{ margin-bottom: 12px;}
+  .MB13{ margin-bottom: 13px;}
+  .MB14{ margin-bottom: 14px;}
+  .MB15{ margin-bottom: 15px;}
+  .MB16{ margin-bottom: 16px;}
+  .MB17{ margin-bottom: 17px;}
+  .MB18{ margin-bottom: 18px;}
+  .MB19{ margin-bottom: 19px;}
+  .MB20{ margin-bottom: 20px;}
+  .MB21{ margin-bottom: 21px;}
+  .MB22{ margin-bottom: 22px;}
+  .MB23{ margin-bottom: 23px;}
+  .MB24{ margin-bottom: 24px;}
+  .MB25{ margin-bottom: 25px;}
+  .MB26{ margin-bottom: 26px;}
+  .MB27{ margin-bottom: 27px;}
+  .MB28{ margin-bottom: 28px;}
+  .MB29{ margin-bottom: 29px;}
+  .MB30{ margin-bottom: 30px;}
+  .MB40{ margin-bottom: 40px;}
+  .MB50{ margin-bottom: 50px;}
+  .MB100{ margin-bottom: 100px;}
+  
+
+
+  .ML1{ margin-left: 1px;}
 .ML2{ margin-left: 2px;}
 .ML3{ margin-left: 3px;}
 .ML4{ margin-left: 4px;}
@@ -289,7 +230,7 @@ table.n-table.n-table-debug th {
 
 
 
- 
+  
 .W1{ width: 1px;}
 .W2{ width: 2px;}
 .W3{ width: 3px;}
@@ -322,7 +263,7 @@ table.n-table.n-table-debug th {
 .W30{ width: 30px;}
 .W40{ width: 40px;}
 .W50{ width: 50px;}
-.W60{ width: 60px;}
+.W60{ width: 50px;}
 .W70{ width: 70px;}
 .W80{ width: 80px;}
 .W90{ width: 90px;}
@@ -360,7 +301,7 @@ table.n-table.n-table-debug th {
 .WP90{ width: 90%;}
 .WP95{ width: 95%;}
 .WP100 {width: 100%}
- 
+  
 .H1{ height: 1px;}
 .H2{ height: 2px;}
 .H3{ height: 3px;}
@@ -576,7 +517,6 @@ table.n-table.n-table-debug th {
 .P40{ padding: 40px;}
 .P50{ padding: 50px;}
 .P100{ padding: 100px;}
-
 .PT0{ padding-top: 0px;}
 .PT1{ padding-top: 1px;}
 .PT2{ padding-top: 2px;}
@@ -713,90 +653,237 @@ table.n-table.n-table-debug th {
 .PL40{ padding-left: 40px;}
 .PL50{ padding-left: 50px;}
 .PL100{ padding-left: 100px;}
-
-
-
-
-.LH12{ line-height: 12px;}
-.LH14{ line-height: 14px;}
-.LH16{ line-height: 16px;}
-.LH18{ line-height: 18px;}
-.LH20{ line-height: 20px;}
-.LH22{ line-height: 22px;}
-.LH24{ line-height: 24px;}
-.LH26{ line-height: 26px;}
-.LH28{ line-height: 28px;}
-.LH30{ line-height: 30px;}
-.LH32{ line-height: 32px;}
-.LH34{ line-height: 34px;}
-.LH36{ line-height: 36px;}
-.LH38{ line-height: 38px;}
-.LH40{ line-height: 40px;}
-.LH50{ line-height: 50px;}
  
- .FS12{
-   font-size: 12px;
- }
- .FS13{
-   font-size: 13px;
- }
- .FS14{
-   font-size: 14px;
- }
- .FS15{
-    font-size: 15px;
+
+
+
+  .LH12{ line-height: 12px;}
+  .LH14{ line-height: 14px;}
+  .LH16{ line-height: 16px;}
+  .LH18{ line-height: 18px;}
+  .LH20{ line-height: 20px;}
+  .LH22{ line-height: 22px;}
+  .LH24{ line-height: 24px;}
+  .LH26{ line-height: 26px;}
+  .LH28{ line-height: 28px;}
+  .LH30{ line-height: 30px;}
+  .LH32{ line-height: 32px;}
+  .LH34{ line-height: 34px;}
+  .LH36{ line-height: 36px;}
+  .LH38{ line-height: 38px;}
+  .LH40{ line-height: 40px;}
+  .LH50{ line-height: 50px;}
+  
+  .FS12{
+    font-size: 12px;
   }
- .FS16{
-   font-size: 16px;
- }
- .FS18{
-   font-size: 18px;
- }
- .FS20{
-   font-size: 20px;
- }
- .FS22{
-   font-size: 22px;
- }
- .FS24{
-   font-size: 24px;
- }
- .C_000{
-   color: #000;
- }
- .C_fff{
-   color: #fff;
- }
- .C_3a0{
-   color: #3a0;
- }
- .C_f00{
-   color: #f00;
- }
- .C_f30{
-   color: #f00;
- }
- .C_f60{
-   color: #f60;
- }
- .C_999{
-   color: #999;
- }
- .BC_fff{
-   background-color:  #fff;
+  .FS13{
+    font-size: 13px;
+  }
+  .FS14{
+    font-size: 14px;
+  }
+  .FS16{
+    font-size: 16px;
+  }
+  .FS18{
+    font-size: 18px;
+  }
+  .FS20{
+    font-size: 20px;
+  }
+  .FS22{
+    font-size: 22px;
+  }
+  .FS24{
+    font-size: 24px;
+  }
+  .C_000{
+    color: #000;
+  }
+  .C_fff{
+    color: #fff;
+  }
+  .C_3a0{
+    color: #3a0;
+  }
+  .C_f00{
+    color: #f00;
+  }
+  .C_f30{
+    color: #f30;
+  }
+  .C_f60{
+    color: #f60;
+  }
+  .C_999{
+    color: #999;
+  }
+  .BC_fff{
+    background-color:  #fff;
 }
 .BC_000{
-   background-color:  #000;
+    background-color:  #000;
 }
-.BC_f60{
-    background-color:  #f60;
- }
- .BC_f00{
-    background-color:  #f00;
- }
- .BC_3a0{
-    background-color:  #3a0;
- }
 .BC_ddd{
-  background-color:  #ddd;
+   background-color:  #ddd;
+}
+  .TI-9999{text-indent: -9999px;}
+  .WS1{white-space:nowrap;}
+  .TLA1{table-layout: fixed;}
+  
+ 
+/*公共弹窗样式-Start*/
+  .btn-primary {
+    color: #fff;
+    display: inline-block;
+    padding: 0 20px;
+    height: 28px;
+    line-height: 26px;
+    background: #0092dd;
+    cursor: pointer;
+    border: none;
+    font-size: 14px;
+    border-radius: 3px;
+}
+
+
+.btn-gray-white {
+  color: #666;
+  display: inline-block;
+  padding: 0 10px;
+  height: 22px;
+  line-height: 22px;
+  background: #f8f8f8;
+  border: 1px #ddd solid;
+  cursor: pointer;
+  font-size: 12px;
+  border-radius: 2px;
+}
+
+.dialogMain {
+    width: 1000px;
+    height: 520px;
+    background: #fff;
+    margin: auto;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 100;
+    border: 3px #999 solid;
+    border-radius: 5px;
+}
+.dialog-title-bar {
+    height: 40px;
+    padding: 0 0 0 10px;
+    background: #f0f0f0;
+}
+.dialog-title {
+    display: inline-block;
+    font-size: 18px;
+  margin-top: 11px;
+}
+.dialog-btn-close {
+    color: #666;
+    display: inline-block;
+    width: 30px;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 22px;
+}
+.dialogInner {
+    height: 420px;
+    overflow: auto;
+}
+.dialogCover {
+    position: fixed;
+    width: 100%;
+    height: 10000px;
+    background-color: #666;
+    top: 0px;
+    left: 0px;
+    opacity: 0.50;
+    -moz-opacity: 0.50;
+    filter: alpha(opacity=50);
+}
+  /*公共弹窗样式-End*/    
+  
+  /* table */
+
+table.table-normal {
+  border-collapse: collapse
+}
+
+table.table-normal td, table.table-normal th {
+  border: 1px solid #dddddd;
+  padding: 10px;
+}
+
+   /* n-table样式 */
+
+   table.n-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.n-table td,
+table.n-table th {
+    border: 1px solid #dddddd;
+    padding: 10px;
+}
+
+table.n-table.P5 td,
+table.n-table.P5 th {
+    padding: 5px;
+}
+table.n-table.n-table-form td,
+table.n-table.n-table-form th {
+    vertical-align: top;
+    font-size: 14px;
+    line-height: 28px
+}
+table.n-table.n-table-debug td,
+table.n-table.n-table-debug th {
+  border: 1px solid #F56C6C;
+}
+
+
+ /* n-table样式-针对element组件 */
+ .n-table-head .cell {
+  padding: 0;
+  font-weight: normal;
+}
+.n-table-row .cell {
+  padding: 0;
+  font-weight: normal;
+}
+
+
+/* 表单字段*/
+.n-input,.n-select{
+  height: 28px;
+  line-height: 28px;
+  padding: 0 0 0 10px;
+  border-radius: 4px;
+  border: 1px solid #DCDFE6;
+  
+  }
+  .n-textarea{
+    padding: 0 10px 0 10px;
+    border-radius: 4px;
+    border: 1px solid #DCDFE6;
+   }
+
+  /* 饿了么弹窗补丁，取消上方padding */
+   .n-el-dialog .el-dialog__body{
+    padding-top:0;
+  }
+
+
+[v-cloak] {
+    display: none
 }
