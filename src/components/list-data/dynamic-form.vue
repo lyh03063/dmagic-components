@@ -182,7 +182,15 @@
                 :list-type="item.collectionlistType"
                 :show-toolbar="item.showToolbar"
                 :cf-form="item.collectionCfForm"
-              ></collection>
+                :cfElBtnAdd="item.cfElBtnAdd"
+                :dataSlot="item.dataSlot"
+              >
+                <!--递归插槽-->
+                <template v-slot:[item.dataSlot]="{doc}">
+                  <!--输出插槽-->
+                  <slot :name="item.dataSlot" v-if="item.dataSlot" :doc="doc"></slot>
+                </template>
+              </collection>
               <!--如果是图片上传控件-->
               <upload_img
                 v-model="formDataNeed[item.prop]"
@@ -230,10 +238,15 @@
               <!--numberRange数字范围-->
 
               <template class v-else-if="item.type=='numberRange'">
-                    <!--如果prop存在-->
-                <number_range class=""  v-model="formDataNeed[item.prop]" v-bind="item" v-if="item.prop" ></number_range>
-                  <!--如果prop不存在，传入整个formDataNeed-->
-                <number_range class=""  v-model="formDataNeed" v-bind="item" v-else ></number_range>
+                <!--如果prop存在-->
+                <number_range
+                  class
+                  v-model="formDataNeed[item.prop]"
+                  v-bind="item"
+                  v-if="item.prop"
+                ></number_range>
+                <!--如果prop不存在，传入整个formDataNeed-->
+                <number_range class v-model="formDataNeed" v-bind="item" v-else></number_range>
               </template>
 
               <!--文本-->
@@ -531,15 +544,19 @@ export default {
         this.value[itemEach.prop] || itemEach.default;
     });
 
+    let ajaxParam = {
+      [this.cf.idKey == "_id" ? "_id" : "id"]: this.value[this.cf.idKey]
+    };
+    Object.assign(ajaxParam, this.cf.paramAddonInit); //合并对象
+    console.log("ajaxParam:", ajaxParam);
+
     //如果初始化的ajax地址存在
     if (this.cf.urlInit) {
       let { data } = await axios({
         //请求接口
         method: "post",
         url: (PUB.domain || "") + this.cf.urlInit, //注意运算符要用括号
-        data: this.cf.paramInit || {
-          id: this.value.P1
-        } //传递参数
+        data: ajaxParam //传递参数
       });
       this.docGet = data.Doc; //这里要使用大写的Doc
     }

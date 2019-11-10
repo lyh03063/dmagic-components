@@ -5,6 +5,10 @@
     </dm_debug_list>
 
     <dm_dynamic_form :cf="cfForm" v-model="formData">
+       <!--自定义集合数据插槽组件-->
+      <template v-slot:slot_collection1="{doc}">
+        doc:{{doc}}
+      </template>
       <!--自定义复选框插槽组件-->
       <template v-slot:slot_form_item_diycheckbox="{formData}">
         <checkbox_diy v-model="formData.diycheckbox" :options="options"></checkbox_diy>
@@ -241,6 +245,54 @@ export default {
         labelWidth: "150px",
 
         formItems: [
+           {
+            label: "集合（带工具栏和插槽）1",
+            style: { "margin-top": "50px" }, //自定义样式
+            prop: "collection1",
+            type: "collection",
+            // collectionlistType: "form",
+            dataSlot:"slot_collection1",//自定义数据插槽
+            cfElBtnAdd:{//自定义“新增”按钮
+              text:"+添加一组",
+              type:"primary",
+              size:"large",plain:false
+            },
+            collectionCfForm: {
+              col_span: 12,
+              formItems: [
+                {
+                  label: "时间",
+                  prop: "time",
+                  type: "date"
+                },
+                {
+                  label: "金额",
+                  prop: "money"
+                }
+              ]
+            }
+          },
+          {
+            label: "集合（无工具栏）",
+            prop: "collection2",
+            type: "collection",
+            collectionlistType: "form",
+            showToolbar: false, //不显示集合的工具栏
+            collectionCfForm: {
+              col_span: 12,
+              formItems: [
+                {
+                  label: "时间",
+                  prop: "time",
+                  type: "date"
+                },
+                {
+                  label: "金额",
+                  prop: "money"
+                }
+              ]
+            }
+          },
           {
             label: "数字范围",
             prop111: "prop_numberRange",
@@ -263,296 +315,7 @@ export default {
               }
             ]
           },
-          // {
-          //   label: "派成权限",
-
-          //   prop: "power_paicheng",
-          //   default: {},
-          //   cfForm: {
-          //     labelWidth: "150px",
-          //     formItems: [
-          //       {
-          //         label: "首页",
-          //         prop: "home",
-          //         style: styleMenuGPowerItem,
-          //         default: {},
-          //         cfForm: {
-          //           col_span: 12,
-          //           formItems: [
-          //             {
-          //               prop: "home",
-          //               style: styleMenuPowerItem,
-          //               cfForm: getFormMenuGPowerSimple({ menuName: "首页" })
-          //             },
-          //             {
-          //               prop: "companyIntro",
-          //               style: styleMenuPowerItem,
-          //               cfForm: getFormMenuGPowerSimple({
-          //                 menuName: "公司介绍"
-          //               })
-          //             }
-          //           ]
-          //         }
-          //       },
-          //       {
-          //         label: "基础数据",
-          //         prop: "baseData",
-          //         style: styleMenuGPowerItem,
-          //         default: {},
-          //         cfForm: {
-          //           col_span: 12,
-          //           formItems: [
-          //             {
-          //               prop: "list_projectBid",
-          //               style: styleMenuPowerItem,
-          //               cfForm: getFormMenuGPower({ menuName: "项目信息" })
-          //             },
-          //             {
-          //               prop: "list_projectContract",
-          //               style: styleMenuPowerItem,
-          //               cfForm: getFormMenuGPower({ menuName: "项目合同" })
-          //             },
-          //             {
-          //               prop: "list_operator",
-          //               style: styleMenuPowerItem,
-          //               cfForm: getFormMenuGPower({ menuName: "经办人" })
-          //             },
-          //             {
-          //               prop: "list_partyA",
-          //               style: styleMenuPowerItem,
-          //               cfForm: getFormMenuGPower({ menuName: "甲方" })
-          //             }
-          //           ]
-          //         }
-          //       },
-          //       {
-          //         label: "财务管理",
-          //         prop: "financial",
-          //         style: styleMenuGPowerItem,
-          //         default: {},
-          //         cfForm: {
-          //           col_span: 12,
-          //           formItems: [
-          //             {
-          //               prop: "list_invoice",
-          //               style: styleMenuPowerItem,
-          //               cfForm: getFormMenuGPower({ menuName: "开票" })
-          //             },
-          //             {
-          //               prop: "list_return",
-          //               style: styleMenuPowerItem,
-          //               cfForm: getFormMenuGPower({ menuName: "回款记录" })
-          //             },
-          //             {
-          //               prop: "list_payNotice",
-          //               style: styleMenuPowerItem,
-          //               cfForm: getFormMenuGPower({ menuName: "付款通知" })
-          //             }
-          //           ]
-          //         }
-          //       },
-          //       {
-          //         label: "运营台账",
-          //         prop: "ledger",
-          //         style: styleMenuGPowerItem,
-          //         default: {},
-          //         cfForm: {
-          //           col_span: 12,
-          //           formItems: [
-          //             {
-          //               prop: "performanceStatistics",
-          //               style: styleMenuPowerItem,
-          //               cfForm: getFormMenuGPowerSimple({
-          //                 menuName: "人员绩效"
-          //               })
-          //             },
-          //             {
-          //               prop: "bussinessOperationMonthly",
-          //               style: styleMenuPowerItem,
-          //               cfForm: getFormMenuGPowerSimple({
-          //                 menuName: "业务经营情况"
-          //               })
-          //             }
-          //           ]
-          //         }
-          //       },
-          //       {
-          //         label: "系统管理",
-          //         prop: "systemManage",
-          //         style: styleMenuGPowerItem,
-          //         default: {},
-          //         cfForm: {
-          //           col_span: 12,
-          //           formItems: [
-          //             {
-          //               prop: "list_member",
-          //               style: styleMenuPowerItem,
-          //               cfForm: getFormMenuGPower({ menuName: "管理员" })
-          //             },
-          //             {
-          //               prop: "list_role",
-          //               style: styleMenuPowerItem,
-          //               cfForm: getFormMenuGPower({ menuName: "角色" })
-          //             }
-          //           ]
-          //         }
-          //       }
-          //     ]
-          //   }
-          // },
-
-          // {
-          //   label: "权限",
-
-          //   prop: "power",
-          //   default: {},
-          //   cfForm: {
-          //     labelWidth: "150px",
-          //     formItems: [
-          //       {
-          //         label: "赛事中心",
-          //         prop: "matchCenter",
-          //         style: styleMenuGPowerItem,
-          //         default: {},
-          //         cfForm: {
-          //           col_span: 12,
-          //           formItems: [
-          //             {
-          //               // label: "赛事列表",
-          //               prop: "list_match",
-          //               style: styleMenuPowerItem,
-          //               cfForm: getFormMenuGPower({ menuName: "赛事列表" })
-          //             },
-          //             {
-          //               // label: "成绩列表",
-          //               prop: "list_achievement",
-          //               style: styleMenuPowerItem,
-          //               cfForm: getFormMenuGPower({ menuName: "成绩列表" })
-          //             },
-          //             {
-          //               prop: "list_enroll",
-          //               style: styleMenuPowerItem,
-          //               cfForm: getFormMenuGPower({ menuName: "报名列表" })
-          //             },
-          //             {
-          //               prop: "list_rule",
-          //               style: styleMenuPowerItem,
-          //               cfForm: getFormMenuGPower({ menuName: "规则库" })
-          //             },
-          //             {
-          //               prop: "list_team",
-          //               style: styleMenuPowerItem,
-          //               cfForm: getFormMenuGPower({ menuName: "球队" })
-          //             }
-          //           ]
-          //         }
-          //       },
-          //       {
-          //         label: "球员信息库",
-          //         prop: "memberCenter",
-          //         style: styleMenuGPowerItem,
-          //         default: {},
-          //         cfForm: {
-          //           col_span: 12,
-          //           formItems: [
-          //             {
-          //               // label: "资讯列表",
-          //               prop: "list_member",
-          //               style: styleMenuPowerItem,
-          //               cfForm: getFormMenuGPower({ menuName: "球员" })
-          //             }
-          //           ]
-          //         }
-          //       },
-          //       {
-          //         label: "资讯中心",
-          //         prop: "newsCenter",
-          //         style: styleMenuGPowerItem,
-          //         default: {},
-          //         cfForm: {
-          //           col_span: 12,
-          //           formItems: [
-          //             {
-          //               // label: "资讯列表",
-          //               prop: "list_article",
-          //               style: styleMenuPowerItem,
-          //               cfForm: getFormMenuGPower({ menuName: "资讯列表" })
-          //             },
-          //             {
-          //               // label: "资讯分类",
-          //               prop: "list_article_category",
-          //               style: styleMenuPowerItem,
-          //               cfForm: getFormMenuGPower({ menuName: "资讯分类" })
-          //             }
-          //           ]
-          //         }
-          //       },
-          //       {
-          //         label: "招商管理",
-          //         prop: "sponsorCenter",
-          //         style: styleMenuGPowerItem,
-          //         default: {},
-          //         cfForm: {
-          //           col_span: 12,
-          //           formItems: [
-          //             {
-          //               prop: "list_sponsor",
-          //               style: styleMenuPowerItem,
-          //               cfForm: getFormMenuGPower({ menuName: "赞助商" })
-          //             },
-          //             {
-          //               prop: "list_sponsorship",
-          //               style: styleMenuPowerItem,
-          //               cfForm: getFormMenuGPower({ menuName: "赛事赞助" })
-          //             }
-          //           ]
-          //         }
-          //       },
-          //       {
-          //         label: "系统消息",
-          //         prop: "msgCenter",
-          //         style: styleMenuGPowerItem,
-          //         default: {},
-          //         cfForm: {
-          //           col_span: 12,
-          //           formItems: [
-          //             {
-          //               prop: "list_msg",
-          //               style: styleMenuPowerItem,
-          //               cfForm: getFormMenuGPower({ menuName: "消息列表" })
-          //             },
-          //             {
-          //               prop: "list_msg_read",
-          //               style: styleMenuPowerItem,
-          //               cfForm: getFormMenuGPower({ menuName: "消息已读记录" })
-          //             }
-          //           ]
-          //         }
-          //       },
-          //       {
-          //         label: "系统管理",
-          //         prop: "systemManage",
-          //         style: styleMenuGPowerItem,
-          //         default: {},
-          //         cfForm: {
-          //           col_span: 12,
-          //           formItems: [
-          //             {
-          //               prop: "list_admin",
-          //               style: styleMenuPowerItem,
-          //               cfForm: getFormMenuGPower({ menuName: "管理员" })
-          //             },
-          //             {
-          //               prop: "list_role",
-          //               style: styleMenuPowerItem,
-          //               cfForm: getFormMenuGPower({ menuName: "角色" })
-          //             }
-          //           ]
-          //         }
-          //       }
-          //     ]
-          //   }
-          // },
+      
 
           {
             label: "用于模糊查询文本框(input_find_vague)",
@@ -716,48 +479,7 @@ export default {
               ]
             }
           },
-          {
-            label: "集合（带工具栏）1",
-            style: { "margin-top": "50px" }, //自定义样式
-            prop: "collection1",
-            type: "collection",
-            collectionlistType: "form",
-            collectionCfForm: {
-              col_span: 12,
-              formItems: [
-                {
-                  label: "时间",
-                  prop: "time",
-                  type: "date"
-                },
-                {
-                  label: "金额",
-                  prop: "money"
-                }
-              ]
-            }
-          },
-          {
-            label: "集合（无工具栏）",
-            prop: "collection2",
-            type: "collection",
-            collectionlistType: "form",
-            showToolbar: false, //不显示集合的工具栏
-            collectionCfForm: {
-              col_span: 12,
-              formItems: [
-                {
-                  label: "时间",
-                  prop: "time",
-                  type: "date"
-                },
-                {
-                  label: "金额",
-                  prop: "money"
-                }
-              ]
-            }
-          },
+         
           {
             label: "文件上传2",
             prop: "prop_upload2",
@@ -788,72 +510,7 @@ export default {
           { text: "取消222", event: "cancel" }
         ]
       },
-      dictEnroolTeam: {
-        "16": {
-          _id: "5d8dd92899aefd5e14b3ece8",
-          P1: 16,
-          createMemberId: 57,
-          matchId: 86,
-          member: [
-            { phone: "1341502", sex: 1, name: "lfhh" },
-            { phone: "13415028975", sex: 1, name: "lxc" }
-          ],
-          CreateUser: "匿名",
-          name: "唐球",
-          orderId: "20190927174056365"
-        },
-        "18": {
-          _id: "5d8f0c783eaaa91a1dbea4b7",
-          P1: 18,
-          matchId: 86,
-          name: "aa",
-          member: [{ name: "sss", sex: 1, phone: "13415028976" }],
-          orderId: "EO1569655913515",
-          CreateUser: "匿名"
-        },
-        "19": {
-          _id: "5d8f631b3eaaa91a1dbea4c6",
-          P1: 19,
-          name: "西游队",
-          createMemberId: 91,
-          matchId: 86,
-          member: [
-            { _exit: true, name: "孙悟空", sex: "1", phone: "13100000001" },
-            { _exit: true, name: "猪八戒", phone: "13100000004", sex: "1" },
-            { _exit: true, name: "唐僧", phone: "13100000003", sex: "1" },
-            { _exit: true, name: "白骨精", sex: "2", phone: "13100000002" }
-          ],
-          CreateUser: "匿名",
-          orderId: "t2"
-        },
-        "20": {
-          _id: "5d8f652e3eaaa91a1dbea4c9",
-          P1: 20,
-          name: "海贼队",
-          createMemberId: 92,
-          matchId: 86,
-          member: [
-            { phone: "13100001004", sex: "1", name: "乌索普", _exit: true },
-            { phone: "13100001003", sex: "2", name: "娜美", _exit: true },
-            { phone: "13100001002", sex: "2", name: "乔巴", _exit: true },
-            { phone: "13100001001", sex: "1", name: "路飞", _exit: true }
-          ],
-          CreateUser: "匿名",
-          orderId: "t1"
-        },
-        "23": {
-          _id: "5d91b42030d3ca2327ff8358",
-          P1: 23,
-          matchId: 86,
-          name: "1311",
-          member: [
-            { phone: "", sex: 1, name: "222" },
-            { phone: "", sex: 1, name: "11111" }
-          ],
-          orderId: "EO1569829896020",
-          CreateUser: "匿名"
-        }
-      },
+     
       test: null,
       options: [
         { label: "label1", value: "1" },

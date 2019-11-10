@@ -11,7 +11,8 @@
     >
       <el-menu-item index="form_demo" route="/form_demo">表单</el-menu-item>
       <el-menu-item index="list_demo" route="/list_demo">列表</el-menu-item>
-       <el-menu-item index="list_static_demo" route="/list_static_demo">静态列表</el-menu-item>
+      <el-menu-item index="list_static_demo" route="/list_static_demo">静态列表</el-menu-item>
+      <el-menu-item index="list_common_demo" route="/list_common_demo">通用列表</el-menu-item>
       <el-menu-item index="upload_qiniu" route="/upload_qiniu">上传七牛云</el-menu-item>
       <el-menu-item index="test" route="/test">测试</el-menu-item>
     </el-menu>
@@ -44,7 +45,7 @@ export default {
       // //
       // return '2'
       // //当前激活的菜单index
-       return this.$store.state.activeMenuIndex; //从vuex的store里面读取值
+      return this.$store.state.activeMenuIndex; //从vuex的store里面读取值
     },
     cfData: function() {
       return this.$store.state.cfData;
@@ -106,7 +107,7 @@ export default {
   position: fixed;
   left: 0;
   top: 0;
-  margin: 60px 0 0
+  margin: 60px 0 0;
 }
 .left-box {
   flex: 1;

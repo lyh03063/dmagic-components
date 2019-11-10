@@ -5,7 +5,7 @@
       <dm_debug_item v-model="valueNeed" text="valueNeed" />
     </dm_debug_list>
     <!-- 这里不能使用MB8样式，会被element自带覆盖 -->
-    <el-button plain @click="addGroup" size="mini" v-if="showToolbar" style="margin-bottom:8px">添加一组</el-button>
+    <el-button @click="addGroup" v-if="showToolbar" v-bind="cfElBtnAdd">{{cfElBtnAdd.text}}</el-button>
 
     <div class v-if="valueNeed && valueNeed.length">
       <ul>
@@ -17,18 +17,20 @@
           @mouseleave="focusItem=999"
           @dblclick="editItem=i"
         >
+          <i class="sort-num" v-if="listType!='form'">{{i+1}}</i>
           <div v-if="editItem==i">
             <!--注意这里v-model要直接绑定valueNeed才行-->
             <json_editor v-model="valueNeed[i]" @blur="afterBlur"></json_editor>
           </div>
-          <div class v-else>
+          <template class v-else>
             <dm_dynamic_form
               ref="dynamicForm"
               :cf="cfForm"
               v-model="valueNeed[i]"
               v-if="listType=='form'"
             ></dm_dynamic_form>
-            <span v-else>{{doc}}</span>
+            <slot v-else-if="dataSlot" :name="dataSlot" :doc="handelShowDoc(doc)"></slot>
+            <span v-else>{{handelShowDoc(doc)}}</span>
             <div class="tool-bar" v-if="focusItem==i&&showToolbar">
               <i class="el-icon-top btn-op" title="上移" @click="move(i, 'up')" v-if="i>0"></i>
               <i
@@ -51,7 +53,7 @@
               ></i>
               <i class="el-icon-delete btn-op" title="删除" @click="deleteData(i)"></i>
             </div>
-          </div>
+          </template>
         </li>
         <li></li>
       </ul>
@@ -71,6 +73,9 @@
       <div class>
         <!--注意这里v-model要直接绑定valueNeed才行-->
         <dm_dynamic_form :cf="cfForm" v-model="valueNeed[editIndex]"></dm_dynamic_form>
+        <div class="TAC">
+          <el-button type="primary" @click="showDialog=false" size="normal">确定</el-button>
+        </div>
       </div>
     </el-dialog>
   </div>
@@ -87,6 +92,14 @@ export default {
   },
   mixins: [MIX.form_item], //混入
   props: {
+    dataSlot: String,
+    //新增按钮配置
+    cfElBtnAdd: {
+      type: Object,
+      default: function() {
+        return {};
+      }
+    },
     listType: {
       default: "bar"
     },
@@ -96,15 +109,6 @@ export default {
 
     cfForm: {
       type: Object
-      // default: function() {
-      //   return {
-
-      //     // btns: [
-      //     //   { text: "保存", event: "submit", type: "primary", validate: true },
-      //     //   { text: "取消", event: "cancel" }
-      //     // ]
-      //   };
-      // }
     }
   },
   watch: {
@@ -131,6 +135,13 @@ export default {
   },
 
   methods: {
+    //处理线上doc的函数
+    handelShowDoc(doc) {
+      //深拷贝
+      var docNew = lodash.cloneDeep(doc);
+      delete docNew.__id;
+      return docNew;
+    },
     /**
      * @name 添加一组对象
      */
@@ -138,8 +149,8 @@ export default {
     addGroup() {
       console.log("addGroup:");
 
-      //__id为了防止新增一组时出现残留值
-      let obj = { _exit: true, __id: util.getTimeRandom() }; //_exit是为了防止出现空对象
+      //__id为了防止新增一组时出现残留值,防止出现空对象
+      let obj = { __id: util.getTimeRandom() }; //
       this.cfForm.formItems.forEach(itemEach => {
         if (itemEach.default !== null && itemEach.default !== undefined) {
           //如果默认值存在
@@ -174,14 +185,19 @@ export default {
     },
     deleteData: async function(index) {
       this.valueNeed.splice(index, 1); //从下标为1的元素开始删除1个元素.
-      // let clickStatus = await this.$confirm("确定删除该数据？").catch(() => {});
-      // if (clickStatus == "confirm") {
-      //   //如果点击了确定
-
-      // }
     }
   },
-  created() {}
+  created() {
+    //按钮默认配置
+    let cfElBtnAddDefault = {
+      plain: true,
+      size: "mini",
+      text: "添加一组",
+      style: "margin-bottom:8px"
+    };
+    //调用：{给一个对象设置默认属性函数}
+    util.setObjDefault(this.cfElBtnAdd, cfElBtnAddDefault);
+  }
 };
 </script>
 
@@ -193,7 +209,6 @@ export default {
   line-height: 26px;
   background-color: #f0f0f0;
   margin: 0 0 10px 0;
-  padding: 0 6px;
   overflow: hidden;
 }
 
@@ -207,7 +222,8 @@ export default {
   top: 0;
   height: 100%;
   background: rgba(3, 3, 3, 0.5);
-
+  height: 26px;
+  line-height: 26px;
   color: #fff;
   padding: 0 10px;
 }
@@ -235,5 +251,16 @@ export default {
   left: 0;
   right: auto;
   border-bottom-right-radius: 10px;
+}
+
+.sort-num {
+  text-align: center;
+  height: 26px;
+  line-height: 26px;
+  width: 20px;
+  display: inline-block;
+  background: #c5c1c1;
+  color: #fff;
+  font-style: normal;
 }
 </style>

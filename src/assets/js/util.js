@@ -1,7 +1,7 @@
 
 window.PUB = {}
-window.PUB.domain = "http://120.76.160.41:3000"
-// window.PUB.domain = "http://localhost:3000"
+//window.PUB.domain = "http://120.76.160.41:3000"
+ window.PUB.domain = "http://localhost:3000"
 //window.PUB.domain = 'http://test.dmagic.cn'
 // window.PUB.urlUpload = `${PUB.domain}/api_third_part/qiniu_upload?scope=test`
 window.PUB.urlUpload = `https://up-z2.qiniup.com`//七牛云上传地址（域名）
@@ -184,22 +184,23 @@ util.getTimeRandom = function () {
 //#region toFixed/money:将数字转换成保留小数点，默认2位
 util.toFixed = function (num, length = 2) {
   let result;
-  if (isNaN(num) || num == 0 || num === undefined) {//结果为数字
-    num = 0;
+  if (isNaN(num)||num==0||num===undefined||num===null) {//结果为数字
+      num = 0;
   }
   result = Number(num.toFixed(length));
   return result
 }
+util.money=util.toFixed;
 //#endregion
 
 //#region handelItem:处理字段数组的某个字段配置的函数
 
 
 util.handelItem = function (cf) {
-  let { action, items, prop, itemNew,key="prop" } = cf;
-  if(!items)return;
+  let { action, items, prop, itemNew, key = "prop" } = cf;
+  if (!items) return;
   let index = items.findIndex(item => item[key] == prop);
-  if (index<0) return;//找不到目标，return
+  if (index < 0) return;//找不到目标，return
   if (action == "replace") {//Q1:replace
     this.$set(items, index, itemNew); //修改memberId对应的字段配置
   } else if (action == "delete") { //Q2:delete
@@ -222,23 +223,23 @@ util.setListPower = function (cfList) {
   //如果没有新增权限
   if (!hasPowerAdd) {
     //删除新增按钮
-    util.handelItem({items:cfList.batchBtns.addon,action:"delete",key:"eventType",prop:"add"})
+    util.handelItem({ items: cfList.batchBtns.addon, action: "delete", key: "eventType", prop: "add" })
   }
   let hasPowerDelete = lodash.get(window.rolePower, `${powerPath}.delete`);
-   //如果没有删除权限
+  //如果没有删除权限
   if (!hasPowerDelete) {
     //删除单项删除按钮
-    util.handelItem({items:cfList.singleBtns.addon,action:"delete",key:"eventType",prop:"delete"})
+    util.handelItem({ items: cfList.singleBtns.addon, action: "delete", key: "eventType", prop: "delete" })
     //删除批量删除按钮
-    util.handelItem({items:cfList.batchBtns.addon,action:"delete",key:"eventType",prop:"delete"})
+    util.handelItem({ items: cfList.batchBtns.addon, action: "delete", key: "eventType", prop: "delete" })
   }
 
   let hasPowerModify = lodash.get(window.rolePower, `${powerPath}.modify`);
-   //如果没有修改权限
+  //如果没有修改权限
   if (!hasPowerModify) {
     //删除单选修改按钮
-    util.handelItem({items:cfList.singleBtns.addon,action:"delete",key:"eventType",prop:"modify"})
-   
+    util.handelItem({ items: cfList.singleBtns.addon, action: "delete", key: "eventType", prop: "modify" })
+
   }
   return cfList
 };
@@ -312,6 +313,20 @@ util.cfList.sBtns.delete = {
 }
 
 
+//#endregion
+
+//#region setObjDefault:给一个对象设置默认属性（但不整个替换对象，并且默认属性优先级低于已有属性）
+util.setObjDefault = function (obj, objDeault) {
+  //for of循环遍历对象，for of不能直接处理对象，本质上是同个Object.keys拼装一个新数组进行辅助
+  console.log("Object.objDeault结果", Object.keys(objDeault));
+  for (var key of Object.keys(objDeault)) {
+    if (obj[key] === null || obj[key] === undefined) {//如果属性不存在
+      obj[key] = objDeault[key]
+    }
+  }
+
+
+}
 //#endregion
 
 

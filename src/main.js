@@ -49,6 +49,7 @@ Vue.use(VueRouter)
 import form_demo from './page/form_demo.vue';   //导入form_demo
 import list_demo from './page/list_demo.vue';   //导入list_demo
 import list_static_demo from './page/list_static_demo.vue';   //导入list_static_demo
+import list_common_demo from './page/list_common_demo.vue';   //导入list_common_demo
 import upload_qiniu from './page/upload_qiniu.vue';   //导入upload_qiniu
 import test from './page/test.vue';   //导入test
 // 3. 创建 router 实例，然后传 `routes` 配置
@@ -58,6 +59,7 @@ const router = new VueRouter({
     { path: '/form_demo', component: form_demo },
     { path: '/list_demo', component: list_demo },
     { path: '/list_static_demo', component: list_static_demo },
+    { path: '/list_common_demo', component: list_common_demo },
     { path: '/upload_qiniu', component: upload_qiniu },
     { path: '/test', component: test },
   ]

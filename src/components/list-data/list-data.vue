@@ -50,7 +50,7 @@
     <!--主列表-->
 
     <el-table
-    v-bind="cf.cfElTable"
+      v-bind="cf.cfElTable"
       highlight-current-row
       ref="table"
       :data="tableData"
@@ -59,13 +59,14 @@
       :cell-style="{padding:'5px'}"
       :header-cell-style="{padding:'5px'}"
       style="width: 100%;"
+      @sort-change="sortChange"
       @selection-change="selectionChange"
     >
       <el-table-column
         fixed
-        label="id"
-        prop="P1"
-        :width="40"
+        label="Id"
+        :prop="cf.idKey"
+        :width="26"
         type="selection"
         v-if="cf.isShowCheckedBox"
       ></el-table-column>
@@ -93,6 +94,7 @@
           :type="column.type"
           :fixed="column.fixed"
           :formatter="column.formatter"
+          :sortable="column.sortable"
           :show-overflow-tooltip="true"
           :key="column.__id"
         >
@@ -105,7 +107,7 @@
             <a
               class="link-blue"
               href="javascript:;"
-              @click="filterData({pid:scope.row.P1,listIndex:column.statistics.listIndex, targetIdKey:column.statistics.targetIdKey})"
+              @click="filterData({pid:scope.row[cf.idKey],listIndex:column.statistics.listIndex, targetIdKey:column.statistics.targetIdKey})"
               v-else-if="column.statistics"
             >{{scope.row[column.prop]}}</a>
             <!--Q4:其他-->
@@ -127,7 +129,7 @@
                 :class="item.class"
                 :target="item.target"
                 :title="item.title"
-                :href="item.url?item.url+scope.row.P1:'javascript:;'"
+                :href="item.url?item.url+scope.row[cf.idKey]:'javascript:;'"
                 :key="index"
               >
                 <el-button
@@ -151,10 +153,12 @@
     <div class="OFH">
       <el-pagination
         background
-        layout="total,prev, pager, next"
+        layout="total, sizes, prev, pager, next, jumper"
         @current-change="handleCurrentChange"
         :total="allCount"
         :pageSize="objParam.pageSize"
+        :page-sizes="[2,10,20,50,100, 200]"
+        @size-change="handleSizeChange"
         style="float:right;margin:10px 0 0 0;"
         v-if="cf.isShowPageLink"
       ></el-pagination>
@@ -233,7 +237,6 @@ export default {
   },
 
   watch: {
-   
     "cf.objParamAddon": {
       handler(newName, oldName) {
         Object.assign(this.objParam, this.cf.objParamAddon); //合并对象
@@ -245,6 +248,35 @@ export default {
   },
 
   methods: {
+    //每页显示数量变动后的回调函数
+    handleSizeChange(val) {
+      this.objParam.pageSize = val;
+      this.getDataList(); //第一次加载此函数，页面才不会空
+    },
+    //排序变动后的回调函数
+    sortChange(param) {
+      //order: "descending","ascending"
+      //排序规则值数据字典
+      let dict1 = {
+        descending: -1,
+        ascending: 1
+      };
+      let sortJsonCurr = {}; //本次排序参数
+      let sortRule = dict1[param.order]; //排序规则值
+      //如果{排序规则值}存在
+      if (sortRule) {
+        sortJsonCurr[param.prop] = sortRule;
+      }
+
+      //拼接排序参数
+      this.objParam.sortJson = Object.assign(
+        {},
+        this.cf.sortJsonDefault,
+        sortJsonCurr
+      );
+
+      this.getDataList(); //第一次加载此函数，页面才不会空
+    },
     //选择数据
     selectionChange(val) {
       console.log("selectionChange");
@@ -302,7 +334,7 @@ export default {
       if (selects.length > 0) {
         var arr = [];
         for (let i = 0; i < selects.length; i++) {
-          arr.push(selects[i].P1);
+          arr.push(selects[i][this.cf.idKey]);
         }
         //  调用方法删除数据
         this.confirmDelete(arr);
@@ -327,17 +359,24 @@ export default {
     async showDetail(row) {
       //判断详情接口是否存在，如果存在，进行ajax请求
       this.$emit("after-show-Dialog-Detail", row);
+
+      let ajaxParam = {
+        //键名根据idKey进行判断
+        [this.cf.idKey == "_id" ? "_id" : "id"]: row[this.cf.idKey]
+      };
+      Object.assign(ajaxParam, this.cf.paramAddonPublic); //合并公共参数
+
+      console.log("ajaxParam:", ajaxParam);
+
       if (this.cf.url.detail) {
         //如果{详情ajax地址}存在
         let { data } = await axios({
           //请求接口
           method: "post",
           url: PUB.domain + this.cf.url.detail,
-          data: {
-            id: row.P1
-          } //传递参数
+          data: ajaxParam //传递参数
         });
-        row = data.Doc;
+        row = data.Doc || data.doc; //兼容大小写的doc***针对多种接口
       }
 
       this.$store.commit("openDialogDetail", {
@@ -358,24 +397,39 @@ export default {
         let idType = util.type(dataId);
         //如果是id数组（批量删除）
         if (idType == "array") {
-          deleteData = this.tableData.filter(doc => dataId.includes(doc.P1));
+          deleteData = this.tableData.filter(doc =>
+            dataId.includes(doc[this.cf.idKey])
+          );
         } else {
-          deleteData = [this.tableData.find(doc => doc.P1 == dataId)];
+          deleteData = [
+            this.tableData.find(doc => doc[this.cf.idKey] == dataId)
+          ];
         }
         deleteData = util.deepCopy(deleteData);
         //Q1:{删除数据接口}存在
         if (this.cf.url.delete) {
+          let ajaxParam ;
+
+          if (this.cf.idKey == "_id") {
+            ajaxParam = {
+              _id: dataId,
+              
+            };
+          } else {
+            ajaxParam = {
+              findJson: {
+                //用于定位要修改的数据
+                [this.cf.idKey]: dataId
+              }
+            };
+          }
+          Object.assign(ajaxParam, this.cf.paramAddonPublic); //合并公共参数
           //用户点击了确认
           await axios({
             //请求接口
             method: "post",
             url: PUB.domain + this.cf.url.delete,
-            data: {
-              findJson: {
-                //用于定位要修改的数据
-                P1: dataId
-              }
-            } //传递参数
+            data: ajaxParam //传递参数
           }).catch(function(error) {
             alert("异常:" + error);
           });
@@ -385,14 +439,12 @@ export default {
             this.getDataList(); //更新数据列表
           }
         } else {
-   
-          let arrId = deleteData.map(doc => doc.P1); //删除的id数组
-          console.log("arrId:", arrId);
+          let arrId = deleteData.map(doc => doc[this.cf.idKey]); //删除的id数组
           //过滤出剩余数据
           this.tableData = this.tableData.filter(
-            doc => !arrId.includes(doc.P1)
+            doc => !arrId.includes(doc[this.cf.idKey])
           );
-          console.log("this.tableData:", this.tableData);
+          this.$emit("input", this.tableData); //****触发外部value的改变，使用watch的话不太好，会有延迟
         }
 
         this.$message({
@@ -473,22 +525,26 @@ export default {
   },
 
   created() {
-    console.log("this.cf:", this.cf);
-     //列表配置对象样式
-      this.cf.cfElTable=this.cf.cfElTable||{}
-      //表头样式
-      this.cf.cfElTable["header-row-class-name"]= this.cf.cfElTable["header-row-class-name"]||"n-table-head"
-      this.cf.cfElTable["row-class-name"]= this.cf.cfElTable["row-class-name"]||"n-table-row"
+    //调用：{给一个对象设置默认属性函数}
+    util.setObjDefault(this.cf, {
+      idKey: "P1",
+      isMultipleSelect: true,
+      isShowCheckedBox: true,
+      isShowSearchForm: true,
+      isShowBreadcrumb: true,
+      isShowPageLink: true,
+      isShowOperateColumn: true,
+      isRefreshAfterCUD: true,
+      isShowToolBar: true,
+      cfElTable: {}, //列表配置对象
+      paramAddonPublic: {} //公共附加参数
+    });
 
-    this.cf.isMultipleSelect === false || (this.cf.isMultipleSelect = true);
-    this.cf.isShowCheckedBox === false || (this.cf.isShowCheckedBox = true);
-    this.cf.isShowSearchForm === false || (this.cf.isShowSearchForm = true);
-    this.cf.isShowBreadcrumb === false || (this.cf.isShowBreadcrumb = true);
-    this.cf.isShowPageLink === false || (this.cf.isShowPageLink = true);
-    this.cf.isShowOperateColumn === false ||
-      (this.cf.isShowOperateColumn = true);
-    this.cf.isShowToolBar === false || (this.cf.isShowToolBar = true);
-    this.cf.isRefreshAfterCUD === false || (this.cf.isRefreshAfterCUD = true);
+    //调用：{给一个对象设置默认属性函数}-//表头样式
+    util.setObjDefault(this.cf.cfElTable, {
+      "header-row-class-name": "n-table-head",
+      "row-class-name": "n-table-row"
+    });
 
     let findJsonDefault = this.cf.findJsonDefault || {};
     //读取vuex的当前列表页默认筛选参数
@@ -505,10 +561,10 @@ export default {
     }
 
     this.objParam.findJson = findJsonDefault;
-    this.objParam.sortJson = this.cf.sortJsonDefault;
+    this.objParam.sortJson = lodash.cloneDeep(this.cf.sortJsonDefault); //处理排序参数
 
     /****************************拼装selectJson参数-START****************************/
-    let selectJson = { P1: 1 }; //P1有时候在列表不显示，但也一定要加上
+    let selectJson = { [this.cf.idKey]: 1 }; //P1有时候在列表不显示，但也一定要加上
 
     this.cf.columns.forEach(columnEach => {
       columnEach.__id = util.getTimeRandom();
@@ -571,7 +627,7 @@ export default {
     //监听标准的单选操作按钮事件
     this.$on("single-btn-click", function(eventType, row) {
       if (eventType == "delete") {
-        this.confirmDelete(row.P1);
+        this.confirmDelete(row[this.cf.idKey]);
       } else if (eventType == "modify") {
         this.$refs.listDialogs.showModify(row);
       } else if (eventType == "detail") {
@@ -592,17 +648,15 @@ export default {
 
 
 <style scoped>
-
- /* n-table样式-针对element组件 ,但好像对其他项目没有效果！！*/
+/* n-table样式-针对element组件 ,但好像对其他项目没有效果！！*/
 .list-data-box >>> .n-table-head .cell {
   padding: 0;
   font-weight: normal;
 }
-.list-data-box >>> .n-table-row  .cell {
+.list-data-box >>> .n-table-row .cell {
   padding: 0;
   font-weight: normal;
 }
-
 
 .search-form-box {
   border: 1px #ebeef5 solid;

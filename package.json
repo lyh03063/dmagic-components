@@ -1,7 +1,7 @@
 {
   "name": "dmagic-components",
   "description": "A Vue.js project",
-  "version": "1.8.9",
+  "version": "1.9.3",
   "author": "lyh <113381161@qq.com>",
   "main": "dist/vue-dm-components.js",
   "license": "MIT",
@@ -20,6 +20,7 @@
     "highlight.js": "^9.15.10",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
+    "node-sass": "^4.13.0",
     "quill-image-drop-module": "^1.0.3",
     "quill-image-resize-module": "^3.0.0",
     "tinymce": "^5.0.15",

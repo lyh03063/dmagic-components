@@ -141,6 +141,8 @@ export default {
       },
       //------------------修改表单组件配置--------------
       cfFormModify: {
+        idKey: this.cf.idKey, //键名
+        paramAddonInit: this.cf.paramAddonPublic, //初始化的附加参数
         watch: lodash.get(this.cf, `cfForm.watch`), //监听器配置
         col_span: lodash.get(this.cf, `cfForm.col_span`, 24), //控制显示一行多列
         urlInit: this.cf.url.detail,
@@ -190,6 +192,10 @@ export default {
   computed: {
     row() {
       //来自vuex的当前行数据
+      console.log(
+        "row####:",
+        this.$store.state.listState[this.cf.listIndex].row
+      );
       return this.$store.state.listState[this.cf.listIndex].row;
     },
     isShowDialogAdd() {
@@ -232,17 +238,30 @@ export default {
     async modifyData() {
       //Q1：{修改数据接口地址}存在
       if (this.cf.url.modify) {
+        let ajaxParam;
+
+        //如果{idKey}是"_id"
+        if (this.cf.idKey == "_id") {
+          ajaxParam = {
+            _id: this.dataIdModify,
+            _data: this.formModify
+          };
+        } else {
+          ajaxParam = {
+            findJson: {
+              //用于定位要修改的数据
+              [this.cf.idKey]: this.dataIdModify
+            },
+            modifyJson: this.formModify
+          };
+        }
+        Object.assign(ajaxParam, this.cf.paramAddonPublic); //合并公共参数
+
         let response = await axios({
           //请求接口
           method: "post",
           url: PUB.domain + this.cf.url.modify,
-          data: {
-            findJson: {
-              //用于定位要修改的数据
-              P1: this.dataIdModify
-            },
-            modifyJson: this.formModify
-          } //传递参数
+          data: ajaxParam //传递参数
         });
         //Q2：{修改数据接口地址}不存在
       } else {
@@ -251,7 +270,7 @@ export default {
           action: "replace",
           items: this.tableData,
           itemNew: this.formModify,
-          key: "P1",
+          key: this.cf.idKey,
           prop: this.dataIdModify
         });
       }
@@ -271,11 +290,19 @@ export default {
     async addData() {
       //如果{新增数据接口地址}存在
       if (this.cf.url.add) {
+        let ajaxParam;
+        //如果{idKey}是"_id"
+        if (this.cf.idKey == "_id") {
+          ajaxParam = { _data: this.formAdd };
+        } else {
+          ajaxParam = { data: this.formAdd };
+        }
+        Object.assign(ajaxParam, this.cf.paramAddonPublic); //合并公共参数
         let response = await axios({
           //请求接口
           method: "post",
           url: PUB.domain + this.cf.url.add,
-          data: { data: this.formAdd } //传递参数
+          data: ajaxParam //传递参数
         });
 
         //触发外部事件-把新增前后的数据都传过去
@@ -285,11 +312,11 @@ export default {
         let idMax = 1;
         //如果列表有数据
         if (this.tableData.length) {
-          let arrId = this.tableData.map(doc => doc.P1); //id数组
+          let arrId = this.tableData.map(doc => doc[this.cf.idKey]); //id数组
           idMax = Math.max(...arrId) + 1; //获取最大id
         }
 
-        this.formAdd.P1 = idMax; //补充P1
+        this.formAdd[this.cf.idKey] = idMax; //补充id
         this.tableData.unshift(this.formAdd); //静态数据列表追加一条数据
         this.$emit("after-add", this.formAdd);
       }
@@ -319,7 +346,7 @@ export default {
       this.isShowDialogModify = true; //打开弹窗
       this.formModify = rowNew; //表单赋值
 
-      this.dataIdModify = rowNew.P1;
+      this.dataIdModify = rowNew[this.cf.idKey];
     }
   },
   created() {

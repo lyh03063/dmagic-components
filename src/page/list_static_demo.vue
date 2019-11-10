@@ -20,7 +20,7 @@ export default {
 
   data() {
     return {
-      tableData: [],
+      tableData: [ { "articleTitle": "2222", "P1": 2 }, { "articleTitle": "1111", "P1": 1 } ],
 
       cfList: {
         cfElTable: {
@@ -239,6 +239,7 @@ export default {
 
   methods: {
     saveData() {
+      console.log("this.tableData:##", this.tableData);
       alert("saveData");
     }
   },

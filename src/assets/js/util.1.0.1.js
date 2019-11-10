@@ -315,3 +315,18 @@ util.cfList.sBtns.delete = {
 
 
 //#endregion
+
+
+//#region setObjDefault:给一个对象设置默认属性（但不整个替换对象，并且默认属性优先级低于已有属性）
+util.setObjDefault = function (obj, objDeault) {
+  //for of循环遍历对象，for of不能直接处理对象，本质上是同个Object.keys拼装一个新数组进行辅助
+  console.log("Object.objDeault结果", Object.keys(objDeault));
+  for (var key of Object.keys(objDeault)) {
+    if (obj[key] === null || obj[key] === undefined) {//如果属性不存在
+      obj[key] = objDeault[key]
+    }
+  }
+
+
+}
+//#endregion
