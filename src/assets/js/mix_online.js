@@ -12,7 +12,7 @@ MIX.form_item = {
 
   watch: {//监听器，双向同步
     value: {
-      handler(newName, oldName) {
+      handler(newVal, oldVal) {
         this.valueNeed = this.value
       },
       deep: true

@@ -94,7 +94,7 @@ export default {
   },
   watch: {
     uploadConfig: {
-      handler(newName, oldName) {
+      handler(newVal, oldVal) {
         this.initConfig(); //函数：{初始化配置函数}
       },
       immediate: true,
@@ -102,7 +102,7 @@ export default {
     },
     //这个处理从mounted移到这边，主要是考虑后期value还是有可能为空
     value: {
-      handler(newName, oldName) {
+      handler(newVal, oldVal) {
         //如果{value}不存在
         if (!this.value) {
           this.valueNeed = [];

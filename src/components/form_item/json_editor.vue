@@ -27,14 +27,14 @@ export default {
   },
   watch: {
     value: {
-      handler(newName, oldName) {
+      handler(newVal, oldVal) {
         this.valueNeedStr = JSON.stringify(this.value);
       },
       immediate: true,
       deep: true
     }
     // valueNeedStr: {
-    //   handler(newName, oldName) {
+    //   handler(newVal, oldVal) {
     //     this.valueNeedStr = JSON.stringify(this.value);
     //   },
     //   immediate: true,

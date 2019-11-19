@@ -171,7 +171,7 @@ export default {
   watch: {
     "cf.formDataAddInit": {
       //监听新增表单的初始化数据
-      handler(newName, oldName) {
+      handler(newVal, oldVal) {
         this.initFormDataAdd(); //调用：{初始化新增数据表单函数}
       },
       immediate: true,
@@ -180,10 +180,10 @@ export default {
     // 当父组件的配置改变时里面的配置随之改变
     "cf.formItems": {
       //监听新增表单的初始化数据
-      handler(newName, oldName) {
-        console.log("newName", newName);
-        this.cfFormAdd.formItems = newName;
-        this.cfFormModify.formItems = newName; //调用：{初始化新增数据表单函数}
+      handler(newVal, oldVal) {
+        console.log("newVal", newVal);
+        this.cfFormAdd.formItems = newVal;
+        this.cfFormModify.formItems = newVal; //调用：{初始化新增数据表单函数}
       },
       immediate: true,
       deep: true

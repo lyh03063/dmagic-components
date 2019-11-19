@@ -238,7 +238,7 @@ export default {
 
   watch: {
     "cf.objParamAddon": {
-      handler(newName, oldName) {
+      handler(newVal, oldVal) {
         Object.assign(this.objParam, this.cf.objParamAddon); //合并对象
         this.objParam = util.deepCopy(this.objParam); //深拷贝强制更新
       },

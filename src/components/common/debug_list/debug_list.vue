@@ -1,5 +1,5 @@
 <template>
-  <table class="n-table n-table-debug MT5 MB5" v-if="debug">
+  <table  class="n-table n-table-debug MT5 MB5" v-if="debug">
     <tr>
       <td class="WP15 FWB">{{$parent.$options.name||"数据"}}</td>
       <td class="WP15 FWB">说明</td>

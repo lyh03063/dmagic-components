@@ -113,7 +113,7 @@ export default {
   },
   watch: {
     value: {
-      handler(newName, oldName) {
+      handler(newVal, oldVal) {
         if (!this.value) {
           //
           this.valueNeed = [];

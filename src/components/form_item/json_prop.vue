@@ -21,7 +21,7 @@ export default {
   },
   watch: {
     valueNeed: {
-      handler(newName, oldName) {
+      handler(newVal, oldVal) {
         this.dataIn = lodash.get(this.valueNeed, this.prop);//lodash获取值
       },
       deep: true

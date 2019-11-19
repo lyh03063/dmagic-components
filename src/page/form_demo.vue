@@ -1,16 +1,27 @@
 <template>
   <div>
     <dm_debug_list>
-      <dm_debug_item v-model="test" text="test" />
+      <dm_debug_item v-model="formData" text="formData" />
     </dm_debug_list>
 
+    <el-input v-model="formData1['obj.num2']"></el-input>
+
     <dm_dynamic_form :cf="cfForm" v-model="formData">
-       <!--自定义集合数据插槽组件-->
-      <template v-slot:slot_collection1="{doc}">
-        doc:{{doc}}
-      </template>
+      <!--自定义集合数据插槽组件-->
+      <template v-slot:slot_collection1="{doc}">doc:{{doc}}</template>
       <!--自定义复选框插槽组件-->
       <template v-slot:slot_form_item_diycheckbox="{formData}">
+        123
+        <checkbox_diy v-model="formData.diycheckbox" :options="options"></checkbox_diy>
+      </template>
+    </dm_dynamic_form>
+######
+    <dm_dynamic_form :cf="cfForm" v-model="formData">
+      <!--自定义集合数据插槽组件-->
+      <template v-slot:slot_collection1="{doc}">doc:{{doc}}</template>
+      <!--自定义复选框插槽组件-->
+      <template v-slot:slot_form_item_diycheckbox="{formData}">
+        123
         <checkbox_diy v-model="formData.diycheckbox" :options="options"></checkbox_diy>
       </template>
     </dm_dynamic_form>
@@ -173,27 +184,14 @@ let cfListSelectActicle = {
 export default {
   name: "form_demo",
   components: { checkbox_diy },
-  computed: {
-    cfData: function() {
-      return this.$store.state.cfData;
-    }
-  },
-  watch: {
-    cfData: {
-      handler(newName, oldName) {
-        var t_json = JSON.stringify(this.cfData); //：{Json对象转换Json字符串函数}
-        this.cfForm = util.parseJson(t_json);
-      },
-      // immediate: true,
-      deep: true
-    }
-  },
+
+ 
   data() {
     return {
+      formData1: { obj: { num: 123 } },
       formData: {
-        power_paicheng: {
-          
-        },
+        aaaa: 123,
+        power_paicheng: {},
 
         power: {
           matchCenter: {
@@ -222,11 +220,11 @@ export default {
         },
         memberId: 221,
         // prop_select_list_data: 122,
-        num1: "55",
+        num1: 0,
         percent: 0.12,
         select1: null,
         collection2: [
-          { time: "2019-09-09", money: 100 },
+          { time: "2019-09-09", money: 0 },
           { time: "2019-09-11", money: 200 }
         ],
         extend: { aaa: 1, name: "lucy" },
@@ -245,17 +243,52 @@ export default {
         labelWidth: "150px",
 
         formItems: [
-           {
+          {
+            label: "aaaa",
+            prop: "aaaa"
+          },
+        
+          {
+            label: "diycheckbox(slot实现)",
+            prop: "diycheckbox",
+            slot: "slot_form_item_diycheckbox",
+            rules: [{ required: true, message: "不能为空" }]
+          },
+          {
+            label: "数字22",
+            prop: "num2222",
+            type: "number",
+            min: 0,
+            max: 3
+          },
+ 
+          {
+            label: "数字(隐藏操作按钮)",
+            prop: "num1",
+            type: "number",
+            min: 0,
+            max: 100,
+            hideBtn: true,
+            frequency: {
+              sytle: { width: "48px" },
+              options: [{ value: 1 }, { value: 2 }, { value: 3 }]
+            }
+          },
+          
+
+          {
             label: "集合（带工具栏和插槽）1",
             style: { "margin-top": "50px" }, //自定义样式
             prop: "collection1",
             type: "collection",
             // collectionlistType: "form",
-            dataSlot:"slot_collection1",//自定义数据插槽
-            cfElBtnAdd:{//自定义“新增”按钮
-              text:"+添加一组",
-              type:"primary",
-              size:"large",plain:false
+            dataSlot: "slot_collection1", //自定义数据插槽
+            cfElBtnAdd: {
+              //自定义“新增”按钮
+              text: "+添加一组",
+              type: "primary",
+              size: "large",
+              plain: false
             },
             collectionCfForm: {
               col_span: 12,
@@ -293,14 +326,14 @@ export default {
               ]
             }
           },
+
           {
             label: "数字范围",
             prop111: "prop_numberRange",
             type: "numberRange",
-            default: {"maxN":4,"minN":1},
-            keyMax:"maxN",
-            keyMin:"minN"
-           
+            default: { maxN: 4, minN: 1 },
+            keyMax: "maxN",
+            keyMin: "minN"
           },
           {
             label: "普通文本框(input)",
@@ -315,7 +348,6 @@ export default {
               }
             ]
           },
-      
 
           {
             label: "用于模糊查询文本框(input_find_vague)",
@@ -343,26 +375,7 @@ export default {
             style: { color: "#f00" },
             tips: "跟下方数字相同"
           },
-          {
-            label: "数字(隐藏操作按钮)",
-            prop: "num1",
-            type: "number",
-            min: 0,
-            max: 100,
-            hideBtn: true,
-            frequency: {
-              sytle: { width: "48px" },
-              options: [{ value: 1 }, { value: 2 }, { value: 3 }]
-            }
-          },
-          {
-            label: "数字22",
-            prop: "num2",
-            type: "number",
-            min: 0,
-            max: 3
-          },
-          
+
           {
             label: "小组成员",
             prop: "groupMember",
@@ -479,7 +492,7 @@ export default {
               ]
             }
           },
-         
+
           {
             label: "文件上传2",
             prop: "prop_upload2",
@@ -498,19 +511,21 @@ export default {
               preview: true
             }
           },
-
+ 
           {
             label: "json编辑器(vueJsonEditor)",
             prop: "prop_vueJsonEditor",
             type: "vueJsonEditor"
           }
+          /*
+           */
         ],
         btns: [
           { text: "提交111", event: "submit", type: "primary", validate: true },
           { text: "取消222", event: "cancel" }
         ]
       },
-     
+
       test: null,
       options: [
         { label: "label1", value: "1" },

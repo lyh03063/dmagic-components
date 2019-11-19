@@ -62,7 +62,7 @@ export default {
   },
   watch: {
     value: {
-      async handler(newName, oldName) {
+      async handler(newVal, oldVal) {
         this.addClassChange(); //调用：{切换样式防抖函数}
 
         let type = util.type(this.value);

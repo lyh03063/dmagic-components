@@ -53,7 +53,7 @@ export default {
   },
   watch: {
     cfData: {
-      handler(newName, oldName) {
+      handler(newVal, oldVal) {
         // alert("1111");
         this.dataConfig = this.cfData;
         this.dataConfigForCopy = JSON.stringify(this.dataConfig); //Json对象转换Json字符串
@@ -62,7 +62,7 @@ export default {
       deep: true
     },
     dataConfig: {
-      handler(newName, oldName) {
+      handler(newVal, oldVal) {
         //来自vuex的当前行数据
         // this.$store.state.listState[this.cf.listIndex].row;
 

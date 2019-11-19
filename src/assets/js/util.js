@@ -1,7 +1,7 @@
 
 window.PUB = {}
-//window.PUB.domain = "http://120.76.160.41:3000"
- window.PUB.domain = "http://localhost:3000"
+window.PUB.domain = "http://120.76.160.41:3000"
+ //window.PUB.domain = "http://localhost:3000"
 //window.PUB.domain = 'http://test.dmagic.cn'
 // window.PUB.urlUpload = `${PUB.domain}/api_third_part/qiniu_upload?scope=test`
 window.PUB.urlUpload = `https://up-z2.qiniup.com`//七牛云上传地址（域名）
@@ -329,5 +329,16 @@ util.setObjDefault = function (obj, objDeault) {
 }
 //#endregion
 
+//#region setObj:拓展vue实例的data数据函数
+util.setObj = function (path, extend) {
+  let objOld = lodash.get(this, path);
+  let objNew = lodash.cloneDeep(objOld);
+  if (objNew === null||objNew === undefined) {//如果{000}000
+    objNew = {}
+  }
+  Object.assign(objNew, extend);//合并对象
+  lodash.set(this, path, objNew);
 
+}
+//#endregion
 export default util

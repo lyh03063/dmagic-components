@@ -56,7 +56,7 @@ export default {
   },
   watch: {
     valueNeed: {
-      handler(newName, oldName) {
+      handler(newVal, oldVal) {
         this.$emit("input", this.valueNeed); //同步valueNeed值到value
       },
       immediate: true,
@@ -64,7 +64,7 @@ export default {
     },
     arrArea: {
       //监听地区数组
-      async handler(newName, oldName) {
+      async handler(newVal, oldVal) {
      
         this.cityIdTemp = this.arrArea[1];
         if (!this.cityIdTemp)return 

@@ -126,9 +126,9 @@ export default {
         cfSearchForm: {
           watch: {
             //传入监听器
-            articleCategory(newName, oldName) {
+            articleCategory(newVal, oldVal) {
               console.log("complete1111变动");
-              this.value.articleTitle = { a: 1 };
+              // this.value.articleTitle = { a: 1 };
             }
           }
         },
@@ -144,7 +144,7 @@ export default {
           col_span: 12, //控制显示一行多列
           watch: {
             //传入监听器
-            articleCategory(newName, oldName) {
+            articleCategory(newVal, oldVal) {
               console.log("watch-articleCategory变化######################123");
               this.value.articleTitle = this.value.articleTitle + "a";
             }
@@ -298,7 +298,7 @@ export default {
   },
   watch: {
     cfData: {
-      handler(newName, oldName) {
+      handler(newVal, oldVal) {
         var t_json = JSON.stringify(this.cfData); //：{Json对象转换Json字符串函数}
         this.cfList = util.parseJson(t_json);
       },

@@ -145,7 +145,7 @@ export default {
         cfSearchForm: {
           watch: {
             //传入监听器
-            articleCategory(newName, oldName) {
+            articleCategory(newVal, oldVal) {
               console.log("complete1111变动");
               this.value.articleTitle = { a: 1 };
             }

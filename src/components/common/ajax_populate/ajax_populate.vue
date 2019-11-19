@@ -36,7 +36,7 @@ export default {
   },
   watch: {
     id: {
-      async handler(newName, oldName) {
+      async handler(newVal, oldVal) {
         this.ajaxGetData();
       }
       // immediate: true
