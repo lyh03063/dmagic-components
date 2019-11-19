@@ -266,4 +266,48 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+/****************************数字输入框隐藏操作按钮-START****************************/
+.hide-btn >>> [role="button"] {
+  display: none;
+}
+
+.hide-btn >>> .el-input__inner {
+  padding-right: 15px;
+}
+/****************************数字输入框隐藏操作按钮-END****************************/
+/****************************进度条补丁-START****************************/
+.el-col >>> .el-slider__marks-text {
+  margin-top: 8px;
+  line-height: 32px;
+  /* 不换行 */
+  word-break: keep-all;
+}
+
+.el-col >>> .el-slider__runway {
+  margin: 15px 0 0 0;
+}
+/****************************进度条补丁-END****************************/
+/****************************常用值选项-START****************************/
+.frequency-option {
+  display: inline-block;
+  border: 1px #ddd solid;
+  border-radius: 5px;
+  line-height: 1;
+  padding: 5px 8px;
+  background-color: #f0f0f0;
+  margin: 0 5px 5px;
+  cursor: pointer;
+  color: #999;
+  font-style: normal;
+  text-align: center;
+}
+.frequency-option:hover {
+  border: 1px #f60 solid;
+}
+
+.frequency-option.focus {
+  border: 1px #3a0 solid;
+}
+/****************************常用值选项-END****************************/
 </style>
