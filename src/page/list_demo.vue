@@ -42,7 +42,7 @@ export default {
         
         },
         // powerPath:"newsCenter.list_article",
-        pageSize: 2,
+        pageSize: 10,
         listIndex: "list_demo", //vuex对应的字段~
         focusMenu: true, //进行菜单聚焦
         twoTitle: "其他数据", //面包屑1级菜单
@@ -154,7 +154,7 @@ export default {
           }
         },
         url: {
-          list: "/crossList?page=info_piece", //列表接口
+          list: "/crossList?page=lawyer_case", //列表接口
           add: "/crossAdd?page=info_piece", //新增接口
           modify: "/crossModify?page=info_piece", //修改接口
           detail: "/crossDetail?page=info_piece",
@@ -187,13 +187,22 @@ export default {
             width: 260,
             fixed: true
           },
-         
+          {
+            label: "案件状态",
+            prop: "status",
+            filters:[{text:"待立案",value:1},
+            {text:"已结案",value:2}],
+            columnKey:'status'
+
+          },
+          
           {
             sortable: "custom",
             label: "创建时间",
             prop: "CreateTime",
             width: 145,
-            slot: "slot_column_CreateTime"
+            slot: "slot_column_CreateTime",
+            
           },
           {
             label: "其他",

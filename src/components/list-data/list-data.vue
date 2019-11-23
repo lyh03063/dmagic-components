@@ -61,6 +61,7 @@
       style="width: 100%;"
       @sort-change="sortChange"
       @selection-change="selectionChange"
+      @filter-change="filterHandler"
     >
       <el-table-column
         fixed
@@ -95,6 +96,8 @@
           :fixed="column.fixed"
           :formatter="column.formatter"
           :sortable="column.sortable"
+          :column-key="column.columnKey"
+          :filters="column.filters"
           :show-overflow-tooltip="true"
           :key="column.__id"
         >
@@ -248,6 +251,16 @@ export default {
   },
 
   methods: {
+    // 表头筛选数据的方法
+    filterHandler(filters) {
+      for (let key in filters) {
+        console.log(key + "---" + filters[key]);
+        this.objParam.findJson[key] = filters[key]
+        console.log(this.objParam);
+        this.getDataList();
+        
+      }
+    },
     //每页显示数量变动后的回调函数
     handleSizeChange(val) {
       this.objParam.pageSize = val;
@@ -257,6 +270,7 @@ export default {
     sortChange(param) {
       //order: "descending","ascending"
       //排序规则值数据字典
+      window.console.log("value", param);
       let dict1 = {
         descending: -1,
         ascending: 1
@@ -408,12 +422,11 @@ export default {
         deleteData = util.deepCopy(deleteData);
         //Q1:{删除数据接口}存在
         if (this.cf.url.delete) {
-          let ajaxParam ;
+          let ajaxParam;
 
           if (this.cf.idKey == "_id") {
             ajaxParam = {
-              _id: dataId,
-              
+              _id: dataId
             };
           } else {
             ajaxParam = {
