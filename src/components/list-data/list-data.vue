@@ -480,6 +480,7 @@ export default {
     },
     //-------------ajax获取数据列表函数--------------
     async getDataList() {
+      console.log("getDataList####");
       //最终需要提交的参数
       let objParamFinal = util.deepCopy(this.objParam); //深拷贝,后续处理数据避免影响查询表单
       /****************************将空数组处理成null-START****************************/
@@ -499,6 +500,7 @@ export default {
           delete obj1[key];
         }
       }
+      console.log("objParamFinal.findJson:", objParamFinal.findJson);
 
       /****************************将空数组处理成null-END****************************/
 
@@ -516,6 +518,9 @@ export default {
         this.tableData = list;
         this.page = page;
         this.allCount = page.allCount; //更改总数据量
+      }else{
+        //调用：{查询静态集合列表函数（支持模糊查询）}
+       this.tableData= util.searchCollection({dataBase:this.tableData,findJson:obj1})
       }
 
       if (this.cf.dynamicDict) {

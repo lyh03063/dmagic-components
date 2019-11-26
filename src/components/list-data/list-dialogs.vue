@@ -337,14 +337,17 @@ export default {
       // this.formAdd = {};
     },
     //-------------显示修改弹窗的函数--------------
-    showModify(row) {
+    async showModify(row) {
+      
       this.$emit("after-show-Dialog-Modify", row);
       this.beforeModify = row;
       let str = JSON.stringify(row); //转换成字符串
       let rowNew = JSON.parse(str); //转换成对象
 
       this.isShowDialogModify = true; //打开弹窗
+      
       this.formModify = rowNew; //表单赋值
+      console.log("this.formModify:", this.formModify);
 
       this.dataIdModify = rowNew[this.cf.idKey];
     }

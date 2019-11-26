@@ -250,15 +250,16 @@ export default {
     },
     //初始化表单函数
     initForm() {
-      
-       this.initRecursionProp(); //给递归表单字段做一层空对象的保障
+      this.initRecursionProp(); //给递归表单字段做一层空对象的保障
       this.isReadyFormData = true; //***表单初始化数据是否已备好的逻辑标记,某些字段需要等待这个标记为true
     }
   },
   async created() {
- 
-
     this.formDataNeed = this.value;
+
+    console.log("created###");
+    console.log("this.value:", this.value);
+
     this.cf.formItems.forEach(itemEach => {
       //循环：{表单字段配置数组}处理默认值-之前的短路运算符有坑，会把值为0变成null
       let val1 = this.value[itemEach.prop];
@@ -277,14 +278,23 @@ export default {
 
     //如果初始化的ajax地址存在
     if (this.cf.urlInit) {
+      console.log("this.cf.urlInit:#####", this.cf.urlInit);
       let { data } = await axios({
         //请求接口
         method: "post",
         url: (PUB.domain || "") + this.cf.urlInit, //注意运算符要用括号
         data: ajaxParam //传递参数
       });
-      this.formDataNeed = data.Doc; //这里要使用大写的Doc
+      console.log("data:333", data);
+      if (data) {
+        
+        this.formDataNeed = data.Doc ||data.doc; //这里要使用大写的Doc
+      } else {
+        this.$message.error('ajax读取初始化数据失败！');
+    
+      }
     }
+    console.log("this.formDataNeed:222", this.formDataNeed);
     this.initForm(); //调用：{初始化表单函数}
   },
   mounted() {
@@ -354,7 +364,4 @@ export default {
 /* .el-form-item {
   margin-bottom: 0;
 } */
-
-
-
 </style>

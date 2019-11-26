@@ -1,11 +1,6 @@
 <template>
   <div>
-   
-    <dm_list_data
-      :cf="cfList"
-    >
-     
-    </dm_list_data>
+    <dm_list_data :cf="cfList"></dm_list_data>
   </div>
 </template>
 
@@ -21,14 +16,13 @@ export default {
     return {
       visible: {},
       cfList: {
-        idKey:"_id",//键名
+        idKey: "_id", //键名
         pageSize: 20,
         listIndex: "list_html_api", //vuex对应的字段~
         focusMenu: true, //进行菜单聚焦
 
         threeTitle: "Html-API", //面包屑2级菜单
-     
-        
+
         url: {
           list: `/info/getCommonList`, //列表接口
           add: "/info/commonAdd", //新增接口
@@ -38,88 +32,36 @@ export default {
         },
         //objParamAddon列表接口的附加参数
         objParamAddon: {
-          _systemId,_dataType
+          _systemId,
+          _dataType
         },
         //公共的附加参数，针对所有接口
         paramAddonPublic: {
-          _systemId,_dataType
+          _systemId,
+          _dataType
         },
-       
-        
+
         //-------列配置数组-------
-        columns: [
-          {
-            label: "标题",
-            prop: "title",
-            width: 160,
-            fixed: true
-          },
-         {
-           label: "说明",
-            prop: "desc",
-            width: 260,
-          },
-        ],
+        columns: [COLUMNS.title_fixed, COLUMNS.desc],
         //-------筛选表单字段数组-------
-        searchFormItems: [
-          
-          {
-            label: "标题",
-            prop: "title",
-            type: "input_find_vague"
-          }
-         
-        ],
+        searchFormItems: [COLUMNS.title_search],
         //-------详情字段数组-------
-        detailItems: [
-          {
-            label: "标题",
-            prop: "title",
-            width: 200
-          },
-         
-          {
-            label: "说明",
-            prop: "desc",
-            type: "html"
-          }
-        ],
+        detailItems: [D_ITEMS.title, D_ITEMS.desc],
         //-------新增、修改表单字段数组-------
         formItems: [
-         
-          {
-            label: "标题",
-            prop: "title",
-
-          },
-          {
-            label: "说明",
-            prop: "desc",
-          },
-          {
-           label: "详情",
-            prop: "detail",
-            type:"editorTM"
-   
-          },
+          F_ITEMS.title,
+          F_ITEMS.desc,
+         F_ITEMS.detail,
         ]
       }
     };
   },
- 
-  methods: {
-   
 
-    
-  
-  },
+  methods: {},
   created() {
     T = this;
-    
   },
-  async mounted() {
-   
-  }
+  async mounted() {}
 };
 </script>
 

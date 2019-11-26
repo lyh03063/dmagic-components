@@ -15,14 +15,21 @@
 <script>
 let T;
 
+let arr_F_ITEMS = [];
+
+for (var prop in window.F_ITEMS) {
+  arr_F_ITEMS.push(window.F_ITEMS[prop]);
+}
+
 export default {
   components: {},
 
   data() {
     return {
-      tableData: [ { "articleTitle": "2222", "P1": 2 }, { "articleTitle": "1111", "P1": 1 } ],
+      tableData: arr_F_ITEMS,
 
       cfList: {
+        idKey:"prop",//数据Id键名 
         cfElTable: {
           "header-row-class-name": "n-table-head11111"
         },
@@ -109,10 +116,7 @@ export default {
         },
 
         url: {
-          //add: "/crossAdd?page=tangball_article", //新增接口
-          // modify: "/crossModify?page=tangball_article", //修改接口
-          // detail: "/crossDetail?page=tangball_article",
-          //delete: "/crossDelete?page=tangball_article" //删除接口
+         
         },
 
         //expands展开行的显示字段配置
@@ -138,69 +142,25 @@ export default {
         //-------列配置数组-------
         columns: [
           {
-            label: "Id",
-            prop: "P1",
+            label: "prop",
+            prop: "prop",
             width: 120,
             fixed: true
           },
           {
-            label: "文章标题2",
-            prop: "articleTitle",
-            width: 260,
+            label: "label",
+            prop: "label",
+            width: 160,
             fixed: true
           },
           {
-            label: "分类名称",
-            prop: "articleCategory",
-            requireProp: ["articleContent"], //依赖文章详情，列表需返回该字段
-            width: 150,
-            formatter11111: function(rowData) {
-              let name = lodash.get(rowData, "categoryDoc.name");
-              return name;
-            }
-          },
-
-          {
-            label: "创建时间",
-            prop: "CreateTime",
-            width: 145,
-            slot: "slot_column_CreateTime"
-          },
-          {
-            label: "其他",
-            prop: "extend",
-            width: 135,
-            formatter11111: function(extend) {
-              return JSON.stringify(extend.extend);
-            }
+            label: "type",
+            prop: "type",
+            width: 150
           }
         ],
         //-------筛选表单字段数组-------
-        searchFormItems: [
-          {
-            label: "下拉框(多选)",
-            prop: "select1",
-            type: "select",
-            // default: [2],
-            multiple: true, //多选
-            options: [{ value: 1, label: "男" }, { value: 2, label: "女" }]
-          },
-          {
-            label: "文章分类",
-            prop: "articleCategory",
-            type: "select",
-            ajax: {
-              url: "/crossList?page=tangball_article_category",
-              keyLabel: "name",
-              keyValue: "P1"
-            }
-          },
-          {
-            label: "文章标题",
-            prop: "articleTitle",
-            type: "input_find_vague"
-          }
-        ],
+        searchFormItems: [F_ITEMS.label_search, F_ITEMS.prop],
         //-------详情字段数组-------
         detailItems: [
           {
@@ -216,23 +176,7 @@ export default {
           }
         ],
         //-------新增、修改表单字段数组-------
-        formItems: [
-          {
-            label: "文章分类",
-            prop: "articleCategory",
-            type: "select",
-            ajax: {
-              url: "/crossList?page=tangball_article_category",
-              keyLabel: "name",
-              keyValue: "P1"
-            }
-          },
-          {
-            label: "文章标题22",
-            prop: "articleTitle",
-            width: 200
-          }
-        ]
+        formItems: [F_ITEMS.label, F_ITEMS.prop]
       }
     };
   },
@@ -251,5 +195,4 @@ export default {
 </script>
 
 <style>
-
 </style>

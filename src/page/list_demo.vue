@@ -6,10 +6,7 @@
       <dm_debug_item v-model="visible" text="visible" />
     </dm_debug_list>
 
-    <dm_list_data
-      :cf="cfList"
-      
-    >
+    <dm_list_data :cf="cfList">
       <template #slot_in_toolbar="{data:{tableData}}">插槽内容可显示tableData</template>
       <template v-slot:slot_form_expand_articleTitle="{row}">
         {{row}}
@@ -39,7 +36,6 @@ export default {
         cfElTable: {
           //默认排序图标显示，需要配合sortJsonDefault
           "default-sort": { prop: "CreateTime", order: "descending" }
-        
         },
         // powerPath:"newsCenter.list_article",
         pageSize: 10,
@@ -154,13 +150,13 @@ export default {
           }
         },
         url: {
-          list: "/crossList?page=lawyer_case", //列表接口
+          list: "/crossList?page=info_piece", //列表接口
           add: "/crossAdd?page=info_piece", //新增接口
           modify: "/crossModify?page=info_piece", //修改接口
           detail: "/crossDetail?page=info_piece",
           delete: "/crossDelete?page=info_piece" //删除接口
         },
-       
+
         //expands展开行的显示字段配置
         expands: [
           {
@@ -181,118 +177,35 @@ export default {
         ],
         //-------列配置数组-------
         columns: [
-          {
-            label: "标题",
-            prop: "name",
-            width: 260,
-            fixed: true
-          },
+          COLUMNS.name_fixed,
           {
             label: "案件状态",
             prop: "status",
-            filters:[{text:"待立案",value:1},
-            {text:"已结案",value:2}],
-            columnKey:'status'
-
+            filters: [
+              { text: "待立案", value: 1 },
+              { text: "已结案", value: 2 }
+            ],
+            columnKey: "status"
           },
-          
+
           {
             sortable: "custom",
             label: "创建时间",
             prop: "CreateTime",
             width: 145,
-            slot: "slot_column_CreateTime",
-            
+            slot: "slot_column_CreateTime"
           },
-          {
-            label: "其他",
-            prop: "extend",
-            width: 135,
-            formatter11111: function(extend) {
-              return JSON.stringify(extend.extend);
-            }
-          },
-          {
-            sortable: "custom",
-            label: "其他1111",
-            prop: "extend1111",
-            width: 135,
-            formatter11111: function(extend) {
-              return JSON.stringify(extend.extend);
-            }
-          },
-          {
-            label: "其他",
-            prop: "extend",
-            width: 335
-          },
-          {
-            label: "其他",
-            prop: "extend",
-            width: 335
-          },
-          {
-            label: "其他",
-            prop: "extend",
-            width: 335
-          }
+          COLUMNS.extend
         ],
         //-------筛选表单字段数组-------
-        searchFormItems: [
-          {
-            label: "下拉框(多选)",
-            prop: "select1",
-            type: "select",
-            // default: [2],
-            multiple: true, //多选
-            options: [{ value: 1, label: "男" }, { value: 2, label: "女" }]
-          },
-          {
-            label: "文章分类",
-            prop: "articleCategory",
-            type: "select",
-            ajax: {
-              url: "/crossList?page=tangball_article_category",
-              keyLabel: "name",
-              keyValue: "P1"
-            }
-          },
-          {
-            label: "标题",
-            prop: "name",
-            type: "input_find_vague"
-          }
-          // {
-          //   label: "文章标题",
-          //   prop: "articleTitle",
-          //   type: "input"
-          // },
-        ],
+        searchFormItems: [F_ITEMS.select1, F_ITEMS.name_search],
         //-------详情字段数组-------
         detailItems: [
-          {
-            label: "标题",
-            prop: "name",
-            width: 200
-          },
-          {
-            label: "文章详情",
-            prop: "articleContent",
-            type: "htmlJson"
-          },
-          {
-            label: "文章详情2",
-            prop: "articleContent",
-            type: "html"
-          }
+          COLUMNS.name
         ],
         //-------新增、修改表单字段数组-------
         formItems: [
-          {
-            label: "标题",
-            prop: "name",
-          },
-          
+          F_ITEMS.name
         ]
       }
     };
@@ -348,12 +261,10 @@ export default {
       console.log("新增后的数据:", param);
       console.log("新增前的数据:", param1);
     },
-  
+
     setAddInit() {
       this.cfList.formDataAddInit = { a: 1, b: 2, articleTitle: "234" };
-    },
-    
-    
+    }
   },
   created() {
     T = this;

@@ -17,6 +17,9 @@ import moment from 'moment'//导入moment方法库
 window.moment = moment
 Vue.prototype.$moment = moment//让vue实例中可访问$moment
 
+import  "./assets/js/config_column.js"
+import  "./assets/js/config_form.js"
+
 
 import util from "./assets/js/util.js";
 window.util = util;

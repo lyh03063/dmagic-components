@@ -391,5 +391,56 @@ MIX.form_item = {
 
 
 WIN.MIX = MIX;
+
+//#region searchCollection:查询静态集合列表函数（支持模糊查询）
+util.searchCollection = function (param = {}) {
+    let { findJson = {}, dataBase } = param;
+
+
+    let paramVague = {};//模糊查询参数
+    let paramEqual = {};//等值查询参数
+
+    for (var prop in findJson) {
+        let pEach = findJson[prop];
+        if (pEach && pEach["$regex"]) {//如果带正则
+            paramVague[prop] = pEach["$regex"];
+        } else if (!(pEach ==undefined||pEach ==null)) {
+            paramEqual[prop] = pEach
+        }
+    }
+
+    console.log("paramEqual:", paramEqual);
+    console.log("paramVague:", paramVague);
+
+    //第1步，先处理等值查询
+    let result = lodash.filter(dataBase, paramEqual);
+
+
+    //第2步，处理模糊查询
+    let searchResult = lodash.filter(result, function (doc) {
+        let flag = true;
+        for (var prop in paramVague) {
+            let flagEach;
+            if (doc[prop]) {
+                //如果对象的属性值存在
+                flagEach = doc[prop].includes(paramVague[prop]);
+            } else {
+                flagEach = false;
+            }
+            console.log("flagEach", flagEach);
+            flag = flag && flagEach;
+        }
+        console.log("flag", flag);
+        return flag;
+    });
+    return searchResult
+};
+//#endregion
+
+
+
+
+
+
 //#endregion
 export default util
