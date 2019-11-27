@@ -35,8 +35,12 @@ COLUMNS.title_search = {
   prop: "title",
   type: "input_find_vague"
 };
-COLUMNS.aaaa = 11111;
-COLUMNS.aaaa = 11111;
+
+
+COLUMNS.item_prop = {...D_ITEMS.item_prop, width: 120,};
+COLUMNS.item_label = {...D_ITEMS.item_label, width: 160,};
+COLUMNS.item_type = {...D_ITEMS.item_type, width: 120,};
+
 COLUMNS.aaaa = 11111;
  /****************************赛事报名-END****************************/
 

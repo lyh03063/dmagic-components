@@ -18,7 +18,7 @@
     </el-menu>
     <div class="main-box">
       <div class="left-box" :style="{'width':showDialog?'60%':'100%'}">
-        <router-view style="padding:10px;margin-top:70px"></router-view>
+        <router-view style="padding:10px;"></router-view>
       </div>
 
       <div :class="{'side-bar-box':true,'show':showDialog}" v-if="true">

@@ -61,7 +61,10 @@ export default {
   created() {
     T = this;
   },
-  async mounted() {}
+  async mounted() {
+    //菜单聚焦
+     this.$store.commit("changeActiveMenu", "list_common_demo");
+  }
 };
 </script>
 

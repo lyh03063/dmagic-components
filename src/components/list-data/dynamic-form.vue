@@ -278,23 +278,19 @@ export default {
 
     //如果初始化的ajax地址存在
     if (this.cf.urlInit) {
-      console.log("this.cf.urlInit:#####", this.cf.urlInit);
       let { data } = await axios({
         //请求接口
         method: "post",
         url: (PUB.domain || "") + this.cf.urlInit, //注意运算符要用括号
         data: ajaxParam //传递参数
       });
-      console.log("data:333", data);
       if (data) {
-        
-        this.formDataNeed = data.Doc ||data.doc; //这里要使用大写的Doc
+        this.formDataNeed = data.Doc ||data.doc; //这里要使用大写的Doc，通用数据用小写的doc
       } else {
         this.$message.error('ajax读取初始化数据失败！');
     
       }
     }
-    console.log("this.formDataNeed:222", this.formDataNeed);
     this.initForm(); //调用：{初始化表单函数}
   },
   mounted() {

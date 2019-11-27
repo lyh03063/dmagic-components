@@ -354,17 +354,21 @@ F_ITEMS.label_search = {
   type: "input_find_vague"
 };
 
-F_ITEMS.label = {
+F_ITEMS.item_label = {
   label: "label说明",
   prop: "label",
   type: "input"
 };
-F_ITEMS.prop = {
+F_ITEMS.item_prop = {
   label: "prop属性名",
   prop: "prop",
   type: "input"
 };
-
+F_ITEMS.item_type = {
+  label: "type",
+  prop: "type",
+  type: "input"
+};
 F_ITEMS.name = {
   label: "标题",
   prop: "name",

@@ -21,6 +21,36 @@ D_ITEMS.detail= {
   prop: "detail",
 
 };
+
+
+
+D_ITEMS.item_prop = {
+  label: "prop",
+  prop: "prop",
+ 
+};
+D_ITEMS.item_label = {
+  label: "label",
+  prop: "label",
+  width: 160,
+};
+D_ITEMS.item_type = {
+  label: "type",
+  prop: "type",
+  width: 160,
+};
+
+D_ITEMS.aaaa=1111;
+D_ITEMS.aaaa=1111;
+D_ITEMS.aaaa=1111;
+D_ITEMS.aaaa=1111;
+D_ITEMS.aaaa=1111;
+D_ITEMS.aaaa=1111;
+D_ITEMS.aaaa=1111;
+D_ITEMS.aaaa=1111;
+D_ITEMS.aaaa=1111;
+D_ITEMS.aaaa=1111;
+D_ITEMS.aaaa=1111;
 D_ITEMS.aaaa=1111;
 
 
