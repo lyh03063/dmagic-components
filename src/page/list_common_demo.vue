@@ -20,9 +20,7 @@ export default {
         pageSize: 20,
         listIndex: "list_html_api", //vuex对应的字段~
         focusMenu: true, //进行菜单聚焦
-
         threeTitle: "Html-API", //面包屑2级菜单
-
         url: {
           list: `/info/getCommonList`, //列表接口
           add: "/info/commonAdd", //新增接口
