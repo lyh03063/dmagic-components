@@ -79,12 +79,18 @@ util.getTimeStatus = function (param) {//
     return { flag, msg, start, end, now }
 }
 //#endregion
-//#region ajaxPopulate:ajax填充数据列表的某个字段函数
-/**ajax填充数据列表的某个字段函数
- * 可用于动态数据字典
- */
+//#region ajaxPopulate:ajax填充数据列表的某个字段函数/可用于动态数据字典
+
 util.ajaxPopulate = async function (populateConfig) {
-    let { listData, page, populateColumn, idColumn, idColumn2, findJson = {} } = populateConfig;
+
+    //补充ajax配置20191128
+    let { ajax, listData, page, populateColumn, idColumn,
+        idColumn2, findJson = {} } = populateConfig;
+
+
+
+
+
     let arrId = [];
     listData.forEach(itemEach => {//循环：{原数据数组}
         let idEach = itemEach[idColumn]
@@ -104,14 +110,26 @@ util.ajaxPopulate = async function (populateConfig) {
             "$in": arrId
         }
     }
+
+
+    let urlAjax = `/crossList?page=${page}`;
+    let paramAjax = {
+        findJson: findJsonNeed, pageSize: 999
+    }
+
+
+    if (ajax) {//如果{ajax配置}存在*****
+        let { url, param = {} } = ajax
+        urlAjax = url;
+        Object.assign(paramAjax, param);//合并对象
+    }
+
     Object.assign(findJsonNeed, findJson);//合并对象
     let { data } = await axios({
         //请求接口
         method: "post",
-        url: WIN.PUB.domain + `/crossList?page=${page}`,
-        data: {
-            findJson: findJsonNeed, pageSize: 999
-        } //传递参数
+        url: WIN.PUB.domain + urlAjax,
+        data: paramAjax //传递参数
     });
     var dict = lodash.keyBy(data.list, idColumn2)
     listData.forEach(itemEach => {//循环：{原数据数组}

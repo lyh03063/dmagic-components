@@ -383,6 +383,9 @@ F_ITEMS.name_search = {
 F_ITEMS.title = { ...D_ITEMS.title };
 F_ITEMS.desc = { ...D_ITEMS.desc, type: "textarea" };
 F_ITEMS.detail = { ...D_ITEMS.detail, type: "editorTM" };
+F_ITEMS.title_search= { ...D_ITEMS.title, type: "input_find_vague" };
+
+
 
 F_ITEMS.aaaa = 11111;
 F_ITEMS.aaaa = 11111;

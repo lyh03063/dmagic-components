@@ -40,6 +40,15 @@ D_ITEMS.item_type = {
   width: 160,
 };
 
+
+
+D_ITEMS.category = {
+  label: "所属分类",
+  prop: "category",
+};
+
+
+
 D_ITEMS.aaaa=1111;
 D_ITEMS.aaaa=1111;
 D_ITEMS.aaaa=1111;

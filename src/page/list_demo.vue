@@ -47,7 +47,17 @@ export default {
         //操作列配置
         columnOperate: {
           "min-width": 200
-        },
+        },  
+
+        //dynamicDict动态数据字典配置
+        dynamicDict: [
+          {
+            page: "tangball_article_category",
+            populateColumn: "categoryDoc",
+            idColumn: "articleCategory",
+            idColumn2: "P1"
+          }
+        ],
         //列表单项操作按钮的配置
         singleBtns: {
           // detail:false,
@@ -200,13 +210,9 @@ export default {
         //-------筛选表单字段数组-------
         searchFormItems: [F_ITEMS.select1, F_ITEMS.name_search],
         //-------详情字段数组-------
-        detailItems: [
-          COLUMNS.name
-        ],
+        detailItems: [COLUMNS.name],
         //-------新增、修改表单字段数组-------
-        formItems: [
-          F_ITEMS.name
-        ]
+        formItems: [F_ITEMS.name]
       }
     };
   },

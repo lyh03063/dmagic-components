@@ -98,7 +98,7 @@
           :sortable="column.sortable"
           :column-key="column.columnKey"
           :filters="column.filters"
-          :show-overflow-tooltip="true"
+          :show-overflow-tooltip="column.showOverflowTooltip"
           :key="column.__id"
         >
           <template slot-scope="scope">
@@ -255,10 +255,9 @@ export default {
     filterHandler(filters) {
       for (let key in filters) {
         console.log(key + "---" + filters[key]);
-        this.objParam.findJson[key] = filters[key]
+        this.objParam.findJson[key] = filters[key];
         console.log(this.objParam);
         this.getDataList();
-        
       }
     },
     //每页显示数量变动后的回调函数
@@ -518,9 +517,12 @@ export default {
         this.tableData = list;
         this.page = page;
         this.allCount = page.allCount; //更改总数据量
-      }else{
+      } else {
         //调用：{查询静态集合列表函数（支持模糊查询）}
-       this.tableData= util.searchCollection({dataBase:this.tableData,findJson:obj1})
+        this.tableData = util.searchCollection({
+          dataBase: this.tableData,
+          findJson: obj1
+        });
       }
 
       if (this.cf.dynamicDict) {
@@ -528,13 +530,20 @@ export default {
 
         for await (const populateCFEach of this.cf.dynamicDict) {
           // await   funPopulate(populateCFEach);//调用：{根据填充配置进行一次ajax请求关联数据的函数}
-          let { page, populateColumn, idColumn, idColumn2 } = populateCFEach;
+          let {
+            page,
+            populateColumn,
+            idColumn,
+            idColumn2,
+            ajax
+          } = populateCFEach;
           this.tableData = await util.ajaxPopulate({
             listData: this.tableData,
             page,
             populateColumn,
             idColumn,
-            idColumn2
+            idColumn2,
+            ajax //补充ajax配置
           });
         }
       }
@@ -587,6 +596,9 @@ export default {
     this.cf.columns.forEach(columnEach => {
       columnEach.__id = util.getTimeRandom();
       selectJson[columnEach.prop] = 1;
+      //设置默认值
+      util.setObjDefault(columnEach, { showOverflowTooltip: true });
+
       //如果依赖字段存在**
       if (columnEach.requireProp && columnEach.requireProp.length) {
         columnEach.requireProp.forEach(rPropEach => {
