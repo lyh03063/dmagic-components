@@ -43,19 +43,20 @@ export default {
           {
             ajax: {
               param: { _systemId, _dataType: "html_api_category" },
-              url: "/info/getCommonList",
+              url: "/info/getCommonList"
             },
             populateColumn: "categoryDoc",
             idColumn: "category",
-            idColumn2: "_id"
+            idColumn2: "_id",
+            
+
           },
-          {
-           
-            page: "tangball_article_category",
-            populateColumn: "categoryDoc2",
-            idColumn: "P1",
-            idColumn2: "P1"
-          }
+          // {
+          //   page: "tangball_article_category",
+          //   populateColumn: "categoryDoc2",
+          //   idColumn: "P1",
+          //   idColumn2: "P1"
+          // }
         ],
 
         //-------列配置数组-------

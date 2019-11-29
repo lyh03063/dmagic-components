@@ -379,4 +379,9 @@ util.searchCollection = function (param = {}) {
 };
 //#endregion
 
-export default util
+
+
+
+WIN.MIX = MIX;
+//#endregion
+

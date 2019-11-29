@@ -530,21 +530,9 @@ export default {
 
         for await (const populateCFEach of this.cf.dynamicDict) {
           // await   funPopulate(populateCFEach);//调用：{根据填充配置进行一次ajax请求关联数据的函数}
-          let {
-            page,
-            populateColumn,
-            idColumn,
-            idColumn2,
-            ajax
-          } = populateCFEach;
-          this.tableData = await util.ajaxPopulate({
-            listData: this.tableData,
-            page,
-            populateColumn,
-            idColumn,
-            idColumn2,
-            ajax //补充ajax配置
-          });
+          let paramPopulate=lodash.cloneDeep(populateCFEach);//深拷贝
+          paramPopulate.listData=this.tableData;//补充listData属性
+          this.tableData = await util.ajaxPopulate(paramPopulate);
         }
       }
       this.$emit("after-search", this.tableData); //触发外部事件
