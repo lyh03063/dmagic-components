@@ -63,7 +63,7 @@
                 <!--提示-->
                 <i class="el-icon-question" :title="item.tips" style="color:#999" v-if="item.tips"></i>
               </label>
-              <form_item :cf="item" v-model="formDataNeed">
+              <form_item :cf="item" v-model="formDataNeed" @enterClick="enterClick">
                 <!--递归普通表单字段的插槽-->
                 <template v-slot:[item.slot]="{formData}">
                   <slot :name="item.slot" :formData="formDataNeed" v-if="item.slot"></slot>
@@ -157,6 +157,17 @@ export default {
     }
   },
   methods: {
+    enterClick(){
+      let eventName
+      this.cf.btns.forEach(item=>{
+        if (item.event=="submit") {
+          eventName = "submit"
+        }else if (item.event=="submit1") {
+          eventName = "submit1"
+        }
+      })
+      this.btnClick(eventName,true)
+    },
     /**
      * @name 获取该字段样式函数
      */
@@ -235,6 +246,8 @@ export default {
       return promise;
     },
     async btnClick(eventName, validate) {
+      // console.log(111);
+      
       //Q1：需要校验
       if (validate) {
         let valid = await this.validate(); //校验结果

@@ -1,7 +1,7 @@
 <template>
   <div class>
     <!--文本框+自定义处理器-->
-    <el-input v-model="valueNeed" @input="change"></el-input>
+    <el-input v-model="valueNeed" @input="change" @keyup.enter.native="$emit('enterClick')"></el-input>
   </div>
 </template>
 

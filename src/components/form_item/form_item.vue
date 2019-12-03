@@ -129,8 +129,9 @@
       :showToolbar="true"
     ></tiny_mce>
     <quill_editor v-model="formDataNeed[item.prop]" v-else-if="item.type=='editor'"></quill_editor>
-    <!--模糊查询文本框-->
-    <input_find_vague v-model="formDataNeed[item.prop]" v-else-if="item.type=='input_find_vague'"></input_find_vague>
+    <!--模糊查询文本框  支持回车查询-->
+    <input_find_vague v-model="formDataNeed[item.prop]" v-else-if="item.type=='input_find_vague'"
+    @enterClick="$emit('enterClick')"></input_find_vague>
 
     <!--密码框-->
     <el-input
@@ -161,8 +162,9 @@
       <number_range class v-model="formDataNeed" v-bind="item" v-else></number_range>
     </template>
 
+    
     <!--文本-->
-
+    
     <span class="PR5" v-else-if="item.type=='text'" :style="item.style">{{formDataNeed[item.prop]}}</span>
 
     <!--ajax_populate-->
@@ -173,8 +175,9 @@
       :page="$lodash.get(item, `cfAjaxPopulate.page`)"
     ></dm_ajax_populate>
 
-    <!--普通文本框-->
-    <el-input v-model="formDataNeed[item.prop]" v-else></el-input>
+    <!--普通文本框  支持enter触发表单提交-->
+
+    <el-input v-else  v-model="formDataNeed[item.prop]"  @keyup.enter.native="$emit('enterClick')"></el-input>
 
     <template class v-if="item.frequency">
       <el-popover
@@ -259,7 +262,12 @@ export default {
       }
     };
   },
-  methods: {},
+  methods: {
+    print(){
+      console.log(12111);
+      
+    }
+  },
   created() {}
 };
 </script>

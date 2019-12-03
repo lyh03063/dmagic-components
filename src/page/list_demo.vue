@@ -33,6 +33,11 @@ export default {
     return {
       visible: {},
       cfList: {
+        breadcrumb:[
+          {value:"首页",path:"/listHome"},
+          {value:"其他数据"},
+          {value:"文章管理"}
+        ],
         cfElTable: {
           //默认排序图标显示，需要配合sortJsonDefault
           "default-sort": { prop: "CreateTime", order: "descending" }

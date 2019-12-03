@@ -216,7 +216,7 @@ export default {
       return Object.assign(style, styleAdd); //合并对象
     },
     initFormDataAdd() {
-      console.log("initFormDataAdd#");
+      // console.log("initFormDataAdd#");
       //函数：{初始化新增数据表单函数}
       if (!this.cf.formDataAddInit) {
         return;

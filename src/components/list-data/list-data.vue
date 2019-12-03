@@ -8,10 +8,22 @@
       <dm_debug_item v-model="cf.dynamicDict" text="动态数据字典配置" />
       <dm_debug_item v-model="tableData" text="列表数据" />
     </dm_debug_list>
-    <el-breadcrumb separator-class="el-icon-arrow-right" v-if="cf.isShowBreadcrumb" class="MB12">
+    <!-- 兼容之前版本面包屑 -->
+    <el-breadcrumb separator-class="el-icon-arrow-right" v-if="cf.isShowBreadcrumb&&!cf.breadcrumb" class="MB12" >
       <el-breadcrumb-item :to="{ path: '/listHome' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>{{cf.twoTitle}}</el-breadcrumb-item>
+      <el-breadcrumb-item >{{cf.twoTitle}}</el-breadcrumb-item>
       <el-breadcrumb-item>{{cf.threeTitle}}</el-breadcrumb-item>
+    </el-breadcrumb>
+    <!-- 新面包屑 -->
+    <el-breadcrumb separator-class="el-icon-arrow-right" v-if="cf.isShowBreadcrumb&&cf.breadcrumb" class="MB12" >
+      <el-breadcrumb-item  v-for="(item,index) in cf.breadcrumb" :key="index">
+        <a :href="item.path" v-if="item.path">
+        {{item.value}}
+        </a>
+        <span v-else>
+          {{item.value}}
+        </span>
+      </el-breadcrumb-item>
     </el-breadcrumb>
 
     <div class="search-form-box MB10" v-if="cf.isShowSearchForm">

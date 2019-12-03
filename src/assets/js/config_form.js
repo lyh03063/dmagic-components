@@ -369,14 +369,14 @@ F_ITEMS.item_type = {
   prop: "type",
   type: "input"
 };
-F_ITEMS.name = {
-  label: "标题",
+F_ITEMS.name ={
+  label: "标题111",
   prop: "name",
-};
+}
 F_ITEMS.name_search = {
-  label: "标题",
+  label: "标题123",
   prop: "name",
-  type: "input_find_vague"
+  type:"input_find_vague"
 };
 
 
