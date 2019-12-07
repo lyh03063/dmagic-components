@@ -33,10 +33,10 @@ export default {
     return {
       visible: {},
       cfList: {
-        breadcrumb:[
-          {value:"首页",path:"/listHome"},
-          {value:"其他数据"},
-          {value:"文章管理"}
+        breadcrumb: [
+          { value: "首页", path: "/listHome" },
+          { value: "其他数据" },
+          { value: "文章管理" }
         ],
         cfElTable: {
           //默认排序图标显示，需要配合sortJsonDefault
@@ -52,7 +52,7 @@ export default {
         //操作列配置
         columnOperate: {
           "min-width": 200
-        },  
+        },
 
         //dynamicDict动态数据字典配置
         dynamicDict: [
@@ -89,7 +89,11 @@ export default {
               uiType: "link",
               text: "新窗口打开页面",
               target: "_blank",
+              urlFormatter: function(row) {
+                return `http://www.baidu.com?id=${row.name}`;
+              },
               url: "http://www.baidu.com?id=" //这里要配置好参数名，内部会把参数加进来
+              // url: "http://www.baidu.com?id=" //这里要配置好参数名，内部会把参数加进来
             }
           ]
         },

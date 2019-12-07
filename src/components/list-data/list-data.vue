@@ -9,20 +9,24 @@
       <dm_debug_item v-model="tableData" text="列表数据" />
     </dm_debug_list>
     <!-- 兼容之前版本面包屑 -->
-    <el-breadcrumb separator-class="el-icon-arrow-right" v-if="cf.isShowBreadcrumb&&!cf.breadcrumb" class="MB12" >
+    <el-breadcrumb
+      separator-class="el-icon-arrow-right"
+      v-if="cf.isShowBreadcrumb&&!cf.breadcrumb"
+      class="MB12"
+    >
       <el-breadcrumb-item :to="{ path: '/listHome' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item >{{cf.twoTitle}}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{cf.twoTitle}}</el-breadcrumb-item>
       <el-breadcrumb-item>{{cf.threeTitle}}</el-breadcrumb-item>
     </el-breadcrumb>
     <!-- 新面包屑 -->
-    <el-breadcrumb separator-class="el-icon-arrow-right" v-if="cf.isShowBreadcrumb&&cf.breadcrumb" class="MB12" >
-      <el-breadcrumb-item  v-for="(item,index) in cf.breadcrumb" :key="index">
-        <a :href="item.path" v-if="item.path">
-        {{item.value}}
-        </a>
-        <span v-else>
-          {{item.value}}
-        </span>
+    <el-breadcrumb
+      separator-class="el-icon-arrow-right"
+      v-if="cf.isShowBreadcrumb&&cf.breadcrumb"
+      class="MB12"
+    >
+      <el-breadcrumb-item v-for="(item,index) in cf.breadcrumb" :key="index">
+        <a :href="item.path" v-if="item.path">{{item.value}}</a>
+        <span v-else>{{item.value}}</span>
       </el-breadcrumb-item>
     </el-breadcrumb>
 
@@ -144,7 +148,7 @@
                 :class="item.class"
                 :target="item.target"
                 :title="item.title"
-                :href="item.url?item.url+scope.row[cf.idKey]:'javascript:;'"
+                :href="getSigleLinkUrl(item,scope.row)"
                 :key="index"
               >
                 <el-button
@@ -263,6 +267,16 @@ export default {
   },
 
   methods: {
+    getSigleLinkUrl(item, row) {
+      console.log("getSigleLinkUrl:####");
+      let linkNeed = item.url ? item.url + row[this.cf.idKey] : "javascript:;";
+     //如果地址格式函数存在
+     if (item.urlFormatter) {
+        linkNeed = item.urlFormatter(row);
+      }
+
+      return linkNeed;
+    },
     // 表头筛选数据的方法
     filterHandler(filters) {
       for (let key in filters) {
@@ -542,8 +556,8 @@ export default {
 
         for await (const populateCFEach of this.cf.dynamicDict) {
           // await   funPopulate(populateCFEach);//调用：{根据填充配置进行一次ajax请求关联数据的函数}
-          let paramPopulate=lodash.cloneDeep(populateCFEach);//深拷贝
-          paramPopulate.listData=this.tableData;//补充listData属性
+          let paramPopulate = lodash.cloneDeep(populateCFEach); //深拷贝
+          paramPopulate.listData = this.tableData; //补充listData属性
           this.tableData = await util.ajaxPopulate(paramPopulate);
         }
       }
