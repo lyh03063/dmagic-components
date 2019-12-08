@@ -268,6 +268,7 @@ export default {
 
   methods: {
     getSigleLinkUrl(item, row) {
+      //注意，这个方法会调用很多次
       console.log("getSigleLinkUrl:####");
       let linkNeed = item.url ? item.url + row[this.cf.idKey] : "javascript:;";
      //如果地址格式函数存在
@@ -363,6 +364,11 @@ export default {
     },
     showAdd() {
       this.$emit("after-show-Dialog-Add");
+      this.$store.commit("openDialogAdd", this.cf.listIndex);
+    },
+    //函数：{显示复制数据弹窗函数}
+    showCopy(row) {
+      this.$emit("after-show-dialog-copy");
       this.$store.commit("openDialogAdd", this.cf.listIndex);
     },
     // 删除选中数据的方法
@@ -662,6 +668,7 @@ export default {
       lodash.set(this.cf, `singleBtns.addon`, [
         util.cfList.sBtns.detail,
         util.cfList.sBtns.modify,
+        util.cfList.sBtns.copy,
         util.cfList.sBtns.delete
       ]);
     }
@@ -676,6 +683,14 @@ export default {
         this.$refs.listDialogs.showModify(row);
       } else if (eventType == "detail") {
         this.showDetail(row);
+      } else if (eventType == "copy") {
+        this.$refs.listDialogs.cfFormAdd.urlInit= this.cf.url.detail;
+        this.$refs.listDialogs.cfFormAdd.idKey= this.cf.idKey;
+        this.$refs.listDialogs.formAdd=lodash.cloneDeep(row);
+      //  delete this.$refs.listDialogs.formAdd[this.cf.idKey]//删除数据id,否则新增会出问题
+
+        this.showCopy(row);//调用：{显示复制数据弹窗函数}
+
       }
     });
   },

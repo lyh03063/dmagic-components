@@ -71,6 +71,7 @@ export default {
           addon: [
             util.cfList.sBtns.detail,
             util.cfList.sBtns.modify,
+            util.cfList.sBtns.copy,
             util.cfList.sBtns.delete,
             {
               title: "单项操作（圆形按钮）",

@@ -295,6 +295,14 @@ util.cfList.sBtns.delete = {
         icon: "el-icon-close"
     }
 }
+util.cfList.sBtns.copy = {
+    title: "复制",
+    eventType: "copy",
+    cfElBtn: {
+        circle: true,
+        icon: "el-icon-document-copy"
+    }
+}
 //#endregion
 //#region setObjDefault:给一个对象设置默认属性（但不整个替换对象，并且默认属性优先级低于已有属性）
 util.setObjDefault = function (obj, objDeault) {

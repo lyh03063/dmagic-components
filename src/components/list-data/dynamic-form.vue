@@ -299,6 +299,8 @@ export default {
       });
       if (data) {
         this.formDataNeed = data.Doc ||data.doc; //这里要使用大写的Doc，通用数据用小写的doc
+        delete this.formDataNeed[this.cf.idKey]//删除数据id,否则复制新增会出问题
+        delete this.formDataNeed["_id"]//删除数据id,否则复制新增会出问题
       } else {
         this.$message.error('ajax读取初始化数据失败！');
     
