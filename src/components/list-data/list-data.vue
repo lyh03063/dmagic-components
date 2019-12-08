@@ -668,7 +668,6 @@ export default {
       lodash.set(this.cf, `singleBtns.addon`, [
         util.cfList.sBtns.detail,
         util.cfList.sBtns.modify,
-        util.cfList.sBtns.copy,
         util.cfList.sBtns.delete
       ]);
     }
