@@ -199,13 +199,14 @@ export default {
         columns: [
           COLUMNS.name_fixed,
           {
-            label: "案件状态",
+            label: "案件状态1",
             prop: "status",
             filters: [
               { text: "待立案", value: 1 },
               { text: "已结案", value: 2 }
             ],
-            columnKey: "status"
+            columnKey: "status",
+            cfColumn:{"class-name":"table_cell_visible"}
           },
 
           {

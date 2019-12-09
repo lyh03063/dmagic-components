@@ -114,6 +114,7 @@
           :sortable="column.sortable"
           :column-key="column.columnKey"
           :filters="column.filters"
+          v-bind="column.cfColumn"
           :show-overflow-tooltip="column.showOverflowTooltip"
           :key="column.__id"
         >
@@ -661,7 +662,6 @@ export default {
         util.cfList.bBtns.delete
       ]);
     }
-
     //添加标准单选操作按钮
     let singleBtnsAddon = lodash.get(this.cf, `singleBtns.addon`);
     if (!singleBtnsAddon) {
