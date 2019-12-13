@@ -364,6 +364,8 @@ export default {
       return this.$emit("bacth-btn-click", eventType); //抛出自定义事件
     },
     showAdd() {
+      //清空初始化数据ajax地址，赋值数据时可能添加了这个，
+      this.$refs.listDialogs.cfFormAdd.urlInit= null;//
       this.$emit("after-show-Dialog-Add");
       this.$store.commit("openDialogAdd", this.cf.listIndex);
     },
@@ -683,9 +685,11 @@ export default {
       } else if (eventType == "detail") {
         this.showDetail(row);
       } else if (eventType == "copy") {
-        this.$refs.listDialogs.cfFormAdd.urlInit= this.cf.url.detail;
-        this.$refs.listDialogs.cfFormAdd.idKey= this.cf.idKey;
+        this.$refs.listDialogs.cfFormAdd.paramAddonInit=this.cf.paramAddonPublic; //初始化的附加参数
+        this.$refs.listDialogs.cfFormAdd.urlInit= this.cf.url.detail;//初始化数据ajax地址
+        this.$refs.listDialogs.cfFormAdd.idKey= this.cf.idKey;//初始化的idKey
         this.$refs.listDialogs.formAdd=lodash.cloneDeep(row);
+
       //  delete this.$refs.listDialogs.formAdd[this.cf.idKey]//删除数据id,否则新增会出问题
 
         this.showCopy(row);//调用：{显示复制数据弹窗函数}

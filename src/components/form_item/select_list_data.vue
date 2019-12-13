@@ -8,10 +8,26 @@
       <dm_debug_item v-model="selectData" text="selectData" />
       <dm_debug_item v-model="cf" text="cf" />
     </dm_debug_list>
-    <span :title="valueNeed">{{label||valueNeed}}</span>
+    <span :title="valueNeed" v-if="!cf.multiple">{{label||valueNeed}}</span>
 
-    <el-input placeholder="隐藏辅助文本框，用于更新校验" ref="input_help" style="width:0px;height:0px;overflow:hidden"></el-input>
+    <el-input
+      placeholder="隐藏辅助文本框，用于更新校验"
+      ref="input_help"
+      style="width:0px;height:0px;overflow:hidden"
+    ></el-input>
     <el-button plain @click="isShowDialog=true" size="mini">选择{{cf.dataName||"数据"}}</el-button>
+    <div class="MT8" v-if="cf.multiple">
+      <collection
+        v-model="valueNeed"
+        :show-toolbar="true"
+        :cf-form="{}"
+        :hidePart="{'btn-add':1,'btn-edit':1,'btn-copy':1}"
+        data-slot="dataSlot1"
+      >
+        <!--插槽内容-->
+        <template v-slot:dataSlot1="{doc}">{{doc[cf.labelKey]}}</template>
+      </collection>
+    </div>
 
     <!--选择数据弹窗-->
     <el-dialog
@@ -37,9 +53,9 @@
 
 <script>
 // import dm_list_data from "../../components/list-data/list-data.vue";
-
+import collection from "../../components/form_item/collection.vue";
 export default {
-  //   components: { dm_list_data },
+  components: { collection },
   props: {
     cf: {
       type: Object,
@@ -65,18 +81,43 @@ export default {
       let selection = this.$refs.listSelectData.$refs.table.selection;
       console.log("selection:", selection);
       if (!selection.length) return this.$message.error("未选择任何数据");
-
       this.selectData = util.deepCopy(selection);
-      this.isShowDialog = false;
-      this.valueNeed = lodash.get(
-        this.selectData,
-        `[0].${this.cf.valueKey || "P1"}`
-      );
-      console.log("this.valueNeed:", this.valueNeed);
-      this.label = lodash.get(
-        this.selectData,
-        `[0].${this.cf.labelKey || "name"}`
-      );
+
+      if (this.cf.multiple) {
+        //Q1：多选
+        this.valueNeed = this.valueNeed || [];
+
+        let { selectJson } = this.cf;
+        if (this.cf.selectJson) {
+          this.selectData = this.selectData.map(doc => {
+            let obj = {};
+            //遍历selectJson对象
+            for (let prop in selectJson) {
+              if (selectJson[prop]) {
+                //如果{selectJson}中存在
+                obj[prop] = doc[prop];
+              }
+            }
+            return obj;
+          });
+        }
+
+        this.valueNeed.push(...this.selectData); //追加
+      } else {
+        //Q2：单选
+        this.valueNeed = lodash.get(
+          this.selectData,
+          `[0].${this.cf.valueKey || "P1"}`
+        );
+        console.log("this.valueNeed:", this.valueNeed);
+        this.label = lodash.get(
+          this.selectData,
+          `[0].${this.cf.labelKey || "name"}`
+        );
+      }
+
+      this.isShowDialog = false; //关闭弹窗
+
       // await this.$nextTick(); //延迟到视图更新
       //       this.$parent.$parent.$forceUpdate()//强制视图更新
       // this.$parent.$forceUpdate()//强制视图更新

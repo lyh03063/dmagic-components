@@ -3,9 +3,10 @@
     <dm_debug_list>
       <dm_debug_item v-model="showToolbar" text="showToolbar" />
       <dm_debug_item v-model="valueNeed" text="valueNeed" />
+      <dm_debug_item v-model="hidePart" text="隐藏部件" />
     </dm_debug_list>
     <!-- 这里不能使用MB8样式，会被element自带覆盖 -->
-    <el-button @click="addGroup" v-if="showToolbar" v-bind="cfElBtnAdd">{{cfElBtnAdd.text}}</el-button>
+    <el-button @click="addGroup" v-if="ifShow('btn-add')" v-bind="cfElBtnAdd">{{cfElBtnAdd.text}}</el-button>
 
     <div class v-if="valueNeed && valueNeed.length">
       <ul>
@@ -43,15 +44,15 @@
                 class="el-icon-edit btn-op"
                 title="编辑"
                 @click="showEditDataDialog(i)"
-                v-if="listType=='bar'"
+                v-if="ifShow('btn-edit')"
               ></i>
               <i
                 class="el-icon-copy-document btn-op"
                 title="复制"
                 @click="copyData(i)"
-                v-if="listType=='bar'"
+                v-if="ifShow('btn-copy')"
               ></i>
-              <i class="el-icon-delete btn-op" title="删除" @click="deleteData(i)"></i>
+              <i class="el-icon-delete btn-op" title="删除" @click="deleteData(i)" v-if="ifShow('btn-delete')"></i>
             </div>
           </template>
         </li>
@@ -109,6 +110,13 @@ export default {
 
     cfForm: {
       type: Object
+    },
+    //隐藏部分
+    hidePart: {
+      type: Object,
+      default: function() {
+        return {};
+      }
     }
   },
   watch: {
@@ -135,6 +143,25 @@ export default {
   },
 
   methods: {
+    //函数：{返回是否显示置底区块函数}
+    ifShow(part) {
+      let flag = false;
+      flag = !this.hidePart[part];
+      //如果flag为真
+      if (flag) {
+        if (part == "btn-add") {
+        } else if (part == "btn-edit") {
+          flag = flag && this.listType == "bar";
+        } else if (part == "btn-copy") {
+          flag = flag && this.listType == "bar";
+        }
+      }
+      //如果flag为真
+      if (flag) {
+        flag = this.showToolbar;
+      }
+      return flag;
+    },
     //处理线上doc的函数
     handelShowDoc(doc) {
       //深拷贝

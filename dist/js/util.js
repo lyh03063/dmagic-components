@@ -16,9 +16,9 @@ if (typeof window === "undefined") {
     WIN = window;
 }
 WIN.PUB = {};
-//WIN.PUB.domain="http://120.76.160.41:3000"
+WIN.PUB.domain = "http://120.76.160.41:3000";
 // WIN.PUB.domain = "http://localhost:3000"
-WIN.PUB.domain = 'http://test.dmagic.cn';
+//WIN.PUB.domain = 'http://test.dmagic.cn'
 // WIN.PUB.urlUpload = `${PUB.domain}/api_third_part/qiniu_upload?scope=test`
 WIN.PUB.urlUpload = "https://up-z2.qiniup.com"; //七牛云上传地址（域名）
 WIN.PUB.urlGetQiniuToken = PUB.domain + "/api_third_part/get_qiniu_token?scope=test";
@@ -378,9 +378,21 @@ util.cfList.sBtns.delete = {
         circle: true,
         icon: "el-icon-close"
     }
-    //#endregion
-    //#region setObjDefault:给一个对象设置默认属性（但不整个替换对象，并且默认属性优先级低于已有属性）
-};util.setObjDefault = function (obj, objDeault) {
+};
+util.cfList.sBtns.copy = {
+    title: "复制",
+    eventType: "copy",
+    cfElBtn: {
+        circle: true,
+        icon: "el-icon-document-copy"
+    }
+
+    //所有的标准版单项按钮数组
+};util.cfList.sBtns.arrAllBtns = [util.cfList.sBtns.detail, util.cfList.sBtns.modify, util.cfList.sBtns.copy, util.cfList.sBtns.delete];
+
+//#endregion
+//#region setObjDefault:给一个对象设置默认属性（但不整个替换对象，并且默认属性优先级低于已有属性）
+util.setObjDefault = function (obj, objDeault) {
     //for of循环遍历对象，for of不能直接处理对象，本质上是同个Object.keys拼装一个新数组进行辅助
     var _iteratorNormalCompletion = true;
     var _didIteratorError = false;

@@ -58,6 +58,12 @@ export default {
           //   idColumn2: "P1"
           // }
         ],
+        //列表单项操作按钮的配置
+        singleBtns: {
+          addon: [
+            ...util.cfList.sBtns.arrAllBtns,
+          ]
+        },
 
         //-------列配置数组-------
         columns: [COLUMNS.title_fixed, COLUMNS.desc, COLUMNS.category],

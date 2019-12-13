@@ -157,16 +157,16 @@ export default {
     }
   },
   methods: {
-    enterClick(){
-      let eventName
-      this.cf.btns.forEach(item=>{
-        if (item.event=="submit") {
-          eventName = "submit"
-        }else if (item.event=="submit1") {
-          eventName = "submit1"
+    enterClick() {
+      let eventName;
+      this.cf.btns.forEach(item => {
+        if (item.event == "submit") {
+          eventName = "submit";
+        } else if (item.event == "submit1") {
+          eventName = "submit1";
         }
-      })
-      this.btnClick(eventName,true)
+      });
+      this.btnClick(eventName, true);
     },
     /**
      * @name 获取该字段样式函数
@@ -247,7 +247,7 @@ export default {
     },
     async btnClick(eventName, validate) {
       // console.log(111);
-      
+
       //Q1：需要校验
       if (validate) {
         let valid = await this.validate(); //校验结果
@@ -298,12 +298,15 @@ export default {
         data: ajaxParam //传递参数
       });
       if (data) {
-        this.formDataNeed = data.Doc ||data.doc; //这里要使用大写的Doc，通用数据用小写的doc
-        delete this.formDataNeed[this.cf.idKey]//删除数据id,否则复制新增会出问题
-        delete this.formDataNeed["_id"]//删除数据id,否则复制新增会出问题
+        console.log("this.formDataNeed:####", this.formDataNeed);
+        this.formDataNeed = data.Doc || data.doc; //这里要使用大写的Doc，通用数据用小写的doc
+        console.log("this.cf.idKey:", this.cf.idKey);
+         delete this.formDataNeed[this.cf.idKey]; //删除数据id,否则复制新增会出问题
+        // delete this.formDataNeed["_id"]; //删除数据id,否则复制新增会出问题
+
+        console.log("$$$$$$$$$$$$$$$$");
       } else {
-        this.$message.error('ajax读取初始化数据失败！');
-    
+        this.$message.error("ajax读取初始化数据失败！");
       }
     }
     this.initForm(); //调用：{初始化表单函数}

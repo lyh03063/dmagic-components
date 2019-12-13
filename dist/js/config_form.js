@@ -8,74 +8,11 @@ require("./config_detail.js");
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-//#region F_ITEMS:表单字段管理
-
 window.F_ITEMS = {};
 
 //#region form_demo的字段
 
-var cfListSelectActicle = {
-  //选择列表配置
-  dataName: "文章",
-  valueKey: "P1",
-  labelKey: "articleTitle",
-  pageName: "tangball_article",
-  cfList: {
-    pageSize: 10,
-    focusMenu: false, //进行菜单聚焦
-    isShowBreadcrumb: false, //面包屑
-    isShowToolBar: false, //批量操作栏
-    isShowOperateColumn: false, //单项操作列
-    isRefreshAfterCUD: false, //是否在增删改操作后自动更新列表
-    isMultipleSelect: false, //不支持多选
-    url: {
-      list: "/crossList?page=tangball_article" //列表接口
-    },
-    dynamicDict: [{
-      page: "tangball_article_category",
-      populateColumn: "categoryDoc",
-      idColumn: "articleCategory",
-      idColumn2: "P1"
-    }],
-    //-------列配置数组-------
-    columns: [{
-      label: "文章标题aaa",
-      prop: "articleTitle",
-      width: 260
-    }, {
-      label: "分类名称",
-      prop: "articleCategory",
-      requireProp: ["articleContent"], //依赖文章详情，列表需返回该字段
-      width: "auto",
-      formatter: function formatter(rowData) {
-        var name = lodash.get(rowData, "categoryDoc.name");
-        return name;
-      }
-    }],
-    //-------筛选表单字段数组-------
-    searchFormItems: [{
-      label: "下拉框(多选)",
-      prop: "select1",
-      type: "select",
-      // default: [2],
-      multiple: true, //多选
-      options: [{ value: 1, label: "男" }, { value: 2, label: "女" }]
-    }, {
-      label: "文章分类",
-      prop: "articleCategory",
-      type: "select",
-      ajax: {
-        url: "/crossList?page=tangball_article_category",
-        keyLabel: "name",
-        keyValue: "P1"
-      }
-    }, {
-      label: "文章标题",
-      prop: "articleTitle",
-      type: "input_find_vague"
-    }]
-  }
-};
+
 F_ITEMS.Id = {
   label: "数据id",
   prop: "P1",
@@ -181,13 +118,7 @@ F_ITEMS.memberId = {
   type: "ajax_populate",
   cfAjaxPopulate: { populateKey: "name", page: "tangball_member" }
 };
-F_ITEMS.prop_select_list_data = {
-  label: "选择列表",
-  prop: "prop_select_list_data",
-  type: "select_list_data",
-  cfSelectList: cfListSelectActicle,
-  rules: [{ required: true, message: "能为空" }]
-};
+
 F_ITEMS.num1_text = {
   label: "文本字段",
   prop: "num1",
@@ -317,6 +248,9 @@ F_ITEMS.prop_vueJsonEditor = {
 };
 //#endregion
 
+
+//#region 其他表单字段
+
 F_ITEMS.label_search = {
   label: "label",
   prop: "label",
@@ -339,11 +273,11 @@ F_ITEMS.item_type = {
   type: "input"
 };
 F_ITEMS.name = {
-  label: "标题",
+  label: "标题111",
   prop: "name"
 };
 F_ITEMS.name_search = {
-  label: "标题",
+  label: "标题123",
   prop: "name",
   type: "input_find_vague"
 };
@@ -352,9 +286,103 @@ F_ITEMS.title = _extends({}, D_ITEMS.title);
 F_ITEMS.desc = _extends({}, D_ITEMS.desc, { type: "textarea" });
 F_ITEMS.detail = _extends({}, D_ITEMS.detail, { type: "editorTM" });
 F_ITEMS.title_search = _extends({}, D_ITEMS.title, { type: "input_find_vague" });
+//#endregion
 
-F_ITEMS.aaaa = 11111;
-F_ITEMS.aaaa = 11111;
-F_ITEMS.aaaa = 11111;
-F_ITEMS.aaaa = 11111;
+//#region 文章列表选择配置
+var cfListSelectActicle = {
+  //选择列表配置
+  dataName: "文章",
+  valueKey: "P1",
+  labelKey: "articleTitle",
+  pageName: "tangball_article",
+  multiple: true, //多选
+  cfList: {
+    pageSize: 10,
+    focusMenu: false, //进行菜单聚焦
+    isShowBreadcrumb: false, //面包屑
+    isShowToolBar: false, //批量操作栏
+    isShowOperateColumn: false, //单项操作列
+    isRefreshAfterCUD: false, //是否在增删改操作后自动更新列表
+    // isMultipleSelect: false, //不支持多选
+    url: {
+      list: "/crossList?page=tangball_article" //列表接口
+    },
+    dynamicDict: [{
+      page: "tangball_article_category",
+      populateColumn: "categoryDoc",
+      idColumn: "articleCategory",
+      idColumn2: "P1"
+    }],
+    //-------列配置数组-------
+    columns: [{
+      label: "文章标题aaa",
+      prop: "articleTitle",
+      width: 260
+    }, {
+      label: "分类名称",
+      prop: "articleCategory",
+      requireProp: ["articleContent"], //依赖文章详情，列表需返回该字段
+      width: "auto",
+      formatter: function formatter(rowData) {
+        var name = lodash.get(rowData, "categoryDoc.name");
+        return name;
+      }
+    }],
+    //-------筛选表单字段数组-------
+    searchFormItems: [{
+      label: "下拉框(多选)",
+      prop: "select1",
+      type: "select",
+      // default: [2],
+      multiple: true, //多选
+      options: [{ value: 1, label: "男" }, { value: 2, label: "女" }]
+    }, {
+      label: "文章分类",
+      prop: "articleCategory",
+      type: "select",
+      ajax: {
+        url: "/crossList?page=tangball_article_category",
+        keyLabel: "name",
+        keyValue: "P1"
+      }
+    }, {
+      label: "文章标题",
+      prop: "articleTitle",
+      type: "input_find_vague"
+    }]
+  }
+};
+
+F_ITEMS.prop_select_list_data = {
+  label: "选择列表",
+  // default: 48,
+  prop: "prop_select_list_data",
+  type: "select_list_data",
+  cfSelectList: cfListSelectActicle,
+  rules: [{ required: true, message: "能为空" }]
+};
+//#endregion
+
+
+//#region 通用数据-网址列表选择配置
+var list_common_url = { "idKey": "_id", "pageSize": 20, "listIndex": "list_url", "focusMenu": true, "twoTitle": "网址", "url": { "list": "/info/getCommonList", "add": "/info/commonAdd", "modify": "/info/commonModify", "detail": "/info/commonDetail", "delete": "/info/commonDelete" }, "columnOperate": { "min-width": 160 }, "singleBtns": { "addon": [{ "title": "详情", "eventType": "detail", "cfElBtn": { "circle": true, "icon": "el-icon-notebook-2" } }, { "title": "编辑", "eventType": "modify", "cfElBtn": { "circle": true, "icon": "el-icon-edit" } }, { "title": "删除", "eventType": "delete", "cfElBtn": { "circle": true, "icon": "el-icon-close" } }, { "uiType": "link", "text": "打开网址", "target": "_blank" }] }, "objParamAddon": { "_systemId": "sys_api", "_dataType": "url" }, "paramAddonPublic": { "_systemId": "sys_api", "_dataType": "url" }, "columns": [{ "label": "标题", "prop": "title", "width": 320, "fixed": true }, { "label": "说明", "prop": "desc", "width": 160 }, { "label": "网址", "prop": "link", "width": 120 }], "searchFormItems": [{ "label": "标题", "prop": "title", "type": "input_find_vague" }], "detailItems": [{ "label": "标题", "prop": "title" }, { "label": "说明", "prop": "desc" }, { "label": "网址", "prop": "link" }], "formItems": [{ "label": "标题", "prop": "title" }, { "label": "网址", "prop": "link", "type": "input" }, { "label": "说明", "prop": "desc", "type": "textarea" }] };
+
+F_ITEMS.select_list_common_url = {
+  label: "网址",
+  prop: "prop_select_list_data",
+  type: "select_list_data",
+  cfSelectList: {
+    dataName: "网址",
+    valueKey: "_id",
+    labelKey: "title",
+    pageName: "tangball_article",
+    multiple: true, //多选
+    //需要保留的集合字段
+    selectJson: {
+      _id: 1, title: 1, link: 1
+    },
+    cfList: list_common_url
+  }
+
+};
 //#endregion

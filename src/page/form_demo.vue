@@ -4,7 +4,7 @@
       <dm_debug_item v-model="formData" text="formData" />
     </dm_debug_list>
 
-    <el-input v-model="formData1['obj.num2']"></el-input>
+    <!-- <el-input v-model="formData1['obj.num2']"></el-input> -->
 
     <dm_dynamic_form :cf="cfForm" v-model="formData">
       <!--自定义集合数据插槽组件-->
@@ -14,16 +14,8 @@
         123
         <checkbox_diy v-model="formData.diycheckbox" :options="options"></checkbox_diy>
       </template>
-    </dm_dynamic_form>######
-    <dm_dynamic_form :cf="cfForm" v-model="formData">
-      <!--自定义集合数据插槽组件-->
-      <template v-slot:slot_collection1="{doc}">doc:{{doc}}</template>
-      <!--自定义复选框插槽组件-->
-      <template v-slot:slot_form_item_diycheckbox="{formData}">
-        123
-        <checkbox_diy v-model="formData.diycheckbox" :options="options"></checkbox_diy>
-      </template>
     </dm_dynamic_form>
+    
   </div>
 </template>
 
@@ -170,27 +162,29 @@ export default {
         labelWidth: "150px",
 
         formItems: [
-          F_ITEMS.diycheckbox,
-          F_ITEMS.num2,
-          F_ITEMS.num1,
-          F_ITEMS.collection1,
-          F_ITEMS.collection2,
-          F_ITEMS.prop_numberRange,
-          F_ITEMS.prop1,
-          F_ITEMS.prop_input_find_vague,
-          F_ITEMS.memberId,
-          F_ITEMS.prop_select_list_data,
-          F_ITEMS.num1_text,
-          F_ITEMS.groupMember,
-          F_ITEMS.prop4,
-          F_ITEMS.num1_component,
-          F_ITEMS.complete1,
-          F_ITEMS.select1,
-          F_ITEMS.prop_editorTM,
-          F_ITEMS.extend,
-          F_ITEMS.prop_upload2,
-          F_ITEMS.prop_upload,
-          F_ITEMS.prop_vueJsonEditor
+          F_ITEMS.select_list_common_url,
+          // F_ITEMS.prop_select_list_data,
+          // F_ITEMS.diycheckbox,
+          // F_ITEMS.num2,
+          // F_ITEMS.num1,
+          // F_ITEMS.collection1,
+          // F_ITEMS.collection2,
+          // F_ITEMS.prop_numberRange,
+          // F_ITEMS.prop1,
+          // F_ITEMS.prop_input_find_vague,
+          // F_ITEMS.memberId,
+          
+          // F_ITEMS.num1_text,
+          // F_ITEMS.groupMember,
+          // F_ITEMS.prop4,
+          // F_ITEMS.num1_component,
+          // F_ITEMS.complete1,
+          // F_ITEMS.select1,
+          // F_ITEMS.prop_editorTM,
+          // F_ITEMS.extend,
+          // F_ITEMS.prop_upload2,
+          // F_ITEMS.prop_upload,
+          // F_ITEMS.prop_vueJsonEditor
         ],
         btns: [
           { text: "提交111", event: "submit", type: "primary", validate: true },
