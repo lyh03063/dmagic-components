@@ -130,8 +130,11 @@
     ></tiny_mce>
     <quill_editor v-model="formDataNeed[item.prop]" v-else-if="item.type=='editor'"></quill_editor>
     <!--模糊查询文本框  支持回车查询-->
-    <input_find_vague v-model="formDataNeed[item.prop]" v-else-if="item.type=='input_find_vague'"
-    @enterClick="$emit('enterClick')"></input_find_vague>
+    <input_find_vague
+      v-model="formDataNeed[item.prop]"
+      v-else-if="item.type=='input_find_vague'"
+      @enterClick="$emit('enterClick')"
+    ></input_find_vague>
 
     <!--密码框-->
     <el-input
@@ -161,10 +164,9 @@
       <!--如果prop不存在，传入整个formDataNeed-->
       <number_range class v-model="formDataNeed" v-bind="item" v-else></number_range>
     </template>
-
-    
+    <!--标签列表（数组）-->
+    <tag_list v-model="formDataNeed[item.prop]" v-else-if="item.type=='tag_list'"></tag_list>
     <!--文本-->
-    
     <span class="PR5" v-else-if="item.type=='text'" :style="item.style">{{formDataNeed[item.prop]}}</span>
 
     <!--ajax_populate-->
@@ -177,7 +179,7 @@
 
     <!--普通文本框  支持enter触发表单提交-->
 
-    <el-input v-else  v-model="formDataNeed[item.prop]"  @keyup.enter.native="$emit('enterClick')"></el-input>
+    <el-input v-else v-model="formDataNeed[item.prop]" @keyup.enter.native="$emit('enterClick')"></el-input>
 
     <template class v-if="item.frequency">
       <el-popover
@@ -217,6 +219,7 @@ import quill_editor from "../../components/form_item/quill_editor.vue";
 import tiny_mce from "../../components/form_item/tiny_mce";
 import select_list_data from "../../components/form_item/select_list_data.vue";
 import number_range from "../../components/form_item/number_range.vue";
+import tag_list from "../../components/form_item/tag_list.vue";
 export default {
   name: "form_item", //组件名，用于递归
   components: {
@@ -233,9 +236,10 @@ export default {
     collection,
     quill_editor,
     tiny_mce,
-    number_range
+    number_range,
+    tag_list
   },
-  
+
   // mixins: [MIX.form_item], //混入
   props: {
     cf: [Object],
@@ -263,9 +267,8 @@ export default {
     };
   },
   methods: {
-    print(){
+    print() {
       console.log(12111);
-      
     }
   },
   created() {}
@@ -274,7 +277,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 /****************************数字输入框隐藏操作按钮-START****************************/
 .hide-btn >>> [role="button"] {
   display: none;

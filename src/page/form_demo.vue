@@ -109,10 +109,12 @@ export default {
     return {
       formData1: { obj: { num: 123 } },
       formData: {
+        // tagList:["2222","3333"],
         aaaa: 123,
         power_paicheng: {},
 
         power: {
+          
           matchCenter: {
             list_match: { add: true, delete: true },
             list_achievement: { add: true, delete: true },
@@ -162,6 +164,7 @@ export default {
         labelWidth: "150px",
 
         formItems: [
+          F_ITEMS.tagList,
           F_ITEMS.select_list_common_url,
           // F_ITEMS.prop_select_list_data,
           // F_ITEMS.diycheckbox,
