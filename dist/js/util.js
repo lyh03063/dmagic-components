@@ -291,9 +291,15 @@ util.handelItem = function (cf) {
     } else if (action == "delete") {
         //Q2:delete
         items.splice(index, 1);
+    } else if (action == "merge") {
+        //Q3:merge合并
+        // let itemNew=Object.assign(items[index],itemNew);//合并对象
+
+        itemNew = _extends({}, items[index], itemNew);
+
+        this.$set(items, index, itemNew); //修改memberId对应的字段配置
     }
 };
-// 
 //#endregion
 //#region setListPower:根据当前角色权限设置列表配置的函数-需要用到window.rolePower变量
 util.setListPower = function (cfList) {

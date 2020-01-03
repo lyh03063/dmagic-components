@@ -209,9 +209,14 @@ util.handelItem = function (cf) {
         this.$set(items, index, itemNew); //修改memberId对应的字段配置
     } else if (action == "delete") { //Q2:delete
         items.splice(index, 1)
+    } else if (action == "merge") { //Q3:merge合并
+        // let itemNew=Object.assign(items[index],itemNew);//合并对象
+
+        itemNew={...items[index],...itemNew}
+      
+        this.$set(items, index, itemNew); //修改memberId对应的字段配置
     }
 }
-// 
 //#endregion
 //#region setListPower:根据当前角色权限设置列表配置的函数-需要用到window.rolePower变量
 util.setListPower = function (cfList) {
@@ -390,5 +395,21 @@ util.searchCollection = function (param = {}) {
     return searchResult
 };
 //#endregion
+
+//#region isNotEmptyArr:判断是否为非空数组的函数
+util.isNotEmptyArr = function (arr) { //函数：{判断是否为非空数组}
+    let type = util.type(arr);//变量：{类型}
+    if (type !== "array") {//如果不是数组
+        return false
+    }
+    if (arr.length <= 0) {//如果数组为空
+        return false
+    }
+    return true;
+};
+//#endregion
+
+
+
 
 export default util

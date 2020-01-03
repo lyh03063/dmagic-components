@@ -71,7 +71,13 @@
         :style="getTipsStyle(cf)"
       ></div>
 
-      <dynamicForm v-model="formAdd" :cf="cfFormAdd" @submit="addData" @cancel="closeDialogAddFun">
+      <dynamicForm
+        v-model="formAdd"
+        :cf="cfFormAdd"
+        @submit="addData"
+        @cancel="closeDialogAddFun"
+        :needDeleteId="true"
+      >
         <template v-slot:[item.slot]="{formData}" v-for="item in cf.formItems">
           <!--根据cf.formItems循环输出插槽--新增修改表单弹窗-->
           <slot :name="item.slot" :formData="formData" v-if="item.slot"></slot>
@@ -235,7 +241,9 @@ export default {
     },
 
     //-------------修改数据的函数--------------
-    async modifyData() {
+    async modifyData(_data) {
+      //  _data参数为了兼容单元格修改
+      _data = _data || this.formModify; //参数如果不传，使用this.formModify
       //Q1：{修改数据接口地址}存在
       if (this.cf.url.modify) {
         let ajaxParam;
@@ -244,7 +252,7 @@ export default {
         if (this.cf.idKey == "_id") {
           ajaxParam = {
             _id: this.dataIdModify,
-            _data: this.formModify
+            _data: _data
           };
         } else {
           ajaxParam = {
@@ -252,7 +260,7 @@ export default {
               //用于定位要修改的数据
               [this.cf.idKey]: this.dataIdModify
             },
-            modifyJson: this.formModify
+            modifyJson: _data
           };
         }
         Object.assign(ajaxParam, this.cf.paramAddonPublic); //合并公共参数
@@ -265,15 +273,17 @@ export default {
         });
         //Q2：{修改数据接口地址}不存在
       } else {
-        //修改静态列表的数据
-        this.handelItem({
-          action: "replace",
-          items: this.tableData,
-          itemNew: this.formModify,
-          key: this.cf.idKey,
-          prop: this.dataIdModify
-        });
       }
+      console.log("this.formModify:", this.formModify);
+      //修改静态列表的数据+修改动态列表的数据
+      this.handelItem({
+        action: "merge",
+        items: this.tableData,
+        itemNew: _data,
+        key: this.cf.idKey,
+        prop: this.dataIdModify
+      });
+
       this.$message({
         message: "修改数据成功",
         duration: 1500,
@@ -282,9 +292,9 @@ export default {
       this.isShowDialogModify = false; //关闭弹窗
       //如果{增删改操作后是否自动刷新}为真
       if (this.cf.isRefreshAfterCUD) {
-        this.$parent.getDataList(); //更新数据列表
+        // this.$parent.getDataList(); //更新数据列表-暂时去掉
       }
-      this.$emit("after-modify", this.formModify, this.beforeModify); //触发外部事件
+      this.$emit("after-modify", _data, this.beforeModify); //触发外部事件
     },
     //-------------新增数据的函数--------------
     async addData() {
@@ -312,11 +322,10 @@ export default {
         let idMax = 1;
         //如果列表有数据
         if (this.tableData.length) {
-          let arrId = this.tableData.map(doc => doc[this.cf.idKey]); //id数组
+          let arrId = this.tableData.map(doc => doc["P1"]); //id数组
           idMax = Math.max(...arrId) + 1; //获取最大id
         }
-
-        this.formAdd[this.cf.idKey] = idMax; //补充id
+        this.formAdd["P1"] = idMax; //补充id
         this.tableData.unshift(this.formAdd); //静态数据列表追加一条数据
         this.$emit("after-add", this.formAdd);
       }
@@ -338,20 +347,19 @@ export default {
     },
     //-------------显示修改弹窗的函数--------------
     async showModify(row) {
-      
       this.$emit("after-show-Dialog-Modify", row);
       this.beforeModify = row;
-      
+
       // let str = JSON.stringify(row); //转换成字符串
       // let rowNew = JSON.parse(str); //转换成对象
 
-
-     let rowNew = lodash.cloneDeep(row)//深拷贝 
+      let rowNew = lodash.cloneDeep(row); //深拷贝
+      console.log("rowNew", rowNew);
 
       this.isShowDialogModify = true; //打开弹窗
-      
+
       this.formModify = rowNew; //表单赋值
-      console.log("this.formModify:", this.formModify);
+      console.log("this.formModify:#######", this.formModify);
 
       this.dataIdModify = rowNew[this.cf.idKey];
     }

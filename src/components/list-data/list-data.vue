@@ -118,20 +118,28 @@
           :show-overflow-tooltip="column.showOverflowTooltip"
           :key="column.__id"
         >
-          <template slot-scope="scope">
-            <!--Q1:有插槽-->
-            <slot :name="column.slot" :row="scope.row" v-if="column.slot"></slot>
-            <!--Q2:有formatter-->
-            <span class v-else-if="column.formatter">{{column.formatter(scope.row)}}</span>
-            <!--Q3:可跳转的统计数字链接-->
-            <a
-              class="link-blue"
-              href="javascript:;"
-              @click="filterData({pid:scope.row[cf.idKey],listIndex:column.statistics.listIndex, targetIdKey:column.statistics.targetIdKey})"
-              v-else-if="column.statistics"
-            >{{scope.row[column.prop]}}</a>
-            <!--Q4:其他-->
-            <span class v-else>{{scope.row[column.prop]}}</span>
+          <!-- slot-scope="scope" -->
+          <template v-slot="scope">
+            <div class="DPI">
+              <!--Q1:有插槽-->
+              <slot :name="column.slot" :row="scope.row" v-if="column.slot"></slot>
+              <!--Q2:有formatter-->
+              <span class v-else-if="column.formatter">{{column.formatter(scope.row)}}</span>
+              <!--Q3:可跳转的统计数字链接-->
+              <a
+                class="link-blue"
+                href="javascript:;"
+                @click="filterData({pid:scope.row[cf.idKey],listIndex:column.statistics.listIndex, targetIdKey:column.statistics.targetIdKey})"
+                v-else-if="column.statistics"
+              >{{scope.row[column.prop]}}</a>
+              <!--Q4:其他-->
+              <span class v-else>{{scope.row[column.prop]}}</span>
+              <i
+                class="el-icon-edit icon-edit"
+                v-if="column.edit"
+                @click="tdEdit(scope.row,column)"
+              ></i>
+            </div>
           </template>
         </el-table-column>
       </template>
@@ -142,7 +150,9 @@
         :min-width="$lodash.get(cf, `columnOperate['min-width']`,140)"
         v-if="cf.isShowOperateColumn"
       >
-        <template slot-scope="scope" class="operation-box">
+        <!-- <div class="" :test="test(scope)" >test调1次</div> -->
+        <template class="operation-box" v-slot="scope">
+          <!-- <div class="" :test="test(scope)" >test调9次</div> -->
           <template class v-if="$lodash.hasIn(cf, 'singleBtns.addon')">
             <template class v-for="(item,index) in cf.singleBtns.addon">
               <a
@@ -208,7 +218,24 @@
       </template>
       <!--列表用到的各种弹窗-->
     </listDialogs>
-    <div class></div>
+    <!--行内编辑字段弹窗-->
+    <el-dialog
+      custom-class="n-el-dialog"
+      width="65%"
+      title="编辑单项内容"
+      :close-on-press-escape="false"
+      :close-on-click-modal="false"
+      :append-to-body="true"
+      v-bind:visible.sync="isShowDialogEditRow"
+      v-if="isShowDialogEditRow"
+    >
+      <dm_dynamic_form
+        :cf="cfFormEditRow"
+        v-model="formDataEditRow"
+        @submit="submitFormEditRow"
+        @cancel="isShowDialogEditRow=false"
+      ></dm_dynamic_form>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -232,6 +259,19 @@ export default {
 
   data() {
     return {
+      //------------------单元格编辑配置--------------
+      rowEdit: null,
+      columnEdit: null,
+      formDataEditRow: {},
+      cfFormEditRow: {
+        labelWidth: "150px",
+        formItems: [F_ITEMS.name],
+        btns: [
+          { text: "提交", event: "submit", type: "primary", validate: true },
+          { text: "取消", event: "cancel" }
+        ]
+      },
+      isShowDialogEditRow: false, //是否显示行内编辑弹窗
       //------------------筛选表单组件配置--------------
       cfSearchForm: {
         // col_span: 8,//控制显示一行多列
@@ -264,16 +304,66 @@ export default {
       },
       immediate: true,
       deep: true
+    },
+    tableData: {
+      //tableData可以使用v-model进行绑定
+      handler(newVal, oldVal) {
+        console.log("tableData changed");
+        this.$emit("input", this.tableData); //触发外部value的改变，使用watch的话不太好，会有延迟
+      },
+      deep: true
+    },
+    value: {
+      handler(newVal, oldVal) {
+        console.log("value changed");
+        if (this.value) {
+          this.tableData = this.value;
+        }
+      },
+      deep: true
     }
   },
 
   methods: {
+    //函数：{单元格编辑函数}
+    async tdEdit(row, column) {
+      console.log("tdEdit:");
+      let { edit, prop } = column;
+      this.columnEdit = column;
+      this.rowEdit = row;
+
+      if (edit) {
+        //如果需要编辑
+
+        let itemTarget = this.cf.formItems.find(doc => doc.prop == prop); //获取对应的表单字段
+        this.cfFormEditRow.formItems = [itemTarget]; //改变字段配置
+        this.isShowDialogEditRow = true;
+        await util.timeout(500); //延迟
+        this.formDataEditRow[prop] = row[prop]; //表单赋值
+      }
+    },
+    //函数：{单元格编辑表单提交函数}
+    submitFormEditRow() {
+      let { prop } = this.columnEdit;
+      let valNew = this.formDataEditRow[prop]; //变量：{修改后的值}
+      this.rowEdit[prop] = valNew;
+
+      //强大！！！！！-重用了同一个修改方法
+      this.$refs.listDialogs.dataIdModify = this.rowEdit[this.cf.idKey]; //需要修改的数据id
+      this.$refs.listDialogs.modifyData({ [prop]: valNew }); //执行修改
+
+      this.isShowDialogEditRow = false;
+    },
+    test() {
+      console.log("test:####");
+      // console.log("scope:", scope);
+    },
     getSigleLinkUrl(item, row) {
       //注意，这个方法会调用很多次
-      console.log("getSigleLinkUrl:####");
+      // console.log("getSigleLinkUrl:####");
       let linkNeed = item.url ? item.url + row[this.cf.idKey] : "javascript:;";
-     //如果地址格式函数存在
-     if (item.urlFormatter) {
+      //如果地址格式函数存在
+      if (item.urlFormatter) {
         linkNeed = item.urlFormatter(row);
       }
 
@@ -365,7 +455,7 @@ export default {
     },
     showAdd() {
       //清空初始化数据ajax地址，赋值数据时可能添加了这个，
-      this.$refs.listDialogs.cfFormAdd.urlInit= null;//
+      this.$refs.listDialogs.cfFormAdd.urlInit = null; //
       this.$emit("after-show-Dialog-Add");
       this.$store.commit("openDialogAdd", this.cf.listIndex);
     },
@@ -480,18 +570,19 @@ export default {
           }).catch(function(error) {
             alert("异常:" + error);
           });
-          //Q2:{删除数据接口}不存在
+
           //如果{增删改操作后是否自动刷新}为真
           if (this.cf.isRefreshAfterCUD) {
             this.getDataList(); //更新数据列表
           }
         } else {
+          //Q2:{删除数据接口}不存在
           let arrId = deleteData.map(doc => doc[this.cf.idKey]); //删除的id数组
           //过滤出剩余数据
           this.tableData = this.tableData.filter(
             doc => !arrId.includes(doc[this.cf.idKey])
           );
-          this.$emit("input", this.tableData); //****触发外部value的改变，使用watch的话不太好，会有延迟
+          // this.$emit("input", this.tableData); //****触发外部value的改变，使用watch的话不太好，会有延迟
         }
 
         this.$message({
@@ -504,6 +595,7 @@ export default {
     },
     //-------------查询列表的函数--------------
     searchList() {
+      this.objParam.pageIndex = 1; //回到第一页
       this.getDataList(); //第一次加载此函数，页面才不会空
     },
 
@@ -538,7 +630,7 @@ export default {
 
       /****************************将空数组处理成null-END****************************/
 
-      this.tableData = this.value; //提取静态数据
+      // this.tableData = this.value; //提取静态数据
       if (this.cf.url.list) {
         //Q1:{列表接口地址}存在
         let { data } = await axios({
@@ -553,21 +645,23 @@ export default {
         this.page = page;
         this.allCount = page.allCount; //更改总数据量
       } else {
+        //Q2:{列表接口地址}不存在-静态数据
         //调用：{查询静态集合列表函数（支持模糊查询）}
         this.tableData = util.searchCollection({
-          dataBase: this.tableData,
+          dataBase: this.value,
           findJson: obj1
         });
+        // this.$emit("input", this.tableData); //****触发外部value的改变，使用watch的话不太好，会有延迟
       }
 
       if (this.cf.dynamicDict) {
         //如果{填充配置数组}存在.
-
         for await (const populateCFEach of this.cf.dynamicDict) {
           // await   funPopulate(populateCFEach);//调用：{根据填充配置进行一次ajax请求关联数据的函数}
           let paramPopulate = lodash.cloneDeep(populateCFEach); //深拷贝
           paramPopulate.listData = this.tableData; //补充listData属性
           this.tableData = await util.ajaxPopulate(paramPopulate);
+          // this.$emit("input", this.tableData); //****触发外部value的改变，使用watch的话不太好，会有延迟
         }
       }
       this.$emit("after-search", this.tableData); //触发外部事件
@@ -679,21 +773,22 @@ export default {
     //监听标准的单选操作按钮事件
     this.$on("single-btn-click", function(eventType, row) {
       if (eventType == "delete") {
+        //Q1：删除按钮点击事件
         this.confirmDelete(row[this.cf.idKey]);
       } else if (eventType == "modify") {
+        //Q2：修改按钮点击事件
         this.$refs.listDialogs.showModify(row);
       } else if (eventType == "detail") {
+        //Q3：详情按钮点击事件
         this.showDetail(row);
       } else if (eventType == "copy") {
-        this.$refs.listDialogs.cfFormAdd.paramAddonInit=this.cf.paramAddonPublic; //初始化的附加参数
-        this.$refs.listDialogs.cfFormAdd.urlInit= this.cf.url.detail;//初始化数据ajax地址
-        this.$refs.listDialogs.cfFormAdd.idKey= this.cf.idKey;//初始化的idKey
-        this.$refs.listDialogs.formAdd=lodash.cloneDeep(row);
-
-      //  delete this.$refs.listDialogs.formAdd[this.cf.idKey]//删除数据id,否则新增会出问题
-
-        this.showCopy(row);//调用：{显示复制数据弹窗函数}
-
+        //Q4：复制按钮点击事件
+        this.$refs.listDialogs.cfFormAdd.paramAddonInit = this.cf.paramAddonPublic; //初始化的附加参数
+        this.$refs.listDialogs.cfFormAdd.urlInit = this.cf.url.detail; //初始化数据ajax地址
+        this.$refs.listDialogs.cfFormAdd.idKey = this.cf.idKey; //初始化的idKey
+        this.$refs.listDialogs.formAdd = lodash.cloneDeep(row);
+        //  delete this.$refs.listDialogs.formAdd[this.cf.idKey]//删除数据id,否则新增会出问题
+        this.showCopy(row); //调用：{显示复制数据弹窗函数}
       }
     });
   },
@@ -710,6 +805,12 @@ export default {
 
 
 <style scoped>
+.icon-edit {
+  position: absolute;
+  right: 3px;
+  top: 3px;
+  color: #ccc;
+}
 /* n-table样式-针对element组件 ,但好像对其他项目没有效果！！*/
 .list-data-box >>> .n-table-head .cell {
   padding: 0;

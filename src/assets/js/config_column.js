@@ -11,7 +11,8 @@ COLUMNS.name = {
 
 COLUMNS.name_fixed = {
   ...COLUMNS.name,
-  fixed: true
+  fixed: true,
+  edit: true,
 };
 
 COLUMNS.extend = {

@@ -11,7 +11,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 window.F_ITEMS = {};
 
 //#region form_demo的字段
-
+F_ITEMS.tagList = {
+  label: "标签",
+  prop: "tagList",
+  type: "tag_list"
+};
 
 F_ITEMS.Id = {
   label: "数据id",

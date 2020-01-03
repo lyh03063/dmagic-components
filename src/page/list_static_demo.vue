@@ -20,7 +20,7 @@ let arr_F_ITEMS = [];
 for (var prop in window.F_ITEMS) {
   arr_F_ITEMS.push(window.F_ITEMS[prop]);
 }
-
+arr_F_ITEMS.length=4;
 export default {
   components: {},
 

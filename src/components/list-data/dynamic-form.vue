@@ -3,6 +3,7 @@
     <dm_loading height="200" v-if="!isReadyFormData"></dm_loading>
     <!--isReadyFormData为真时才开始渲染表单，保证里面的组件初始化时，表单初始数据已经准备好-->
     <dm_debug_list>
+      <dm_debug_item v-model="needDeleteId" text="是否需要删除id" />
       <dm_debug_item v-model="formDataNeed" text="formDataNeed" />
       <dm_debug_item v-model="value" text="value" />
       <dm_debug_item v-model="cf" text="配置" />
@@ -125,7 +126,11 @@ export default {
         };
       }
     },
-    value: Object
+    value: Object,
+    //是否需要删除Id,在复制数据时需要-
+    needDeleteId: {
+      default: false
+    }
     // formData: Object
   },
   data() {
@@ -301,10 +306,14 @@ export default {
         console.log("this.formDataNeed:####", this.formDataNeed);
         this.formDataNeed = data.Doc || data.doc; //这里要使用大写的Doc，通用数据用小写的doc
         console.log("this.cf.idKey:", this.cf.idKey);
-         delete this.formDataNeed[this.cf.idKey]; //删除数据id,否则复制新增会出问题
-        // delete this.formDataNeed["_id"]; //删除数据id,否则复制新增会出问题
 
-        console.log("$$$$$$$$$$$$$$$$");
+        if (this.needDeleteId) {
+          //如果需要删除Id-这部分不应该写进来
+          delete this.formDataNeed[this.cf.idKey]; //删除数据id,否则复制新增会出问题
+          delete this.formDataNeed["_id"]; //删除数据id,否则复制新增会出问题
+         
+        }
+         delete this.formDataNeed["_data"]; //清除这个_data字段，防止一直叠加****
       } else {
         this.$message.error("ajax读取初始化数据失败！");
       }
