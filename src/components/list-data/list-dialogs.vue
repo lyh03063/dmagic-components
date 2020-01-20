@@ -7,6 +7,7 @@
       v-if="isShowDialogDetail"
       width="95%"
       :before-close="closeDialogDetailFun"
+       :close-on-click-modal="false"
       :append-to-body="true"
     >
       <template v-if="!cf.customDetail">
@@ -54,6 +55,7 @@
       v-if="isShowDialogAdd"
       width="95%"
       :before-close="closeDialogAddFun"
+      :close-on-click-modal="false"
       :append-to-body="true"
     >
       <div class>
@@ -91,6 +93,7 @@
       :visible.sync="isShowDialogModify"
       v-if="isShowDialogModify"
       width="95%"
+      :close-on-click-modal="false"
       :append-to-body="true"
     >
       <dm_debug_list level-up="1">

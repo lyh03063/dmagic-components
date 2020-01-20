@@ -315,6 +315,31 @@ F_ITEMS.title = { ...D_ITEMS.title };
 F_ITEMS.desc = { ...D_ITEMS.desc, type: "textarea" };
 F_ITEMS.detail = { ...D_ITEMS.detail, type: "editorTM" };
 F_ITEMS.title_search = { ...D_ITEMS.title, type: "input_find_vague" };
+
+
+
+F_ITEMS.importance = {
+  "label": "重要性",
+  "prop": "importance",
+  "type": "select",
+  "options": [{
+    "label": "作废",
+    "value": 1
+  }, {
+    "label": "次要",
+    "value": 2
+  }, {
+    "label": "一般",
+    "value": 3
+  }, {
+    "label": "重要",
+    "value": 4
+  }, {
+    "label": "很重要",
+    "value": 5
+  }]
+};
+
 //#endregion
 
 //#region 文章列表选择配置
@@ -417,7 +442,7 @@ F_ITEMS.select_list_common_url = {
     multiple: true,//多选
     //需要保留的集合字段
     selectJson: {
-      _id:1,title:1,link:1
+      _id: 1, title: 1, link: 1
     },
     cfList: list_common_url
   }

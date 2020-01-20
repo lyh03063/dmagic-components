@@ -290,6 +290,29 @@ F_ITEMS.title = _extends({}, D_ITEMS.title);
 F_ITEMS.desc = _extends({}, D_ITEMS.desc, { type: "textarea" });
 F_ITEMS.detail = _extends({}, D_ITEMS.detail, { type: "editorTM" });
 F_ITEMS.title_search = _extends({}, D_ITEMS.title, { type: "input_find_vague" });
+
+F_ITEMS.importance = {
+  "label": "重要性",
+  "prop": "importance",
+  "type": "select",
+  "options": [{
+    "label": "作废",
+    "value": 1
+  }, {
+    "label": "次要",
+    "value": 2
+  }, {
+    "label": "一般",
+    "value": 3
+  }, {
+    "label": "重要",
+    "value": 4
+  }, {
+    "label": "很重要",
+    "value": 5
+  }]
+};
+
 //#endregion
 
 //#region 文章列表选择配置

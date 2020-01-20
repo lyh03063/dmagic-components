@@ -299,6 +299,7 @@ export default {
   watch: {
     "cf.objParamAddon": {
       handler(newVal, oldVal) {
+        console.log("cf.objParamAddon-变动！！");
         Object.assign(this.objParam, this.cf.objParamAddon); //合并对象
         this.objParam = util.deepCopy(this.objParam); //深拷贝强制更新
       },
@@ -689,8 +690,10 @@ export default {
       "header-row-class-name": "n-table-head",
       "row-class-name": "n-table-row"
     });
-
-    let findJsonDefault = this.cf.findJsonDefault || {};
+    //变量：{来自附加参数的findJson}
+    let findJsonFromAddon = lodash.get(this.cf, `objParamAddon.findJson`);
+    //优先使用findJsonFromAddon
+    let findJsonDefault = findJsonFromAddon || this.cf.findJsonDefault || {};
     //读取vuex的当前列表页默认筛选参数
     let defultFindJson = this.$store.state.defultFindJson[this.cf.listIndex];
     if (defultFindJson) {

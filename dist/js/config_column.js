@@ -13,7 +13,8 @@ COLUMNS.name = _extends({}, D_ITEMS.name, {
 });
 
 COLUMNS.name_fixed = _extends({}, COLUMNS.name, {
-  fixed: true
+  fixed: true,
+  edit: true
 });
 
 COLUMNS.extend = {

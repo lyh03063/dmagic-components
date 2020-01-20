@@ -511,4 +511,34 @@ util.searchCollection = function () {
 };
 //#endregion
 
+//#region isNotEmptyArr:判断是否为非空数组的函数
+util.isNotEmptyArr = function (arr) {
+    //函数：{判断是否为非空数组}
+    var type = util.type(arr); //变量：{类型}
+    if (type !== "array") {
+        //如果不是数组
+        return false;
+    }
+    return !!arr.length;
+};
+//#endregion
+
+//#region isNotEmptyObj:判断是否为非空对象的函数
+util.isNotEmptyObj = function (obj) {
+    var arr = Object.keys(obj);
+    return !!arr.length;
+};
+//#endregion
+//#region clearObj:清除对象中的空属性（null.undefined,空格等）
+util.clearObj = function (obj) {
+    var arrSpec = ["", null, undefined];
+    for (var prop in obj) {
+        //如果属性值是特殊的空值，删除属性
+        if (arrSpec.includes(obj[prop])) {
+            delete obj[prop];
+        }
+    }
+};
+//#endregion
+
 exports.default = util;

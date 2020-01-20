@@ -5,7 +5,7 @@
 
 import Vue from 'vue'
 import 'babel-polyfill'
-import "./assets/js/mix.js";//注意位置要提前
+// import "./assets/js/mix.js";//注意位置要提前
 
 import axios from "axios";
 window.axios = axios;
@@ -50,6 +50,7 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 import form_demo from './page/form_demo.vue';   //导入form_demo
+import form_demo2 from './page/form_demo2.vue';   //导入form_demo
 import list_demo from './page/list_demo.vue';   //导入list_demo
 import list_static_demo from './page/list_static_demo.vue';   //导入list_static_demo
 import list_common_demo from './page/list_common_demo.vue';   //导入list_common_demo
@@ -60,6 +61,9 @@ const router = new VueRouter({
   routes: [
     { path: '/', redirect: '/form_demo' },
     { path: '/form_demo', component: form_demo },
+    { path: '/form_demo2', component: form_demo2 },
+    // { path: '/detail_data', component: () => import("./page/form_demo.vue") },
+    
     { path: '/list_demo', component: list_demo },
     { path: '/list_static_demo', component: list_static_demo },
     { path: '/list_common_demo', component: list_common_demo },

@@ -1,6 +1,7 @@
 <template>
   <div>
-    <dm_list_data :cf="cfList"></dm_list_data>
+    <button class="n-button plain" @click="test">objParamAddon添加属性</button>
+    <dm_list_data :cf="cfList" ref="listData"></dm_list_data>
   </div>
 </template>
 
@@ -28,6 +29,7 @@ export default {
           detail: "/info/commonDetail",
           delete: "/info/commonDelete" //删除接口
         },
+        findJsonDefault: { a: 1 },
         //objParamAddon列表接口的附加参数
         objParamAddon: {
           _systemId,
@@ -47,10 +49,8 @@ export default {
             },
             populateColumn: "categoryDoc",
             idColumn: "category",
-            idColumn2: "_id",
-            
-
-          },
+            idColumn2: "_id"
+          }
           // {
           //   page: "tangball_article_category",
           //   populateColumn: "categoryDoc2",
@@ -60,9 +60,7 @@ export default {
         ],
         //列表单项操作按钮的配置
         singleBtns: {
-          addon: [
-            ...util.cfList.sBtns.arrAllBtns,
-          ]
+          addon: [...util.cfList.sBtns.arrAllBtns]
         },
 
         //-------列配置数组-------
@@ -77,7 +75,26 @@ export default {
     };
   },
 
-  methods: {},
+  methods: {
+    test() {
+      console.log("test");
+
+      // this.$set(this.$refs.listData.cf.objParamAddon, "aaa", 777);
+      let random=Math.random()
+
+      this.$set(this.cfList.objParamAddon, "bbb", random);
+      // let objParamAddon= lodash.get(this.$refs, `listData.cf.objParamAddon`);
+      // if (objParamAddon.aaa) {
+
+      //   objParamAddon.aaa++;
+      // } else {
+
+      //   objParamAddon.aaa = 1;
+      // }
+
+      // this.$refs.listData.cf.objParamAddon=lodash.cloneDeep(objParamAddon)
+    }
+  },
   created() {
     T = this;
   },

@@ -212,8 +212,8 @@ util.handelItem = function (cf) {
     } else if (action == "merge") { //Q3:merge合并
         // let itemNew=Object.assign(items[index],itemNew);//合并对象
 
-        itemNew={...items[index],...itemNew}
-      
+        itemNew = { ...items[index], ...itemNew }
+
         this.$set(items, index, itemNew); //修改memberId对应的字段配置
     }
 }
@@ -402,14 +402,26 @@ util.isNotEmptyArr = function (arr) { //函数：{判断是否为非空数组}
     if (type !== "array") {//如果不是数组
         return false
     }
-    if (arr.length <= 0) {//如果数组为空
-        return false
-    }
-    return true;
+    return !!arr.length;
 };
 //#endregion
 
-
-
+//#region isNotEmptyObj:判断是否为非空对象的函数
+util.isNotEmptyObj = function (obj) {
+    var arr = Object.keys(obj);
+    return !!arr.length;
+};
+//#endregion
+//#region clearObj:清除对象中的空属性（null,undefined,空格等）
+util.clearObj = function (obj) {
+    let arrSpec = ["", null, undefined];
+    for (var prop in obj) {
+        //如果属性值是特殊的空值，删除属性
+        if (arrSpec.includes(obj[prop])) {
+            delete obj[prop];
+        }
+    }
+};
+//#endregion
 
 export default util

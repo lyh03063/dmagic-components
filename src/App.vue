@@ -10,6 +10,7 @@
       active-text-color="#ffd04b"
     >
       <el-menu-item index="form_demo" route="/form_demo">表单</el-menu-item>
+      <el-menu-item index="form_demo2" route="/form_demo2">表单2</el-menu-item>
       <el-menu-item index="list_demo" route="/list_demo">列表</el-menu-item>
       <el-menu-item index="list_static_demo" route="/list_static_demo">静态列表</el-menu-item>
       <el-menu-item index="list_common_demo" route="/list_common_demo">通用列表</el-menu-item>
