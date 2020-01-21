@@ -44,6 +44,8 @@ import form_and_list from './components/list-data/index.js';   //
 Vue.use(form_and_list);   //作为全局组件，必须有install
 
 
+import dm_select_list_data from './components/form_item/select_list_data/index.js'
+Vue.use(dm_select_list_data);   //作为全局组件，必须有install
 
 
 import VueRouter from 'vue-router'

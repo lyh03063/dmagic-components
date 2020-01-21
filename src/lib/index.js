@@ -6,6 +6,7 @@ import dm_list_data from '../components/list-data/list-data.vue'
 import dm_loading from '../components/common/loading/loading.vue'
 import dm_ajax_populate from '../components/common/ajax_populate/ajax_populate.vue'
 import dm_space from '../components/common/space/space.vue'
+import dm_select_list_data from '../components/form_item/select_list_data/select_list_data.vue'
 
 
 
@@ -39,7 +40,8 @@ const Components = {
   dm_debug_list, dm_debug_item,
   dm_loading,dm_ajax_populate,dm_space,
   dm_dynamic_form,dm_list_data,
-  dm_codemirror:codemirror
+  dm_codemirror:codemirror,
+  dm_select_list_data
 }
 
 

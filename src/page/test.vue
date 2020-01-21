@@ -1,16 +1,13 @@
 <template>
   <div>
-    <dm_debug_list></dm_debug_list>
-tangball_franchisee：
-    <dm_ajax_populate
-            :id="2"
-            populateKey="name"
-            page="tangball_franchisee"
+    <dm_select_list_data class v-model="arrSelect" :cf="cfSelectList" @select="afterSelect"></dm_select_list_data>
 
-          ></dm_ajax_populate>
+    <dm_select_list_data class v-model="arrSelect2" :cf="cfSelectList2" @select="afterSelect"></dm_select_list_data>
+######
+    <dm_debug_list></dm_debug_list>tangball_franchisee：
+    <dm_ajax_populate :id="2" populateKey="name" page="tangball_franchisee"></dm_ajax_populate>
 
     <codemirror v-model="code" :options="cmOptions" ref="myCm"></codemirror>
-
     {{selectData}}
     <el-button plain @click="formatCode" size="mini" class="MT10">格式化</el-button>
 
@@ -48,7 +45,6 @@ import dm_list_data from "../components/list-data/list-data.vue";
 import dm_dynamic_form from "../components/list-data/dynamic-form.vue";
 import collection from "../components/form_item/collection.vue";
 
-
 import { codemirror } from "vue-codemirror";
 import "codemirror/lib/codemirror.css";
 // 引入主题后还需要在 options 中指定主题才会生效
@@ -73,6 +69,10 @@ export default {
 
   data() {
     return {
+      arrSelect: [],
+      arrSelect2: [],
+      cfSelectList: F_ITEMS.select_list_common_url.cfSelectList,
+      cfSelectList2: window.cfSelectList_note,
       cmOptions: {
         // codemirror options
         tabSize: 4,
@@ -121,6 +121,7 @@ export default {
       `,
 
       selectData: [],
+
       isShowDialog: false, //是否显示弹窗
       cfList: {
         pageSize: 10,
@@ -213,7 +214,10 @@ export default {
             type: "select",
             // default: [2],
             multiple: true, //多选
-            options: [{ value: 1, label: "男" }, { value: 2, label: "女" }]
+            options: [
+              { value: 1, label: "男" },
+              { value: 2, label: "女" }
+            ]
           },
           {
             label: "文章分类",
@@ -240,8 +244,12 @@ export default {
     }
   },
   methods: {
+    afterSelect(arr) {
+      alert("afterSelect");
+      console.log("arr:", arr);
+    },
     formatCode() {
-      let T=this;
+      let T = this;
       console.log("T.cm:", T.cm);
       //T.cm.setValue("aaaaa")编辑器设置代码
       // this.cm.commands["selectAll"]();
@@ -249,7 +257,7 @@ export default {
         return { from: T.cm.getCursor(true), to: T.cm.getCursor(false) };
       }
 
-      var range =  getSelectedRange();
+      var range = getSelectedRange();
       T.cm.autoFormatRange(range.from, range.to);
     },
     //函数：{确认选择数据函数}
@@ -268,8 +276,8 @@ export default {
 </script>
 
 <style>
-        .CodeMirror{
-            font-size: 16px;
-            font-family:Arial;
-        }
-    </style>
+.CodeMirror {
+  font-size: 16px;
+  font-family: Arial;
+}
+</style>

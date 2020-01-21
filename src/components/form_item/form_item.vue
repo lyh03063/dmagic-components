@@ -217,7 +217,7 @@ import json_prop from "../../components/form_item/json_prop.vue";
 import collection from "../../components/form_item/collection.vue";
 import quill_editor from "../../components/form_item/quill_editor.vue";
 import tiny_mce from "../../components/form_item/tiny_mce";
-import select_list_data from "../../components/form_item/select_list_data.vue";
+import select_list_data from "../../components/form_item/select_list_data/select_list_data.vue";
 import number_range from "../../components/form_item/number_range.vue";
 import tag_list from "../../components/form_item/tag_list.vue";
 export default {
