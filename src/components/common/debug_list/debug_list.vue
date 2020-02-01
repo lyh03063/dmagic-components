@@ -35,7 +35,6 @@ export default {
       var ctrlKey = e.ctrlKey || e.metaKey;
       var altKey = e.altKey;
       if (altKey && ctrlKey && keyCode == 68) {
-          console.log("切换调试组件显示！！！！！！！！！！！！");
  
         let debug = this.$store.state.debug;
    

@@ -190,7 +190,6 @@ export default {
     "cf.formItems": {
       //监听新增表单的初始化数据
       handler(newVal, oldVal) {
-        console.log("newVal", newVal);
         this.cfFormAdd.formItems = newVal;
         this.cfFormModify.formItems = newVal; //调用：{初始化新增数据表单函数}
       },
@@ -201,10 +200,7 @@ export default {
   computed: {
     row() {
       //来自vuex的当前行数据
-      console.log(
-        "row####:",
-        this.$store.state.listState[this.cf.listIndex].row
-      );
+     
       return this.$store.state.listState[this.cf.listIndex].row;
     },
     isShowDialogAdd() {
@@ -225,7 +221,6 @@ export default {
       return Object.assign(style, styleAdd); //合并对象
     },
     initFormDataAdd() {
-      // console.log("initFormDataAdd#");
       //函数：{初始化新增数据表单函数}
       if (!this.cf.formDataAddInit) {
         return;
@@ -277,7 +272,6 @@ export default {
         //Q2：{修改数据接口地址}不存在
       } else {
       }
-      console.log("this.formModify:", this.formModify);
       //修改静态列表的数据+修改动态列表的数据
       this.handelItem({
         action: "merge",
@@ -357,12 +351,10 @@ export default {
       // let rowNew = JSON.parse(str); //转换成对象
 
       let rowNew = lodash.cloneDeep(row); //深拷贝
-      console.log("rowNew", rowNew);
 
       this.isShowDialogModify = true; //打开弹窗
 
       this.formModify = rowNew; //表单赋值
-      console.log("this.formModify:#######", this.formModify);
 
       this.dataIdModify = rowNew[this.cf.idKey];
     }

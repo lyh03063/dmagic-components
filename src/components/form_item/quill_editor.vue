@@ -79,7 +79,6 @@ export default {
             handlers: {
               image: function(value) {
                 if (value) {
-                  console.log(document.querySelector("#quill-upload input"));
                   
                   document.querySelector("#quill-upload input").click();
                 } else {
@@ -114,12 +113,10 @@ export default {
   methods: {
     // 富文本图片上传前
     async beforeUpload(file) {
-      console.log("beforeUpload-1");
       // 显示loading动画
       this.quillUpdateImg = true;
   
       let time = moment().format("YYYYMMDDHHmmSSsss");
-          console.log("beforeUpload-2");
       //请求获取token接口
 
       let { data } = await axios({
@@ -143,8 +140,6 @@ export default {
       });
 
 
-      console.log("beforeUpload-3");
-      console.log("data", data);
       let { token, downloadDomain } = data;
        this.downloadDomain = downloadDomain; //更新七牛云下载域名
       this.postData.token = token;
@@ -181,7 +176,6 @@ export default {
   mounted() {
     //在mounted钩子里面初始化富文本的样式
     // quillConfig.initButton();
-    console.log('window.PUB.urlUpload',window.PUB.urlUpload);
     
   }
 };

@@ -55,7 +55,6 @@ export default {
         this.keyExit += `__${str}`;
       }
 
-      console.log("this.keyExit", this.keyExit);
 
       //函数：{获取缓存数据的函数}
       var getExitDoc = () => {
@@ -68,7 +67,6 @@ export default {
           }, 100);
         } else {
           //请求已完成
-          console.log("获取到缓存的数据");
           this.doc = docExit; //****** */
           this.text = docExit[this.populateKey];
         }

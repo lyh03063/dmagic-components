@@ -65,14 +65,12 @@ export default {
         }
       });
 
-      console.log("data", data);
 
       let { token } = data;
       this.postData.token = token;
 
       // this.postData.forceSaveKey = true;
       // this.postData.saveKey = "$(imageInfo.width)";
-      console.log("file", file);
       const isLt2M = file.size / 1024 / 1024 < 200;
 
       if (!isLt2M) {
@@ -94,7 +92,6 @@ export default {
     //  policy.forceSaveKey = true;
     //  policy.saveKey = "1234";//指定文件名
     // token = genUpToken(AK, SK, policy);
-    // console.log("token", token);
     // this.postData.token = token;
   }
 };

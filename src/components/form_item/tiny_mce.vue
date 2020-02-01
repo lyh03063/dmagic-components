@@ -61,7 +61,6 @@ export default {
   methods: {
    async uploadingImg(blobInfo, succFun, failFun){
        var img = blobInfo.blob();
-       console.log(img);
        let time = moment().format("YYYYMMDDHHmmSSsss");
       let requestData = await axios({
         method: "post",

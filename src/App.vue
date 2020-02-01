@@ -16,6 +16,14 @@
       <el-menu-item index="list_common_demo" route="/list_common_demo">通用列表</el-menu-item>
       <el-menu-item index="upload_qiniu" route="/upload_qiniu">上传七牛云</el-menu-item>
       <el-menu-item index="test" route="/test">测试</el-menu-item>
+
+      <el-submenu index="demo_show">
+        <template slot="title">
+          <span class>更多demo</span>
+        </template>
+        <el-menu-item :index="item" :route="`/demo_show?com=${item}`" v-for="item in arrDemo" :key="item">{{item}}</el-menu-item>
+ 
+      </el-submenu>
     </el-menu>
     <div class="main-box">
       <div class="left-box" :style="{'width':showDialog?'60%':'100%'}">
@@ -37,6 +45,12 @@
 </template>
 
 <script>
+//变量：{demo数组}
+let arrDemo=["pannel","list_flex_res"]
+
+
+
+
 import dm_dynamic_form from "./components/list-data/dynamic-form.vue";
 export default {
   components: { dm_dynamic_form },
@@ -75,6 +89,7 @@ export default {
   },
   data() {
     return {
+      arrDemo,
       dataConfigForCopy: "", //用于拷贝的配置字符串
       dataConfig: {}, //内部组件配置数据
       // activeIndex: "1",

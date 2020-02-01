@@ -299,7 +299,6 @@ export default {
   watch: {
     "cf.objParamAddon": {
       handler(newVal, oldVal) {
-        console.log("cf.objParamAddon-变动！！");
         Object.assign(this.objParam, this.cf.objParamAddon); //合并对象
         this.objParam = util.deepCopy(this.objParam); //深拷贝强制更新
       },
@@ -309,14 +308,12 @@ export default {
     tableData: {
       //tableData可以使用v-model进行绑定
       handler(newVal, oldVal) {
-        console.log("tableData changed");
         this.$emit("input", this.tableData); //触发外部value的改变，使用watch的话不太好，会有延迟
       },
       deep: true
     },
     value: {
       handler(newVal, oldVal) {
-        console.log("value changed");
         if (this.value) {
           this.tableData = this.value;
         }
@@ -328,7 +325,6 @@ export default {
   methods: {
     //函数：{单元格编辑函数}
     async tdEdit(row, column) {
-      console.log("tdEdit:");
       let { edit, prop } = column;
       this.columnEdit = column;
       this.rowEdit = row;
@@ -356,12 +352,9 @@ export default {
       this.isShowDialogEditRow = false;
     },
     test() {
-      console.log("test:####");
-      // console.log("scope:", scope);
     },
     getSigleLinkUrl(item, row) {
       //注意，这个方法会调用很多次
-      // console.log("getSigleLinkUrl:####");
       let linkNeed = item.url ? item.url + row[this.cf.idKey] : "javascript:;";
       //如果地址格式函数存在
       if (item.urlFormatter) {
@@ -373,9 +366,7 @@ export default {
     // 表头筛选数据的方法
     filterHandler(filters) {
       for (let key in filters) {
-        console.log(key + "---" + filters[key]);
         this.objParam.findJson[key] = filters[key];
-        console.log(this.objParam);
         this.getDataList();
       }
     },
@@ -388,7 +379,6 @@ export default {
     sortChange(param) {
       //order: "descending","ascending"
       //排序规则值数据字典
-      window.console.log("value", param);
       let dict1 = {
         descending: -1,
         ascending: 1
@@ -411,7 +401,6 @@ export default {
     },
     //选择数据
     selectionChange(val) {
-      console.log("selectionChange");
       if (this.cf.isMultipleSelect) return;
       if (val.length > 1) {
         this.$refs.table.clearSelection();
@@ -505,7 +494,6 @@ export default {
       };
       Object.assign(ajaxParam, this.cf.paramAddonPublic); //合并公共参数
 
-      console.log("ajaxParam:", ajaxParam);
 
       if (this.cf.url.detail) {
         //如果{详情ajax地址}存在
@@ -607,7 +595,6 @@ export default {
     },
     //-------------ajax获取数据列表函数--------------
     async getDataList() {
-      console.log("getDataList####");
       //最终需要提交的参数
       let objParamFinal = util.deepCopy(this.objParam); //深拷贝,后续处理数据避免影响查询表单
       /****************************将空数组处理成null-START****************************/
@@ -627,7 +614,6 @@ export default {
           delete obj1[key];
         }
       }
-      console.log("objParamFinal.findJson:", objParamFinal.findJson);
 
       /****************************将空数组处理成null-END****************************/
 
@@ -798,7 +784,7 @@ export default {
 
   async mounted() {
     await util.timeout(30); //延迟,处理getDataList中处理空数组字段需要，
-    console.log("神奇！！");
+    console.warn("神奇！！");
     //不加这一句的话一开始空数组是undefined，但提交时却变成 []，神奇！！
     //等待模板加载后，
     this.getDataList(); //第一次加载此函数，页面才不会空

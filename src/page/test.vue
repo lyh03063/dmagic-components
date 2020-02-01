@@ -147,7 +147,6 @@ export default {
           watch: {
             //传入监听器
             articleCategory(newVal, oldVal) {
-              console.log("complete1111变动");
               this.value.articleTitle = { a: 1 };
             }
           }
@@ -246,11 +245,9 @@ export default {
   methods: {
     afterSelect(arr) {
       alert("afterSelect");
-      console.log("arr:", arr);
     },
     formatCode() {
       let T = this;
-      console.log("T.cm:", T.cm);
       //T.cm.setValue("aaaaa")编辑器设置代码
       // this.cm.commands["selectAll"]();
       function getSelectedRange() {
@@ -264,7 +261,6 @@ export default {
     confirmSelect() {
       //获取选中的数据，此处可优化，使用selection-change事件
       let selection = this.$refs.listSelectData.$refs.table.selection;
-      console.log("selection:", selection);
       if (!selection.length) return this.$message.error("未选择任何数据");
       this.selectData = util.deepCopy(selection);
       this.isShowDialog = false;

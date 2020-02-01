@@ -135,7 +135,6 @@ function getAllUrlParame(_json) {//函数定义：{获取所有url参数Json的�
  *   methods:{
  *     change:function(propName,newVal,oldVal){
  *       this[propName]=newVal;
- *       console.log("组件mycomponent的" +propName+ "属性由" +oldVal+ "修改为了" +newVal);
  *     }
  *   }
  * }
@@ -213,7 +212,6 @@ var propsync = {
             unwatchPropsFnArr.push(propsFn);
             //[监听所有属性映射到组件内的变量]
             var dataFn = that.$watch(dataName, function (newVal, oldVal) {
-                console.log("监听所有属性映射到组件内的变量@###########");
                 that.$emit(emitPropsChangeName, prop, newVal, oldVal); //将组件内p_prop通知给组件外(调用方)
             }, {});
             unwatchDataFnArr.push(dataFn);
@@ -298,7 +296,6 @@ Vue.component('dialog-normal', {
             WIN.PUB.dialogZIndex = WIN.PUB.dialogZIndex || 2500;
             WIN.PUB.dialogZIndex++;
             this.zIndex = WIN.PUB.dialogZIndex
-            console.log("computed-this.show1", this.show);
             return this.p_show
         },
     },
@@ -405,11 +402,8 @@ if (WIN.Vuex) {//如果{Vuex}存在
         var keyCode = e.keyCode || e.which || e.charCode;
         var ctrlKey = e.ctrlKey || e.metaKey;
         if (ctrlKey && keyCode == 68) {
-            console.log("ctrlKey", ctrlKey);
-            console.log("keyCode", keyCode);
             // this.toggleDebug();//调用：{切换调试模式函数}
             let debug = WIN.store.state.debug;
-            console.log("debug", debug);
             WIN.store.commit("setDebug", !debug);
             e.preventDefault(); //阻止默认事件
             return false;
@@ -442,7 +436,6 @@ util.MIX.power = {
         },
     }, created() {
         if (!WIN.PUB.rolePower && localStorage.rolePower) {//公共权限数据变量不存在，从localStorage读取
-            console.log("公共权限数据变量不存在，从localStorage读取");
             WIN.PUB.rolePower = JSON.parse(localStorage.rolePower)
         }
     }

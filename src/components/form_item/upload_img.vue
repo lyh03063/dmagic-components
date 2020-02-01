@@ -149,12 +149,10 @@ export default {
           }
         }
       });
-      console.log("data", data);
       let { token, downloadDomain } = data;
       this.downloadDomain = downloadDomain; //更新七牛云下载域名
 
       this.postData.token = token;
-      console.log("file", file);
       const isLt2M = file.size / 1024 / 1024 < 200;
 
       if (!isLt2M) {
@@ -164,22 +162,15 @@ export default {
     },
     //处理图片上传后的同步
     uploaded(response) {
-      console.log("response", response);
       //  response= util.parseJson(response)//转成json
       let { key, fname } = response;
       let url = `${this.downloadDomain}/${key}`; //图片的绝对路径
       this.valueNeed.push({ url, name: fname }); //
     },
-    // uploaded(response) {
-    //   console.log("response", response);
-    //   let { key, downloadDomain, originalname } = response;
-    //   let url = `${downloadDomain}/${key}`; //图片的绝对路径
-    //   this.valueNeed.push({ url, name: originalname }); //
-    // },
+    
 
     //处理图片删除后的同步
     handleRemove(file, fileList) {
-      console.log(file, fileList);
       this.valueNeed = fileList;
     },
     handlePictureCardPreview(file) {

@@ -72,27 +72,18 @@ export default {
      * @name 自定义单项操作按钮点击函数
      */
     singlebtnClick: function(eventType, row) {
-      console.log("bacthBtnClick-singlebtnClick:", eventType);
-      console.log("row:####", row);
     },
     /**
      * @name 自定义批量操作按钮点击函数
      */
     bacthBtnClick: function(eventType, selection) {
-      console.log("bacthBtnClick-eventType:", eventType);
-      console.log("selection:####", selection);
     },
     fold(row) {
       T.$refs.list1.$refs.table.toggleRowExpansion(row, false);
     },
     afterDelete(param, param1) {
-      console.log("afterDelete");
-      console.log("删除的数据:", param);
     },
     afterAdd(param, param1) {
-      console.log("afterAdd");
-      console.log("新增后的数据:", param);
-      console.log("新增前的数据:", param1);
     },
 
     setAddInit() {

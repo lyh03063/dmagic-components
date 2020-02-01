@@ -1,6 +1,6 @@
 
 <template>
-  <div class>
+  <div class="DPIB">
     <dm_debug_list>
       <dm_debug_item v-model="value" text="value" />
       <dm_debug_item v-model="valueNeed" text="valueNeed" />
@@ -79,7 +79,6 @@ export default {
     async confirmSelect() {
       //获取选中的数据，此处可优化，使用selection-change事件
       let selection = this.$refs.listSelectData.$refs.table.selection;
-      console.log("selection:", selection);
       if (!selection.length) return this.$message.error("未选择任何数据");
       this.selectData = util.deepCopy(selection);
 
@@ -109,7 +108,6 @@ export default {
           this.selectData,
           `[0].${this.cf.valueKey || "P1"}`
         );
-        console.log("this.valueNeed:", this.valueNeed);
         this.label = lodash.get(
           this.selectData,
           `[0].${this.cf.labelKey || "name"}`
@@ -147,7 +145,6 @@ export default {
         } //传递参数
       });
 
-      console.log("docNeed:", docNeed);
       if (!docNeed) return;
       this.label = docNeed[this.cf.labelKey];
     }

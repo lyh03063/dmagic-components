@@ -110,7 +110,6 @@ PUB.listCF.list_demo={
     watch: {
       //传入监听器
       articleCategory(newVal, oldVal) {
-        console.log("complete1111变动");
         // this.value.articleTitle = { a: 1 };
       }
     }
@@ -128,7 +127,6 @@ PUB.listCF.list_demo={
     watch: {
       //传入监听器
       articleCategory(newVal, oldVal) {
-        console.log("watch-articleCategory变化######################123");
         this.value.articleTitle = this.value.articleTitle + "a";
       }
     },

@@ -1,5 +1,4 @@
 import axios from "axios";
-console.log("ajax-1");
 /**
  * 优势1，统一接口数据处理规范
  * 优势2，精简代码
@@ -58,13 +57,9 @@ service.interceptors.request.use(
 /****** respone拦截器==>对响应做处理 ******/
 service.interceptors.response.use(
   response => {  //成功请求到数据
-    console.log("axios的生命周期-响应时");
-    console.log(response);
-    console.log("response.data", response.data);
 
     // //这里根据后端提供的数据进行对应的处理
     // if (response.data.code === 0) {
-    //   console.log("接口数据正确");
       
     // } else {
     //   alert("接口数据错误");
@@ -72,8 +67,6 @@ service.interceptors.response.use(
     return response.data;
   },
   error => {  //响应错误处理
-    console.log('error');
-    console.log(error.response);
 
     if (error.response) {//如果{000}000
       let text = error.response.status === 404

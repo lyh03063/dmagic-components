@@ -174,7 +174,6 @@ export default {
      */
 
     addGroup() {
-      console.log("addGroup:");
 
       //__id为了防止新增一组时出现残留值,防止出现空对象
       let obj = { __id: util.getTimeRandom() }; //

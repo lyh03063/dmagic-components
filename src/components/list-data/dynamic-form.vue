@@ -146,15 +146,12 @@ export default {
   watch: {
     formDataNeed: {
       handler(newVal, oldVal) {
-        console.log("dynamic-form-formDataNeed变更");
-        console.log("this.formDataNeed:", this.formDataNeed);
         this.$emit("input", this.formDataNeed);
       },
       deep: true
     },
     value: {
       handler(newVal, oldVal) {
-        console.log("dynamic-form-value变更");
         this.formDataNeed = this.value || {};
       },
       deep: true
@@ -251,7 +248,6 @@ export default {
       return promise;
     },
     async btnClick(eventName, validate) {
-      // console.log(111);
 
       //Q1：需要校验
       if (validate) {
@@ -275,8 +271,6 @@ export default {
   async created() {
     this.formDataNeed = this.value;
 
-    console.log("created###");
-    console.log("this.value:", this.value);
 
     this.cf.formItems.forEach(itemEach => {
       //循环：{表单字段配置数组}处理默认值-之前的短路运算符有坑，会把值为0变成null
@@ -303,9 +297,7 @@ export default {
         data: ajaxParam //传递参数
       });
       if (data) {
-        console.log("this.formDataNeed:####", this.formDataNeed);
         this.formDataNeed = data.Doc || data.doc; //这里要使用大写的Doc，通用数据用小写的doc
-        console.log("this.cf.idKey:", this.cf.idKey);
 
         if (this.needDeleteId) {
           //如果需要删除Id-这部分不应该写进来

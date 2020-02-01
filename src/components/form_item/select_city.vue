@@ -132,7 +132,6 @@ export default {
         this.valueNeed = this.value;
       }
 
-console.log("this.valueNeed", this.valueNeed);
       let objOption = this.options.find(opEach => opEach.value == provinceId);
       if (objOption) {
         //如果{000}000

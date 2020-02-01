@@ -30,8 +30,6 @@ export default {
   watch: {
     value: {
       handler(newVal, oldVal) {
-        console.log("value-change");
-          console.log("this.value:###", this.value);
         if (this.value) {
           this.valueNeed = this.value;
         } else {
@@ -43,7 +41,6 @@ export default {
     },
     valueNeed: {
       handler(newVal, oldVal) {
-        console.log("valueNeed变更");
         if (this.valueNeed) {
           this.$emit("input", this.valueNeed); //同步valueNeed值到value
         }

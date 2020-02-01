@@ -77,7 +77,6 @@ export default {
 
   methods: {
     test() {
-      console.log("test");
 
       // this.$set(this.$refs.listData.cf.objParamAddon, "aaa", 777);
       let random=Math.random()

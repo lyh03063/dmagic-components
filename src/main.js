@@ -24,28 +24,33 @@ import  "./assets/js/config_form.js"
 import util from "./assets/js/util.js";
 window.util = util;
 
+import  comment from "./lib/index.js"
+comment.install(Vue)//还真可以共用！！！！！！！20200201
 
 
+// import space from './components/common/space/index.js';   //默认情况下找的是index文件
+// Vue.use(space);   //必须有install
+// import debug_list from './components/common/debug_list/index.js';   //导入debug_list
+// Vue.use(debug_list);   //作为全局组件，必须有install
+// import debug_item from './components/common/debug_item/index.js';   //导入debug_item
+// Vue.use(debug_item);   //作为全局组件，必须有install
+// import dm_ajax_populate from './components/common/ajax_populate/index.js';   //导入ajax_populate
+// Vue.use(dm_ajax_populate);   //作为全局组件，必须有install
+// import loading from './components/common/loading/index.js';   //导入loading
+// Vue.use(loading);   //作为全局组件，必须有install
+
+// import pannel from './components/common/pannel/index.js';   //导入ajax_populate
+// Vue.use(pannel);   //作为全局组件，必须有install
+// import list_flex_res from './components/common/list_flex_res/index.js';   //导入ajax_populate
+// Vue.use(list_flex_res);   //作为全局组件，必须有install
+
+// //**** 导入dm_dynamic_form和dm_list_data和 dm_ajax_populate*/
+// import form_and_list from './components/list-data/index.js';   //
+// Vue.use(form_and_list);   //作为全局组件，必须有install
 
 
-import space from './components/common/space/index.js';   //默认情况下找的是index文件
-Vue.use(space);   //必须有install
-import debug_list from './components/common/debug_list/index.js';   //导入debug_list
-Vue.use(debug_list);   //作为全局组件，必须有install
-import debug_item from './components/common/debug_item/index.js';   //导入debug_item
-Vue.use(debug_item);   //作为全局组件，必须有install
-import dm_ajax_populate from './components/common/ajax_populate/index.js';   //导入ajax_populate
-Vue.use(dm_ajax_populate);   //作为全局组件，必须有install
-import loading from './components/common/loading/index.js';   //导入loading
-Vue.use(loading);   //作为全局组件，必须有install
-
-//**** 导入dm_dynamic_form和dm_list_data和 dm_ajax_populate*/
-import form_and_list from './components/list-data/index.js';   //
-Vue.use(form_and_list);   //作为全局组件，必须有install
-
-
-import dm_select_list_data from './components/form_item/select_list_data/index.js'
-Vue.use(dm_select_list_data);   //作为全局组件，必须有install
+// import dm_select_list_data from './components/form_item/select_list_data/index.js'
+// Vue.use(dm_select_list_data);   //作为全局组件，必须有install
 
 
 import VueRouter from 'vue-router'
@@ -58,19 +63,21 @@ import list_static_demo from './page/list_static_demo.vue';   //导入list_stati
 import list_common_demo from './page/list_common_demo.vue';   //导入list_common_demo
 import upload_qiniu from './page/upload_qiniu.vue';   //导入upload_qiniu
 import test from './page/test.vue';   //导入test
+import demo_show from './page/demo_show.vue';   //导入demo_show
 // 3. 创建 router 实例，然后传 `routes` 配置
 const router = new VueRouter({
   routes: [
     { path: '/', redirect: '/form_demo' },
     { path: '/form_demo', component: form_demo },
     { path: '/form_demo2', component: form_demo2 },
-    // { path: '/detail_data', component: () => import("./page/form_demo.vue") },
+
     
     { path: '/list_demo', component: list_demo },
     { path: '/list_static_demo', component: list_static_demo },
     { path: '/list_common_demo', component: list_common_demo },
     { path: '/upload_qiniu', component: upload_qiniu },
     { path: '/test', component: test },
+    { path: '/demo_show', component: demo_show },
   ]
 })
 

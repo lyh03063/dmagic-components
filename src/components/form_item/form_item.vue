@@ -268,7 +268,6 @@ export default {
   },
   methods: {
     print() {
-      console.log(12111);
     }
   },
   created() {}

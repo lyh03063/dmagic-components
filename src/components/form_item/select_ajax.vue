@@ -34,7 +34,6 @@ export default {
   watch: {
     param: {
       handler(newVal, oldVal) {
-        console.log("param changed###############");
         this.ajaxGetOptions(); //调用：{ajax获取选项函数}
       },
 
@@ -58,7 +57,6 @@ export default {
     },
     //函数：{ajax获取选项函数}
     async ajaxGetOptions() {
-      console.log("ajaxGetOptions");
       let { data } = await axios({
         //请求接口
         method: "post",

@@ -7,9 +7,9 @@ import dm_loading from '../components/common/loading/loading.vue'
 import dm_ajax_populate from '../components/common/ajax_populate/ajax_populate.vue'
 import dm_space from '../components/common/space/space.vue'
 import dm_select_list_data from '../components/form_item/select_list_data/select_list_data.vue'
+import dm_pannel from '../components/common/pannel/index.vue'
 
-
-
+import dm_list_flex_res from '../components/common/list_flex_res/index.vue'
 
 
 
@@ -37,6 +37,7 @@ import "codemirror/addon/fold/brace-fold.js"; //代码折叠-一定要引用
 
 
 const Components = {
+  dm_pannel,dm_list_flex_res,
   dm_debug_list, dm_debug_item,
   dm_loading,dm_ajax_populate,dm_space,
   dm_dynamic_form,dm_list_data,
@@ -47,15 +48,18 @@ const Components = {
 
 const comment = {
   install: function (Vue) {
+ 
     //安装以上多个组件
     Object.keys(Components).forEach(name => {
-      console.log("name################1", name);
+      console.log(`install:${name}`);
       Vue.component(name, Components[name])
       // Vue.component(name, VueComment)
     })
 
   }
 }
+
+console.log("window.Vue:####", window.Vue);
 // global 情况下 自动安装
 if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(comment)
