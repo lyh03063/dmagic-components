@@ -1,7 +1,7 @@
 <template>
   <div>
     <dm_pannel class="MB20" title="默认的列表(4列)">
-      <dm_list_flex_res class="MB20" :list="productList" com="product_old" #default="{item}">
+      <dm_list_flex_res class="MB20" :list="productList"  #default="{item}">
         <div class="group">{{item.title}}</div>
       </dm_list_flex_res>
     </dm_pannel>
@@ -11,7 +11,7 @@
         class="MB20"
         :style_g="{width:'49.5%'}"
         :list="productList"
-        com="product_old"
+       
         #default="{item}"
       >
         <div class="group">{{item.title}}</div>
@@ -22,7 +22,7 @@
       <dm_list_flex_res
         class="MB20"
         :list="productList"
-        com="product_old"
+        
         #default="{item}"
         col="2"
       >
@@ -31,7 +31,7 @@
       <dm_list_flex_res
         class="MB20"
         :list="productList"
-        com="product_old"
+       
         #default="{item}"
         col="3"
       >
@@ -41,7 +41,7 @@
       <dm_list_flex_res
         class="MB20"
         :list="productList"
-        com="product_old"
+       
         #default="{item}"
         col="5"
       >
@@ -51,7 +51,7 @@
       <dm_list_flex_res
         class="MB20"
         :list="productList"
-        com="product_old"
+      
         #default="{item}"
         col="6"
       >
@@ -61,7 +61,7 @@
       <dm_list_flex_res
         class="MB20"
         :list="productList"
-        com="product_old"
+      
         #default="{item}"
         col="7"
       >
@@ -71,7 +71,7 @@
       <dm_list_flex_res
         class="MB20"
         :list="productList"
-        com="product_old"
+      
         #default="{item}"
         col="8"
       >
@@ -81,7 +81,7 @@
       <dm_list_flex_res
         class="MB20"
         :list="productList"
-        com="product_old"
+
         #default="{item}"
         col="9"
       >
@@ -91,7 +91,7 @@
       <dm_list_flex_res
         class="MB20"
         :list="productList"
-        com="product_old"
+    
         #default="{item}"
         col="10"
       >
@@ -99,7 +99,7 @@
       </dm_list_flex_res>
     </dm_pannel>
 
-    <dm_list_flex_res class="MB20" :list="productList" com="product_old" #default="{item}">
+    <dm_list_flex_res class="MB20" :list="productList"  #default="{item}">
       <el-button type="primary">{{item.title}}</el-button>
     </dm_list_flex_res>
   </div>

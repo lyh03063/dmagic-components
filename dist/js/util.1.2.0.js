@@ -898,8 +898,52 @@ util.cfList.sBtns.copy = {
         circle: true,
         icon: "el-icon-document-copy"
     }
-    //所有的标准版单项按钮数组
-};util.cfList.sBtns.arrAllBtns = [util.cfList.sBtns.detail, util.cfList.sBtns.modify, util.cfList.sBtns.copy, util.cfList.sBtns.delete];
+};
+
+util.cfList.sBtns.up = {
+    title: "上移",
+    eventType: "up",
+    cfElBtn: {
+        circle: true,
+        icon: "el-icon-top"
+    }
+};
+
+util.cfList.sBtns.down = {
+    title: "下移",
+    eventType: "down",
+    cfElBtn: {
+        circle: true,
+        icon: "el-icon-bottom"
+    }
+};
+
+util.cfList.sBtns.top = {
+    title: "置顶",
+    eventType: "top",
+    cfElBtn: {
+        circle: true,
+        icon: "el-icon-top",
+        class: "sort-top-bottom"
+    }
+};
+
+util.cfList.sBtns.bottom = {
+    title: "置底",
+    eventType: "bottom",
+    cfElBtn: {
+        circle: true,
+        icon: "el-icon-bottom",
+        class: "sort-top-bottom"
+    }
+};
+
+//所有的标准版单项按钮数组
+util.cfList.sBtns.arrAllBtns = [util.cfList.sBtns.detail, util.cfList.sBtns.modify, util.cfList.sBtns.copy, util.cfList.sBtns.delete];
+
+//排序按钮数组
+util.cfList.sBtns.arrSortBtns = [util.cfList.sBtns.up, util.cfList.sBtns.down, util.cfList.sBtns.top, util.cfList.sBtns.bottom];
+
 //#endregion
 //#region setObjDefault:给一个对象设置默认属性（但不整个替换对象，并且默认属性优先级低于已有属性）
 util.setObjDefault = function (obj, objDeault) {
@@ -1011,6 +1055,52 @@ util.clearObj = function (obj) {
             delete obj[prop];
         }
     }
+};
+//#endregion
+
+
+//#region ajaxGroupDataSort:调用分组数据排序接口的函数
+util.ajaxGroupDataSort = function () {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(actionType, doc) {
+        var _id;
+
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+            while (1) {
+                switch (_context3.prev = _context3.next) {
+                    case 0:
+                        _id = doc._id;
+                        _context3.next = 3;
+                        return axios({
+                            //请求接口
+                            method: "post",
+                            url: PUB.domain + "/info/groupDataSort",
+                            data: { _systemId: PUB._systemId, _id: _id, actionType: actionType //传递参数
+                            } });
+
+                    case 3:
+                    case "end":
+                        return _context3.stop();
+                }
+            }
+        }, _callee3, this);
+    }));
+
+    return function (_x5, _x6) {
+        return _ref4.apply(this, arguments);
+    };
+}();
+//#endregion
+
+
+//#region aaaa:000函数
+util.aaaa = function (param) {
+    return 1111;
+};
+//#endregion
+
+//#region aaaa:000函数
+util.aaaa = function (param) {
+    return 1111;
 };
 //#endregion
 

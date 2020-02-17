@@ -1,60 +1,23 @@
 
 
-// import './assets/css/public.css';
 
-
-import Vue from 'vue'
-import 'babel-polyfill'
-// import "./assets/js/mix.js";//注意位置要提前
-
-import axios from "axios";
 window.axios = axios;
-import lodash from 'lodash'//导入lodash方法库
 window.lodash = lodash
 Vue.prototype.$lodash = lodash//让vue实例中可访问$store
-
 import moment from 'moment'//导入moment方法库
 window.moment = moment
 Vue.prototype.$moment = moment//让vue实例中可访问$moment
 
-import  "./assets/js/config_column.js"
-import  "./assets/js/config_form.js"
+import  "./assets/js/util.1.2.0.js"//改成跟线上版同步
+import  "./assets/js/config_detail.1.0.1.js"
+import  "./assets/js/config_column.1.0.1.js"
+import  "./assets/js/config_form.1.0.1.js"
 
-
-import util from "./assets/js/util.js";
-window.util = util;
 
 import  comment from "./lib/index.js"
 comment.install(Vue)//还真可以共用！！！！！！！20200201
 
 
-// import space from './components/common/space/index.js';   //默认情况下找的是index文件
-// Vue.use(space);   //必须有install
-// import debug_list from './components/common/debug_list/index.js';   //导入debug_list
-// Vue.use(debug_list);   //作为全局组件，必须有install
-// import debug_item from './components/common/debug_item/index.js';   //导入debug_item
-// Vue.use(debug_item);   //作为全局组件，必须有install
-// import dm_ajax_populate from './components/common/ajax_populate/index.js';   //导入ajax_populate
-// Vue.use(dm_ajax_populate);   //作为全局组件，必须有install
-// import loading from './components/common/loading/index.js';   //导入loading
-// Vue.use(loading);   //作为全局组件，必须有install
-
-// import pannel from './components/common/pannel/index.js';   //导入ajax_populate
-// Vue.use(pannel);   //作为全局组件，必须有install
-// import list_flex_res from './components/common/list_flex_res/index.js';   //导入ajax_populate
-// Vue.use(list_flex_res);   //作为全局组件，必须有install
-
-// //**** 导入dm_dynamic_form和dm_list_data和 dm_ajax_populate*/
-// import form_and_list from './components/list-data/index.js';   //
-// Vue.use(form_and_list);   //作为全局组件，必须有install
-
-
-// import dm_select_list_data from './components/form_item/select_list_data/index.js'
-// Vue.use(dm_select_list_data);   //作为全局组件，必须有install
-
-
-import VueRouter from 'vue-router'
-Vue.use(VueRouter)
 
 import form_demo from './page/form_demo.vue';   //导入form_demo
 import form_demo2 from './page/form_demo2.vue';   //导入form_demo
@@ -70,8 +33,6 @@ const router = new VueRouter({
     { path: '/', redirect: '/form_demo' },
     { path: '/form_demo', component: form_demo },
     { path: '/form_demo2', component: form_demo2 },
-
-    
     { path: '/list_demo', component: list_demo },
     { path: '/list_static_demo', component: list_static_demo },
     { path: '/list_common_demo', component: list_common_demo },
@@ -135,10 +96,6 @@ const store = new Vuex.Store({//定义Vuex的存储对象
     },
     openDialogDetail(state, param) {//打开详情弹窗事件
       state.listState[param.listIndex].isShowDialogDetail = true;
-      // state.listState[param.listIndex].tableDataDetail.forEach(doc => {
-      //   //遍历详情弹窗的表格数据
-      //   doc.itemValue = param.row[doc.field]; //修改itemValue
-      // });
       state.listState[param.listIndex].row = param.row;//将行数据保存到vuex
     },
     closeDialogDetail(state, listIndex) {//关闭详情弹窗事件
@@ -150,16 +107,7 @@ const store = new Vuex.Store({//定义Vuex的存储对象
 Vue.prototype.$store = store//让vue实例中可访问$store
 
 window.$store = store;
-// import ElementUI from 'element-ui';
-// import 'element-ui/lib/theme-chalk/index.css';
 
-// Vue.use(ElementUI);
-
-
-import ElementUI from 'element-ui';
-// import 'element-ui/lib/theme-chalk/index.css';
-
-Vue.use(ElementUI);
 
 // 代码高亮插件
 import hljs from 'highlight.js';

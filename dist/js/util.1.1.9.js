@@ -898,8 +898,52 @@ util.cfList.sBtns.copy = {
         circle: true,
         icon: "el-icon-document-copy"
     }
-    //所有的标准版单项按钮数组
-};util.cfList.sBtns.arrAllBtns = [util.cfList.sBtns.detail, util.cfList.sBtns.modify, util.cfList.sBtns.copy, util.cfList.sBtns.delete];
+};
+
+util.cfList.sBtns.up = {
+    title: "上移",
+    eventType: "up",
+    cfElBtn: {
+        circle: true,
+        icon: "el-icon-top"
+    }
+};
+
+util.cfList.sBtns.down = {
+    title: "下移",
+    eventType: "down",
+    cfElBtn: {
+        circle: true,
+        icon: "el-icon-bottom"
+    }
+};
+
+util.cfList.sBtns.top = {
+    title: "置顶",
+    eventType: "top",
+    cfElBtn: {
+        circle: true,
+        icon: "el-icon-top",
+        class: "sort-top-bottom"
+    }
+};
+
+util.cfList.sBtns.bottom = {
+    title: "置底",
+    eventType: "bottom",
+    cfElBtn: {
+        circle: true,
+        icon: "el-icon-bottom",
+        class: "sort-top-bottom"
+    }
+};
+
+//所有的标准版单项按钮数组
+util.cfList.sBtns.arrAllBtns = [util.cfList.sBtns.detail, util.cfList.sBtns.modify, util.cfList.sBtns.copy, util.cfList.sBtns.delete];
+
+//排序按钮数组
+util.cfList.sBtns.arrSortBtns = [util.cfList.sBtns.up, util.cfList.sBtns.down, util.cfList.sBtns.top, util.cfList.sBtns.bottom];
+
 //#endregion
 //#region setObjDefault:给一个对象设置默认属性（但不整个替换对象，并且默认属性优先级低于已有属性）
 util.setObjDefault = function (obj, objDeault) {

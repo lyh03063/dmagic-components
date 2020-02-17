@@ -1,18 +1,18 @@
 let WIN;
-if (typeof (window) === "undefined") {//如果{000}000
+if (typeof (window) === "undefined") {//如果window不存在
     WIN = global;
 } else {
     WIN = window;
 }
 WIN.PUB = WIN.PUB || {}
-WIN.PUB.domain = "https://www.dmagic.cn"
-// WIN.PUB.domain = "http://localhost:3000"
-//WIN.PUB.domain = 'http://test.dmagic.cn'
-// WIN.PUB.urlUpload = `${PUB.domain}/api_third_part/qiniu_upload?scope=test`
-WIN.PUB.urlUpload = `https://up-z2.qiniup.com`//七牛云上传地址（域名）
-WIN.PUB.urlGetQiniuToken = `${PUB.domain}/api_third_part/get_qiniu_token?scope=dmagic`
-WIN.util = {}
 
+if (typeof (lodash) === "undefined") {//如果{000}000
+    WIN.lodash = _;//ladash加入全局变量
+} else {
+    WIN.lodash = lodash;//ladash加入全局变量
+}
+
+WIN.util = {}
 //#region 从dmagic-util.js迁移过来
 //#region encodeHtml:html转义函数
 util.encodeHtml = function (str) {
@@ -42,7 +42,6 @@ util.decodeHtml = function (str) {
     return s;
 };
 //#endregion
-
 //#region parseParam:将json转成url参数形式函数[全局]
 var parseParam = function (param, key1) {
     //函数：{将json转成url参数形式}-递归
@@ -112,8 +111,6 @@ function getAllUrlParame(_json) {//函数定义：{获取所有url参数Json的�
     return jsonParameOld;
 }
 //#endregion
-
-
 //#region 【废弃】propsync:vue组件的混合对象
 /**
  * =================说明==================
@@ -220,7 +217,6 @@ var propsync = {
     destroyed: function () {
     }
 };
-//博客园 @xxcanghai @小小沧海 
 //#endregion
 //#region space:自定义空行组件
 // 自定义空行组件
@@ -320,7 +316,6 @@ Vue.component('dialog-normal', {
 })
 //#endregion
 //#region loading:loading组件
-
 // loading组件
 Vue.component('loading', {
     template: `
@@ -345,7 +340,6 @@ Vue.component('loading', {
     },
 })
 //#endregion
-
 //#region Vuex
 if (WIN.Vuex) {//如果{Vuex}存在
     WIN.store = new Vuex.Store({//定义Vuex的存储对象
@@ -459,10 +453,6 @@ util.MIX.form_item = {
     },
 }
 WIN.MIX = util.MIX//WIN.MIX加入，兼容dmagic-components
-
-
-
-
 //#region MIX:MIX混入-暂时废弃
 let MIX = {};
 //表单字段组件配置
@@ -491,15 +481,8 @@ MIX.form_item = {
 }
 // WIN.MIX = MIX;
 //#endregion
-
-
-
-
 //#endregion
-
 //#endregion
-
-
 //#region deepCopy:深拷贝函数
 util.deepCopy = function (obj) {//深拷贝一个Json对象的函数
     return lodash.cloneDeep(obj);
@@ -699,9 +682,7 @@ util.handelItem = function (cf) {
         items.splice(index, 1)
     } else if (action == "merge") { //Q3:merge合并
         // let itemNew=Object.assign(items[index],itemNew);//合并对象
-
-        itemNew={...items[index],...itemNew}
-      
+        itemNew = { ...items[index], ...itemNew }
         this.$set(items, index, itemNew); //修改memberId对应的字段配置
     }
 }
@@ -796,8 +777,44 @@ util.cfList.sBtns.copy = {
         icon: "el-icon-document-copy"
     }
 }
+util.cfList.sBtns.up = {
+    title: "上移",
+    eventType: "up",
+    cfElBtn: {
+        circle: true,
+        icon: "el-icon-top"
+    }
+};
+util.cfList.sBtns.down = {
+    title: "下移",
+    eventType: "down",
+    cfElBtn: {
+        circle: true,
+        icon: "el-icon-bottom"
+    }
+};
+util.cfList.sBtns.top = {
+    title: "置顶",
+    eventType: "top",
+    cfElBtn: {
+        circle: true,
+        icon: "el-icon-top",
+        class: "sort-top-bottom"
+    }
+};
+util.cfList.sBtns.bottom = {
+    title: "置底",
+    eventType: "bottom",
+    cfElBtn: {
+        circle: true,
+        icon: "el-icon-bottom",
+        class: "sort-top-bottom"
+    }
+};
 //所有的标准版单项按钮数组
 util.cfList.sBtns.arrAllBtns = [util.cfList.sBtns.detail, util.cfList.sBtns.modify, util.cfList.sBtns.copy, util.cfList.sBtns.delete]
+//排序按钮数组
+util.cfList.sBtns.arrSortBtns = [util.cfList.sBtns.up, util.cfList.sBtns.down, util.cfList.sBtns.top, util.cfList.sBtns.bottom]
 //#endregion
 //#region setObjDefault:给一个对象设置默认属性（但不整个替换对象，并且默认属性优先级低于已有属性）
 util.setObjDefault = function (obj, objDeault) {
@@ -820,7 +837,6 @@ util.setObj = function (path, extend) {
     lodash.set(this, path, objNew);
 }
 //#endregion
-
 //#region searchCollection:查询静态集合列表函数（支持模糊查询）
 util.searchCollection = function (param = {}) {
     let { findJson = {}, dataBase } = param;
@@ -854,7 +870,6 @@ util.searchCollection = function (param = {}) {
     return searchResult
 };
 //#endregion
-
 //#region isNotEmptyArr:判断是否为非空数组的函数
 util.isNotEmptyArr = function (arr) { //函数：{判断是否为非空数组}
     let type = util.type(arr);//变量：{类型}
@@ -881,8 +896,134 @@ util.clearObj = function (obj) {
     }
 };
 //#endregion
+//#region ajaxGroupDataSort:调用分组数据排序接口的函数
+util.ajaxGroupDataSort = async function (actionType, doc) {
+    let { _id } = doc;
+    await axios({
+        //请求接口
+        method: "post",
+        url: `${PUB.domain}/info/groupDataSort`,
+        data: { _systemId: PUB._systemId, _id, actionType } //传递参数
+    });
+};
+//#endregion
+//#region setCookie:cookie中存值函数
+util.setCookie = function ({ key, value, cookie }) {
+    if (!cookie) {//如果cookie串没有指定
+        cookie = document.cookie
+    }
+    if (value) {
+        var days = 1; //定义一天
+        var exp = new Date();
+        exp.setTime(exp.getTime() + days * 24 * 60 * 60 * 1000);
+        // 写入Cookie, toGMTString将时间转换成字符串
+        cookie = key + "=" + escape(value) + ";expires=" + exp.toGMTString;
+    }
+    return cookie
+};
+//#endregion
+//#region getCookie: cookie中取值函数
+util.getCookie = function ({ key, cookie }) {
+    if (!cookie) {//如果cookie串没有指定
+        cookie = document.cookie
+    }
+    var arr, reg = new RegExp("(^| )" + key + "=([^;]*)(;|$)"); //匹配字段
+    if (arr = cookie.match(reg)) {
+        return unescape(arr[2]);
+    } else {
+        return null;
+    }
+};
+//#endregion
+//#region delCookie :删除cookie函数
+util.delCookie = function ({ key, cookie }) {
+    if (!cookie) {//如果cookie串没有指定
+        cookie = document.cookie
+    }
+    var exp = new Date();
+    exp.setTime(exp.getTime() - 1);
+    var cval = setCookie(name);
+    if (cval && cval != null) {
+        document.cookie = key + "=" + cval + ";expires=" + exp.toGMTString()
+    }
+};
+//#endregion
+//#region longting-nuxt站点新增公共函数
+//函数：{处理分组数据列表数据函数}-使之适用于列表渲染
+util.handleGDataList = function (list) {
+    return list.map(doc => {
+        return {
+            _id: lodash.get(doc, `targetDoc._id`),
+            title: lodash.get(doc, `targetDoc.title`),
+            link: lodash.get(doc, `targetDoc.link`),
+            alias: lodash.get(doc, `targetDoc.alias`),
+            imgSrc: lodash.get(doc, `targetDoc.album[0].url`)
+        };
+    });
+};
+//函数：{根据别名获取子分组数据列表的函数}-更稳定的定位方式
+util.getSonListByAlias = function ({ list, alias }) {
+    console.log("list:", list);
+    console.log("alias:", alias);
+    let obj = list.find(doc => doc.targetDoc.alias == alias);
+    if (!obj) return [];
+    return util.handleGDataList(obj.sonList); //调用：{处理列表数据函数}
+};
+//#endregion
 
 
+
+//#region inWX:判断是否处于微信浏览器内函数
+util.inWX = function (param) {
+    let ua = window.navigator.userAgent.toLowerCase();
+    let flag = ua.indexOf("micromessenger") != -1; //变量：{是否在微信浏览器}
+    return flag
+};
+//#endregion
+
+
+//#region callWXPay:调用网页微信支付控件的函数-promise化
+util.callWXPay = function (param) {
+    var promise = new Promise((resolve, reject) => {
+        function onBridgeReady() {
+            console.log("onBridgeReady");
+            let paramCall = { signType: "MD5", ...param };
+            //唤起微信支付控件！！
+            WeixinJSBridge.invoke("getBrandWCPayRequest", paramCall, function (res) {
+                resolve(res);
+
+            });
+        }
+        if (typeof WeixinJSBridge == "undefined") {
+            if (document.addEventListener) {
+                document.addEventListener("WeixinJSBridgeReady", onBridgeReady, false);
+            } else if (document.attachEvent) {
+                document.attachEvent("WeixinJSBridgeReady", onBridgeReady);
+                document.attachEvent("onWeixinJSBridgeReady", onBridgeReady);
+            }
+        } else {
+            onBridgeReady();
+        }
+    });
+
+    return promise;
+};
+//#endregion
+//#region aaaa:000函数
+//#region aaaa:000函数
+util.aaaa = function (param) {
+    return 1111
+};
+//#endregion
+//#region aaaa:000函数
+util.aaaa = function (param) {
+    return 1111
+};
+//#endregion
+//#region aaaa:000函数
+util.aaaa = function (param) {
+    return 1111
+};
+//#endregion
 Vue.prototype.$util = util//让vue实例中可访问$util
 Vue.prototype.$lodash = lodash//让vue实例中可访问$util
-

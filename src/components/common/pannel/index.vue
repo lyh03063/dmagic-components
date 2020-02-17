@@ -80,11 +80,11 @@ a {
 }
 
 @media screen and (max-width: 640px) {
-  .title-bar {
+  /* .title-bar {
     padding: 0 10px;
-  }
-  .content-box {
+  } */
+ /* .pannel-box.border_card  .content-box {
     padding: 0 10px;
-  }
+  } */
 }
 </style>

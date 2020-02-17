@@ -1,26 +1,339 @@
 "use strict";
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 var _F_ITEMS$extend;
 
-require("./config_detail.js");
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+var _systemId = PUB._systemId;
 window.F_ITEMS = {};
+//#region 唐球过来
+F_ITEMS.Id = {
+  label: "数据id",
+  prop: "P1",
+  type: "input"
+};
+F_ITEMS.payStatus = {
+  label: "支付状态",
+  prop: "payStatus",
+  type: "select",
+  options: [{ label: "已支付", value: 2 }, { label: "未支付", value: 1 }]
+};
+F_ITEMS.auditStatus = {
+  label: "审核状态",
+  prop: "auditStatus",
+  type: "select",
+  options: [{ label: "未审核", value: 1 }, { label: "审核不通过", value: 2 }, { label: "审核通过", value: 3 }]
+};
+F_ITEMS.publicationStatus = {
+  label: "发布状态",
+  prop: "publicationStatus",
+  type: "select",
+  options: [{ label: "是", value: 1 }, { label: "否", value: 2 }]
+};
+F_ITEMS.album = {
+  label: "相册",
+  prop: "album",
+  type: "upload",
+  col_span: 24 //控制显示一行多列
+  // tips: "可上传多张图"
+};
+/****************************赛事报名-START****************************/
+F_ITEMS.phone = {
+  label: "手机号",
+  prop: "phone",
+  type: "input"
+};
+F_ITEMS.sex = {
+  label: "性别",
+  prop: "sex",
+  type: "select",
+  options: [{ label: "男", value: 1 }, { label: "女", value: 2 }]
+};
+F_ITEMS.age = {
+  label: "年龄",
+  prop: "age",
+  type: "input"
+};
+F_ITEMS.career = {
+  label: "职业",
+  prop: "career",
+  type: "input"
+};
+F_ITEMS.idCard = {
+  label: "身份证号",
+  prop: "idCard"
+};
+//#endregion
+//#region 通用数据
+F_ITEMS.title = _extends({}, D_ITEMS.title);
+F_ITEMS.title_search = _extends({}, D_ITEMS.title, { type: "input_find_vague" });
+F_ITEMS.desc = _extends({}, D_ITEMS.desc, { type: "textarea" });
+F_ITEMS.detail = _extends({}, D_ITEMS.detail, { type: "editorTM" });
+
+F_ITEMS._data = _extends({}, D_ITEMS._data, { type: "jsonEditor" });
+F_ITEMS.countGroup = _extends({}, D_ITEMS.countGroup, { type: "number" });
+//#endregion
+//#region html_api
+F_ITEMS.html_display = _extends({}, D_ITEMS.html_display, { type: "select",
+  options: DYDICT.arr_html_display
+});
+F_ITEMS.importance = _extends({}, D_ITEMS.importance, { type: "select",
+  options: DYDICT.arr_importance
+});
+F_ITEMS.importance_radio = _extends({}, F_ITEMS.importance, { type: "radio"
+});
+
+F_ITEMS.difficulty = _extends({}, D_ITEMS.difficulty, { type: "select",
+  options: DYDICT.arr_difficulty
+});
+F_ITEMS.difficulty_radio = _extends({}, F_ITEMS.difficulty, { type: "radio"
+});
+
+F_ITEMS.english = _extends({}, D_ITEMS.english, { type: "input"
+});
+F_ITEMS.html_version = _extends({}, D_ITEMS.html_version, { type: "select",
+  options: DYDICT.arr_html_version
+});
+F_ITEMS.selfClose = _extends({}, D_ITEMS.selfClose, { type: "select",
+  options: DYDICT.arr_selfClose
+});
+F_ITEMS.demoList = _extends({}, D_ITEMS.demoList, {
+  type: "collection",
+  collectionlistType: "form",
+  // showToolbar: false, //不显示集合的工具栏
+  collectionCfForm: {
+    col_span: 12,
+    formItems: [{
+      label: "标题",
+      prop: "title",
+      type: "input"
+    }, {
+      label: "链接",
+      prop: "link",
+      type: "input"
+    }]
+  }
+});
+
+//#endregion
+//#region 分类
+F_ITEMS.cateIdOld = _extends({}, D_ITEMS.cateIdOld, { type: "input" });
+F_ITEMS.category_name = _extends({}, D_ITEMS.category_name, { type: "input" });
+F_ITEMS.category_remark = _extends({}, D_ITEMS.category_remark, { type: "textarea" });
+F_ITEMS.category = _extends({}, D_ITEMS.category, { type: "input" });
+F_ITEMS.html_api_category = _extends({}, D_ITEMS.category, {
+  type: "select",
+  ajax: {
+    param: { _systemId: _systemId, _dataType: "html_api_category" },
+    url: "/info/getCommonList",
+    keyLabel: "title",
+    keyValue: "_id"
+  }
+});
+F_ITEMS.css_api_category = _extends({}, D_ITEMS.category, {
+  type: "select",
+  ajax: {
+    param: { _systemId: _systemId, _dataType: "css_api_category" },
+    url: "/info/getCommonList",
+    keyLabel: "title",
+    keyValue: "_id"
+  }
+});
+F_ITEMS.js_api_category = _extends({}, D_ITEMS.category, {
+  type: "select",
+  ajax: {
+    param: { _systemId: _systemId, _dataType: "js_api_category" },
+    url: "/info/getCommonList",
+    keyLabel: "title",
+    keyValue: "_id"
+  }
+});
+
+F_ITEMS.note_category = _extends({}, D_ITEMS.category, {
+  type: "select",
+  multiple: true, //多选
+  ajax: {
+    param: { _systemId: _systemId, _dataType: "note_category" },
+    url: "/info/getCommonList",
+    keyLabel: "title",
+    keyValue: "_id"
+  }
+});
+//#endregion
+//#region 熟悉度
+F_ITEMS.familiarity = _extends({}, D_ITEMS.familiarity, { type: "input" });
+F_ITEMS.dataType = _extends({}, D_ITEMS.dataType, { type: "input" });
+F_ITEMS.dataId = _extends({}, D_ITEMS.dataId, { type: "input" });
+F_ITEMS.userId = _extends({}, D_ITEMS.userId, { type: "input" });
+F_ITEMS._userId = _extends({}, D_ITEMS._userId, { type: "input" });
+//数据类型
+F_ITEMS.dataTypekey = _extends({}, D_ITEMS.dataTypekey, { type: "input" });
+//#endregion
+//#region 分组
+F_ITEMS.group_dataType = _extends({}, D_ITEMS.group_dataType, {
+  type: "select",
+  ajax: {
+    param: { _systemId: _systemId, _dataType: "data_type" },
+    url: "/info/getCommonList",
+    keyLabel: "title",
+    keyValue: "key"
+  }
+});
+F_ITEMS.alias = _extends({}, D_ITEMS.alias, { type: "input" });
+//#endregion
+//#region 关系
+F_ITEMS._idRel = _extends({}, D_ITEMS._idRel, { type: "input" });
+F_ITEMS._idRel2 = _extends({}, D_ITEMS._idRel2, { type: "input" });
+F_ITEMS.sort = _extends({}, D_ITEMS.sort, { type: "number" });
+//#endregion
+//#region 管理员
+F_ITEMS.userName = _extends({}, D_ITEMS.userName, { type: "input" });
+F_ITEMS.passWord = _extends({}, D_ITEMS.passWord, { type: "passWord" });
+F_ITEMS.nickName = _extends({}, D_ITEMS.nickName, { type: "input" });
+F_ITEMS.role = _extends({}, D_ITEMS.role, { type: "jsonEditor" });
+//#endregion
+//#region 角色
+var styleMenuPowerItem = "margin-bottom:10px;padding:0 5px";
+var styleMenuGPowerItem = "margin-bottom:0;border:none;padding:0";
+//函数定义：{获取菜单权限表单配置函数}
+function getFormMenuGPower(_ref) {
+  var _ref$menuName = _ref.menuName,
+      menuName = _ref$menuName === undefined ? "XXX" : _ref$menuName;
+
+  return {
+    col_span: 4,
+    labelWidth: "10px",
+    formItems: [{
+      label: "",
+      prop: "menuName",
+      default: menuName,
+      col_span: 4,
+      type: "text"
+    }, {
+      label: "",
+      prop: "add",
+      col_span: 3,
+      type: "checkbox",
+      default: false,
+      options: [{ value: "1", label: "添加" }]
+    }, {
+      label: "",
+      prop: "modify",
+      col_span: 3,
+      type: "checkbox",
+      default: false,
+      options: [{ value: "1", label: "修改" }]
+    }, {
+      label: "",
+      prop: "search",
+      col_span: 3,
+      type: "checkbox",
+      default: false,
+      options: [{ value: "1", label: "查询" }]
+    }, {
+      label: "",
+      prop: "delete",
+      col_span: 3,
+      type: "checkbox",
+      default: false,
+      options: [{ value: "1", label: "删除" }]
+    }]
+  };
+}
+COLUMNS.roleName = _extends({}, D_ITEMS.roleName, { type: "input" });
+COLUMNS.rolePower = _extends({}, D_ITEMS.rolePower, {
+  default: {},
+  cfForm: {
+    labelWidth: "150px",
+    formItems: [{
+      label: "资讯中心",
+      prop: "newsCenter",
+      style: styleMenuGPowerItem,
+      default: {},
+      cfForm: {
+        col_span: 12,
+        formItems: [{
+          // label: "资讯列表",
+          prop: "list_article",
+          style: styleMenuPowerItem,
+          cfForm: getFormMenuGPower({ menuName: "资讯列表" })
+        }, {
+          // label: "资讯分类",
+          prop: "list_article_category",
+          style: styleMenuPowerItem,
+          cfForm: getFormMenuGPower({ menuName: "资讯分类" })
+        }]
+      }
+    }, {
+      label: "系统管理",
+      prop: "systemManage",
+      style: styleMenuGPowerItem,
+      default: {},
+      cfForm: {
+        col_span: 12,
+        formItems: [{
+          prop: "list_admin",
+          style: styleMenuPowerItem,
+          cfForm: getFormMenuGPower({ menuName: "管理员" })
+        }, {
+          prop: "list_role",
+          style: styleMenuPowerItem,
+          cfForm: getFormMenuGPower({ menuName: "角色" })
+        }, {
+          prop: "list_area",
+          style: styleMenuPowerItem,
+          cfForm: getFormMenuGPower({ menuName: "地区管理" })
+        }]
+      }
+    }]
+  }
+});
+//#endregion
+
+
+//#region 笔记
+F_ITEMS.keyword = _extends({}, D_ITEMS.keyword, { type: "tag_list" });
+
+//#endregion
+//#region 网址
+F_ITEMS.link = _extends({}, D_ITEMS.link, { type: "input" });
+//#endregion
+
+
+F_ITEMS.vedio = _extends({}, D_ITEMS.vedio, {
+  type: "upload",
+  uploadConfig: {
+    limit: 2,
+    listType: "text"
+  }
+});
+
+// import list_note_for_select from "@/assets/js/config/list_note.js"
+// //#region 笔记
+// F_ITEMS.note_linkList = { ...D_ITEMS.note_linkList, 
+//   type: "select_list_data",
+//   cfSelectList: {
+//     //选择列表配置
+//     dataName: "球员",
+//     valueKey: "P1",
+//     labelKey: "name",
+//     pageName: "tangball_member",
+//     cfList: list_note_for_select
+//   },
+//  };
+
+//#endregion
+F_ITEMS.aaaa = 11111;
+
+//#region dm组件库用到
 
 //#region form_demo的字段
 F_ITEMS.tagList = {
   label: "标签",
   prop: "tagList",
   type: "tag_list"
-};
-
-F_ITEMS.Id = {
-  label: "数据id",
-  prop: "P1",
-  type: "input"
 };
 
 F_ITEMS.diycheckbox = {
@@ -286,33 +599,6 @@ F_ITEMS.name_search = {
   type: "input_find_vague"
 };
 
-F_ITEMS.title = _extends({}, D_ITEMS.title);
-F_ITEMS.desc = _extends({}, D_ITEMS.desc, { type: "textarea" });
-F_ITEMS.detail = _extends({}, D_ITEMS.detail, { type: "editorTM" });
-F_ITEMS.title_search = _extends({}, D_ITEMS.title, { type: "input_find_vague" });
-
-F_ITEMS.importance = {
-  "label": "重要性",
-  "prop": "importance",
-  "type": "select",
-  "options": [{
-    "label": "作废",
-    "value": 1
-  }, {
-    "label": "次要",
-    "value": 2
-  }, {
-    "label": "一般",
-    "value": 3
-  }, {
-    "label": "重要",
-    "value": 4
-  }, {
-    "label": "很重要",
-    "value": 5
-  }]
-};
-
 //#endregion
 
 //#region 文章列表选择配置
@@ -427,6 +713,8 @@ window.cfSelectList_note = {
     _id: 1, title: 1, link: 1
   },
   cfList: list_common_note
+
+  //#endregion
 
   //#endregion
 

@@ -12,14 +12,8 @@ if (typeof window === "undefined") {
     WIN = window;
 }
 WIN.PUB = WIN.PUB || {};
-WIN.PUB.domain = "http://120.76.160.41:3000";
-// WIN.PUB.domain = "http://localhost:3000"
-//WIN.PUB.domain = 'http://test.dmagic.cn'
-// WIN.PUB.urlUpload = `${PUB.domain}/api_third_part/qiniu_upload?scope=test`
-WIN.PUB.urlUpload = "https://up-z2.qiniup.com"; //七牛云上传地址（域名）
-WIN.PUB.urlGetQiniuToken = PUB.domain + "/api_third_part/get_qiniu_token?scope=dmagic";
+WIN.lodash = lodash; //ladash加入全局变量
 WIN.util = {};
-
 //#region 从dmagic-util.js迁移过来
 //#region encodeHtml:html转义函数
 util.encodeHtml = function (str) {
@@ -49,7 +43,6 @@ util.decodeHtml = function (str) {
     return s;
 };
 //#endregion
-
 //#region parseParam:将json转成url参数形式函数[全局]
 var parseParam = function parseParam(param, key1) {
     //函数：{将json转成url参数形式}-递归
@@ -122,8 +115,6 @@ function getAllUrlParame(_json) {
     return jsonParameOld;
 }
 //#endregion
-
-
 //#region 【废弃】propsync:vue组件的混合对象
 /**
  * =================说明==================
@@ -227,7 +218,6 @@ var propsync = {
     },
     destroyed: function destroyed() {}
 };
-//博客园 @xxcanghai @小小沧海 
 //#endregion
 //#region space:自定义空行组件
 // 自定义空行组件
@@ -336,7 +326,6 @@ Vue.component('dialog-normal', {
 });
 //#endregion
 //#region loading:loading组件
-
 // loading组件
 Vue.component('loading', {
     template: "\n<div class=\"loading-box\" :style=\"{'height':height+'px','line-height':height+'px','color':color,'text-align':'center'}\">\n\u52A0\u8F7D\u4E2D\n<i class=\"el-icon-loading FS16\"></i>\n</div>\n",
@@ -356,7 +345,6 @@ Vue.component('loading', {
     }
 });
 //#endregion
-
 //#region Vuex
 if (WIN.Vuex) {
     //如果{Vuex}存在
@@ -490,8 +478,6 @@ util.MIX.form_item = {
     }
 };
 WIN.MIX = util.MIX; //WIN.MIX加入，兼容dmagic-components
-
-
 //#region MIX:MIX混入-暂时废弃
 var MIX = {};
 //表单字段组件配置
@@ -522,13 +508,8 @@ MIX.form_item = {
     }
     // WIN.MIX = MIX;
     //#endregion
-
-
     //#endregion
-
     //#endregion
-
-
     //#region deepCopy:深拷贝函数
 };util.deepCopy = function (obj) {
     //深拷贝一个Json对象的函数
@@ -800,9 +781,7 @@ util.handelItem = function (cf) {
     } else if (action == "merge") {
         //Q3:merge合并
         // let itemNew=Object.assign(items[index],itemNew);//合并对象
-
         itemNew = _extends({}, items[index], itemNew);
-
         this.$set(items, index, itemNew); //修改memberId对应的字段配置
     }
 };
@@ -898,8 +877,45 @@ util.cfList.sBtns.copy = {
         circle: true,
         icon: "el-icon-document-copy"
     }
-    //所有的标准版单项按钮数组
-};util.cfList.sBtns.arrAllBtns = [util.cfList.sBtns.detail, util.cfList.sBtns.modify, util.cfList.sBtns.copy, util.cfList.sBtns.delete];
+};
+util.cfList.sBtns.up = {
+    title: "上移",
+    eventType: "up",
+    cfElBtn: {
+        circle: true,
+        icon: "el-icon-top"
+    }
+};
+util.cfList.sBtns.down = {
+    title: "下移",
+    eventType: "down",
+    cfElBtn: {
+        circle: true,
+        icon: "el-icon-bottom"
+    }
+};
+util.cfList.sBtns.top = {
+    title: "置顶",
+    eventType: "top",
+    cfElBtn: {
+        circle: true,
+        icon: "el-icon-top",
+        class: "sort-top-bottom"
+    }
+};
+util.cfList.sBtns.bottom = {
+    title: "置底",
+    eventType: "bottom",
+    cfElBtn: {
+        circle: true,
+        icon: "el-icon-bottom",
+        class: "sort-top-bottom"
+    }
+};
+//所有的标准版单项按钮数组
+util.cfList.sBtns.arrAllBtns = [util.cfList.sBtns.detail, util.cfList.sBtns.modify, util.cfList.sBtns.copy, util.cfList.sBtns.delete];
+//排序按钮数组
+util.cfList.sBtns.arrSortBtns = [util.cfList.sBtns.up, util.cfList.sBtns.down, util.cfList.sBtns.top, util.cfList.sBtns.bottom];
 //#endregion
 //#region setObjDefault:给一个对象设置默认属性（但不整个替换对象，并且默认属性优先级低于已有属性）
 util.setObjDefault = function (obj, objDeault) {
@@ -945,7 +961,6 @@ util.setObj = function (path, extend) {
     lodash.set(this, path, objNew);
 };
 //#endregion
-
 //#region searchCollection:查询静态集合列表函数（支持模糊查询）
 util.searchCollection = function () {
     var param = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -984,7 +999,6 @@ util.searchCollection = function () {
     return searchResult;
 };
 //#endregion
-
 //#region isNotEmptyArr:判断是否为非空数组的函数
 util.isNotEmptyArr = function (arr) {
     //函数：{判断是否为非空数组}
@@ -1013,7 +1027,133 @@ util.clearObj = function (obj) {
     }
 };
 //#endregion
+//#region ajaxGroupDataSort:调用分组数据排序接口的函数
+util.ajaxGroupDataSort = function () {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(actionType, doc) {
+        var _id;
 
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+            while (1) {
+                switch (_context3.prev = _context3.next) {
+                    case 0:
+                        _id = doc._id;
+                        _context3.next = 3;
+                        return axios({
+                            //请求接口
+                            method: "post",
+                            url: PUB.domain + "/info/groupDataSort",
+                            data: { _systemId: PUB._systemId, _id: _id, actionType: actionType //传递参数
+                            } });
 
+                    case 3:
+                    case "end":
+                        return _context3.stop();
+                }
+            }
+        }, _callee3, this);
+    }));
+
+    return function (_x5, _x6) {
+        return _ref4.apply(this, arguments);
+    };
+}();
+//#endregion
+//#region setCookie:cookie中存值函数
+util.setCookie = function (_ref5) {
+    var key = _ref5.key,
+        value = _ref5.value,
+        cookie = _ref5.cookie;
+
+    if (!cookie) {
+        //如果cookie串没有指定
+        cookie = document.cookie;
+    }
+    if (value) {
+        var days = 1; //定义一天
+        var exp = new Date();
+        exp.setTime(exp.getTime() + days * 24 * 60 * 60 * 1000);
+        // 写入Cookie, toGMTString将时间转换成字符串
+        cookie = key + "=" + escape(value) + ";expires=" + exp.toGMTString;
+    }
+    return cookie;
+};
+//#endregion
+//#region getCookie: cookie中取值函数
+util.getCookie = function (_ref6) {
+    var key = _ref6.key,
+        cookie = _ref6.cookie;
+
+    if (!cookie) {
+        //如果cookie串没有指定
+        cookie = document.cookie;
+    }
+    var arr,
+        reg = new RegExp("(^| )" + key + "=([^;]*)(;|$)"); //匹配字段
+    if (arr = cookie.match(reg)) {
+        return unescape(arr[2]);
+    } else {
+        return null;
+    }
+};
+//#endregion
+//#region delCookie :删除cookie函数
+util.delCookie = function (_ref7) {
+    var key = _ref7.key,
+        cookie = _ref7.cookie;
+
+    if (!cookie) {
+        //如果cookie串没有指定
+        cookie = document.cookie;
+    }
+    var exp = new Date();
+    exp.setTime(exp.getTime() - 1);
+    var cval = setCookie(name);
+    if (cval && cval != null) {
+        document.cookie = key + "=" + cval + ";expires=" + exp.toGMTString();
+    }
+};
+//#endregion
+//#region longting-nuxt站点新增公共函数
+//函数：{处理分组数据列表数据函数}-使之适用于列表渲染
+util.handleGDataList = function (list) {
+    return list.map(function (doc) {
+        return {
+            _id: lodash.get(doc, "targetDoc._id"),
+            title: lodash.get(doc, "targetDoc.title"),
+            link: lodash.get(doc, "targetDoc.link"),
+            alias: lodash.get(doc, "targetDoc.alias"),
+            imgSrc: lodash.get(doc, "targetDoc.album[0].url")
+        };
+    });
+};
+//函数：{根据别名获取子分组数据列表的函数}-更稳定的定位方式
+util.getSonListByAlias = function (_ref8) {
+    var list = _ref8.list,
+        alias = _ref8.alias;
+
+    console.log("list:", list);
+    console.log("alias:", alias);
+    var obj = list.find(function (doc) {
+        return doc.targetDoc.alias == alias;
+    });
+    if (!obj) return [];
+    return util.handleGDataList(obj.sonList); //调用：{处理列表数据函数}
+};
+//#endregion
+//#region aaaa:000函数
+util.aaaa = function (param) {
+    return 1111;
+};
+//#endregion
+//#region aaaa:000函数
+util.aaaa = function (param) {
+    return 1111;
+};
+//#endregion
+//#region aaaa:000函数
+util.aaaa = function (param) {
+    return 1111;
+};
+//#endregion
 Vue.prototype.$util = util; //让vue实例中可访问$util
 Vue.prototype.$lodash = lodash; //让vue实例中可访问$util

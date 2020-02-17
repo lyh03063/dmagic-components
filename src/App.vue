@@ -119,11 +119,11 @@ export default {
   transition: 0.5s;
   display: flex;
   width: 100%;
-  height: calc(100% - 70px);
-  position: fixed;
+  height: calc(100vh - 70px);
+
   left: 0;
   top: 0;
-  margin: 60px 0 0;
+  
 }
 .left-box {
   flex: 1;

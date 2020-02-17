@@ -529,7 +529,7 @@ util.isNotEmptyObj = function (obj) {
     return !!arr.length;
 };
 //#endregion
-//#region clearObj:清除对象中的空属性（null.undefined,空格等）
+//#region clearObj:清除对象中的空属性（null,undefined,空格等）
 util.clearObj = function (obj) {
     var arrSpec = ["", null, undefined];
     for (var prop in obj) {

@@ -88,9 +88,9 @@ export default {
 
 /*屏幕宽度小于640px*/
 @media screen and (max-width: 640px) {
-  .n-flex-main {
+  /* .n-flex-main {
     padding: 10px;
-  }
+  } */
   .n-col-2 .n-flex-group {
     width: 100%;
   }
