@@ -22,7 +22,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /****** 创建axios实例 ******/
 var service = _axios2.default.create({
-  baseURL: "http://120.76.160.41:3000", // api的base_url
+  baseURL: "https://www.dmagic.cn", // api的base_url
   timeout: 1000 // 请求超时时间
 
 });

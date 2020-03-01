@@ -154,7 +154,7 @@ export default {
         paramAddonInit: this.cf.paramAddonPublic, //初始化的附加参数
         watch: lodash.get(this.cf, `cfForm.watch`), //监听器配置
         col_span: lodash.get(this.cf, `cfForm.col_span`, 24), //控制显示一行多列
-        urlInit: this.cf.url.detail,
+        urlInit: lodash.get(this.cf, `url.detail`),
         formItems: this.cf.formItems,
         btns: [
           { text: "修改", event: "submit", type: "primary", validate: true },

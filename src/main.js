@@ -8,14 +8,23 @@ import moment from 'moment'//导入moment方法库
 window.moment = moment
 Vue.prototype.$moment = moment//让vue实例中可访问$moment
 
-import  "./assets/js/util.1.2.0.js"//改成跟线上版同步
-import  "./assets/js/config_detail.1.0.1.js"
-import  "./assets/js/config_column.1.0.1.js"
-import  "./assets/js/config_form.1.0.1.js"
+import "./assets/js/util.1.2.5.js"//改成跟线上版同步
+import "./assets/js/config_detail.1.0.5.js"
+import "./assets/js/config_column.1.0.6.js"
+import "./assets/js/config_form.1.1.1.js"
+import "./assets/js/public.js"
 
 
-import  comment from "./lib/index.js"
+import comment from "./lib/index.js"
 comment.install(Vue)//还真可以共用！！！！！！！20200201
+
+
+
+
+
+
+
+
 
 
 
@@ -58,8 +67,8 @@ const store = new Vuex.Store({//定义Vuex的存储对象
       // list_article:{articleCategory:3  }
 
     },
-    cfData:{//组件配置数据
-      isShowSearchForm:false
+    cfData: {//组件配置数据
+      isShowSearchForm: false
     }
   },
 
@@ -69,7 +78,7 @@ const store = new Vuex.Store({//定义Vuex的存储对象
 
     },
     setCfData(state, param) {//设置组件配置数据
-      state.cfData= param;
+      state.cfData = param;
 
     },
     setListFindJson(state, param) {//设置列表的初始筛选参数值
@@ -115,10 +124,10 @@ import javascript from 'highlight.js/lib/languages/javascript';
 hljs.registerLanguage('javascript', javascript);
 import 'highlight.js/styles/github.css' //样式文件
 
-Vue.directive('highlight',function (el) {
+Vue.directive('highlight', function (el) {
   let highlight = el.querySelectorAll('pre code');
-  highlight.forEach((block)=>{
-      hljs.highlightBlock(block)
+  highlight.forEach((block) => {
+    hljs.highlightBlock(block)
   })
 })
 
@@ -131,4 +140,3 @@ new Vue({
   render: h => h(App),
   router,
 })
-

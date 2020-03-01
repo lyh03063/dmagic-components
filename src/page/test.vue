@@ -43,7 +43,7 @@
 <script>
 import dm_list_data from "../components/list-data/list-data.vue";
 import dm_dynamic_form from "../components/list-data/dynamic-form.vue";
-import collection from "../components/form_item/collection.vue";
+import collection from "../components/form_item/collection/index.vue";
 
 import { codemirror } from "vue-codemirror";
 import "codemirror/lib/codemirror.css";

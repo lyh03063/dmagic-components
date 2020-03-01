@@ -1,7 +1,5 @@
 "use strict";
 
-WIN = WIN;
-
 var _systemId = PUB._systemId;
 //#region DYDICT:公共数据字典对象管理
 window.DYDICT = {}; //公共数据字典对象
@@ -86,9 +84,9 @@ D_ITEMS.priceOrder = {
     prop: "priceOrder"
 };
 
-D_ITEMS.goodsList = {
+D_ITEMS.listGoods = {
     label: "商品清单",
-    prop: "goodsList"
+    prop: "listGoods"
 };
 
 D_ITEMS.addressObj = {

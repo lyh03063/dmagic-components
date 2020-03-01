@@ -53,7 +53,7 @@
 
 <script>
 // import dm_list_data from "../../components/list-data/list-data.vue";
-import collection from "../../../components/form_item/collection.vue";
+import collection from "../../../components/form_item/collection/index.vue";
 export default {
   components: { collection },
   props: {

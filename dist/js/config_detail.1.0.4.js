@@ -84,9 +84,9 @@ D_ITEMS.priceOrder = {
     prop: "priceOrder"
 };
 
-D_ITEMS.goodsList = {
+D_ITEMS.listGoods = {
     label: "商品清单",
-    prop: "goodsList"
+    prop: "listGoods"
 };
 
 D_ITEMS.addressObj = {

@@ -351,8 +351,7 @@ export default {
 
       this.isShowDialogEditRow = false;
     },
-    test() {
-    },
+    test() {},
     getSigleLinkUrl(item, row) {
       //注意，这个方法会调用很多次
       let linkNeed = item.url ? item.url + row[this.cf.idKey] : "javascript:;";
@@ -494,7 +493,6 @@ export default {
       };
       Object.assign(ajaxParam, this.cf.paramAddonPublic); //合并公共参数
 
-
       if (this.cf.url.detail) {
         //如果{详情ajax地址}存在
         let { data } = await axios({
@@ -617,13 +615,15 @@ export default {
 
       /****************************将空数组处理成null-END****************************/
 
+      let urlList = lodash.get(this.cf, `url.list`);
+
       // this.tableData = this.value; //提取静态数据
-      if (this.cf.url.list) {
+      if (urlList) {
         //Q1:{列表接口地址}存在
         let { data } = await axios({
           //请求接口
           method: "post",
-          url: PUB.domain + this.cf.url.list,
+          url: PUB.domain + urlList,
           data: objParamFinal
         });
 

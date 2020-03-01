@@ -21,8 +21,12 @@
         <template slot="title">
           <span class>更多demo</span>
         </template>
-        <el-menu-item :index="item" :route="`/demo_show?com=${item}`" v-for="item in arrDemo" :key="item">{{item}}</el-menu-item>
- 
+        <el-menu-item
+          :index="item"
+          :route="`/demo_show?com=${item}`"
+          v-for="item in arrDemo"
+          :key="item"
+        >{{item}}</el-menu-item>
       </el-submenu>
     </el-menu>
     <div class="main-box">
@@ -46,10 +50,13 @@
 
 <script>
 //变量：{demo数组}
-let arrDemo=["pannel","list_flex_res"]
-
-
-
+let arrDemo = [
+  "pannel",
+  "list_flex_res",
+  "goods_cart",
+  "goods_specs_2",
+  "goods_specs_front_2"
+];
 
 import dm_dynamic_form from "./components/list-data/dynamic-form.vue";
 export default {
@@ -123,7 +130,6 @@ export default {
 
   left: 0;
   top: 0;
-  
 }
 .left-box {
   flex: 1;

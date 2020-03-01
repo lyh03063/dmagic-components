@@ -12,7 +12,7 @@ if (typeof window === "undefined") {
     WIN = window;
 }
 WIN.PUB = WIN.PUB || {};
-WIN.PUB.domain = "http://120.76.160.41:3000";
+WIN.PUB.domain = "https://www.dmagic.cn";
 // WIN.PUB.domain = "http://localhost:3000"
 //WIN.PUB.domain = 'http://test.dmagic.cn'
 // WIN.PUB.urlUpload = `${PUB.domain}/api_third_part/qiniu_upload?scope=test`

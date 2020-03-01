@@ -16,7 +16,7 @@
           :class="{'data-group':true,'edit':editItem==i,'data-form-group':listType=='form'}"
           @mouseenter="focusItem=i"
           @mouseleave="focusItem=999"
-          @dblclick="editItem=i"
+          @dblclick.ctrl="editItem=i"
         >
           <i class="sort-num" v-if="listType!='form'">{{i+1}}</i>
           <div v-if="editItem==i">
@@ -52,7 +52,12 @@
                 @click="copyData(i)"
                 v-if="ifShow('btn-copy')"
               ></i>
-              <i class="el-icon-delete btn-op" title="删除" @click="deleteData(i)" v-if="ifShow('btn-delete')"></i>
+              <i
+                class="el-icon-delete btn-op"
+                title="删除"
+                @click="deleteData(i)"
+                v-if="ifShow('btn-delete')"
+              ></i>
             </div>
           </template>
         </li>
@@ -83,7 +88,7 @@
 </template>
 
 <script>
-import json_editor from "../../components/form_item/json_editor.vue";
+import json_editor from "../../../components/form_item/json_editor.vue";
 
 export default {
   name: "collection",
@@ -174,7 +179,6 @@ export default {
      */
 
     addGroup() {
-
       //__id为了防止新增一组时出现残留值,防止出现空对象
       let obj = { __id: util.getTimeRandom() }; //
       this.cfForm.formItems.forEach(itemEach => {
@@ -186,6 +190,11 @@ export default {
 
       this.valueNeed.unshift(obj);
       this.valueNeed = util.deepCopy(this.valueNeed);
+
+      if (this.listType != "form") {
+        //如果不是表单类型
+        this.showEditDataDialog(0); //编辑第1条
+      }
     },
     /**
      * @name 显示修改对象弹窗的函数
@@ -206,6 +215,7 @@ export default {
     },
     copyData: function(index) {
       let copy = util.deepCopy(this.valueNeed[index]);
+      copy.__id = util.getTimeRandom(); //修改__id,避免key重复
       this.valueNeed.splice(index, 0, copy); //从下标为1的元素开始删除0个元素.
       this.$message.success("复制成功");
     },

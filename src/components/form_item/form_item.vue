@@ -214,7 +214,7 @@ import json_editor from "../../components/form_item/json_editor.vue";
 import upload_img from "../../components/form_item/upload_img.vue";
 import time_period from "../../components/form_item/time_period.vue";
 import json_prop from "../../components/form_item/json_prop.vue";
-import collection from "../../components/form_item/collection.vue";
+import collection from "../../components/form_item/collection/index.vue";
 import quill_editor from "../../components/form_item/quill_editor.vue";
 import tiny_mce from "../../components/form_item/tiny_mce";
 import select_list_data from "../../components/form_item/select_list_data/select_list_data.vue";
