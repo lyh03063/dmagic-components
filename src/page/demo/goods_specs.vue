@@ -40,6 +40,8 @@
 </template>
 
 <script>
+
+
 let T;
 
 export default {
@@ -92,7 +94,7 @@ export default {
             prop: "name",
             type: "input"
           },
-       
+
           F_ITEMS.objSpecTerm,
           F_ITEMS.specs_options
         ]
@@ -107,6 +109,10 @@ export default {
         let { listSpecs, listSpecPrice } = T.formDataNeed;
         T.$set(T.formData, "listSpecs", listSpecs);
         T.$set(T.formData, "listSpecPrice", listSpecPrice);
+
+        let priceSellSection = util.getGoodsPrice(T.formData); //调用：{获取商品价格(区间)的函数}
+
+        T.$set(T.formData, "priceSellSection", priceSellSection);
         // Object.assign(T.formData, { listSpecs, listSpecPrice });//合并对象
       },
       deep: true
@@ -143,7 +149,6 @@ export default {
     //函数：{更新规格/价格表的函数}
     updateSpecPeice() {
       let { listSpecs } = T.formDataNeed;
-      console.log("listSpecs:", listSpecs);
       if (!listSpecs) return;
       T.setCacheSpecPrice(); //调用：{设置缓存规格/价格表数据字典的函数}
       let arrParam = listSpecs.map(doc => doc.options);
@@ -176,7 +181,6 @@ export default {
           width: 120
         };
       });
-      console.log("arrColumns:", arrColumns);
       arrColumns.push(...T.columnsFixed);
       T.cfListSpecPrice.columns = arrColumns;
     },

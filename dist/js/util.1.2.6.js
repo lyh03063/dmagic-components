@@ -1,10 +1,18 @@
 "use strict";
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _extends = Object.assign || function(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+function _asyncToGenerator(fn) {
+    return function() {
+        var gen = fn.apply(this, arguments);
+        return new Promise(function(resolve, reject) {
+            function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function(value) { step("next", value); }, function(err) { step("throw", err); }); } }
+            return step("next");
+        });
+    };
+}
 
 var WIN = void 0;
 if (typeof window === "undefined") {
@@ -25,7 +33,7 @@ if (typeof lodash === "undefined") {
 WIN.util = {};
 //#region 从dmagic-util.js迁移过来
 //#region encodeHtml:html转义函数
-util.encodeHtml = function (str) {
+util.encodeHtml = function(str) {
     var s = "";
     if (str.length == 0) return "";
     s = str.replace(/&/g, "&amp;");
@@ -39,7 +47,7 @@ util.encodeHtml = function (str) {
 };
 //#endregion
 //#region decodeHtml:html反转义函数
-util.decodeHtml = function (str) {
+util.decodeHtml = function(str) {
     var s = "";
     if (str.length == 0) return "";
     s = str.replace(/&amp;/g, "&");
@@ -75,14 +83,14 @@ var parseParam = function parseParam(param, key1) {
 //#region getAPI:get调用api函数[全局]
 //函数定义：{get调用api函数}
 var getAPI = function getAPI(_param) {
-    var promise = new Promise(function (resolve, reject) {
+    var promise = new Promise(function(resolve, reject) {
         _param.param = _param.param || {};
         var paramAdd = parseParam(_param.param);
         var ajaxUrl = _param.url;
         ajaxUrl += "?" + paramAdd; //*****变量赋值：{将参数拼接到url}
-        axios.get(ajaxUrl, {}).then(function (res) {
+        axios.get(ajaxUrl, {}).then(function(res) {
             resolve(res);
-        }).catch(function (err) {
+        }).catch(function(err) {
             reject(err);
         });
     });
@@ -91,12 +99,12 @@ var getAPI = function getAPI(_param) {
 //#endregion
 //#region postAPI:post调用api函数[全局]
 var postAPI = function postAPI(_param) {
-    var promise = new Promise(function (resolve, reject) {
+    var promise = new Promise(function(resolve, reject) {
         _param.param = _param.param || {};
         var ajaxUrl = _param.url;
-        axios.post(ajaxUrl, _param.param).then(function (res) {
+        axios.post(ajaxUrl, _param.param).then(function(res) {
             resolve(res);
-        }).catch(function (err) {
+        }).catch(function(err) {
             reject(err);
         });
     });
@@ -190,7 +198,7 @@ var propsync = {
         var that = this;
         /** 所有组件定义的props名称数组 */
         var propsKeys = Object.keys(that.$options.props || {});
-        propsKeys.forEach(function (prop, i) {
+        propsKeys.forEach(function(prop, i) {
             var dataName = getDataName(prop);
             var isEnable = that.$options.props[prop][isEnableName];
             isEnable = typeof isEnable === "boolean" ? isEnable : true;
@@ -208,18 +216,18 @@ var propsync = {
         var unwatchDataFnArr = [];
         /** 所有组件定义的props名称数组 */
         var propsKeys = Object.keys(that.$options.props || {});
-        propsKeys.forEach(function (prop, i) {
+        propsKeys.forEach(function(prop, i) {
             var dataName = getDataName(prop);
             var isEnable = that.$options.props[prop][isEnableName];
             isEnable = typeof isEnable === "boolean" ? isEnable : true;
             if (!isEnable) return;
             //监听所有props属性
-            var propsFn = that.$watch(prop, function (newVal, oldVal) {
+            var propsFn = that.$watch(prop, function(newVal, oldVal) {
                 that[dataName] = newVal; //将组件外变更的prop同步到组件内的p_prop变量中
             }, {});
             unwatchPropsFnArr.push(propsFn);
             //[监听所有属性映射到组件内的变量]
-            var dataFn = that.$watch(dataName, function (newVal, oldVal) {
+            var dataFn = that.$watch(dataName, function(newVal, oldVal) {
                 that.$emit(emitPropsChangeName, prop, newVal, oldVal); //将组件内p_prop通知给组件外(调用方)
             }, {});
             unwatchDataFnArr.push(dataFn);
@@ -282,7 +290,7 @@ Vue.component('dialog-normal', {
     data: function data() {
         return {
             zIndex: 100
-            //  showFlag: this.show,
+                //  showFlag: this.show,
         };
     },
 
@@ -299,8 +307,8 @@ Vue.component('dialog-normal', {
         // }
     },
     methods: {
-        confirmFun: function () {
-            var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(e) {
+        confirmFun: function() {
+            var _ref = _asyncToGenerator( /*#__PURE__*/ regeneratorRuntime.mark(function _callee(e) {
                 return regeneratorRuntime.wrap(function _callee$(_context) {
                     while (1) {
                         switch (_context.prev = _context.next) {
@@ -361,9 +369,9 @@ if (WIN.Vuex) {
         state: {
             debug: false,
             activeMenuIndex: "", //当前激活的菜单index
-            listState: {//存放列表的共享状态，
+            listState: { //存放列表的共享状态，
             },
-            defultFindJson: {//存放列表的默认查询参数，
+            defultFindJson: { //存放列表的默认查询参数，
                 // list_article:{articleCategory:3  }
             }
         },
@@ -415,7 +423,7 @@ if (WIN.Vuex) {
         }
     });
     Vue.prototype.$store = WIN.store; //让vue实例中可访问$store
-    document.onkeydown = function (e) {
+    document.onkeydown = function(e) {
         //绑定ctrl+D事件
         var keyCode = e.keyCode || e.which || e.charCode;
         var ctrlKey = e.ctrlKey || e.metaKey;
@@ -521,7 +529,8 @@ MIX.form_item = {
     //#endregion
     //#endregion
     //#region deepCopy:深拷贝函数
-};util.deepCopy = function (obj) {
+};
+util.deepCopy = function(obj) {
     //深拷贝一个Json对象的函数
     return lodash.cloneDeep(obj);
 };
@@ -529,19 +538,19 @@ MIX.form_item = {
 //#region type:返回对象数据类型函数
 var class2type = {},
 
-//用于记录[object class]样式  
-arrObjs = "Boolean Number String Function Array Date RegExp Null Undefined".split(" ");
+    //用于记录[object class]样式  
+    arrObjs = "Boolean Number String Function Array Date RegExp Null Undefined".split(" ");
 for (var i = 0, l = arrObjs.length; i < l; i++) {
     class2type["[object " + arrObjs[i] + "]"] = arrObjs[i].toLowerCase();
 }
-util.type = function (obj) {
+util.type = function(obj) {
     return class2type[Object.prototype.toString.call(obj)] || "object";
 };
 //#endregion
 //#region timeout:基于promise的延迟函数
-util.timeout = function (ms) {
+util.timeout = function(ms) {
     //使用promise封装一个延迟方法
-    return new Promise(function (resolve) {
+    return new Promise(function(resolve) {
         //resolve延迟解决后的回调函数, reject延迟异常的处理函数
         setTimeout(resolve, ms, 'done');
     });
@@ -554,7 +563,7 @@ util.timeout = function (ms) {
  * @param {结束时间} _json.endTime
  *  @param {当前时间} _json.currTime
  */
-util.getTimeStatus = function (param) {
+util.getTimeStatus = function(param) {
     //
     var start = param.start,
         end = param.end,
@@ -595,8 +604,8 @@ util.getTimeStatus = function (param) {
 };
 //#endregion
 //#region ajaxPopulate:ajax填充数据列表的某个字段函数/可用于动态数据字典
-util.ajaxPopulate = function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(populateConfig) {
+util.ajaxPopulate = function() {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/ regeneratorRuntime.mark(function _callee2(populateConfig) {
         var ajax, listData, page, populateColumn, idColumn, idColumn2, _populateConfig$findJ, findJson, arrId, urlAjax, paramAjax, url, _ajax$param, param, _ref3, data, dict;
 
         return regeneratorRuntime.wrap(function _callee2$(_context2) {
@@ -607,7 +616,7 @@ util.ajaxPopulate = function () {
                         ajax = populateConfig.ajax, listData = populateConfig.listData, page = populateConfig.page, populateColumn = populateConfig.populateColumn, idColumn = populateConfig.idColumn, idColumn2 = populateConfig.idColumn2, _populateConfig$findJ = populateConfig.findJson, findJson = _populateConfig$findJ === undefined ? {} : _populateConfig$findJ;
                         arrId = [];
 
-                        listData.forEach(function (itemEach) {
+                        listData.forEach(function(itemEach) {
                             //循环：{原数据数组}
                             var idEach = itemEach[idColumn];
                             if (idEach) {
@@ -651,7 +660,7 @@ util.ajaxPopulate = function () {
                         data = _ref3.data;
                         dict = lodash.keyBy(data.list, idColumn2);
 
-                        listData.forEach(function (itemEach) {
+                        listData.forEach(function(itemEach) {
                             //循环：{原数据数组}
                             var idEach = itemEach[idColumn];
                             if (idEach) {
@@ -659,7 +668,7 @@ util.ajaxPopulate = function () {
                                 if (util.type(idEach) == "array") {
                                     //Q1:idEach是数组
                                     itemEach[populateColumn] = [];
-                                    idEach.forEach(function (idOneEach) {
+                                    idEach.forEach(function(idOneEach) {
                                         //循环：{id数组}
                                         itemEach[populateColumn].push(dict[idOneEach]);
                                     });
@@ -679,15 +688,15 @@ util.ajaxPopulate = function () {
         }, _callee2, this);
     }));
 
-    return function (_x2) {
+    return function(_x2) {
         return _ref2.apply(this, arguments);
     };
 }();
 //#endregion
 //#region stringify:json转字符串函数（含function处理）
-util.stringify = function (_json) {
+util.stringify = function(_json) {
     //函数定义：{json转字符串函数（含function处理）}
-    var strJson = JSON.stringify(_json, function (key, val) {
+    var strJson = JSON.stringify(_json, function(key, val) {
         if (typeof val === "function") {
             return val + ""; //将函数代码转换成字符串
         }
@@ -697,10 +706,10 @@ util.stringify = function (_json) {
 };
 //#endregion
 //#region parseJson:字符串转json函数（含function还原处理）
-util.parseJson = function (str) {
+util.parseJson = function(str) {
     //函数定义：{字符串转json函数（含function还原处理）}
     //将带function字符串的还原成真正发function
-    var json = JSON.parse(str, function (k, v) {
+    var json = JSON.parse(str, function(k, v) {
         if (v.indexOf && v.indexOf("function") > -1) {
             return eval("(function(){return " + v + " })()");
         }
@@ -710,7 +719,7 @@ util.parseJson = function (str) {
 };
 //#endregion
 //#region moveData:数组元素上下移动函数
-util.moveData = function (index, type, list) {
+util.moveData = function(index, type, list) {
     //函数：{数据移动函数}-注意调用对象的KEY等配置
     list = list || this[this.KEY.arrRelate]; //KEY配置相关数组
     var objIndex = {
@@ -732,7 +741,7 @@ util.moveData = function (index, type, list) {
 };
 //#endregion
 //#region sortByArrId:根据id数组重排集合的函数
-util.sortByArrId = function (param) {
+util.sortByArrId = function(param) {
     var list = param.list,
         _param$idKey = param.idKey,
         idKey = _param$idKey === undefined ? "P1" : _param$idKey,
@@ -740,17 +749,17 @@ util.sortByArrId = function (param) {
 
     if (!(list && list.length && arrId && arrId.length)) return list;
     var dict = lodash.keyBy(list, idKey); //转成数据字段，方便重排
-    var arrNeed = arrId.map(function (id) {
+    var arrNeed = arrId.map(function(id) {
         return dict[id];
     }); //获取排序后的列表数据
-    arrNeed = arrNeed.filter(function (doc) {
+    arrNeed = arrNeed.filter(function(doc) {
         return doc;
     }); //过滤null的数据
     return arrNeed; //获取排序后的列表数据
 };
 //#endregion
 //#region toFixed/money:将数字转换成保留小数点，默认2位
-util.toFixed = function (num) {
+util.toFixed = function(num) {
     var length = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
 
     num = parseFloat(num);
@@ -765,12 +774,12 @@ util.toFixed = function (num) {
 util.money = util.toFixed;
 //#endregion
 //#region getTimeRandom:返回带时间戳的随机数
-util.getTimeRandom = function () {
+util.getTimeRandom = function() {
     return moment().format("YYYYMMDDHHmmSSsss_") + lodash.random(99999);
 };
 //#endregion
 //#region handelItem:处理字段数组的某个字段配置的函数
-util.handelItem = function (cf) {
+util.handelItem = function(cf) {
     var action = cf.action,
         items = cf.items,
         prop = cf.prop,
@@ -779,7 +788,7 @@ util.handelItem = function (cf) {
         key = _cf$key === undefined ? "prop" : _cf$key;
 
     if (!items) return;
-    var index = items.findIndex(function (item) {
+    var index = items.findIndex(function(item) {
         return item[key] == prop;
     });
     if (index < 0) return; //找不到目标，return
@@ -798,7 +807,7 @@ util.handelItem = function (cf) {
 };
 //#endregion
 //#region setListPower:根据当前角色权限设置列表配置的函数-需要用到WIN.rolePower变量
-util.setListPower = function (cfList) {
+util.setListPower = function(cfList) {
     var powerPath = cfList.powerPath;
 
     if (!powerPath) return cfList;
@@ -826,7 +835,7 @@ util.setListPower = function (cfList) {
 };
 //#endregion
 //#region setLocalStorageObj:设置一个对象到LocalStorage函数
-util.setLocalStorageObj = function (key, val) {
+util.setLocalStorageObj = function(key, val) {
     if (util.type(val) == "array" || util.type(val) == "object") {
         //Q1:数据类型是数组活对虾
         val = JSON.stringify(val); //Json对象转换Json字符串
@@ -835,7 +844,7 @@ util.setLocalStorageObj = function (key, val) {
 };
 //#endregion
 //#region getLocalStorageObj:从LocalStorage获取一个对象的函数
-util.getLocalStorageObj = function (key) {
+util.getLocalStorageObj = function(key) {
     if (!localStorage[key]) return false;
     return JSON.parse(localStorage[key]); //
 };
@@ -929,7 +938,7 @@ util.cfList.sBtns.arrAllBtns = [util.cfList.sBtns.detail, util.cfList.sBtns.modi
 util.cfList.sBtns.arrSortBtns = [util.cfList.sBtns.up, util.cfList.sBtns.down, util.cfList.sBtns.top, util.cfList.sBtns.bottom];
 //#endregion
 //#region setObjDefault:给一个对象设置默认属性（但不整个替换对象，并且默认属性优先级低于已有属性）
-util.setObjDefault = function (obj, objDeault) {
+util.setObjDefault = function(obj, objDeault) {
     //for of循环遍历对象，for of不能直接处理对象，本质上是同个Object.keys拼装一个新数组进行辅助
     var _iteratorNormalCompletion = true;
     var _didIteratorError = false;
@@ -961,7 +970,7 @@ util.setObjDefault = function (obj, objDeault) {
 };
 //#endregion
 //#region setObj:拓展vue实例的data数据函数
-util.setObj = function (path, extend) {
+util.setObj = function(path, extend) {
     var objOld = lodash.get(this, path);
     var objNew = lodash.cloneDeep(objOld);
     if (objNew === null || objNew === undefined) {
@@ -973,7 +982,7 @@ util.setObj = function (path, extend) {
 };
 //#endregion
 //#region searchCollection:查询静态集合列表函数（支持模糊查询）
-util.searchCollection = function () {
+util.searchCollection = function() {
     var param = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var _param$findJson = param.findJson,
         findJson = _param$findJson === undefined ? {} : _param$findJson,
@@ -993,7 +1002,7 @@ util.searchCollection = function () {
     //第1步，先处理等值查询
     var result = lodash.filter(dataBase, paramEqual);
     //第2步，处理模糊查询
-    var searchResult = lodash.filter(result, function (doc) {
+    var searchResult = lodash.filter(result, function(doc) {
         var flag = true;
         for (var prop in paramVague) {
             var flagEach = void 0;
@@ -1011,7 +1020,7 @@ util.searchCollection = function () {
 };
 //#endregion
 //#region isNotEmptyArr:判断是否为非空数组的函数
-util.isNotEmptyArr = function (arr) {
+util.isNotEmptyArr = function(arr) {
     //函数：{判断是否为非空数组}
     var type = util.type(arr); //变量：{类型}
     if (type !== "array") {
@@ -1022,21 +1031,21 @@ util.isNotEmptyArr = function (arr) {
 };
 //#endregion
 //#region isNotEmptyObj:判断是否为非空对象的函数
-util.isNotEmptyObj = function (obj) {
+util.isNotEmptyObj = function(obj) {
     var arr = Object.keys(obj);
     return !!arr.length;
 };
 //#endregion
 
 //#region countProp:返回对象的属性数的函数
-util.countProp = function (obj) {
+util.countProp = function(obj) {
     var arr = Object.keys(obj);
     return arr.length;
 };
 //#endregion
 
 //#region clearObj:清除对象中的空属性（null,undefined,空格等）
-util.clearObj = function (obj) {
+util.clearObj = function(obj) {
     var arrSpec = ["", null, undefined];
     for (var prop in obj) {
         //如果属性值是特殊的空值，删除属性
@@ -1046,9 +1055,21 @@ util.clearObj = function (obj) {
     }
 };
 //#endregion
+
+//#region clearArr:清除数组中的null,undefined,空格等
+util.clearArr = function(arr) {
+    var arrSpec = ["", null, undefined];
+    return arr.filter(item => !arrSpec.includes(item))
+
+
+};
+//#endregion
+
+
+
 //#region ajaxGroupDataSort:调用分组数据排序接口的函数
-util.ajaxGroupDataSort = function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(actionType, doc) {
+util.ajaxGroupDataSort = function() {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/ regeneratorRuntime.mark(function _callee3(actionType, doc) {
         var _id;
 
         return regeneratorRuntime.wrap(function _callee3$(_context3) {
@@ -1061,8 +1082,12 @@ util.ajaxGroupDataSort = function () {
                             //请求接口
                             method: "post",
                             url: PUB.domain + "/info/groupDataSort",
-                            data: { _systemId: PUB._systemId, _id: _id, actionType: actionType //传递参数
-                            } });
+                            data: {
+                                _systemId: PUB._systemId,
+                                _id: _id,
+                                actionType: actionType //传递参数
+                            }
+                        });
 
                     case 3:
                     case "end":
@@ -1072,13 +1097,13 @@ util.ajaxGroupDataSort = function () {
         }, _callee3, this);
     }));
 
-    return function (_x5, _x6) {
+    return function(_x5, _x6) {
         return _ref4.apply(this, arguments);
     };
 }();
 //#endregion
 //#region setCookie:cookie中存值函数
-util.setCookie = function (_ref5) {
+util.setCookie = function(_ref5) {
     var key = _ref5.key,
         value = _ref5.value,
         cookie = _ref5.cookie;
@@ -1098,7 +1123,7 @@ util.setCookie = function (_ref5) {
 };
 //#endregion
 //#region getCookie: cookie中取值函数
-util.getCookie = function (_ref6) {
+util.getCookie = function(_ref6) {
     var key = _ref6.key,
         cookie = _ref6.cookie;
 
@@ -1116,7 +1141,7 @@ util.getCookie = function (_ref6) {
 };
 //#endregion
 //#region delCookie :删除cookie函数
-util.delCookie = function (_ref7) {
+util.delCookie = function(_ref7) {
     var key = _ref7.key,
         cookie = _ref7.cookie;
 
@@ -1134,8 +1159,8 @@ util.delCookie = function (_ref7) {
 //#endregion
 //#region longting-nuxt站点新增公共函数
 //函数：{处理分组数据列表数据函数}-使之适用于列表渲染
-util.handleGDataList = function (list) {
-    return list.map(function (doc) {
+util.handleGDataList = function(list) {
+    return list.map(function(doc) {
         return {
             _id: lodash.get(doc, "targetDoc._id"),
             title: lodash.get(doc, "targetDoc.title"),
@@ -1149,13 +1174,13 @@ util.handleGDataList = function (list) {
     });
 };
 //函数：{根据别名获取子分组数据列表的函数}-更稳定的定位方式
-util.getSonListByAlias = function (_ref8) {
+util.getSonListByAlias = function(_ref8) {
     var list = _ref8.list,
         alias = _ref8.alias;
 
     console.log("list:", list);
     console.log("alias:", alias);
-    var obj = list.find(function (doc) {
+    var obj = list.find(function(doc) {
         return doc.targetDoc.alias == alias;
     });
     if (!obj) return [];
@@ -1165,7 +1190,7 @@ util.getSonListByAlias = function (_ref8) {
 
 
 //#region inWX:判断是否处于微信浏览器内函数
-util.inWX = function () {
+util.inWX = function() {
     var ua = window.navigator.userAgent.toLowerCase();
     var flag = ua.indexOf("micromessenger") != -1; //变量：{是否在微信浏览器}
     return flag;
@@ -1174,13 +1199,13 @@ util.inWX = function () {
 
 
 //#region callWXPay:调用网页微信支付控件的函数-promise化
-util.callWXPay = function (param) {
-    var promise = new Promise(function (resolve, reject) {
+util.callWXPay = function(param) {
+    var promise = new Promise(function(resolve, reject) {
         function onBridgeReady() {
             console.log("onBridgeReady");
             var paramCall = _extends({ signType: "MD5" }, param);
             //唤起微信支付控件！！
-            WeixinJSBridge.invoke("getBrandWCPayRequest", paramCall, function (res) {
+            WeixinJSBridge.invoke("getBrandWCPayRequest", paramCall, function(res) {
                 resolve(res);
             });
         }
@@ -1201,7 +1226,7 @@ util.callWXPay = function (param) {
 //#endregion
 
 //#region combination:返回多个数组的排列组合结果数组函数
-util.combination = function (arr) {
+util.combination = function(arr) {
     arr.reverse(); //反转
     //函数：{递归排列组合函数}
     function combine(arr) {
@@ -1220,7 +1245,7 @@ util.combination = function (arr) {
 //#endregion
 
 //#region isNullUndefined:判断是否为null或undefind函数
-util.isNullUndefined = function (param) {
+util.isNullUndefined = function(param) {
     return param === null || param === undefined;
 };
 
@@ -1231,12 +1256,12 @@ util.isNullUndefined = function (param) {
 if (typeof console !== "undefined") {
     //如果window不存在
     //函数：{控制台打印转字符串函数}
-    console.logs = function (s) {
+    console.logs = function(s) {
         var _console;
 
         // console.log(arguments);
         var arrAg = Array.from(arguments); //伪数组转数组
-        arrAg = arrAg.map(function (agm) {
+        arrAg = arrAg.map(function(agm) {
             var type = util.type(agm); //变量：{类型}
             if (type !== "string") {
                 //如果不是字符串，转成字符串
@@ -1251,10 +1276,10 @@ if (typeof console !== "undefined") {
 
 
 //函数：{获取商品价格(区间)的函数}-可能存在多个价格
-util.getGoodsPrice = function (docGoods) {
+util.getGoodsPrice = function(docGoods) {
     var priceSpec = void 0;
     if (!docGoods.listSpecPrice) return docGoods.priceSell;
-    var arrPrice = docGoods.listSpecPrice.map(function (doc) {
+    var arrPrice = docGoods.listSpecPrice.map(function(doc) {
         var price = doc.price;
 
         if (util.isNullUndefined(price)) {
@@ -1274,7 +1299,7 @@ util.getGoodsPrice = function (docGoods) {
 };
 
 //#region aaaa:000函数
-util.aaaa = function (param) {
+util.aaaa = function(param) {
     return 1111;
 };
 //#endregion
