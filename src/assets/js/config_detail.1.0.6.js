@@ -1,10 +1,6 @@
-
-
-
-
 let _systemId = PUB._systemId
-//#region DYDICT:公共数据字典对象管理
-window.DYDICT = {}//公共数据字典对象
+    //#region DYDICT:公共数据字典对象管理
+window.DYDICT = {} //公共数据字典对象
 DYDICT.arr_importance = [
     { label: "作废", value: 1 },
     { label: "次要", value: 2 },
@@ -31,8 +27,8 @@ DYDICT.arr_html_version = [
     { label: "HTML5", value: "HTML5" },
 ]
 DYDICT.arr_selfClose = [
-    { label: "否", value: 0 },
-    { label: "是", value: 1 },
+    { label: "否", value: "0" },
+    { label: "是", value: "1" },
 ]
 DYDICT.selfClose = lodash.keyBy(DYDICT.arr_selfClose, 'value')
 
@@ -69,12 +65,9 @@ DYDICT.payStatus = lodash.keyBy(DYDICT.arr_payStatus, 'value')
 
 
 
-DYDICT.arr_aaaa = [
-]
-DYDICT.arr_aaaa = [
-]
-DYDICT.arr_aaaa = [
-]
+DYDICT.arr_aaaa = []
+DYDICT.arr_aaaa = []
+DYDICT.arr_aaaa = []
 DYDICT.html_api_category = {
     ajax: {
         param: { _systemId, _dataType: "html_api_category" },
@@ -116,7 +109,7 @@ DYDICT.note_category = {
 DYDICT.aaa = 1111;
 DYDICT.aaa = 1111;
 //#endregion
-window.D_ITEMS = {}//公共数据字典对象
+window.D_ITEMS = {} //公共数据字典对象
 
 
 //#region 龙庭订单
@@ -161,7 +154,7 @@ D_ITEMS.Id = {
 D_ITEMS.sex = {
     label: "性别",
     prop: "sex",
-    formatter: function (data) {
+    formatter: function(data) {
         if (data.sex == 2) {
             return '女'
         } else if (data.sex == 1) {
@@ -204,14 +197,14 @@ D_ITEMS.orderId = {
 D_ITEMS.payStatus = {
     label: "支付状态",
     prop: "payStatus",
-    formatter: function (rowData) {
+    formatter: function(rowData) {
         return lodash.get(DYDICT.payStatus, `${rowData.payStatus}.label`);
     },
 };
 D_ITEMS.auditStatus = {
     label: "审核状态",
     prop: "auditStatus",
-    formatter: function (rowData) {
+    formatter: function(rowData) {
         if (rowData.auditStatus == 1) {
             return "未审核";
         } else if (rowData.auditStatus == 2) {
