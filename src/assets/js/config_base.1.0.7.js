@@ -670,9 +670,9 @@ let _systemId = PUB._systemId;
         //-------列配置数组-------
         columns: [COLUMNS.title_fixed, COLUMNS._id, COLUMNS.alias, COLUMNS.desc, COLUMNS.group_dataType],
         //-------筛选表单字段数组-------
-        searchFormItems: [F_ITEMS.title_search,D_ITEMS.group_dataType],
+        searchFormItems: [F_ITEMS.title_search,F_ITEMS.group_dataType,F_ITEMS.alias],
         //-------详情字段数组-------
-        detailItems: [D_ITEMS._id, D_ITEMS.title, D_ITEMS.desc, D_ITEMS.group_dataType],
+        detailItems: [D_ITEMS._id, D_ITEMS.title,D_ITEMS.alias, D_ITEMS.desc, D_ITEMS.group_dataType],
         //-------新增、修改表单字段数组-------
         formItems: [
             F_ITEMS.title,

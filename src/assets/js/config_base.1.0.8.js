@@ -370,7 +370,7 @@ MIX.listGroupData = {
         },
         //函数：{列表查询后的回调函数}
         async afterSearch(list) {
-            let arrId = list.map(doc => doc._idRel2);
+  
             //设置id数组
             this.$refs.scorePanel.ajaxGetScore(); //调用：{ajax获取分数函数}
             if (this.$refs.scorePanel.focusId == undefined) {
@@ -670,9 +670,9 @@ let _systemId = PUB._systemId;
         //-------列配置数组-------
         columns: [COLUMNS.title_fixed, COLUMNS._id, COLUMNS.alias, COLUMNS.desc, COLUMNS.group_dataType],
         //-------筛选表单字段数组-------
-        searchFormItems: [F_ITEMS.title_search,D_ITEMS.group_dataType],
+        searchFormItems: [F_ITEMS.title_search,F_ITEMS.group_dataType,F_ITEMS.alias],
         //-------详情字段数组-------
-        detailItems: [D_ITEMS._id, D_ITEMS.title, D_ITEMS.desc, D_ITEMS.group_dataType],
+        detailItems: [D_ITEMS._id, D_ITEMS.title,D_ITEMS.alias, D_ITEMS.desc, D_ITEMS.group_dataType],
         //-------新增、修改表单字段数组-------
         formItems: [
             F_ITEMS.title,
@@ -952,7 +952,7 @@ let _systemId = PUB._systemId;
             _dataType
         },
         //-------列配置数组-------
-        columns: [COLUMNS.title_fixed, COLUMNS.keyword_edit, COLUMNS._id, COLUMNS.desc, COLUMNS.vedio, COLUMNS.link],
+        columns: [COLUMNS.title_fixed, COLUMNS.keyword_edit, COLUMNS.countGroup, COLUMNS._id, COLUMNS.desc, COLUMNS.vedio, COLUMNS.link],
         //-------筛选表单字段数组-------
         searchFormItems: [F_ITEMS.title_search],
         //-------详情字段数组-------

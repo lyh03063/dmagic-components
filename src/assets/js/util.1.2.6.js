@@ -908,6 +908,15 @@ util.clearObj = function(obj) {
     }
 };
 //#endregion
+
+//#region clearArr:清除数组中的null,undefined,空格等
+util.clearArr = function (arr) {
+    var arrSpec = ["", null, undefined];
+    return arr.filter(item => !arrSpec.includes(item))
+
+};
+//#endregion
+
 //#region ajaxGroupDataSort:调用分组数据排序接口的函数
 util.ajaxGroupDataSort = async function(actionType, doc) {
     let { _id } = doc;

@@ -67,15 +67,24 @@ DYDICT.note_category = {
     idColumn: "category",
     idColumn2: "_id"
 };
+
+DYDICT.order_user = {
+    ajax: {
+        param: { _systemId: _systemId, _dataType: "user" },
+        url: "/info/getCommonList"
+    },
+    populateColumn: "userDoc",
+    idColumn: "openid",
+    idColumn2: "openid"
+};
+
 DYDICT.aaa = 1111;
 DYDICT.aaa = 1111;
 //#endregion
 
-
-//#region D_ITEMS
-
 window.D_ITEMS = {}; //公共数据字典对象
-
+window.COLUMNS = {};
+window.F_ITEMS = {};
 
 //#region 龙庭订单
 
@@ -83,6 +92,8 @@ D_ITEMS.transaction_id = {
     label: "微信交易号",
     prop: "transaction_id"
 };
+COLUMNS.transaction_id = _extends({}, D_ITEMS.transaction_id);
+F_ITEMS.transaction_id = _extends({}, D_ITEMS.transaction_id);
 
 D_ITEMS.timeOrder = {
     label: "下单时间",
@@ -94,20 +105,29 @@ D_ITEMS.timeOrder = {
 
 };
 
+COLUMNS.timeOrder = _extends({}, D_ITEMS.timeOrder);
+F_ITEMS.timeOrder = _extends({}, D_ITEMS.timeOrder);
+
 D_ITEMS.priceOrder = {
     label: "订单金额",
     prop: "priceOrder"
 };
+COLUMNS.priceOrder = _extends({}, D_ITEMS.priceOrder);
+F_ITEMS.priceOrder = _extends({}, D_ITEMS.priceOrder);
 
 D_ITEMS.listGoods = {
     label: "商品清单",
     prop: "listGoods"
 };
+COLUMNS.listGoods = _extends({}, D_ITEMS.listGoods);
+F_ITEMS.listGoods = _extends({}, D_ITEMS.listGoods, { type: "jsonEditor" });
 
 D_ITEMS.addressObj = {
     label: "地址",
     prop: "addressObj"
 };
+COLUMNS.addressObj = _extends({}, D_ITEMS.addressObj);
+F_ITEMS.addressObj = _extends({}, D_ITEMS.addressObj, { type: "jsonEditor" });
 
 //#endregion
 
@@ -117,6 +137,17 @@ D_ITEMS.Id = {
     label: "Id",
     prop: "P1"
 };
+COLUMNS.Id = {
+    label: "Id",
+    prop: "P1",
+    width: 50
+};
+F_ITEMS.Id = {
+    label: "数据id",
+    prop: "P1",
+    type: "input"
+};
+
 D_ITEMS.sex = {
     label: "性别",
     prop: "sex",
@@ -130,35 +161,79 @@ D_ITEMS.sex = {
         }
     }
 };
+COLUMNS.sex = Object.assign({}, D_ITEMS.sex, { width: 50 });
+F_ITEMS.sex = {
+    label: "性别",
+    prop: "sex",
+    type: "select",
+    options: [{ label: "男", value: 1 }, { label: "女", value: 2 }]
+};
+
 D_ITEMS.openid = {
     label: "微信openid",
     prop: "openid"
 };
+COLUMNS.openid = _extends({}, D_ITEMS.openid);
+F_ITEMS.openid = _extends({}, D_ITEMS.openid);
+
 D_ITEMS.phone = {
     label: "手机号",
     prop: "phone"
 };
+COLUMNS.phone = {
+    label: "手机号",
+    prop: "phone",
+    width: 110
+};
+
+F_ITEMS.phone = {
+    label: "手机号",
+    prop: "phone",
+    type: "input"
+};
+
 D_ITEMS.idCard = {
     label: "身份证号",
     prop: "idCard"
 };
+F_ITEMS.idCard = {
+    label: "身份证号",
+    prop: "idCard"
+};
+
 D_ITEMS.career = {
     label: "职业",
     prop: "career"
 };
+F_ITEMS.career = {
+    label: "职业",
+    prop: "career",
+    type: "input"
+};
+
 D_ITEMS.remark = {
     label: "备注",
     prop: "remark"
 };
+COLUMNS.remark = _extends({}, D_ITEMS.remark);
+F_ITEMS.remark = _extends({}, D_ITEMS.remark);
+
 D_ITEMS.age = {
     label: "年龄",
     prop: "age"
+};
+F_ITEMS.age = {
+    label: "年龄",
+    prop: "age",
+    type: "input"
 };
 
 D_ITEMS.orderId = {
     label: "订单号",
     prop: "orderId"
 };
+COLUMNS.orderId = _extends({}, D_ITEMS.orderId, { width: 160 });
+F_ITEMS.orderId = _extends({}, D_ITEMS.orderId);
 
 D_ITEMS.payStatus = {
     label: "支付状态",
@@ -192,38 +267,59 @@ D_ITEMS.auditStatus = {
         }
     }
 };
+F_ITEMS.auditStatus = {
+    label: "审核状态",
+    prop: "auditStatus",
+    type: "select",
+    options: [{ label: "未审核", value: 1 }, { label: "审核不通过", value: 2 }, { label: "审核通过", value: 3 }]
+};
 //#endregion
 //#region 通用数据
 D_ITEMS.title = {
     label: "标题",
     prop: "title"
 };
+COLUMNS.title_fixed = _extends({}, D_ITEMS.title, { width: 320, fixed: true });
+F_ITEMS.title = _extends({}, D_ITEMS.title);
+F_ITEMS.title_search = _extends({}, D_ITEMS.title, { type: "input_find_vague" });
+
 D_ITEMS.desc = {
     label: "说明",
     prop: "desc"
 };
+COLUMNS.desc = _extends({}, D_ITEMS.desc, { width: 160 });
+F_ITEMS.desc = _extends({}, D_ITEMS.desc, { type: "textarea" });
+
 D_ITEMS.detail = {
     label: "详情",
     prop: "_detail",
     type: "html"
 };
+//  COLUMNS.detail = {...D_ITEMS.detail, width: 120,};
+F_ITEMS.detail = _extends({}, D_ITEMS.detail, { type: "editorTM" });
 
 D_ITEMS._data = {
     label: "_data对象",
     prop: "_data"
 
 };
+COLUMNS._data = _extends({}, D_ITEMS._data, { width: 90 });
+F_ITEMS._data = _extends({}, D_ITEMS._data, { type: "jsonEditor" });
 
 D_ITEMS.arrGroup = {
     label: "所属分组",
     prop: "arrGroup"
 
 };
+COLUMNS.arrGroup = _extends({}, D_ITEMS.arrGroup, { width: 100 });
+
 D_ITEMS.countGroup = {
     label: "分组数",
     prop: "countGroup"
 
 };
+COLUMNS.countGroup = _extends({}, D_ITEMS.countGroup, { width: 60 });
+F_ITEMS.countGroup = _extends({}, D_ITEMS.countGroup, { type: "number" });
 
 //#endregion
 //#region 管理员
@@ -231,358 +327,113 @@ D_ITEMS.userName = {
     label: "用户名",
     prop: "userName"
 };
+COLUMNS.userName = _extends({}, D_ITEMS.userName, { width: 150 });
+F_ITEMS.userName = _extends({}, D_ITEMS.userName, { type: "input" });
+
 D_ITEMS.passWord = {
     label: "密码",
     prop: "passWord"
 };
+COLUMNS.passWord = _extends({}, D_ITEMS.passWord, { width: 150 });
+F_ITEMS.passWord = _extends({}, D_ITEMS.passWord, { type: "passWord" });
+
 D_ITEMS.nickName = {
     label: "昵称",
     prop: "nickName"
 };
+COLUMNS.nickName = _extends({}, D_ITEMS.nickName, { width: 120 });
+F_ITEMS.nickName = _extends({}, D_ITEMS.nickName, { type: "input" });
+
 D_ITEMS.role = {
     label: "所属角色",
     prop: "role"
 };
+COLUMNS.role = _extends({}, D_ITEMS.role, { width: 120 });
+F_ITEMS.role = _extends({}, D_ITEMS.role, { type: "jsonEditor" });
+
 //#endregion
 //#region 角色
 D_ITEMS.roleName = {
     label: "角色名",
     prop: "name"
 };
+COLUMNS.roleName = _extends({}, D_ITEMS.roleName, { width: 120 });
+F_ITEMS.roleName = _extends({}, D_ITEMS.roleName, { type: "input" });
+
 D_ITEMS.rolePower = {
     label: "权限",
     prop: "power"
 };
+COLUMNS.rolePower = _extends({}, D_ITEMS.rolePower, { width: 120 });
+F_ITEMS.rolePower = _extends({}, D_ITEMS.rolePower, {
+    default: {},
+    cfForm: {
+        labelWidth: "150px",
+        formItems: [{
+            label: "资讯中心",
+            prop: "newsCenter",
+            style: styleMenuGPowerItem,
+            default: {},
+            cfForm: {
+                col_span: 12,
+                formItems: [{
+                    // label: "资讯列表",
+                    prop: "list_article",
+                    style: styleMenuPowerItem,
+                    cfForm: getFormMenuGPower({ menuName: "资讯列表" })
+                }, {
+                    // label: "资讯分类",
+                    prop: "list_article_category",
+                    style: styleMenuPowerItem,
+                    cfForm: getFormMenuGPower({ menuName: "资讯分类" })
+                }]
+            }
+        }, {
+            label: "系统管理",
+            prop: "systemManage",
+            style: styleMenuGPowerItem,
+            default: {},
+            cfForm: {
+                col_span: 12,
+                formItems: [{
+                    prop: "list_admin",
+                    style: styleMenuPowerItem,
+                    cfForm: getFormMenuGPower({ menuName: "管理员" })
+                }, {
+                    prop: "list_role",
+                    style: styleMenuPowerItem,
+                    cfForm: getFormMenuGPower({ menuName: "角色" })
+                }, {
+                    prop: "list_area",
+                    style: styleMenuPowerItem,
+                    cfForm: getFormMenuGPower({ menuName: "地区管理" })
+                }]
+            }
+        }]
+    }
+});
+
 //#endregion
 //#region 分类
 D_ITEMS.category_name = {
     label: "分类名",
     prop: "name"
 };
+COLUMNS.category_name = _extends({}, D_ITEMS.category_name, { width: 120 });
+F_ITEMS.category_name = _extends({}, D_ITEMS.category_name, { type: "input" });
+
 D_ITEMS.category_remark = {
     label: "分类说明",
     prop: "remark"
 };
+COLUMNS.category_remark = _extends({}, D_ITEMS.category_remark, { width: 180 });
+F_ITEMS.category_remark = _extends({}, D_ITEMS.category_remark, { type: "textarea" });
+
 D_ITEMS.category = {
     label: "所属分类",
     prop: "category"
 };
-//#endregion
-//#region 熟悉度相关函数
-D_ITEMS.familiarity = {
-    label: "熟悉度",
-    prop: "familiarity"
-};
-D_ITEMS.dataType = {
-    label: "数据类型",
-    prop: "dataType"
-};
-D_ITEMS.dataId = {
-    label: "数据Id",
-    prop: "dataId"
-};
-D_ITEMS.userId = {
-    label: "用户Id",
-    prop: "userId"
-};
-D_ITEMS._userId = {
-    label: "_userId",
-    prop: "_userId"
-};
-D_ITEMS._id = {
-    label: "uuid",
-    prop: "_id"
-};
-D_ITEMS.studyTime = {
-    label: "学习时间",
-    prop: "studyTime"
-};
-//#endregion
-//#region html-API
-D_ITEMS.html_display = {
-    label: "块级",
-    prop: "display"
-};
-D_ITEMS.importance = {
-    label: "重要性",
-    prop: "importance"
-};
-D_ITEMS.difficulty = {
-    label: "难度",
-    prop: "difficulty"
-};
-D_ITEMS.english = {
-    label: "原英文",
-    prop: "english"
-};
-D_ITEMS.html_version = {
-    label: "版本",
-    prop: "version"
-};
-D_ITEMS.selfClose = {
-    label: "自闭合",
-    prop: "selfClose"
-};
-D_ITEMS.cateIdOld = {
-    label: "旧分类Id",
-    prop: "cateIdOld"
-};
-D_ITEMS.demoList = {
-    label: "demo列表",
-    prop: "demoList"
-};
-//#endregion
 
-
-D_ITEMS.css_version = {
-    label: "版本",
-    prop: "version"
-};
-
-//#region 分组
-D_ITEMS.group_dataType = {
-    label: "数据类型",
-    prop: "dataType"
-};
-
-D_ITEMS.countData = {
-    label: "数据量",
-    prop: "countData"
-};
-D_ITEMS.score = {
-    label: "分数对象",
-    prop: "score"
-};
-D_ITEMS.myScore = {
-    label: "我的分数",
-    prop: "myScore"
-};
-
-D_ITEMS.alias = {
-    label: "别名",
-    prop: "alias"
-};
-//#endregion
-//#region 关系
-D_ITEMS._idRel = {
-    label: "关联数据1",
-    prop: "_idRel"
-};
-D_ITEMS._idRel2 = {
-    label: "关联数据2",
-    prop: "_idRel2"
-};
-D_ITEMS.sort = {
-    label: "序号",
-    prop: "sort"
-};
-//#endregion
-//#region 其他
-D_ITEMS.dataTypekey = {
-    label: "类型代号",
-    prop: "key"
-};
-
-//#endregion
-//#region 笔记
-D_ITEMS.keyword = {
-    label: "关键词",
-    prop: "keyword"
-};
-D_ITEMS.note_linkList = {
-    label: "相关demo列表",
-    prop: "demoLinkList"
-};
-D_ITEMS.note_noteList = {
-    label: "相关笔记列表",
-    prop: "noteList"
-};
-//#endregion
-//#region 网址
-D_ITEMS.link = {
-    label: "网址",
-    prop: "link"
-};
-
-//#endregion
-
-D_ITEMS.item_prop = {
-    label: "prop",
-    prop: "prop"
-};
-D_ITEMS.item_label = {
-    label: "label",
-    prop: "label",
-    width: 160
-};
-D_ITEMS.item_type = {
-    label: "type",
-    prop: "type",
-    width: 160
-};
-
-D_ITEMS.vedio = {
-    label: "视频上传",
-    prop: "vedio"
-
-};
-
-//#region 商品
-D_ITEMS.priceMarket = {
-    label: "市场价",
-    prop: "priceMarket"
-
-};
-
-D_ITEMS.priceSell = {
-    label: "销售价",
-    prop: "priceSell"
-
-};
-D_ITEMS.isPublish = {
-    label: "是否发布",
-    prop: "isPublish"
-
-};
-
-D_ITEMS.countOrder = {
-    label: "订单数",
-    prop: "countOrder"
-
-};
-
-//#endregion
-
-
-D_ITEMS.aaaa = 1111;
-D_ITEMS.aaaa = 1111;
-D_ITEMS.aaaa = 1111;
-D_ITEMS.aaaa = 1111;
-//#endregion
-
-//#region COLUMNS
-
-window.COLUMNS = {};
-//#region 唐球过来
-COLUMNS.Id = {
-    label: "Id",
-    prop: "P1",
-    width: 50
-};
-COLUMNS.sex = Object.assign({}, D_ITEMS.sex, { width: 50 });
-COLUMNS.phone = {
-    label: "手机号",
-    prop: "phone",
-    width: 110
-};
-COLUMNS.orderId = _extends({}, D_ITEMS.orderId, { width: 160 });
-COLUMNS.openid = _extends({}, D_ITEMS.openid);
-
-//#endregion
-
-//#region 龙庭订单
-COLUMNS.transaction_id = _extends({}, D_ITEMS.transaction_id);
-COLUMNS.timeOrder = _extends({}, D_ITEMS.timeOrder);
-COLUMNS.priceOrder = _extends({}, D_ITEMS.priceOrder);
-COLUMNS.listGoods = _extends({}, D_ITEMS.listGoods);
-COLUMNS.addressObj = _extends({}, D_ITEMS.addressObj);
-COLUMNS.remark = _extends({}, D_ITEMS.remark);
-
-//#endregion
-
-//#region 通用
-COLUMNS.title_fixed = _extends({}, D_ITEMS.title, { width: 320, fixed: true });
-COLUMNS.title_fixed_w150 = _extends({}, COLUMNS.title_fixed, { width: 150 });
-COLUMNS.title_fixed_w150_edit = _extends({}, COLUMNS.title_fixed_w150, { edit: true });
-COLUMNS.title_fixed_edit = _extends({}, COLUMNS.title_fixed, { edit: true });
-
-COLUMNS.desc = _extends({}, D_ITEMS.desc, { width: 160 });
-COLUMNS.html_display = _extends({}, D_ITEMS.html_display, { width: 70 });
-COLUMNS.importance = _extends({}, D_ITEMS.importance, {
-    width: 70,
-    formatter: function formatter(rowData) {
-        return lodash.get(DYDICT.importance, rowData.importance + ".label");
-    }
-});
-
-COLUMNS.importance_edit = _extends({}, COLUMNS.importance, {
-    edit: true
-});
-COLUMNS._data = _extends({}, D_ITEMS._data, { width: 90 });
-
-COLUMNS.arrGroup = _extends({}, D_ITEMS.arrGroup, { width: 100 });
-COLUMNS.countGroup = _extends({}, D_ITEMS.countGroup, { width: 60 });
-
-//#endregion
-//#region html_api
-COLUMNS.html_display = _extends({}, D_ITEMS.html_display, { width: 70 });
-COLUMNS.difficulty = _extends({}, D_ITEMS.difficulty, {
-    width: 70,
-    formatter: function formatter(rowData) {
-        return lodash.get(DYDICT.difficulty, rowData.difficulty + ".label");
-    }
-});
-
-COLUMNS.difficulty_edit = _extends({}, COLUMNS.difficulty, {
-    edit: true
-});
-COLUMNS.english = _extends({}, D_ITEMS.english, { width: 70 });
-COLUMNS.html_version = _extends({}, D_ITEMS.html_version, { width: 70 });
-
-COLUMNS.selfClose = _extends({}, D_ITEMS.selfClose, { width: 70 });
-COLUMNS.cateIdOld = _extends({}, D_ITEMS.cateIdOld, { width: 70 });
-COLUMNS.demoList = _extends({}, D_ITEMS.demoList, { width: 90 });
-
-COLUMNS.css_version = _extends({}, D_ITEMS.css_version, { width: 70 });
-//#endregion
-//#region 管理员
-//  COLUMNS.detail = {...D_ITEMS.detail, width: 120,};
-COLUMNS.userName = _extends({}, D_ITEMS.userName, { width: 150 });
-COLUMNS.passWord = _extends({}, D_ITEMS.passWord, { width: 150 });
-COLUMNS.nickName = _extends({}, D_ITEMS.nickName, { width: 120 });
-COLUMNS.role = _extends({}, D_ITEMS.role, { width: 120 });
-//#endregion
-//#region 角色
-COLUMNS.roleName = _extends({}, D_ITEMS.roleName, { width: 120 });
-COLUMNS.rolePower = _extends({}, D_ITEMS.rolePower, { width: 120 });
-//#endregion
-//#region 分类
-COLUMNS.category_name = _extends({}, D_ITEMS.category_name, { width: 120 });
-COLUMNS.category_remark = _extends({}, D_ITEMS.category_remark, { width: 180 });
-//#endregion
-//#region 熟悉度等
-COLUMNS.familiarity_select = _extends({}, D_ITEMS.familiarity, {
-    width: 120,
-    slot: "slot_column_familiarity",
-    cfColumn: { "class-name": "table_cell_visible" //补充特殊单元格类名，进行特殊控制！
-    } });
-COLUMNS.familiarity = _extends({}, D_ITEMS.familiarity, {
-    width: 100
-});
-COLUMNS.dataType = _extends({}, D_ITEMS.dataType, { width: 80 });
-COLUMNS.dataId = _extends({}, D_ITEMS.dataId, { width: 210 });
-COLUMNS.userId = _extends({}, D_ITEMS.userId, { width: 120 });
-COLUMNS._userId = _extends({}, D_ITEMS._userId, { width: 120 });
-COLUMNS._id = _extends({}, D_ITEMS._id, {
-    width: 80,
-    sortable: "custom" //开启后端排序
-});
-COLUMNS.myScore = _extends({}, D_ITEMS.myScore, { width: 90 });
-COLUMNS.score = _extends({}, D_ITEMS.score, { width: 90 });
-//#endregion
-//#region 分组
-COLUMNS.group_dataType = _extends({}, D_ITEMS.group_dataType, { width: 90 });
-COLUMNS.countData = _extends({}, D_ITEMS.countData, { width: 80 });
-COLUMNS.myScore = _extends({}, D_ITEMS.myScore, { width: 90, slot: "slot_column_score" });
-COLUMNS.alias = _extends({}, D_ITEMS.alias, { width: 130 });
-//#endregion
-//#region 关系
-COLUMNS._idRel = _extends({}, D_ITEMS._idRel, { width: 220 });
-COLUMNS._idRel2 = _extends({}, D_ITEMS._idRel2, { width: 220 });
-COLUMNS.sort = _extends({}, D_ITEMS.sort, { width: 70 });
-//#endregion
-//#region 分类等
-//单个的分类
 COLUMNS.category = _extends({}, D_ITEMS.category, {
     width: 120,
     formatter: function formatter(rowData) {
@@ -590,201 +441,6 @@ COLUMNS.category = _extends({}, D_ITEMS.category, {
         return title;
     }
 });
-//支持多个的分类
-COLUMNS.category_multiple = _extends({}, D_ITEMS.category, {
-    width: 120,
-    formatter: function formatter(rowData) {
-        if (!(rowData.categoryDoc && rowData.categoryDoc.length)) return "";
-        var arrCate = rowData.categoryDoc.map(function (doc) {
-            return doc.title;
-        });
-        return arrCate.join();
-    }
-});
-COLUMNS.studyTime = _extends({}, D_ITEMS.studyTime, {
-    width: 140
-});
-COLUMNS.dataTypekey = _extends({}, D_ITEMS.dataTypekey, { width: 120 });
-
-//#endregion
-
-//#region 网址
-
-COLUMNS.link = _extends({}, D_ITEMS.link, { width: 120 });
-//#endregion
-//#region 笔记
-COLUMNS.note_linkList = _extends({}, D_ITEMS.note_linkList, { width: 120 });
-COLUMNS.note_noteList = _extends({}, D_ITEMS.note_noteList, { width: 120 });
-COLUMNS.keyword = _extends({}, D_ITEMS.keyword, { width: 70 });
-COLUMNS.keyword_edit = _extends({}, COLUMNS.keyword, { edit: true });
-//#endregion
-
-COLUMNS.vedio = _extends({}, D_ITEMS.vedio, { width: 70 });
-
-//#region dm组件库用到
-COLUMNS.item_prop = _extends({}, D_ITEMS.item_prop, { width: 120 });
-COLUMNS.item_label = _extends({}, D_ITEMS.item_label, { width: 160 });
-COLUMNS.item_type = _extends({}, D_ITEMS.item_type, { width: 120 });
-
-COLUMNS.name = _extends({}, D_ITEMS.name, {
-    width: 200
-});
-COLUMNS.name_fixed = _extends({}, COLUMNS.name, {
-    fixed: true,
-    edit: true
-});
-
-COLUMNS.extend = {
-    label: "其他",
-    prop: "extend",
-    width: 235
-};
-//#endregion
-
-//#region 商品
-COLUMNS.priceMarket = _extends({}, D_ITEMS.priceMarket, { width: 90 });
-COLUMNS.priceSell = _extends({}, D_ITEMS.priceSell, { width: 90 });
-COLUMNS.isPublish = _extends({}, D_ITEMS.isPublish, { width: 90 });
-COLUMNS.countOrder = _extends({}, D_ITEMS.countOrder, { width: 90 });
-//#endregion
-
-
-//#endregion
-
-//#region F_ITEMS
-window.F_ITEMS = {};
-//#region 唐球过来
-F_ITEMS.Id = {
-    label: "数据id",
-    prop: "P1",
-    type: "input"
-};
-
-F_ITEMS.auditStatus = {
-    label: "审核状态",
-    prop: "auditStatus",
-    type: "select",
-    options: [{ label: "未审核", value: 1 }, { label: "审核不通过", value: 2 }, { label: "审核通过", value: 3 }]
-};
-F_ITEMS.publicationStatus = {
-    label: "发布状态",
-    prop: "publicationStatus",
-    type: "select",
-    options: [{ label: "是", value: 1 }, { label: "否", value: 2 }]
-};
-F_ITEMS.album = {
-    label: "相册",
-    prop: "album",
-    type: "upload",
-    col_span: 24 //控制显示一行多列
-    // tips: "可上传多张图"
-};
-/****************************赛事报名-START****************************/
-F_ITEMS.phone = {
-    label: "手机号",
-    prop: "phone",
-    type: "input"
-};
-F_ITEMS.sex = {
-    label: "性别",
-    prop: "sex",
-    type: "select",
-    options: [{ label: "男", value: 1 }, { label: "女", value: 2 }]
-};
-F_ITEMS.age = {
-    label: "年龄",
-    prop: "age",
-    type: "input"
-};
-F_ITEMS.career = {
-    label: "职业",
-    prop: "career",
-    type: "input"
-};
-F_ITEMS.idCard = {
-    label: "身份证号",
-    prop: "idCard"
-};
-F_ITEMS.orderId = _extends({}, D_ITEMS.orderId);
-F_ITEMS.openid = _extends({}, D_ITEMS.openid);
-//#endregion
-
-//#region 龙庭订单
-F_ITEMS.transaction_id = _extends({}, D_ITEMS.transaction_id);
-F_ITEMS.timeOrder = _extends({}, D_ITEMS.timeOrder);
-F_ITEMS.priceOrder = _extends({}, D_ITEMS.priceOrder);
-F_ITEMS.listGoods = _extends({}, D_ITEMS.listGoods, { type: "jsonEditor" });
-F_ITEMS.addressObj = _extends({}, D_ITEMS.addressObj, { type: "jsonEditor" });
-F_ITEMS.remark = _extends({}, D_ITEMS.remark);
-F_ITEMS.aaa = _extends({}, D_ITEMS.aaa);
-F_ITEMS.aaa = _extends({}, D_ITEMS.aaa);
-F_ITEMS.aaa = _extends({}, D_ITEMS.aaa);
-
-//#endregion
-//#region 通用数据
-F_ITEMS.title = _extends({}, D_ITEMS.title);
-F_ITEMS.title_search = _extends({}, D_ITEMS.title, { type: "input_find_vague" });
-F_ITEMS.desc = _extends({}, D_ITEMS.desc, { type: "textarea" });
-F_ITEMS.detail = _extends({}, D_ITEMS.detail, { type: "editorTM" });
-
-F_ITEMS._data = _extends({}, D_ITEMS._data, { type: "jsonEditor" });
-F_ITEMS.countGroup = _extends({}, D_ITEMS.countGroup, { type: "number" });
-//#endregion
-//#region html_api
-F_ITEMS.html_display = _extends({}, D_ITEMS.html_display, {
-    type: "select",
-    options: DYDICT.arr_html_display
-});
-F_ITEMS.importance = _extends({}, D_ITEMS.importance, {
-    type: "select",
-    options: DYDICT.arr_importance
-});
-F_ITEMS.importance_radio = _extends({}, F_ITEMS.importance, {
-    type: "radio"
-});
-
-F_ITEMS.difficulty = _extends({}, D_ITEMS.difficulty, {
-    type: "select",
-    options: DYDICT.arr_difficulty
-});
-F_ITEMS.difficulty_radio = _extends({}, F_ITEMS.difficulty, {
-    type: "radio"
-});
-
-F_ITEMS.english = _extends({}, D_ITEMS.english, {
-    type: "input"
-});
-F_ITEMS.html_version = _extends({}, D_ITEMS.html_version, {
-    type: "select",
-    options: DYDICT.arr_html_version
-});
-F_ITEMS.selfClose = _extends({}, D_ITEMS.selfClose, {
-    type: "select",
-    options: DYDICT.arr_selfClose
-});
-F_ITEMS.demoList = _extends({}, D_ITEMS.demoList, {
-    type: "collection",
-    collectionlistType: "form",
-    // showToolbar: false, //不显示集合的工具栏
-    collectionCfForm: {
-        col_span: 12,
-        formItems: [{
-            label: "标题",
-            prop: "title",
-            type: "input"
-        }, {
-            label: "链接",
-            prop: "link",
-            type: "input"
-        }]
-    }
-});
-
-//#endregion
-//#region 分类
-F_ITEMS.cateIdOld = _extends({}, D_ITEMS.cateIdOld, { type: "input" });
-F_ITEMS.category_name = _extends({}, D_ITEMS.category_name, { type: "input" });
-F_ITEMS.category_remark = _extends({}, D_ITEMS.category_remark, { type: "textarea" });
 F_ITEMS.category = _extends({}, D_ITEMS.category, { type: "input" });
 F_ITEMS.html_api_category = _extends({}, D_ITEMS.category, {
     type: "select",
@@ -824,17 +480,192 @@ F_ITEMS.note_category = _extends({}, D_ITEMS.category, {
         keyValue: "_id"
     }
 });
+
 //#endregion
-//#region 熟悉度
+//#region 熟悉度相关
+D_ITEMS.familiarity = {
+    label: "熟悉度",
+    prop: "familiarity"
+};
+COLUMNS.familiarity_select = _extends({}, D_ITEMS.familiarity, {
+    width: 120,
+    slot: "slot_column_familiarity",
+    cfColumn: { "class-name": "table_cell_visible" //补充特殊单元格类名，进行特殊控制！
+    } });
+COLUMNS.familiarity = _extends({}, D_ITEMS.familiarity, {
+    width: 100
+});
 F_ITEMS.familiarity = _extends({}, D_ITEMS.familiarity, { type: "input" });
+
+D_ITEMS.dataType = {
+    label: "数据类型",
+    prop: "dataType"
+};
+COLUMNS.dataType = _extends({}, D_ITEMS.dataType, { width: 80 });
 F_ITEMS.dataType = _extends({}, D_ITEMS.dataType, { type: "input" });
+
+D_ITEMS.dataId = {
+    label: "数据Id",
+    prop: "dataId"
+};
+COLUMNS.dataId = _extends({}, D_ITEMS.dataId, { width: 210 });
 F_ITEMS.dataId = _extends({}, D_ITEMS.dataId, { type: "input" });
+
+D_ITEMS.userId = {
+    label: "用户Id",
+    prop: "userId"
+};
+COLUMNS.userId = _extends({}, D_ITEMS.userId, { width: 120 });
 F_ITEMS.userId = _extends({}, D_ITEMS.userId, { type: "input" });
+
+D_ITEMS._userId = {
+    label: "_userId",
+    prop: "_userId"
+};
+COLUMNS._userId = _extends({}, D_ITEMS._userId, { width: 120 });
 F_ITEMS._userId = _extends({}, D_ITEMS._userId, { type: "input" });
-//数据类型
-F_ITEMS.dataTypekey = _extends({}, D_ITEMS.dataTypekey, { type: "input" });
+
+D_ITEMS._id = {
+    label: "uuid",
+    prop: "_id"
+};
+COLUMNS._id = _extends({}, D_ITEMS._id, {
+    width: 80,
+    sortable: "custom" //开启后端排序
+});
+
+D_ITEMS.studyTime = {
+    label: "学习时间",
+    prop: "studyTime"
+};
+COLUMNS.studyTime = _extends({}, D_ITEMS.studyTime, {
+    width: 140
+});
+
 //#endregion
+//#region html-API
+D_ITEMS.html_display = {
+    label: "块级",
+    prop: "display"
+};
+COLUMNS.html_display = _extends({}, D_ITEMS.html_display, { width: 70 });
+F_ITEMS.html_display = _extends({}, D_ITEMS.html_display, {
+    type: "select",
+    options: DYDICT.arr_html_display
+});
+
+D_ITEMS.importance = {
+    label: "重要性",
+    prop: "importance"
+};
+COLUMNS.importance = _extends({}, D_ITEMS.importance, {
+    width: 70,
+    formatter: function formatter(rowData) {
+        return lodash.get(DYDICT.importance, rowData.importance + ".label");
+    }
+});
+F_ITEMS.importance = _extends({}, D_ITEMS.importance, {
+    type: "select",
+    options: DYDICT.arr_importance
+});
+F_ITEMS.importance_radio = _extends({}, F_ITEMS.importance, {
+    type: "radio"
+});
+
+D_ITEMS.difficulty = {
+    label: "难度",
+    prop: "difficulty"
+};
+COLUMNS.difficulty = _extends({}, D_ITEMS.difficulty, {
+    width: 70,
+    formatter: function formatter(rowData) {
+        return lodash.get(DYDICT.difficulty, rowData.difficulty + ".label");
+    }
+});
+F_ITEMS.difficulty = _extends({}, D_ITEMS.difficulty, {
+    type: "select",
+    options: DYDICT.arr_difficulty
+});
+F_ITEMS.difficulty_radio = _extends({}, F_ITEMS.difficulty, {
+    type: "radio"
+});
+
+D_ITEMS.english = {
+    label: "原英文",
+    prop: "english"
+};
+COLUMNS.english = _extends({}, D_ITEMS.english, { width: 70 });
+F_ITEMS.english = _extends({}, D_ITEMS.english, {
+    type: "input"
+});
+
+D_ITEMS.html_version = {
+    label: "版本",
+    prop: "version"
+};
+COLUMNS.html_version = _extends({}, D_ITEMS.html_version, { width: 70 });
+F_ITEMS.html_version = _extends({}, D_ITEMS.html_version, {
+    type: "select",
+    options: DYDICT.arr_html_version
+});
+
+D_ITEMS.selfClose = {
+    label: "自闭合",
+    prop: "selfClose"
+};
+COLUMNS.selfClose = _extends({}, D_ITEMS.selfClose, { width: 70 });
+F_ITEMS.selfClose = _extends({}, D_ITEMS.selfClose, {
+    type: "select",
+    options: DYDICT.arr_selfClose
+});
+
+D_ITEMS.cateIdOld = {
+    label: "旧分类Id",
+    prop: "cateIdOld"
+};
+COLUMNS.cateIdOld = _extends({}, D_ITEMS.cateIdOld, { width: 70 });
+F_ITEMS.cateIdOld = _extends({}, D_ITEMS.cateIdOld, { type: "input" });
+
+D_ITEMS.demoList = {
+    label: "demo列表",
+    prop: "demoList"
+};
+
+COLUMNS.demoList = _extends({}, D_ITEMS.demoList, { width: 90 });
+
+F_ITEMS.demoList = _extends({}, D_ITEMS.demoList, {
+    type: "collection",
+    collectionlistType: "form",
+    // showToolbar: false, //不显示集合的工具栏
+    collectionCfForm: {
+        col_span: 12,
+        formItems: [{
+            label: "标题",
+            prop: "title",
+            type: "input"
+        }, {
+            label: "链接",
+            prop: "link",
+            type: "input"
+        }]
+    }
+});
+
+//#endregion
+
+
+D_ITEMS.css_version = {
+    label: "版本",
+    prop: "version"
+};
+COLUMNS.css_version = _extends({}, D_ITEMS.css_version, { width: 70 });
+
 //#region 分组
+D_ITEMS.group_dataType = {
+    label: "数据类型",
+    prop: "dataType"
+};
+COLUMNS.group_dataType = _extends({}, D_ITEMS.group_dataType, { width: 90 });
 F_ITEMS.group_dataType = _extends({}, D_ITEMS.group_dataType, {
     type: "select",
     ajax: {
@@ -844,18 +675,356 @@ F_ITEMS.group_dataType = _extends({}, D_ITEMS.group_dataType, {
         keyValue: "key"
     }
 });
+
+D_ITEMS.countData = {
+    label: "数据量",
+    prop: "countData"
+};
+COLUMNS.countData = _extends({}, D_ITEMS.countData, { width: 80 });
+
+D_ITEMS.score = {
+    label: "分数对象",
+    prop: "score"
+};
+COLUMNS.score = _extends({}, D_ITEMS.score, { width: 90 });
+
+D_ITEMS.myScore = {
+    label: "我的分数",
+    prop: "myScore"
+};
+COLUMNS.myScore = _extends({}, D_ITEMS.myScore, { width: 90, slot: "slot_column_score" });
+
+D_ITEMS.alias = {
+    label: "别名",
+    prop: "alias"
+};
+COLUMNS.alias = _extends({}, D_ITEMS.alias, { width: 130 });
 F_ITEMS.alias = _extends({}, D_ITEMS.alias, { type: "input" });
+
 //#endregion
 //#region 关系
+D_ITEMS._idRel = {
+    label: "关联数据1",
+    prop: "_idRel"
+};
 F_ITEMS._idRel = _extends({}, D_ITEMS._idRel, { type: "input" });
+COLUMNS._idRel = _extends({}, D_ITEMS._idRel, { width: 220 });
+
+D_ITEMS._idRel2 = {
+    label: "关联数据2",
+    prop: "_idRel2"
+};
+COLUMNS._idRel2 = _extends({}, D_ITEMS._idRel2, { width: 220 });
 F_ITEMS._idRel2 = _extends({}, D_ITEMS._idRel2, { type: "input" });
+
+D_ITEMS.sort = {
+    label: "序号",
+    prop: "sort"
+};
+COLUMNS.sort = _extends({}, D_ITEMS.sort, { width: 70 });
 F_ITEMS.sort = _extends({}, D_ITEMS.sort, { type: "number" });
+
+//#endregion
+//#region 其他
+D_ITEMS.dataTypekey = {
+    label: "类型代号",
+    prop: "key"
+};
+COLUMNS.dataTypekey = _extends({}, D_ITEMS.dataTypekey, { width: 120 });
+F_ITEMS.dataTypekey = _extends({}, D_ITEMS.dataTypekey, { type: "input" });
+
+//#endregion
+//#region 笔记
+D_ITEMS.keyword = {
+    label: "关键词",
+    prop: "keyword"
+};
+COLUMNS.keyword = _extends({}, D_ITEMS.keyword, { width: 70 });
+COLUMNS.keyword_edit = _extends({}, COLUMNS.keyword, { edit: true });
+F_ITEMS.keyword = _extends({}, D_ITEMS.keyword, { type: "tag_list" });
+
+D_ITEMS.note_linkList = {
+    label: "相关demo列表",
+    prop: "demoLinkList"
+};
+COLUMNS.note_linkList = _extends({}, D_ITEMS.note_linkList, { width: 120 });
+
+D_ITEMS.note_noteList = {
+    label: "相关笔记列表",
+    prop: "noteList"
+};
+COLUMNS.note_noteList = _extends({}, D_ITEMS.note_noteList, { width: 120 });
+
+//#endregion
+//#region 网址
+D_ITEMS.link = {
+    label: "网址",
+    prop: "link"
+};
+COLUMNS.link = _extends({}, D_ITEMS.link, { width: 120 });
+F_ITEMS.link = _extends({}, D_ITEMS.link, { type: "input" });
+
+//#endregion
+
+D_ITEMS.item_prop = {
+    label: "prop",
+    prop: "prop"
+};
+COLUMNS.item_prop = _extends({}, D_ITEMS.item_prop, { width: 120 });
+F_ITEMS.item_prop = {
+    label: "prop属性名",
+    prop: "prop",
+    type: "input"
+};
+
+D_ITEMS.item_label = {
+    label: "label",
+    prop: "label",
+    width: 160
+};
+F_ITEMS.label_search = {
+    label: "label",
+    prop: "label",
+    type: "input_find_vague"
+};
+
+COLUMNS.item_label = _extends({}, D_ITEMS.item_label, { width: 160 });
+F_ITEMS.item_label = {
+    label: "label说明",
+    prop: "label",
+    type: "input"
+};
+
+D_ITEMS.item_type = {
+    label: "type",
+    prop: "type",
+    width: 160
+};
+COLUMNS.item_type = _extends({}, D_ITEMS.item_type, { width: 120 });
+
+F_ITEMS.item_type = {
+    label: "type",
+    prop: "type",
+    type: "input"
+};
+
+D_ITEMS.vedio = {
+    label: "视频上传",
+    prop: "vedio"
+
+};
+COLUMNS.vedio = _extends({}, D_ITEMS.vedio, { width: 70 });
+F_ITEMS.vedio = _extends({}, D_ITEMS.vedio, {
+    type: "upload",
+    uploadConfig: {
+        limit: 2,
+        listType: "text"
+    }
+});
+
+//#region 商品
+D_ITEMS.priceMarket = {
+    label: "市场价",
+    prop: "priceMarket"
+
+};
+COLUMNS.priceMarket = _extends({}, D_ITEMS.priceMarket, { width: 90 });
+F_ITEMS.priceMarket = _extends({}, D_ITEMS.priceMarket, { type: "number" });
+
+D_ITEMS.priceSell = {
+    label: "销售价",
+    prop: "priceSell"
+
+};
+COLUMNS.priceSell = _extends({}, D_ITEMS.priceSell, { width: 90 });
+F_ITEMS.priceSell = _extends({}, D_ITEMS.priceSell, { type: "number" });
+
+D_ITEMS.isPublish = {
+    label: "是否发布",
+    prop: "isPublish"
+
+};
+COLUMNS.isPublish = _extends({}, D_ITEMS.isPublish, { width: 90 });
+F_ITEMS.isPublish = _extends({}, D_ITEMS.isPublish, {
+    type: "radio",
+    options: DYDICT.arr_boolean
+});
+
+D_ITEMS.countOrder = {
+    label: "订单数",
+    prop: "countOrder"
+
+};
+COLUMNS.countOrder = _extends({}, D_ITEMS.countOrder, { width: 90 });
+F_ITEMS.countOrder = _extends({}, D_ITEMS.countOrder, { type: "number" });
+
+//#endregion
+
+
+//#region COLUMNS
+
+
+//#region 通用
+
+COLUMNS.title_fixed_w150 = _extends({}, COLUMNS.title_fixed, { width: 150 });
+COLUMNS.title_fixed_w150_edit = _extends({}, COLUMNS.title_fixed_w150, { edit: true });
+COLUMNS.title_fixed_edit = _extends({}, COLUMNS.title_fixed, { edit: true });
+
+COLUMNS.importance_edit = _extends({}, COLUMNS.importance, {
+    edit: true
+});
+
+//#endregion
+//#region html_api
+
+
+COLUMNS.difficulty_edit = _extends({}, COLUMNS.difficulty, {
+    edit: true
+});
+
 //#endregion
 //#region 管理员
-F_ITEMS.userName = _extends({}, D_ITEMS.userName, { type: "input" });
-F_ITEMS.passWord = _extends({}, D_ITEMS.passWord, { type: "passWord" });
-F_ITEMS.nickName = _extends({}, D_ITEMS.nickName, { type: "input" });
-F_ITEMS.role = _extends({}, D_ITEMS.role, { type: "jsonEditor" });
+
+
+//#endregion
+//#region 角色
+
+
+//#endregion
+//#region 分类
+
+
+//#endregion
+//#region 熟悉度等
+
+
+//#endregion
+//#region 分组
+
+
+//#endregion
+//#region 关系
+
+
+//#endregion
+//#region 分类等
+//单个的分类
+
+
+//支持多个的分类
+COLUMNS.category_multiple = _extends({}, D_ITEMS.category, {
+    width: 120,
+    formatter: function formatter(rowData) {
+        if (!(rowData.categoryDoc && rowData.categoryDoc.length)) return "";
+        var arrCate = rowData.categoryDoc.map(function (doc) {
+            return doc.title;
+        });
+        return arrCate.join();
+    }
+});
+
+//#endregion
+
+//#region 网址
+
+
+//#endregion
+//#region 笔记
+
+
+//#endregion
+
+
+//#region dm组件库用到
+
+
+COLUMNS.name = _extends({}, D_ITEMS.name, {
+    width: 200
+});
+COLUMNS.name_fixed = _extends({}, COLUMNS.name, {
+    fixed: true,
+    edit: true
+});
+
+COLUMNS.extend = {
+    label: "其他",
+    prop: "extend",
+    width: 235
+};
+//#endregion
+
+//#region 商品
+
+
+//#endregion
+
+
+//#endregion
+
+//#region F_ITEMS
+
+//#region 唐球过来
+
+
+F_ITEMS.publicationStatus = {
+    label: "发布状态",
+    prop: "publicationStatus",
+    type: "select",
+    options: [{ label: "是", value: 1 }, { label: "否", value: 2 }]
+};
+F_ITEMS.album = {
+    label: "相册",
+    prop: "album",
+    type: "upload",
+    col_span: 24 //控制显示一行多列
+    // tips: "可上传多张图"
+};
+/****************************赛事报名-START****************************/
+
+//#endregion
+
+
+//#region 龙庭订单
+
+
+//#endregion
+//#region 龙庭订单
+
+
+F_ITEMS.aaa = _extends({}, D_ITEMS.aaa);
+F_ITEMS.aaa = _extends({}, D_ITEMS.aaa);
+F_ITEMS.aaa = _extends({}, D_ITEMS.aaa);
+
+//#endregion
+//#region 通用数据
+
+
+//#endregion
+//#region html_api
+
+
+//#endregion
+//#region 分类
+
+
+//#endregion
+//#region 熟悉度
+
+
+//数据类型
+
+//#endregion
+//#region 分组
+
+
+//#endregion
+//#region 关系
+
+
+//#endregion
+//#region 管理员
+
+
 //#endregion
 //#region 角色
 var styleMenuPowerItem = "margin-bottom:10px;padding:0 5px";
@@ -905,85 +1074,9 @@ function getFormMenuGPower(_ref) {
         }]
     };
 }
-COLUMNS.roleName = _extends({}, D_ITEMS.roleName, { type: "input" });
-COLUMNS.rolePower = _extends({}, D_ITEMS.rolePower, {
-    default: {},
-    cfForm: {
-        labelWidth: "150px",
-        formItems: [{
-            label: "资讯中心",
-            prop: "newsCenter",
-            style: styleMenuGPowerItem,
-            default: {},
-            cfForm: {
-                col_span: 12,
-                formItems: [{
-                    // label: "资讯列表",
-                    prop: "list_article",
-                    style: styleMenuPowerItem,
-                    cfForm: getFormMenuGPower({ menuName: "资讯列表" })
-                }, {
-                    // label: "资讯分类",
-                    prop: "list_article_category",
-                    style: styleMenuPowerItem,
-                    cfForm: getFormMenuGPower({ menuName: "资讯分类" })
-                }]
-            }
-        }, {
-            label: "系统管理",
-            prop: "systemManage",
-            style: styleMenuGPowerItem,
-            default: {},
-            cfForm: {
-                col_span: 12,
-                formItems: [{
-                    prop: "list_admin",
-                    style: styleMenuPowerItem,
-                    cfForm: getFormMenuGPower({ menuName: "管理员" })
-                }, {
-                    prop: "list_role",
-                    style: styleMenuPowerItem,
-                    cfForm: getFormMenuGPower({ menuName: "角色" })
-                }, {
-                    prop: "list_area",
-                    style: styleMenuPowerItem,
-                    cfForm: getFormMenuGPower({ menuName: "地区管理" })
-                }]
-            }
-        }]
-    }
-});
-//#endregion
-
-
-//#region 笔记
-F_ITEMS.keyword = _extends({}, D_ITEMS.keyword, { type: "tag_list" });
-
-//#endregion
-//#region 网址
-F_ITEMS.link = _extends({}, D_ITEMS.link, { type: "input" });
-//#endregion
-
-
-//#region 商品
-F_ITEMS.priceMarket = _extends({}, D_ITEMS.priceMarket, { type: "number" });
-F_ITEMS.priceSell = _extends({}, D_ITEMS.priceSell, { type: "number" });
-F_ITEMS.isPublish = _extends({}, D_ITEMS.isPublish, {
-    type: "radio",
-    options: DYDICT.arr_boolean
-});
-F_ITEMS.countOrder = _extends({}, D_ITEMS.countOrder, { type: "number" });
 
 //#endregion
 
-
-F_ITEMS.vedio = _extends({}, D_ITEMS.vedio, {
-    type: "upload",
-    uploadConfig: {
-        limit: 2,
-        listType: "text"
-    }
-});
 
 // import list_note_for_select from "@/assets/js/config/list_note.js"
 // //#region 笔记
@@ -1285,27 +1378,7 @@ F_ITEMS.prop_vueJsonEditor = {
 
 //#region 其他表单字段
 
-F_ITEMS.label_search = {
-    label: "label",
-    prop: "label",
-    type: "input_find_vague"
-};
 
-F_ITEMS.item_label = {
-    label: "label说明",
-    prop: "label",
-    type: "input"
-};
-F_ITEMS.item_prop = {
-    label: "prop属性名",
-    prop: "prop",
-    type: "input"
-};
-F_ITEMS.item_type = {
-    label: "type",
-    prop: "type",
-    type: "input"
-};
 F_ITEMS.name = {
     label: "标题111",
     prop: "name"
@@ -1395,6 +1468,8 @@ F_ITEMS.prop_select_list_data = {
 
 
 //#region 通用数据-网址列表选择配置
+
+
 var list_common_url = { "idKey": "_id", "pageSize": 20, "listIndex": "list_url", "focusMenu": true, "twoTitle": "网址", "url": { "list": "/info/getCommonList", "add": "/info/commonAdd", "modify": "/info/commonModify", "detail": "/info/commonDetail", "delete": "/info/commonDelete" }, "columnOperate": { "min-width": 160 }, "singleBtns": { "addon": [{ "title": "详情", "eventType": "detail", "cfElBtn": { "circle": true, "icon": "el-icon-notebook-2" } }, { "title": "编辑", "eventType": "modify", "cfElBtn": { "circle": true, "icon": "el-icon-edit" } }, { "title": "删除", "eventType": "delete", "cfElBtn": { "circle": true, "icon": "el-icon-close" } }, { "uiType": "link", "text": "打开网址", "target": "_blank" }] }, "objParamAddon": { "_systemId": "sys_api", "_dataType": "url" }, "paramAddonPublic": { "_systemId": "sys_api", "_dataType": "url" }, "columns": [{ "label": "标题", "prop": "title", "width": 320, "fixed": true }, { "label": "说明", "prop": "desc", "width": 160 }, { "label": "网址", "prop": "link", "width": 120 }], "searchFormItems": [{ "label": "标题", "prop": "title", "type": "input_find_vague" }], "detailItems": [{ "label": "标题", "prop": "title" }, { "label": "说明", "prop": "desc" }, { "label": "网址", "prop": "link" }], "formItems": [{ "label": "标题", "prop": "title" }, { "label": "网址", "prop": "link", "type": "input" }, { "label": "说明", "prop": "desc", "type": "textarea" }] };
 
 F_ITEMS.select_list_common_url = {
@@ -1443,17 +1518,7 @@ window.cfSelectList_note = {
     //#endregion
 
 
-};DYDICT.order_user = {
-    ajax: {
-        param: { _systemId: _systemId, _dataType: "user" },
-        url: "/info/getCommonList"
-    },
-    populateColumn: "userDoc",
-    idColumn: "openid",
-    idColumn2: "openid"
-};
-
-D_ITEMS.trueName = {
+};D_ITEMS.trueName = {
     label: "真实姓名",
     prop: "trueName"
 

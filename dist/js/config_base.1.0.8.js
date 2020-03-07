@@ -451,23 +451,19 @@ MIX.listGroupData = {
         //函数：{列表查询后的回调函数}
         afterSearch: function () {
             var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(list) {
-                var arrId;
                 return regeneratorRuntime.wrap(function _callee6$(_context6) {
                     while (1) {
                         switch (_context6.prev = _context6.next) {
                             case 0:
-                                arrId = list.map(function (doc) {
-                                    return doc._idRel2;
-                                });
-                                //设置id数组
 
+                                //设置id数组
                                 this.$refs.scorePanel.ajaxGetScore(); //调用：{ajax获取分数函数}
                                 if (this.$refs.scorePanel.focusId == undefined) {
                                     //如果没有筛选熟悉度（这里的触发机制还需进一步优化，没有必要一直调用）
                                     this.updateGroupCountData(); //调用：{更新当前分组的数据量的函数}
                                 }
 
-                            case 3:
+                            case 2:
                             case "end":
                                 return _context6.stop();
                         }
@@ -753,9 +749,9 @@ var _systemId = PUB._systemId;
         //-------列配置数组-------
         columns: [COLUMNS.title_fixed, COLUMNS._id, COLUMNS.alias, COLUMNS.desc, COLUMNS.group_dataType],
         //-------筛选表单字段数组-------
-        searchFormItems: [F_ITEMS.title_search, D_ITEMS.group_dataType],
+        searchFormItems: [F_ITEMS.title_search, F_ITEMS.group_dataType, F_ITEMS.alias],
         //-------详情字段数组-------
-        detailItems: [D_ITEMS._id, D_ITEMS.title, D_ITEMS.desc, D_ITEMS.group_dataType],
+        detailItems: [D_ITEMS._id, D_ITEMS.title, D_ITEMS.alias, D_ITEMS.desc, D_ITEMS.group_dataType],
         //-------新增、修改表单字段数组-------
         formItems: [F_ITEMS.title, F_ITEMS.alias, F_ITEMS.group_dataType, F_ITEMS.desc]
     });
@@ -964,7 +960,7 @@ var _systemId = PUB._systemId;
             _dataType: _dataType12
         },
         //-------列配置数组-------
-        columns: [COLUMNS.title_fixed, COLUMNS.keyword_edit, COLUMNS._id, COLUMNS.desc, COLUMNS.vedio, COLUMNS.link],
+        columns: [COLUMNS.title_fixed, COLUMNS.keyword_edit, COLUMNS.countGroup, COLUMNS._id, COLUMNS.desc, COLUMNS.vedio, COLUMNS.link],
         //-------筛选表单字段数组-------
         searchFormItems: [F_ITEMS.title_search],
         //-------详情字段数组-------
