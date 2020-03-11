@@ -883,6 +883,13 @@ function getFormMenuGPower(_ref) {
             options: [{ value: "1", label: "添加" }]
         }, {
             label: "",
+            prop: "copy",
+            col_span: 3,
+            type: "checkbox",
+            default: false,
+            options: [{ value: "1", label: "复制" }]
+        }, {
+            label: "",
             prop: "modify",
             col_span: 3,
             type: "checkbox",

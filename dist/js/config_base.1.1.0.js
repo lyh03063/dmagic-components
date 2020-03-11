@@ -326,7 +326,7 @@ PUB.singleBtns4 = {
     util.setObjDefault(listCF, { dynamicDict: [] });
     var dict = {
         ajax: {
-            param: { _systemId: _systemId, _dataType: "familiarity", findJson: { userId: PUB.userId } },
+            param: { _systemId: _systemId, _dataType: "familiarity", findJson: { userId: PUB.$sys.userId } },
             url: "/info/getCommonList"
         },
         populateColumn: "familiarityDoc",
@@ -869,11 +869,11 @@ var _systemId = PUB._systemId;
     });
 }
 //#endregion
-
 //#region 角色列表页
 {
     var _dataType10 = "role";
     PUB.listCF.list_role = _extends({
+        // powerPath: "systemManage.list_role",//权限路径
         idKey: "_id", //键名
         pageSize: 20,
         listIndex: "list_role", //vuex对应的字段~
@@ -900,7 +900,6 @@ var _systemId = PUB._systemId;
     });
 }
 //#endregion
-
 //#region 网址列表页
 {
 

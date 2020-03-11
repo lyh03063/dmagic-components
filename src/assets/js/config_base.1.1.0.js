@@ -294,7 +294,7 @@ window.setFamiliarityAjaxCF = function (listCF, idKey = "_id") {
     util.setObjDefault(listCF, { dynamicDict: [] });
     let dict = {
         ajax: {
-            param: { _systemId, _dataType: "familiarity", findJson: { userId: PUB.userId }, },
+            param: { _systemId, _dataType: "familiarity", findJson: { userId: PUB.$sys.userId }, },
             url: "/info/getCommonList",
         },
         populateColumn: "familiarityDoc",
@@ -413,53 +413,53 @@ let _systemId = PUB._systemId;
 //#region 管理员列表页
 {
     let _dataType = "admin";
-
+  
     PUB.listCF.list_admin = {
-        idKey: "_id", //键名
-        pageSize: 20,
-        listIndex: "list_admin", //vuex对应的字段~
-        focusMenu: true, //进行菜单聚焦
-        threeTitle: "管理员", //面包屑2级菜单
-        ...PUB.listCFCommon2,//展开公共配置
-        //objParamAddon列表接口的附加参数
-        objParamAddon: {
-            _systemId,
-            _dataType
-        },
-        //公共的附加参数，针对所有接口
-        paramAddonPublic: {
-            _systemId,
-            _dataType
-        },
-        //-------列配置数组-------
-        columns: [
-            COLUMNS.Id,
-            COLUMNS.userName,
-            COLUMNS.passWord,
-            COLUMNS.nickName,
-            COLUMNS.role,
-        ],
-        //-------筛选表单字段数组-------
-        searchFormItems: [
-            F_ITEMS.Id,
-        ],
-        //-------详情字段数组-------
-        detailItems: [
-            D_ITEMS.Id,
-            D_ITEMS.userName,
-            D_ITEMS.passWord,
-        ],
-        //-------新增、修改表单字段数组-------
-        formItems: [
-            F_ITEMS.userName,
-            F_ITEMS.passWord,
-            F_ITEMS.nickName,
-            F_ITEMS.role,
-        ]
+      idKey: "_id", //键名
+      pageSize: 20,
+      listIndex: "list_admin", //vuex对应的字段~
+      focusMenu: true, //进行菜单聚焦
+      threeTitle: "管理员", //面包屑2级菜单
+      ...PUB.listCFCommon2,//展开公共配置
+      //objParamAddon列表接口的附加参数
+      objParamAddon: {
+        _systemId,
+        _dataType
+      },
+      //公共的附加参数，针对所有接口
+      paramAddonPublic: {
+        _systemId,
+        _dataType
+      },
+      //-------列配置数组-------
+      columns: [
+        COLUMNS.Id,
+        COLUMNS.userName,
+        COLUMNS.passWord,
+        COLUMNS.nickName,
+        COLUMNS.role,
+      ],
+      //-------筛选表单字段数组-------
+      searchFormItems: [
+        F_ITEMS.Id,
+      ],
+      //-------详情字段数组-------
+      detailItems: [
+        D_ITEMS.Id,
+        D_ITEMS.userName,
+        D_ITEMS.passWord,
+      ],
+      //-------新增、修改表单字段数组-------
+      formItems: [
+        F_ITEMS.userName,
+        F_ITEMS.passWord,
+        F_ITEMS.nickName,
+        F_ITEMS.role,
+      ]
     }
-
-}
-//#endregion
+  
+  }
+  //#endregion
 
 //#region 所有数据列表页
 {
@@ -833,53 +833,52 @@ let _systemId = PUB._systemId;
 
 }
 //#endregion
-
 //#region 角色列表页
 {
     let _dataType = "role";
     PUB.listCF.list_role = {
-        idKey: "_id", //键名
-        pageSize: 20,
-        listIndex: "list_role", //vuex对应的字段~
-        focusMenu: true, //进行菜单聚焦
-        threeTitle: "角色", //面包屑2级菜单
-        ...PUB.listCFCommon2,//展开公共配置
-        objParamAddon: {
-            _systemId,
-            _dataType
-        },
-        //公共的附加参数，针对所有接口
-        paramAddonPublic: {
-            _systemId,
-            _dataType
-        },
-        //-------列配置数组-------
-
-        columns: [
-            COLUMNS.Id,
-            COLUMNS.roleName,
-            COLUMNS.rolePower
-        ],
-        //-------筛选表单字段数组-------
-        searchFormItems: [
-            F_ITEMS.Id
-        ],
-        //-------详情字段数组-------
-        detailItems: [
-            COLUMNS.Id,
-            COLUMNS.roleName,
-            COLUMNS.rolePower
-        ],
-        //-------新增、修改表单字段数组-------
-        formItems: [
-            COLUMNS.roleName,
-            COLUMNS.rolePower,
-        ]
+      // powerPath: "systemManage.list_role",//权限路径
+      idKey: "_id", //键名
+      pageSize: 20,
+      listIndex: "list_role", //vuex对应的字段~
+      focusMenu: true, //进行菜单聚焦
+      threeTitle: "角色", //面包屑2级菜单
+      ...PUB.listCFCommon2,//展开公共配置
+      objParamAddon: {
+        _systemId,
+        _dataType
+      },
+      //公共的附加参数，针对所有接口
+      paramAddonPublic: {
+        _systemId,
+        _dataType
+      },
+      //-------列配置数组-------
+  
+      columns: [
+        COLUMNS.Id,
+        COLUMNS.roleName,
+        COLUMNS.rolePower
+      ],
+      //-------筛选表单字段数组-------
+      searchFormItems: [
+        F_ITEMS.Id
+      ],
+      //-------详情字段数组-------
+      detailItems: [
+        D_ITEMS.Id,
+        D_ITEMS.roleName,
+        D_ITEMS.rolePower
+      ],
+      //-------新增、修改表单字段数组-------
+      formItems: [
+        F_ITEMS.roleName,
+        F_ITEMS.rolePower,
+      ]
     }
-
-}
-//#endregion
-
+  
+  }
+  //#endregion
 //#region 网址列表页
 {
 
@@ -930,7 +929,7 @@ let _systemId = PUB._systemId;
 {
 
     let _dataType = "vedio";
-
+  
     PUB.listCF.list_vedio = {
         idKey: "_id", //键名
         pageSize: 20,
@@ -941,7 +940,7 @@ let _systemId = PUB._systemId;
             { value: "教学视频" }
         ],
         ...PUB.listCFCommon2,//展开公共配置
-
+  
         objParamAddon: {
             _systemId,
             _dataType
@@ -954,7 +953,7 @@ let _systemId = PUB._systemId;
         //-------列配置数组-------
         columns: [COLUMNS.title_fixed, COLUMNS.keyword_edit, COLUMNS.countGroup, COLUMNS._id, COLUMNS.desc, COLUMNS.vedio, COLUMNS.link],
         //-------筛选表单字段数组-------
-        searchFormItems: [F_ITEMS.title_search],
+        searchFormItems: [F_ITEMS.title_search,F_ITEMS.countGroup],
         //-------详情字段数组-------
         detailItems: [D_ITEMS.title, D_ITEMS.desc, D_ITEMS.link, D_ITEMS.vedio, D_ITEMS.detail,],
         //-------新增、修改表单字段数组-------
@@ -964,13 +963,12 @@ let _systemId = PUB._systemId;
             F_ITEMS.desc,
             F_ITEMS.link,
             F_ITEMS.vedio,
-
+  
         ]
     }
-
-}
-//#endregion
-
+  
+  }
+  //#endregion
 //#region 000列表页
 {
 

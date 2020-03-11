@@ -47,7 +47,7 @@ PUB.menuList = [{
     title: "笔记"
   }]
 }, {
-  index: "newsCenter",
+  index: "OtherData",
   icon: "el-icon-document",
   title: "其他数据",
   menuItem: [{

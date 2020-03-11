@@ -1,35 +1,35 @@
 let WIN;
-if (typeof(window) === "undefined") { //如果window不存在
+if (typeof (window) === "undefined") { //如果window不存在
     WIN = global;
 } else {
     WIN = window;
 }
 WIN.PUB = WIN.PUB || {}
 
-if (typeof(lodash) === "undefined") { //如果{000}000
+if (typeof (lodash) === "undefined") { //如果{000}000
     WIN.lodash = _; //ladash加入全局变量
 } else {
     WIN.lodash = lodash; //ladash加入全局变量
 }
 
 WIN.util = {}
-    //#region 从dmagic-util.js迁移过来
-    //#region encodeHtml:html转义函数
-util.encodeHtml = function(str) {
-        var s = "";
-        if (str.length == 0) return "";
-        s = str.replace(/&/g, "&amp;");
-        s = s.replace(/</g, "&lt;");
-        s = s.replace(/>/g, "&gt;");
-        s = s.replace(/ /g, "&nbsp;");
-        s = s.replace(/\'/g, "&#39;");
-        s = s.replace(/\"/g, "&quot;");
-        s = s.replace(/\n/g, "<br/>");
-        return s;
-    }
-    //#endregion
-    //#region decodeHtml:html反转义函数
-util.decodeHtml = function(str) {
+//#region 从dmagic-util.js迁移过来
+//#region encodeHtml:html转义函数
+util.encodeHtml = function (str) {
+    var s = "";
+    if (str.length == 0) return "";
+    s = str.replace(/&/g, "&amp;");
+    s = s.replace(/</g, "&lt;");
+    s = s.replace(/>/g, "&gt;");
+    s = s.replace(/ /g, "&nbsp;");
+    s = s.replace(/\'/g, "&#39;");
+    s = s.replace(/\"/g, "&quot;");
+    s = s.replace(/\n/g, "<br/>");
+    return s;
+}
+//#endregion
+//#region decodeHtml:html反转义函数
+util.decodeHtml = function (str) {
     var s = "";
     if (str.length == 0) return "";
     s = str.replace(/&amp;/g, "&");
@@ -43,7 +43,7 @@ util.decodeHtml = function(str) {
 };
 //#endregion
 //#region parseParam:将json转成url参数形式函数[全局]
-var parseParam = function(param, key1) {
+var parseParam = function (param, key1) {
     //函数：{将json转成url参数形式}-递归
     var paramStr = "";
     if (typeof param == "string" || typeof param == "number" || typeof param == "boolean") {
@@ -64,7 +64,7 @@ var parseParam = function(param, key1) {
 //#endregion
 //#region getAPI:get调用api函数[全局]
 //函数定义：{get调用api函数}
-var getAPI = function(_param) {
+var getAPI = function (_param) {
     var promise = new Promise((resolve, reject) => {
         _param.param = _param.param || {};
         var paramAdd = parseParam(_param.param);
@@ -80,7 +80,7 @@ var getAPI = function(_param) {
 };
 //#endregion
 //#region postAPI:post调用api函数[全局]
-var postAPI = function(_param) {
+var postAPI = function (_param) {
     var promise = new Promise((resolve, reject) => {
         _param.param = _param.param || {};
         var ajaxUrl = _param.url;
@@ -172,12 +172,12 @@ function getDataName(propName) {
 }
 var propsync = {
     //修改data，自动生成props对应的data字段
-    data: function() {
+    data: function () {
         var data = {};
         var that = this;
         /** 所有组件定义的props名称数组 */
         var propsKeys = Object.keys((that.$options.props) || {});
-        propsKeys.forEach(function(prop, i) {
+        propsKeys.forEach(function (prop, i) {
             var dataName = getDataName(prop);
             var isEnable = that.$options.props[prop][isEnableName];
             isEnable = (typeof isEnable === "boolean") ? isEnable : true;
@@ -188,7 +188,7 @@ var propsync = {
         });
         return data;
     },
-    created: function() {
+    created: function () {
         var that = this;
         /** 所有 取消props的watch监听函数 的数组 */
         var unwatchPropsFnArr = [];
@@ -196,47 +196,47 @@ var propsync = {
         var unwatchDataFnArr = [];
         /** 所有组件定义的props名称数组 */
         var propsKeys = Object.keys((that.$options.props) || {});
-        propsKeys.forEach(function(prop, i) {
+        propsKeys.forEach(function (prop, i) {
             var dataName = getDataName(prop);
             var isEnable = that.$options.props[prop][isEnableName];
             isEnable = (typeof isEnable === "boolean") ? isEnable : true;
             if (!isEnable)
                 return;
             //监听所有props属性
-            var propsFn = that.$watch(prop, function(newVal, oldVal) {
+            var propsFn = that.$watch(prop, function (newVal, oldVal) {
                 that[dataName] = newVal; //将组件外变更的prop同步到组件内的p_prop变量中
             }, {});
             unwatchPropsFnArr.push(propsFn);
             //[监听所有属性映射到组件内的变量]
-            var dataFn = that.$watch(dataName, function(newVal, oldVal) {
+            var dataFn = that.$watch(dataName, function (newVal, oldVal) {
                 that.$emit(emitPropsChangeName, prop, newVal, oldVal); //将组件内p_prop通知给组件外(调用方)
             }, {});
             unwatchDataFnArr.push(dataFn);
         });
     },
-    destroyed: function() {}
+    destroyed: function () { }
 };
 //#endregion
 //#region space:自定义空行组件
 // 自定义空行组件
 Vue.component('space', {
-        template: `<p class=" OF2 CL1 " :style='"height:"+height+"px"'></p>`,
-        props: {
-            height: {
-                type: String,
-                default: 10
-            }
-        },
-        data() {
-            return {
-                //  showFlag: this.show,
-            };
-        },
-        methods: {},
-        created() {}
-    })
-    //#endregion
-    //#region dialog-normal:普通弹窗组件
+    template: `<p class=" OF2 CL1 " :style='"height:"+height+"px"'></p>`,
+    props: {
+        height: {
+            type: String,
+            default: 10
+        }
+    },
+    data() {
+        return {
+            //  showFlag: this.show,
+        };
+    },
+    methods: {},
+    created() { }
+})
+//#endregion
+//#region dialog-normal:普通弹窗组件
 let templateDialogNormal = `
 <div class="" v-if="showDialogFlag">
 <div class=" dialogCover" :style="'z-index:'+zIndex+';'" ></div>
@@ -251,91 +251,91 @@ let templateDialogNormal = `
 `;
 // 普通弹窗组件
 Vue.component('dialog-normal', {
-        template: templateDialogNormal,
-        mixins: [propsync], //声明使用propsync的mixin
-        props: {
-            title: {
-                type: String,
-                default: "默认弹窗标题",
-                propsync: false //不会被propsync实现双向绑定
-            },
-            width: {
-                type: Number,
-                default: 600,
-                propsync: false //不会被propsync实现双向绑定
-            },
-            height: {
-                type: Number,
-                default: 400,
-                propsync: false //不会被propsync实现双向绑定
-            },
-            confirm: {
-                type: Function,
-                propsync: false //不会被propsync实现双向绑定
-            },
-            show: {
-                type: Boolean,
-                default: true,
+    template: templateDialogNormal,
+    mixins: [propsync], //声明使用propsync的mixin
+    props: {
+        title: {
+            type: String,
+            default: "默认弹窗标题",
+            propsync: false //不会被propsync实现双向绑定
+        },
+        width: {
+            type: Number,
+            default: 600,
+            propsync: false //不会被propsync实现双向绑定
+        },
+        height: {
+            type: Number,
+            default: 400,
+            propsync: false //不会被propsync实现双向绑定
+        },
+        confirm: {
+            type: Function,
+            propsync: false //不会被propsync实现双向绑定
+        },
+        show: {
+            type: Boolean,
+            default: true,
+        }
+    },
+    data() {
+        return {
+            zIndex: 100
+            //  showFlag: this.show,
+        };
+    },
+    computed: {
+        showDialogFlag: function () {
+            WIN.PUB.dialogZIndex = WIN.PUB.dialogZIndex || 2500;
+            WIN.PUB.dialogZIndex++;
+            this.zIndex = WIN.PUB.dialogZIndex
+            return this.p_show
+        },
+    },
+    watch: {
+        // aaa: function(curVal, oldVal) {
+        // }
+    },
+    methods: {
+        async confirmFun(e) { //函数：{确认弹窗}
+            if (this.confirm) { //如果{确认函数}存在
+                this.confirm();
             }
         },
-        data() {
-            return {
-                zIndex: 100
-                    //  showFlag: this.show,
-            };
-        },
-        computed: {
-            showDialogFlag: function() {
-                WIN.PUB.dialogZIndex = WIN.PUB.dialogZIndex || 2500;
-                WIN.PUB.dialogZIndex++;
-                this.zIndex = WIN.PUB.dialogZIndex
-                return this.p_show
-            },
-        },
-        watch: {
-            // aaa: function(curVal, oldVal) {
-            // }
-        },
-        methods: {
-            async confirmFun(e) { //函数：{确认弹窗}
-                if (this.confirm) { //如果{确认函数}存在
-                    this.confirm();
-                }
-            },
-            closeDialog(e) { //函数：{关闭弹窗}
-                this.p_show = false;
-            }
-        },
-        created() {},
-        mounted() {}
-    })
-    //#endregion
-    //#region loading:loading组件
-    // loading组件
+        closeDialog(e) { //函数：{关闭弹窗}
+            this.p_show = false;
+        }
+    },
+    created() { },
+    mounted() { }
+})
+//#endregion
+//#region loading:loading组件
+// loading组件
 Vue.component('loading', {
-        template: `
+    template: `
 <div class="loading-box" :style="{'height':height+'px','line-height':height+'px','color':color,'text-align':'center'}">
 加载中
 <i class="el-icon-loading FS16"></i>
 </div>
 `,
-        props: {
-            text: {
-                type: [String],
-                default: "加载中",
-            },
-            height: {
-                type: [String, Number],
-                default: "100",
-            },
-            color: {
-                type: [String, Number],
-                default: "#999",
-            }
+    props: {
+        text: {
+            type: [String],
+            default: "加载中",
         },
-    })
-    //#endregion
-    //#region Vuex
+        height: {
+            type: [String, Number],
+            default: "100",
+        },
+        color: {
+            type: [String, Number],
+            default: "#999",
+        }
+    },
+})
+//#endregion
+//#region Vuex
 if (WIN.Vuex) { //如果{Vuex}存在
     WIN.store = new Vuex.Store({ //定义Vuex的存储对象
         state: {
@@ -402,35 +402,35 @@ if (WIN.Vuex) { //如果{Vuex}存在
 //#endregion
 //#region MIX:混合对象
 util.MIX = {}
-    //表单字段组件配置
+//表单字段组件配置
 util.MIX.power = {
-        methods: {
-            getPower(_json) { //函数：{获取权限函数}
-                if (!WIN.needPower) return true;
-                let { page, operation, group } = _json;
-                let power = WIN.PUB.rolePower;
-                if (!power) { //如果没有权限变量，表示不需要权限设置
-                    return true
-                }
-                if (group) { //如果{000}000
-                    return lodash.get(power, `groupPower.${group}`);
-                }
-                if (page && operation) { //如果{000}000
-                    // let flag = power[page] && power[page][operation];
-                    let flag = lodash.get(power, `listPower.${page}.${operation}`);
-                    return flag;
-                } else if (page) {
-                    return lodash.get(power, `listPower.${page}`) || lodash.get(power, `normalPagePower.${page}`);
-                }
-            },
-        },
-        created() {
-            if (!WIN.PUB.rolePower && localStorage.rolePower) { //公共权限数据变量不存在，从localStorage读取
-                WIN.PUB.rolePower = JSON.parse(localStorage.rolePower)
+    methods: {
+        getPower(_json) { //函数：{获取权限函数}
+            if (!WIN.needPower) return true;
+            let { page, operation, group } = _json;
+            let power = WIN.PUB.rolePower;
+            if (!power) { //如果没有权限变量，表示不需要权限设置
+                return true
             }
+            if (group) { //如果{000}000
+                return lodash.get(power, `groupPower.${group}`);
+            }
+            if (page && operation) { //如果{000}000
+                // let flag = power[page] && power[page][operation];
+                let flag = lodash.get(power, `listPower.${page}.${operation}`);
+                return flag;
+            } else if (page) {
+                return lodash.get(power, `listPower.${page}`) || lodash.get(power, `normalPagePower.${page}`);
+            }
+        },
+    },
+    created() {
+        if (!WIN.PUB.rolePower && localStorage.rolePower) { //公共权限数据变量不存在，从localStorage读取
+            WIN.PUB.rolePower = JSON.parse(localStorage.rolePower)
         }
     }
-    //表单字段组件配置
+}
+//表单字段组件配置
 util.MIX.form_item = {
     props: ["value"],
     data() {
@@ -449,187 +449,187 @@ util.MIX.form_item = {
     },
 }
 WIN.MIX = util.MIX //WIN.MIX加入，兼容dmagic-components
-    //#region MIX:MIX混入-暂时废弃
+//#region MIX:MIX混入-暂时废弃
 let MIX = {};
 //表单字段组件配置
 MIX.form_item = {
-        props: ["value"],
-        data() {
-            return {
-                valueNeed: this.value
-            };
-        },
-        watch: { //监听器，双向同步
-            value: {
-                handler(newVal, oldVal) {
-                    this.valueNeed = this.value
-                },
-                deep: true
+    props: ["value"],
+    data() {
+        return {
+            valueNeed: this.value
+        };
+    },
+    watch: { //监听器，双向同步
+        value: {
+            handler(newVal, oldVal) {
+                this.valueNeed = this.value
             },
-            valueNeed: {
-                handler(newVal, oldVal) {
-                    this.$emit("input", this.valueNeed); //同步valueNeed值到value
-                },
-                // immediate: true,//组件初始化时立即执行一次变动
-                deep: true //深度监听
-            }
+            deep: true
         },
-    }
-    // WIN.MIX = MIX;
-    //#endregion
-    //#endregion
-    //#endregion
-    //#region deepCopy:深拷贝函数
-util.deepCopy = function(obj) { //深拷贝一个Json对象的函数
-        return lodash.cloneDeep(obj);
-    }
-    //#endregion
-    //#region type:返回对象数据类型函数
+        valueNeed: {
+            handler(newVal, oldVal) {
+                this.$emit("input", this.valueNeed); //同步valueNeed值到value
+            },
+            // immediate: true,//组件初始化时立即执行一次变动
+            deep: true //深度监听
+        }
+    },
+}
+// WIN.MIX = MIX;
+//#endregion
+//#endregion
+//#endregion
+//#region deepCopy:深拷贝函数
+util.deepCopy = function (obj) { //深拷贝一个Json对象的函数
+    return lodash.cloneDeep(obj);
+}
+//#endregion
+//#region type:返回对象数据类型函数
 let class2type = {},
     //用于记录[object class]样式  
     arrObjs = "Boolean Number String Function Array Date RegExp Null Undefined".split(" ");
 for (var i = 0, l = arrObjs.length; i < l; i++) {
     class2type["[object " + arrObjs[i] + "]"] = arrObjs[i].toLowerCase();
 }
-util.type = function(obj) {
+util.type = function (obj) {
     return class2type[Object.prototype.toString.call(obj)] || "object";
 };
 //#endregion
 //#region timeout:基于promise的延迟函数
-util.timeout = function(ms) { //使用promise封装一个延迟方法
-        return new Promise((resolve) => { //resolve延迟解决后的回调函数, reject延迟异常的处理函数
-            setTimeout(resolve, ms, 'done');
-        });
+util.timeout = function (ms) { //使用promise封装一个延迟方法
+    return new Promise((resolve) => { //resolve延迟解决后的回调函数, reject延迟异常的处理函数
+        setTimeout(resolve, ms, 'done');
+    });
+}
+//#endregion
+//#region getTimeStatus:获取时间段状态函数
+/**
+ * 
+ * @param {开始时间} _json.startTime
+ * @param {结束时间} _json.endTime
+ *  @param {当前时间} _json.currTime
+ */
+util.getTimeStatus = function (param) { //
+    let { start, end, now } = param;
+    let flag = 2;
+    let msg = "进行中";
+    if (!(start && end)) {
+        start = start || "——";
+        end = end || "——";
+        flag = 4;
+        msg = "时间段设置有误，时间段不完整";
+        return { flag, msg, start, end }
     }
-    //#endregion
-    //#region getTimeStatus:获取时间段状态函数
-    /**
-     * 
-     * @param {开始时间} _json.startTime
-     * @param {结束时间} _json.endTime
-     *  @param {当前时间} _json.currTime
-     */
-util.getTimeStatus = function(param) { //
-        let { start, end, now } = param;
-        let flag = 2;
-        let msg = "进行中";
-        if (!(start && end)) {
-            start = start || "——";
-            end = end || "——";
-            flag = 4;
-            msg = "时间段设置有误，时间段不完整";
-            return { flag, msg, start, end }
-        }
-        let fomatStr = "YYYY-MM-DD HH:mm";
-        now = now || moment();
-        now = moment(now).format(fomatStr);
-        start = moment(start).format(fomatStr);
-        end = moment(end).format(fomatStr);
-        //先格式化才能正确比较大小
-        if (start > end) {
-            start = start || "——";
-            end = end || "——";
-            flag = 4;
-            msg = "时间段设置有误，开始时间大于结束时间";
-            return { flag, msg, start, end }
-        }
-        if (now < start) { //如果当前时间小于开始时间
-            msg = "未开始";
-            flag = 1;
-        } else if (now > end) { //如果当前时间大于结束时间
-            flag = 3;
-            msg = "已结束";
-        }
-        return { flag, msg, start, end, now }
+    let fomatStr = "YYYY-MM-DD HH:mm";
+    now = now || moment();
+    now = moment(now).format(fomatStr);
+    start = moment(start).format(fomatStr);
+    end = moment(end).format(fomatStr);
+    //先格式化才能正确比较大小
+    if (start > end) {
+        start = start || "——";
+        end = end || "——";
+        flag = 4;
+        msg = "时间段设置有误，开始时间大于结束时间";
+        return { flag, msg, start, end }
     }
-    //#endregion
-    //#region ajaxPopulate:ajax填充数据列表的某个字段函数/可用于动态数据字典
-util.ajaxPopulate = async function(populateConfig) {
-        //补充ajax配置20191128
-        let {
-            ajax,
-            listData,
-            page,
-            populateColumn,
-            idColumn,
-            idColumn2,
-            findJson = {}
-        } = populateConfig;
-        let arrId = [];
-        listData.forEach(itemEach => { //循环：{原数据数组}
-            let idEach = itemEach[idColumn]
-            if (idEach) { //如果{idEach}存在
-                if (util.type(idEach) == "array") { //Q1:idEach是数组
-                    arrId = arrId.concat(idEach); //拼接
-                } else { //Q2:idEach不是数组
-                    arrId.push(idEach);
-                }
+    if (now < start) { //如果当前时间小于开始时间
+        msg = "未开始";
+        flag = 1;
+    } else if (now > end) { //如果当前时间大于结束时间
+        flag = 3;
+        msg = "已结束";
+    }
+    return { flag, msg, start, end, now }
+}
+//#endregion
+//#region ajaxPopulate:ajax填充数据列表的某个字段函数/可用于动态数据字典
+util.ajaxPopulate = async function (populateConfig) {
+    //补充ajax配置20191128
+    let {
+        ajax,
+        listData,
+        page,
+        populateColumn,
+        idColumn,
+        idColumn2,
+        findJson = {}
+    } = populateConfig;
+    let arrId = [];
+    listData.forEach(itemEach => { //循环：{原数据数组}
+        let idEach = itemEach[idColumn]
+        if (idEach) { //如果{idEach}存在
+            if (util.type(idEach) == "array") { //Q1:idEach是数组
+                arrId = arrId.concat(idEach); //拼接
+            } else { //Q2:idEach不是数组
+                arrId.push(idEach);
             }
-        })
-        arrId = Array.from(new Set(arrId)) //去重
-        let urlAjax = `/crossList?page=${page}`;
-        let paramAjax = {
-            pageSize: 999
         }
-        if (ajax) { //如果{ajax配置}存在*****
-            let { url, param = {} } = ajax
-            urlAjax = url;
-            Object.assign(paramAjax, param); //合并对象
+    })
+    arrId = Array.from(new Set(arrId)) //去重
+    let urlAjax = `/crossList?page=${page}`;
+    let paramAjax = {
+        pageSize: 999
+    }
+    if (ajax) { //如果{ajax配置}存在*****
+        let { url, param = {} } = ajax
+        urlAjax = url;
+        Object.assign(paramAjax, param); //合并对象
+    }
+    //补充id数组过滤条件****
+    lodash.set(paramAjax, `findJson.${idColumn2}`, {
+        "$in": arrId,
+        ...findJson
+    });
+    let { data } = await axios({
+        //请求接口
+        method: "post",
+        url: WIN.PUB.domain + urlAjax,
+        data: paramAjax //传递参数
+    });
+    var dict = lodash.keyBy(data.list, idColumn2)
+    listData.forEach(itemEach => { //循环：{原数据数组}
+        let idEach = itemEach[idColumn]
+        if (idEach) { //如果{idEach}存在
+            if (util.type(idEach) == "array") { //Q1:idEach是数组
+                itemEach[populateColumn] = [];
+                idEach.forEach(idOneEach => { //循环：{id数组}
+                    itemEach[populateColumn].push(dict[idOneEach])
+                })
+            } else { //Q2:idEach不是数组
+                itemEach[populateColumn] = dict[idEach]
+            }
         }
-        //补充id数组过滤条件****
-        lodash.set(paramAjax, `findJson.${idColumn2}`, {
-            "$in": arrId,
-            ...findJson
-        });
-        let { data } = await axios({
-            //请求接口
-            method: "post",
-            url: WIN.PUB.domain + urlAjax,
-            data: paramAjax //传递参数
-        });
-        var dict = lodash.keyBy(data.list, idColumn2)
-        listData.forEach(itemEach => { //循环：{原数据数组}
-            let idEach = itemEach[idColumn]
-            if (idEach) { //如果{idEach}存在
-                if (util.type(idEach) == "array") { //Q1:idEach是数组
-                    itemEach[populateColumn] = [];
-                    idEach.forEach(idOneEach => { //循环：{id数组}
-                        itemEach[populateColumn].push(dict[idOneEach])
-                    })
-                } else { //Q2:idEach不是数组
-                    itemEach[populateColumn] = dict[idEach]
-                }
-            }
-        })
-        return util.deepCopy(listData); //深拷贝，返回一个全新的对象
-        //return listData
-    }
-    //#endregion
-    //#region stringify:json转字符串函数（含function处理）
-util.stringify = function(_json) { //函数定义：{json转字符串函数（含function处理）}
-        var strJson = JSON.stringify(_json, function(key, val) {
-            if (typeof val === "function") {
-                return val + ""; //将函数代码转换成字符串
-            }
-            return val;
-        });
-        return strJson
-    }
-    //#endregion
-    //#region parseJson:字符串转json函数（含function还原处理）
-util.parseJson = function(str) { //函数定义：{字符串转json函数（含function还原处理）}
-        //将带function字符串的还原成真正发function
-        let json = JSON.parse(str, function(k, v) {
-            if (v.indexOf && v.indexOf("function") > -1) {
-                return eval("(function(){return " + v + " })()");
-            }
-            return v;
-        });
-        return json;
-    }
-    //#endregion
-    //#region moveData:数组元素上下移动函数
-util.moveData = function(index, type, list) { //函数：{数据移动函数}-注意调用对象的KEY等配置
+    })
+    return util.deepCopy(listData); //深拷贝，返回一个全新的对象
+    //return listData
+}
+//#endregion
+//#region stringify:json转字符串函数（含function处理）
+util.stringify = function (_json) { //函数定义：{json转字符串函数（含function处理）}
+    var strJson = JSON.stringify(_json, function (key, val) {
+        if (typeof val === "function") {
+            return val + ""; //将函数代码转换成字符串
+        }
+        return val;
+    });
+    return strJson
+}
+//#endregion
+//#region parseJson:字符串转json函数（含function还原处理）
+util.parseJson = function (str) { //函数定义：{字符串转json函数（含function还原处理）}
+    //将带function字符串的还原成真正发function
+    let json = JSON.parse(str, function (k, v) {
+        if (v.indexOf && v.indexOf("function") > -1) {
+            return eval("(function(){return " + v + " })()");
+        }
+        return v;
+    });
+    return json;
+}
+//#endregion
+//#region moveData:数组元素上下移动函数
+util.moveData = function (index, type, list) { //函数：{数据移动函数}-注意调用对象的KEY等配置
     list = list || this[this.KEY.arrRelate]; //KEY配置相关数组
     let objIndex = {
         "up": index - 1,
@@ -648,7 +648,7 @@ util.moveData = function(index, type, list) { //函数：{数据移动函数}-�
 };
 //#endregion
 //#region sortByArrId:根据id数组重排集合的函数
-util.sortByArrId = function(param) {
+util.sortByArrId = function (param) {
     let { list, idKey = "P1", arrId } = param;
     if (!(list && list.length && arrId && arrId.length)) return list;
     var dict = lodash.keyBy(list, idKey); //转成数据字段，方便重排
@@ -658,7 +658,7 @@ util.sortByArrId = function(param) {
 };
 //#endregion
 //#region toFixed/money:将数字转换成保留小数点，默认2位
-util.toFixed = function(num, length = 2) {
+util.toFixed = function (num, length = 2) {
     num = parseFloat(num);
     let result;
     if (isNaN(num) || num == 0 || num === undefined || num === null) { //结果为数字
@@ -670,29 +670,29 @@ util.toFixed = function(num, length = 2) {
 util.money = util.toFixed;
 //#endregion
 //#region getTimeRandom:返回带时间戳的随机数
-util.getTimeRandom = function() {
+util.getTimeRandom = function () {
     return moment().format("YYYYMMDDHHmmSSsss_") + lodash.random(99999)
 };
 //#endregion
 //#region handelItem:处理字段数组的某个字段配置的函数
-util.handelItem = function(cf) {
-        let { action, items, prop, itemNew, key = "prop" } = cf;
-        if (!items) return;
-        let index = items.findIndex(item => item[key] == prop);
-        if (index < 0) return; //找不到目标，return
-        if (action == "replace") { //Q1:replace
-            this.$set(items, index, itemNew); //修改memberId对应的字段配置
-        } else if (action == "delete") { //Q2:delete
-            items.splice(index, 1)
-        } else if (action == "merge") { //Q3:merge合并
-            // let itemNew=Object.assign(items[index],itemNew);//合并对象
-            itemNew = {...items[index], ...itemNew }
-            this.$set(items, index, itemNew); //修改memberId对应的字段配置
-        }
+util.handelItem = function (cf) {
+    let { action, items, prop, itemNew, key = "prop" } = cf;
+    if (!items) return;
+    let index = items.findIndex(item => item[key] == prop);
+    if (index < 0) return; //找不到目标，return
+    if (action == "replace") { //Q1:replace
+        this.$set(items, index, itemNew); //修改memberId对应的字段配置
+    } else if (action == "delete") { //Q2:delete
+        items.splice(index, 1)
+    } else if (action == "merge") { //Q3:merge合并
+        // let itemNew=Object.assign(items[index],itemNew);//合并对象
+        itemNew = { ...items[index], ...itemNew }
+        this.$set(items, index, itemNew); //修改memberId对应的字段配置
     }
-    //#endregion
-    //#region setListPower:根据当前角色权限设置列表配置的函数-需要用到WIN.rolePower变量
-util.setListPower = function(cfList) {
+}
+//#endregion
+//#region setListPower:根据当前角色权限设置列表配置的函数-需要用到WIN.rolePower变量
+util.setListPower = function (cfList) {
     let { powerPath } = cfList;
     if (!powerPath) return cfList
     let hasPowerAdd = lodash.get(WIN.rolePower, `${powerPath}.add`);
@@ -706,7 +706,7 @@ util.setListPower = function(cfList) {
     if (!hasPowerDelete) {
         //删除单项删除按钮
         util.handelItem({ items: cfList.singleBtns.addon, action: "delete", key: "eventType", prop: "delete" })
-            //删除批量删除按钮
+        //删除批量删除按钮
         util.handelItem({ items: cfList.batchBtns.addon, action: "delete", key: "eventType", prop: "delete" })
     }
     let hasPowerModify = lodash.get(WIN.rolePower, `${powerPath}.modify`);
@@ -715,24 +715,52 @@ util.setListPower = function(cfList) {
         //删除单选修改按钮
         util.handelItem({ items: cfList.singleBtns.addon, action: "delete", key: "eventType", prop: "modify" })
     }
+
+    let hasPowerCopy = lodash.get(WIN.rolePower, `${powerPath}.copy`);
+    //如果没有修改权限
+    if (!hasPowerCopy) {
+        //删除单选修改按钮
+        util.handelItem({ items: cfList.singleBtns.addon, action: "delete", key: "eventType", prop: "copy" })
+    }
+
+    let hasPowerSort = lodash.get(WIN.rolePower, `${powerPath}.sort`);
+    //如果没有排序权限
+    if (!hasPowerSort) {
+        //删除单选修改按钮
+        util.handelItem({ items: cfList.singleBtns.addon, action: "delete", key: "eventType", prop: "up" })
+        util.handelItem({ items: cfList.singleBtns.addon, action: "delete", key: "eventType", prop: "down" })
+        util.handelItem({ items: cfList.singleBtns.addon, action: "delete", key: "eventType", prop: "top" })
+        util.handelItem({ items: cfList.singleBtns.addon, action: "delete", key: "eventType", prop: "bottom" })
+    }
+
     return cfList
 };
 //#endregion
 //#region setLocalStorageObj:设置一个对象到LocalStorage函数
-util.setLocalStorageObj = function(key, val) {
-        if (util.type(val) == "array" || util.type(val) == "object") { //Q1:数据类型是数组活对虾
-            val = JSON.stringify(val); //Json对象转换Json字符串
-        }
-        localStorage[key] = val
+util.setLocalStorageObj = function (key, val) {
+    if (util.type(val) == "array" || util.type(val) == "object") { //Q1:数据类型是数组活对虾
+        val = JSON.stringify(val); //Json对象转换Json字符串
     }
-    //#endregion
-    //#region getLocalStorageObj:从LocalStorage获取一个对象的函数
-util.getLocalStorageObj = function(key) {
-        if (!localStorage[key]) return false;
-        return JSON.parse(localStorage[key]); //
-    }
-    //#endregion
-    //#region cfList:标准列表的一些配置项
+    localStorage[key] = val
+}
+//#endregion
+//#region getLocalStorageObj:从LocalStorage获取一个对象的函数
+util.getLocalStorageObj = function (key) {
+    if (!localStorage[key]) return false;
+    return JSON.parse(localStorage[key]); //
+}
+//#endregion
+
+
+//#region extendLocalStorageObj:拓展一个LocalStorage对象的函数
+util.extendLocalStorageObj = function (key,extend) {
+  let obj=  util.getLocalStorageObj(key)||{}
+  Object.assign(obj,extend);//合并对象
+  util.setLocalStorageObj(key,obj)//调用：{设置一个对象到LocalStorage}
+}
+//#endregion
+
+//#region cfList:标准列表的一些配置项
 util.cfList = {}
 util.cfList.bBtns = {}
 util.cfList.bBtns.add = {
@@ -817,32 +845,32 @@ util.cfList.sBtns.bottom = {
 };
 //所有的标准版单项按钮数组
 util.cfList.sBtns.arrAllBtns = [util.cfList.sBtns.detail, util.cfList.sBtns.modify, util.cfList.sBtns.copy, util.cfList.sBtns.delete]
-    //排序按钮数组
+//排序按钮数组
 util.cfList.sBtns.arrSortBtns = [util.cfList.sBtns.up, util.cfList.sBtns.down, util.cfList.sBtns.top, util.cfList.sBtns.bottom]
-    //#endregion
-    //#region setObjDefault:给一个对象设置默认属性（但不整个替换对象，并且默认属性优先级低于已有属性）
-util.setObjDefault = function(obj, objDeault) {
-        //for of循环遍历对象，for of不能直接处理对象，本质上是同个Object.keys拼装一个新数组进行辅助
-        for (var key of Object.keys(objDeault)) {
-            if (obj[key] === null || obj[key] === undefined) { //如果属性不存在
-                obj[key] = objDeault[key]
-            }
+//#endregion
+//#region setObjDefault:给一个对象设置默认属性（但不整个替换对象，并且默认属性优先级低于已有属性）
+util.setObjDefault = function (obj, objDeault) {
+    //for of循环遍历对象，for of不能直接处理对象，本质上是同个Object.keys拼装一个新数组进行辅助
+    for (var key of Object.keys(objDeault)) {
+        if (obj[key] === null || obj[key] === undefined) { //如果属性不存在
+            obj[key] = objDeault[key]
         }
     }
-    //#endregion
-    //#region setObj:拓展vue实例的data数据函数
-util.setObj = function(path, extend) {
-        let objOld = lodash.get(this, path);
-        let objNew = lodash.cloneDeep(objOld);
-        if (objNew === null || objNew === undefined) { //如果{000}000
-            objNew = {}
-        }
-        Object.assign(objNew, extend); //合并对象
-        lodash.set(this, path, objNew);
+}
+//#endregion
+//#region setObj:拓展vue实例的data数据函数
+util.setObj = function (path, extend) {
+    let objOld = lodash.get(this, path);
+    let objNew = lodash.cloneDeep(objOld);
+    if (objNew === null || objNew === undefined) { //如果{000}000
+        objNew = {}
     }
-    //#endregion
-    //#region searchCollection:查询静态集合列表函数（支持模糊查询）
-util.searchCollection = function(param = {}) {
+    Object.assign(objNew, extend); //合并对象
+    lodash.set(this, path, objNew);
+}
+//#endregion
+//#region searchCollection:查询静态集合列表函数（支持模糊查询）
+util.searchCollection = function (param = {}) {
     let { findJson = {}, dataBase } = param;
     let paramVague = {}; //模糊查询参数
     let paramEqual = {}; //等值查询参数
@@ -857,7 +885,7 @@ util.searchCollection = function(param = {}) {
     //第1步，先处理等值查询
     let result = lodash.filter(dataBase, paramEqual);
     //第2步，处理模糊查询
-    let searchResult = lodash.filter(result, function(doc) {
+    let searchResult = lodash.filter(result, function (doc) {
         let flag = true;
         for (var prop in paramVague) {
             let flagEach;
@@ -875,7 +903,7 @@ util.searchCollection = function(param = {}) {
 };
 //#endregion
 //#region isNotEmptyArr:判断是否为非空数组的函数
-util.isNotEmptyArr = function(arr) { //函数：{判断是否为非空数组}
+util.isNotEmptyArr = function (arr) { //函数：{判断是否为非空数组}
     let type = util.type(arr); //变量：{类型}
     if (type !== "array") { //如果不是数组
         return false
@@ -884,21 +912,21 @@ util.isNotEmptyArr = function(arr) { //函数：{判断是否为非空数组}
 };
 //#endregion
 //#region isNotEmptyObj:判断是否为非空对象的函数
-util.isNotEmptyObj = function(obj) {
+util.isNotEmptyObj = function (obj) {
     var arr = Object.keys(obj);
     return !!arr.length;
 };
 //#endregion
 
 //#region countProp:返回对象的属性数的函数
-util.countProp = function(obj) {
+util.countProp = function (obj) {
     var arr = Object.keys(obj);
     return arr.length;
 };
 //#endregion
 
 //#region clearObj:清除对象中的空属性（null,undefined,空格等）
-util.clearObj = function(obj) {
+util.clearObj = function (obj) {
     let arrSpec = ["", null, undefined];
     for (var prop in obj) {
         //如果属性值是特殊的空值，删除属性
@@ -918,7 +946,7 @@ util.clearArr = function (arr) {
 //#endregion
 
 //#region ajaxGroupDataSort:调用分组数据排序接口的函数
-util.ajaxGroupDataSort = async function(actionType, doc) {
+util.ajaxGroupDataSort = async function (actionType, doc) {
     let { _id } = doc;
     await axios({
         //请求接口
@@ -929,7 +957,7 @@ util.ajaxGroupDataSort = async function(actionType, doc) {
 };
 //#endregion
 //#region setCookie:cookie中存值函数
-util.setCookie = function({ key, value, cookie }) {
+util.setCookie = function ({ key, value, cookie }) {
     if (!cookie) { //如果cookie串没有指定
         cookie = document.cookie
     }
@@ -944,7 +972,7 @@ util.setCookie = function({ key, value, cookie }) {
 };
 //#endregion
 //#region getCookie: cookie中取值函数
-util.getCookie = function({ key, cookie }) {
+util.getCookie = function ({ key, cookie }) {
     if (!cookie) { //如果cookie串没有指定
         cookie = document.cookie
     }
@@ -957,7 +985,7 @@ util.getCookie = function({ key, cookie }) {
 };
 //#endregion
 //#region delCookie :删除cookie函数
-util.delCookie = function({ key, cookie }) {
+util.delCookie = function ({ key, cookie }) {
     if (!cookie) { //如果cookie串没有指定
         cookie = document.cookie
     }
@@ -971,7 +999,7 @@ util.delCookie = function({ key, cookie }) {
 //#endregion
 //#region longting-nuxt站点新增公共函数
 //函数：{处理分组数据列表数据函数}-使之适用于列表渲染
-util.handleGDataList = function(list) {
+util.handleGDataList = function (list) {
     return list.map(doc => {
         return {
             _id: lodash.get(doc, `targetDoc._id`),
@@ -986,7 +1014,7 @@ util.handleGDataList = function(list) {
     });
 };
 //函数：{根据别名获取子分组数据列表的函数}-更稳定的定位方式
-util.getSonListByAlias = function({ list, alias }) {
+util.getSonListByAlias = function ({ list, alias }) {
     console.log("list:", list);
     console.log("alias:", alias);
     let obj = list.find(doc => doc.targetDoc.alias == alias);
@@ -998,7 +1026,7 @@ util.getSonListByAlias = function({ list, alias }) {
 
 
 //#region inWX:判断是否处于微信浏览器内函数
-util.inWX = function() {
+util.inWX = function () {
     let ua = window.navigator.userAgent.toLowerCase();
     let flag = ua.indexOf("micromessenger") != -1; //变量：{是否在微信浏览器}
     return flag
@@ -1007,13 +1035,13 @@ util.inWX = function() {
 
 
 //#region callWXPay:调用网页微信支付控件的函数-promise化
-util.callWXPay = function(param) {
+util.callWXPay = function (param) {
     var promise = new Promise((resolve, reject) => {
         function onBridgeReady() {
             console.log("onBridgeReady");
             let paramCall = { signType: "MD5", ...param };
             //唤起微信支付控件！！
-            WeixinJSBridge.invoke("getBrandWCPayRequest", paramCall, function(res) {
+            WeixinJSBridge.invoke("getBrandWCPayRequest", paramCall, function (res) {
                 resolve(res);
 
             });
@@ -1035,7 +1063,7 @@ util.callWXPay = function(param) {
 //#endregion
 
 //#region combination:返回多个数组的排列组合结果数组函数
-util.combination = function(arr) {
+util.combination = function (arr) {
     arr.reverse(); //反转
     //函数：{递归排列组合函数}
     function combine(arr) {
@@ -1054,7 +1082,7 @@ util.combination = function(arr) {
 //#endregion
 
 //#region isNullUndefined:判断是否为null或undefind函数
-util.isNullUndefined = function(param) {
+util.isNullUndefined = function (param) {
     return param === null || param === undefined
 };
 
@@ -1062,9 +1090,9 @@ util.isNullUndefined = function(param) {
 
 
 //#region console控制台强化
-if (typeof(console) !== "undefined") { //如果window不存在
+if (typeof (console) !== "undefined") { //如果window不存在
     //函数：{控制台打印转字符串函数}
-    console.logs = function(s) {
+    console.logs = function (s) {
         // console.log(arguments);
         let arrAg = Array.from(arguments); //伪数组转数组
         arrAg = arrAg.map(agm => {
@@ -1082,7 +1110,7 @@ if (typeof(console) !== "undefined") { //如果window不存在
 
 
 //函数：{获取商品价格(区间)的函数}-可能存在多个价格
-util.getGoodsPrice = function(docGoods) {
+util.getGoodsPrice = function (docGoods) {
     let priceSpec;
     if (!docGoods.listSpecPrice) return docGoods.priceSell;
     let arrPrice = docGoods.listSpecPrice.map(doc => {
@@ -1103,10 +1131,14 @@ util.getGoodsPrice = function(docGoods) {
     return priceSpec;
 };
 
+//函数：{根据key/val获取字典标签}
+util.getDictLabel = function (key, val) {
+    return lodash.get(DYDICT[key], `${val}.label`, "");
+};
 
 
 //#region aaaa:000函数
-util.aaaa = function(param) {
+util.aaaa = function (param) {
     return 1111
 };
 //#endregion

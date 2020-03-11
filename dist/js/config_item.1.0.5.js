@@ -1087,6 +1087,13 @@ function getFormMenuGPower(_ref) {
             type: "checkbox",
             default: false,
             options: [{ value: "1", label: "删除" }]
+        }, {
+            label: "",
+            prop: "sort",
+            col_span: 3,
+            type: "checkbox",
+            default: false,
+            options: [{ value: "1", label: "移位" }]
         }]
     };
 }
