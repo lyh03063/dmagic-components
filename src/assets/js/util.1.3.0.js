@@ -674,6 +674,14 @@ util.getTimeRandom = function () {
     return moment().format("YYYYMMDDHHmmSSsss_") + lodash.random(99999)
 };
 //#endregion
+
+//#region getTimeStamp:获取当前的时间戳
+util.getTimeStamp = function() {
+    return Math.round(new Date().getTime() / 1000)
+};
+//#endregion
+
+
 //#region handelItem:处理字段数组的某个字段配置的函数
 util.handelItem = function (cf) {
     let { action, items, prop, itemNew, key = "prop" } = cf;

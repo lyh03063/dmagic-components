@@ -14,11 +14,15 @@ import goods_specs from "./demo/goods_specs.vue";
 import goods_specs_2 from "./demo/goods_specs_2.vue";
 import goods_specs_front from "./demo/goods_specs_front.vue";
 import goods_specs_front_2 from "./demo/goods_specs_front_2.vue";
+import calendar1 from "./demo/calendar1.vue";
 
 import goods_cart from "./demo/goods_cart.vue";
 
+import tool_old_cf_list from "./demo/tool_old_cf_list.vue";
+
+
 export default {
-  components: { pannel, list_flex_res,goods_specs,goods_specs_2,goods_specs_front,goods_specs_front_2,goods_cart },
+  components: { pannel, list_flex_res,goods_specs,goods_specs_2,goods_specs_front,goods_specs_front_2,goods_cart,calendar1,tool_old_cf_list },
 
   data() {
     return {

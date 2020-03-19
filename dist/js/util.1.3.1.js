@@ -1324,6 +1324,31 @@ util.getDictLabel = function (key, val) {
     return lodash.get(DYDICT[key], val + ".label", "");
 };
 
+//函数：{改造列表字段配置形式的函数（字符串转对象）}-dm列表组件专用
+//让列表的配置更简洁且能跟踪错误，避免像之前那样很难定位错误！！！！
+util.reformCFListItem = function (cfList) {
+    var map = {
+        columns: "COLUMNS", searchFormItems: "F_ITEMS", detailItems: "D_ITEMS", formItems: "F_ITEMS"
+    };
+    var arrNeed = Object.keys(map);
+    arrNeed.forEach(function (prop) {
+        //循环：{需要处理的字段名数组}
+        var keyPub = map[prop];
+        var arrKey = cfList[prop];
+        if (!keyPub) return console.error("\u627E\u4E0D\u5230" + prop + "\u5BF9\u5E94\u7684\u516C\u5171\u53D8\u91CF");
+
+        var objTarget = window[map[prop]];
+        var arr2 = arrKey.map(function (item) {
+            if (!objTarget[item]) {
+                //如果字段不存在
+                return console.error(keyPub + "." + item + "\u5B57\u6BB5\u4E0D\u5B58\u5728");
+            }
+            return objTarget[item];
+        });
+        cfList[prop] = arr2;
+    });
+};
+
 //#region aaaa:000函数
 util.aaaa = function (param) {
     return 1111;

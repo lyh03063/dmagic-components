@@ -8,7 +8,7 @@ Vue.prototype.$moment = moment //让vue实例中可访问$moment
 import "./assets/js/util.1.3.0.js" //改成跟线上版同步
 // import "./assets/js/config_detail.1.0.5.js"
 // import "./assets/js/config_column.1.0.6.js"
-import "./assets/js/config_item.1.0.5.js"
+import "./assets/js/config_item.1.0.7.js"
 import "./assets/js/public.js"
 
 

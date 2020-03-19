@@ -55,7 +55,9 @@ let arrDemo = [
   "list_flex_res",
   "goods_cart",
   "goods_specs_2",
-  "goods_specs_front_2"
+  "goods_specs_front_2",
+  "calendar1",
+  "tool_old_cf_list"
 ];
 
 import dm_dynamic_form from "./components/list-data/dynamic-form.vue";

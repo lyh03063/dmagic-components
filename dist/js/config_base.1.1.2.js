@@ -6,6 +6,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
+var _systemId = PUB._systemId;
+
 //#region window.FN函数库
 window.FN = {}; //存放本站公共函数的对象
 //函数：{ajax根据关键词获取关联数据列表的函数}
@@ -330,7 +332,17 @@ PUB.listCFCommon3 = {
     url: PUB.listUrl,
     columnOperate: { "min-width": 230 },
     //列表单项操作按钮的配置
-    singleBtns: PUB.singleBtns_copy_link
+    singleBtns: PUB.singleBtns_copy_link,
+    //objParamAddon列表接口的附加参数
+    objParamAddon: {
+        _systemId: _systemId,
+        _dataType: _dataType
+    },
+    //公共的附加参数，针对所有接口
+    paramAddonPublic: {
+        _systemId: _systemId,
+        _dataType: _dataType
+    }
 };
 PUB.singleBtns4 = {
     addon: [].concat(_toConsumableArray(util.cfList.sBtns.arrAllBtns), [sBtnDetail, sBtnLink])
@@ -339,7 +351,17 @@ PUB.singleBtns4 = {
     url: PUB.listUrl,
     columnOperate: { "min-width": 290 },
     //列表单项操作按钮的配置
-    singleBtns: PUB.singleBtns4
+    singleBtns: PUB.singleBtns4,
+    //objParamAddon列表接口的附加参数
+    objParamAddon: {
+        _systemId: _systemId,
+        _dataType: _dataType
+    },
+    //公共的附加参数，针对所有接口
+    paramAddonPublic: {
+        _systemId: _systemId,
+        _dataType: _dataType
+    }
     //函数：{补充熟悉度ajax配置（动态数据字典）函数}
 };window.setFamiliarityAjaxCF = function (listCF) {
     var idKey = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "_id";
@@ -571,7 +593,6 @@ MIX.listGroupData = {
 };
 //#endregion
 
-var _systemId = PUB._systemId;
 
 //#region 【多】标准列表页配置
 //#region 管理员列表页

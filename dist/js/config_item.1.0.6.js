@@ -27,9 +27,21 @@ DYDICT.dataType = lodash.keyBy(DYDICT.arr_dataType, 'value');
 DYDICT.arr_payStatus = [{ label: "未支付", value: 1 }, { label: "已支付", value: 2 }, { label: "申请退款中", value: 3 }, { label: "已退款", value: 4 }];
 DYDICT.payStatus = lodash.keyBy(DYDICT.arr_payStatus, 'value');
 
-DYDICT.arr_aaaa = [];
-DYDICT.arr_aaaa = [];
-DYDICT.arr_aaaa = [];
+DYDICT.arr_prior = [{ value: 1, label: "很高" }, { value: 2, label: "高" }, { value: 3, label: "中" }, { value: 4, label: "低" }];
+DYDICT.prior = lodash.keyBy(DYDICT.arr_prior, 'value');
+
+DYDICT.arr_taskType = [{ value: 1, label: "新需求" }, { value: 2, label: "bug" }, { value: 3, label: "其他" }];
+
+DYDICT.taskType = lodash.keyBy(DYDICT.arr_taskType, 'value');
+
+DYDICT.arr_complete = [{ value: 0, label: "0%" }, { value: 0.1, label: "10%" }, { value: 0.2, label: "20%" }, { value: 0.3, label: "30%" }, { value: 0.4, label: "40%" }, { value: 0.5, label: "50%" }, { value: 0.6, label: "60%" }, { value: 0.7, label: "70%" }, { value: 0.8, label: "80%" }, { value: 0.9, label: "90%" }, { value: 1, label: "100%" }];
+DYDICT.complete = lodash.keyBy(DYDICT.arr_complete, 'value');
+
+DYDICT.arr_complete2 = [{ value: 1, label: "未开始" }, //complete==0
+{ value: 2, label: "进行中" }, //complete>0&&complete>1
+{ value: 3, label: "已完成" }];
+DYDICT.complete2 = lodash.keyBy(DYDICT.arr_complete2, 'value');
+
 DYDICT.html_api_category = {
     ajax: {
         param: { _systemId: _systemId, _dataType: "html_api_category" },
@@ -78,8 +90,6 @@ DYDICT.order_user = {
     idColumn2: "openid"
 };
 
-DYDICT.aaa = 1111;
-DYDICT.aaa = 1111;
 //#endregion
 
 window.D_ITEMS = {}; //公共数据字典对象
@@ -775,6 +785,7 @@ COLUMNS.link = _extends({}, D_ITEMS.link, { width: 120 });
 F_ITEMS.link = _extends({}, D_ITEMS.link, { type: "input" });
 
 //#endregion
+
 
 D_ITEMS.item_prop = {
     label: "prop",
@@ -1519,6 +1530,7 @@ window.cfSelectList_note = {
     //#endregion
 
 
+    //#region 用户信息
 };D_ITEMS.trueName = {
     label: "真实姓名",
     prop: "trueName"
@@ -1526,6 +1538,11 @@ window.cfSelectList_note = {
 };
 COLUMNS.trueName = _extends({}, D_ITEMS.trueName, { width: 70 });
 F_ITEMS.trueName = _extends({}, D_ITEMS.trueName);
+
+//#endregion
+
+
+//#region 订单信息
 
 D_ITEMS.deliveryDesc = {
     label: "配送说明",
@@ -1555,3 +1572,138 @@ D_ITEMS.priceSellSection = {
 };
 COLUMNS.priceSellSection = _extends({}, D_ITEMS.priceSellSection, { width: 70 });
 F_ITEMS.priceSellSection = _extends({}, D_ITEMS.deliverpriceSellSectionyDesc, { type: "text" });
+//#endregion
+
+
+//#region旧版信息系统
+
+
+//#region 任务类型
+D_ITEMS.taskType = {
+    label: "任务类型",
+    prop: "taskType"
+};
+COLUMNS.taskType = _extends({}, D_ITEMS.taskType, { width: 70,
+    formatter: function formatter(row) {
+        return lodash.get(DYDICT.taskType, row.taskType + ".label");
+    }
+});
+F_ITEMS.taskType = _extends({}, D_ITEMS.taskType, { type: "select", options: DYDICT.arr_taskType });
+
+F_ITEMS.taskType_radio = _extends({}, D_ITEMS.taskType, { type: "radio", default: 1, options: DYDICT.arr_taskType });
+//#endregion
+
+
+//#region 优先级
+D_ITEMS.prior = {
+    label: "优先级",
+    prop: "prior"
+};
+COLUMNS.prior = _extends({}, D_ITEMS.prior, { width: 80,
+    formatter: function formatter(row) {
+        return lodash.get(DYDICT.prior, row.prior + ".label");
+    }
+});
+F_ITEMS.prior = _extends({}, D_ITEMS.prior, { type: "select", options: DYDICT.arr_prior });
+F_ITEMS.prior_radio = _extends({}, D_ITEMS.prior, { type: "radio", options: DYDICT.arr_prior });
+//#endregion
+
+//#region 完成度
+D_ITEMS.complete = {
+    label: "完成度",
+    prop: "complete"
+};
+COLUMNS.complete = _extends({}, D_ITEMS.complete, { width: 80,
+    slot: "slot_column_complete"
+});
+F_ITEMS.complete = _extends({}, D_ITEMS.complete, { type: "slider",
+    default: 0,
+    options: DYDICT.arr_complete
+});
+//#endregion
+
+//#region 预估耗时
+D_ITEMS.predictTime = {
+    label: "预估耗时",
+    prop: "predictTime"
+};
+COLUMNS.predictTime = _extends({}, D_ITEMS.predictTime, { width: 70 });
+F_ITEMS.predictTime = _extends({}, D_ITEMS.predictTime, { type: "text",
+    frequency: { options: [{ value: 0.3 }, { value: 0.5 }, { value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }, { value: 5 }, { value: 8 }, { value: 10 }] }
+});
+//#endregion
+
+//#region 实耗时
+D_ITEMS.actualTime = {
+    label: "实耗时",
+    prop: "actualTime"
+};
+COLUMNS.actualTime = _extends({}, D_ITEMS.actualTime, { width: 70 });
+F_ITEMS.actualTime = _extends({}, D_ITEMS.actualTime, { type: "text",
+    frequency: { options: [{ value: 0.3 }, { value: 0.5 }, { value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }, { value: 5 }, { value: 8 }, { value: 10 }] }
+});
+//#endregion
+
+//#region 负责人
+D_ITEMS.personCharge = {
+    label: "负责人",
+    prop: "personCharge"
+};
+COLUMNS.personCharge = _extends({}, D_ITEMS.personCharge, { width: 70 });
+F_ITEMS.personCharge = _extends({}, D_ITEMS.personCharge, { type: "select",
+    ajax: {
+        param: { _systemId: _systemId, _dataType: "data_type" },
+        url: "/info/getCommonList",
+        keyLabel: "nickName",
+        keyValue: "userName"
+    }
+});
+//#endregion
+
+//#region 0000
+D_ITEMS.aaaa = {
+    label: "0000",
+    prop: "aaaa"
+};
+COLUMNS.aaaa = _extends({}, D_ITEMS.aaaa, { width: 70 });
+F_ITEMS.aaaa = _extends({}, D_ITEMS.aaaa, { type: "input" });
+//#endregion
+
+//#region 0000
+D_ITEMS.aaaa = {
+    label: "0000",
+    prop: "aaaa"
+};
+COLUMNS.aaaa = _extends({}, D_ITEMS.aaaa, { width: 70 });
+F_ITEMS.aaaa = _extends({}, D_ITEMS.aaaa, { type: "input" });
+//#endregion
+
+//#region 0000
+D_ITEMS.aaaa = {
+    label: "0000",
+    prop: "aaaa"
+};
+COLUMNS.aaaa = _extends({}, D_ITEMS.aaaa, { width: 70 });
+F_ITEMS.aaaa = _extends({}, D_ITEMS.aaaa, { type: "input" });
+//#endregion
+
+//#region 0000
+D_ITEMS.aaaa = {
+    label: "0000",
+    prop: "aaaa"
+};
+COLUMNS.aaaa = _extends({}, D_ITEMS.aaaa, { width: 70 });
+F_ITEMS.aaaa = _extends({}, D_ITEMS.aaaa, { type: "input" });
+//#endregion
+
+//#region 0000
+D_ITEMS.aaaa = {
+    label: "0000",
+    prop: "aaaa"
+};
+COLUMNS.aaaa = _extends({}, D_ITEMS.aaaa, { width: 70 });
+F_ITEMS.aaaa = _extends({}, D_ITEMS.aaaa, { type: "input" });
+//#endregion
+
+
+//#endregion

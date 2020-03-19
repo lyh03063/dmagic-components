@@ -1,4 +1,6 @@
 
+let _systemId = PUB._systemId;
+
 //#region window.FN函数库
 window.FN = {}//存放本站公共函数的对象
 //函数：{ajax根据关键词获取关联数据列表的函数}
@@ -295,6 +297,16 @@ PUB.listCFCommon3 = {
     columnOperate: { "min-width": 230 },
     //列表单项操作按钮的配置
     singleBtns: PUB.singleBtns_copy_link,
+    //objParamAddon列表接口的附加参数
+    objParamAddon: {
+        _systemId,
+        _dataType
+    },
+    //公共的附加参数，针对所有接口
+    paramAddonPublic: {
+        _systemId,
+        _dataType
+    },
 }
 PUB.singleBtns4 = {
     addon: [
@@ -309,6 +321,16 @@ PUB.listCFCommon4 = {
     columnOperate: { "min-width": 290 },
     //列表单项操作按钮的配置
     singleBtns: PUB.singleBtns4,
+    //objParamAddon列表接口的附加参数
+    objParamAddon: {
+        _systemId,
+        _dataType
+    },
+    //公共的附加参数，针对所有接口
+    paramAddonPublic: {
+        _systemId,
+        _dataType
+    },
 }
 //函数：{补充熟悉度ajax配置（动态数据字典）函数}
 window.setFamiliarityAjaxCF = function (listCF, idKey = "_id") {
@@ -428,7 +450,7 @@ MIX.listGroupData = {
 }
 //#endregion
 
-let _systemId = PUB._systemId;
+
 
 //#region 【多】标准列表页配置
 //#region 管理员列表页
