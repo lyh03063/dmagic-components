@@ -69,19 +69,18 @@ export default {
   data() {
     return {
       codeSrc: ` 
-      {
-
   columns: [COLUMNS.title_fixed],
- 
-}`,
+`,
       codeResult: ""
     };
   },
   methods: {
     transform() {
-      if (!T.codeSrc) return;
+       try {
+          if (!T.codeSrc) return;
+        T.codeResult = "";
       let obj;
-      eval(` obj =${T.codeSrc}`);
+      eval(` obj ={${T.codeSrc}}`);
       console.log("obj:", obj);
       let objRS = util.oldCFListToNew(obj);
 
@@ -110,6 +109,12 @@ export default {
       str2 += `\nutil.reformCFListItem(PUB.listCF.aaaaaaaaa)`;
 
       T.codeResult = str2;
+      } catch (err) {
+        this.$message.error(`${err.toString}`);
+        console.log(`${err.toString}`);
+      }
+
+    
     }
   },
   beforeCreate() {

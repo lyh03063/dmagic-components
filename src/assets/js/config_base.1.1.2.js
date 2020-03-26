@@ -436,6 +436,27 @@ MIX.listGroupData = {
                 data: ajaxParam //传递参数
             });
         },
+        //函数：{增加排除当前分组数据的查询条件}
+        async withOutCurrGroup() {
+            /****************************补充排除当前所属分组的查询参数-START****************************/
+            let { cfList } = this.cfSelectList2;
+            cfList.objParamAddon = cfList.objParamAddon || {};
+            cfList.objParamAddon.findJson = cfList.objParamAddon.findJson || {};
+            let findjsonAdd = {
+                arrGroup: {
+                    $elemMatch: {
+                        _idRel: {
+                            $ne: this.groupId
+                        }
+                    }
+                }
+            }; //补充排除id的查询条件
+            cfList.objParamAddon.findJson = {
+                ...cfList.objParamAddon.findJson,
+                ...findjsonAdd
+            };
+            /****************************补充排除当前所属分组的查询参数-END****************************/
+        },
 
     },
     async created() {

@@ -402,8 +402,8 @@ export default {
     selectionChange(val) {
       if (this.cf.isMultipleSelect) return;
       if (val.length > 1) {
-        this.$refs.table.clearSelection();
-        this.$refs.table.toggleRowSelection(val.pop());
+        this.$refs.table.clearSelection();//清除选择
+        this.$refs.table.toggleRowSelection(val.pop());//重新选中一条新数据
       }
     },
     //获取提示样式的函数

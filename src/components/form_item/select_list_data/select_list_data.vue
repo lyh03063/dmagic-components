@@ -15,7 +15,7 @@
       ref="input_help"
       style="width:0px;height:0px;overflow:hidden"
     ></el-input>
-    <el-button plain @click="isShowDialog=true" size="mini">选择{{cf.dataName||"数据"}}</el-button>
+    <el-button plain @click="showDialog" size="mini">选择{{cf.dataName||"数据"}}</el-button>
     <div class="MT8" v-if="cf.multiple&&!cf.hideCollection">
       <collection
         v-model="valueNeed"
@@ -33,7 +33,8 @@
     <el-dialog
       custom-class="n-el-dialog"
       width="95%"
-      :title="'选择'+cf.dataName||'数据'"
+      top="5vh"
+      :title="`选择${cf.dataName||'数据'}`"
       :close-on-press-escape="false"
       :close-on-click-modal="false"
       :append-to-body="true"
@@ -55,6 +56,7 @@
 // import dm_list_data from "../../components/list-data/list-data.vue";
 import collection from "../../../components/form_item/collection/index.vue";
 export default {
+  mixins: [MIX.form_item], //混入
   components: { collection },
   props: {
     cf: {
@@ -65,7 +67,7 @@ export default {
     }
   },
   name: "select_list_data",
-  mixins: [MIX.form_item], //混入
+
   data() {
     return {
       label: null, //数据标题
@@ -75,6 +77,34 @@ export default {
     };
   },
   methods: {
+    showDialog() {
+      this.isShowDialog = true; //打开弹窗
+      console.log("this.valueNeed:", this.valueNeed);
+
+     
+
+      /****************************在列表查询参数中排除已选的数据-START****************************/
+      {
+        let arrIdWithOut; //变量：{需要排除的id数组}，避免重复显示和添加
+        let idKey = this.cf.valueKey; //数据键名
+        if (this.valueNeed.length) {
+          //如果已选数据存在
+          arrIdWithOut = this.valueNeed.map(doc => doc[idKey]);
+        }
+        if (!arrIdWithOut) return;
+
+        this.cfList.objParamAddon = this.cfList.objParamAddon || {};
+        this.cfList.objParamAddon.findJson =
+          this.cfList.objParamAddon.findJson || {};
+        let findjsonAdd = { [idKey]: { $nin: arrIdWithOut } }; //补充排除id的查询条件
+        this.cfList.objParamAddon.findJson = {
+          ...this.cfList.objParamAddon.findJson,
+          ...findjsonAdd
+        };
+      }
+
+      /****************************在列表查询参数中排除已选的数据-END****************************/
+    },
     //函数：{确认选择数据函数}
     async confirmSelect() {
       //获取选中的数据，此处可优化，使用selection-change事件
@@ -116,7 +146,7 @@ export default {
 
       this.isShowDialog = false; //关闭弹窗
 
-      this.$emit("select",this.valueNeed);//抛出事件并传递数据
+      this.$emit("select", this.valueNeed); //抛出事件并传递数据
 
       // await this.$nextTick(); //延迟到视图更新
       //       this.$parent.$parent.$forceUpdate()//强制视图更新
@@ -154,6 +184,9 @@ export default {
       //如果{value}不存在
       this.valueNeed = "";
     }
+    this.cfList.isShowBreadcrumb = false; //隐藏面包屑导航
+    this.cfList.pageSize = 10; //隐藏面包屑导航
+    this.cfList.focusMenu = false; //不聚焦菜单
   },
   async mounted() {
     this.ajaxGetLabel(); //调用：{ajax获取label函数}

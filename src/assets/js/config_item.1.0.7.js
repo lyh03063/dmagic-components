@@ -1803,7 +1803,7 @@ let list_common_note = { "idKey": "_id", "pageSize": 20, "listIndex": "list_note
 
 
 window.cfSelectList_note = {
-    hideCollection: true,
+    hideCollection: true,//隐藏collection
     dataName: "笔记(不回显)",
     valueKey: "_id",
     labelKey: "title",
@@ -1971,7 +1971,7 @@ D_ITEMS.personCharge = {
 };
 COLUMNS.personCharge = { ...D_ITEMS.personCharge, width: 70, };
 F_ITEMS.personCharge = {
-    ...D_ITEMS.personCharge, type: "select",multiple: true, //多选
+    ...D_ITEMS.personCharge, type: "select", multiple: true, //多选
     ajax: {
         param: { _systemId, _dataType: "data_type" },
         url: "/info/getCommonList",
@@ -2033,6 +2033,17 @@ F_ITEMS.refundStaus = {
     options: DYDICT.arr_payStatus
 };
 
+
+
+D_ITEMS.relNoteList = {
+    label: "相关笔记列表",
+    prop: "relNoteList"
+};
+COLUMNS.relNoteList = { ...D_ITEMS.relNoteList, width: 120 };
+
+F_ITEMS.relNoteList = {
+    ...D_ITEMS.relNoteList
+};
 
 
 

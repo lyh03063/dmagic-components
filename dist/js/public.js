@@ -2,7 +2,19 @@
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+window.PUB = window.PUB || {};
+PUB.domain = "http://localhost:3000";
+//PUB.domain = 'http://test.dmagic.cn'
+//PUB.domain = "https://www.dmagic.cn"
+PUB.urlUpload = "https://up-z2.qiniup.com"; //七牛云上传地址（域名）
+PUB.urlGetQiniuToken = PUB.domain + "/api_third_part/get_qiniu_token?scope=dmagic";
+PUB.systemName = "前端学习系统";
+PUB.KeySys = "api";
+var _systemId = "sys_" + PUB.KeySys;
+PUB._systemId = _systemId;
+
 window.FN = window.FN || {};
+
 //函数：{获取规格链id函数}
 FN.getIdSpecChian = function (arrSpecSelected) {
     var arrId = arrSpecSelected.map(function (doc) {
