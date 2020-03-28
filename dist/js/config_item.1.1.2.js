@@ -1,6 +1,6 @@
 "use strict";
 
-var _F_ITEMS$extend, _extends2;
+var _F_ITEMS$extend;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -1721,15 +1721,20 @@ COLUMNS.relNoteList = _extends({}, D_ITEMS.relNoteList, { width: 120 });
 F_ITEMS.relNoteList = _extends({}, D_ITEMS.relNoteList);
 
 //#region 加盟商Id
-D_ITEMS.franchiseeId = {
+
+var franchiseeId = {
     label: "加盟商",
-    prop: "franchiseeId",
-    slot: 'slot_detail_item_franchiseeId'
+    prop: "franchiseeId"
 };
-COLUMNS.franchiseeId = _extends({}, D_ITEMS.franchiseeId, (_extends2 = { width: 70 }, _defineProperty(_extends2, "width", 100), _defineProperty(_extends2, "formatter", function formatter(rowData) {
-    return lodash.get(rowData, "franchiseeDoc.name");
-}), _extends2));
-F_ITEMS.franchiseeId = _extends({}, D_ITEMS.franchiseeId, { type: "select",
+D_ITEMS.franchiseeId = _extends({}, franchiseeId, {
+    slot: 'slot_detail_item_franchiseeId'
+});
+COLUMNS.franchiseeId = _extends({}, franchiseeId, { width: 100,
+    formatter: function formatter(rowData) {
+        return lodash.get(rowData, "franchiseeDoc.name");
+    }
+});
+F_ITEMS.franchiseeId = _extends({}, franchiseeId, { type: "select",
     ajax: {
         url: "/crossList?page=tangball_franchisee",
         keyLabel: "name",
@@ -1749,7 +1754,7 @@ COLUMNS.joinTime = _extends({}, D_ITEMS.joinTime, { width: 130,
     }
 });
 F_ITEMS.joinTime_search = _extends({}, D_ITEMS.joinTime, { type: "time_period" });
-F_ITEMS.joinTime = _extends({}, D_ITEMS.joinTime, { type: "time" });
+F_ITEMS.joinTime = _extends({}, D_ITEMS.joinTime, { type: "date" });
 //#endregion
 
 //#region 场馆名称
@@ -1800,28 +1805,33 @@ D_ITEMS.phoneNumber = {
     prop: "phoneNumber"
 };
 COLUMNS.phoneNumber = _extends({}, D_ITEMS.phoneNumber, { width: 140 });
-F_ITEMS.phoneNumber = _extends({}, D_ITEMS.phoneNumber, { type: "input" });
+F_ITEMS.phoneNumber = _extends({}, D_ITEMS.phoneNumber, { type: "input",
+    rules: [{ required: true, message: "不能为空" }]
+});
 //#endregion
 
 
 //#region 相册
-D_ITEMS.album = {
+var album = {
     label: "相册",
-    prop: "album",
-    slot: "slot_detail_item_album"
+    prop: "album"
+
 };
+D_ITEMS.album = _extends({}, album, {
+    slot: "slot_detail_item_album"
+});
 COLUMNS.album = _extends({}, D_ITEMS.album, { width: 70 });
 
-F_ITEMS.album = _extends({}, D_ITEMS.album, {
+F_ITEMS.album = _extends({}, album, {
     type: "upload",
     col_span: 24 //控制显示一行多列
     // tips: "可上传多张图"
 });
 
-D_ITEMS.albumVenue = _extends({}, D_ITEMS.album, {
+D_ITEMS.albumVenue = _extends({}, album, {
     slot: "slot_detail_item_album"
 });
-F_ITEMS.albumVenue = _extends({}, D_ITEMS.album, {
+F_ITEMS.albumVenue = _extends({}, album, {
     type: "upload",
     tips: "图片尺寸比例最好保持在1 : 0.8，建议尺寸：宽500px，高400px"
 });

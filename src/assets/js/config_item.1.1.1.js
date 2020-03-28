@@ -2059,20 +2059,24 @@ F_ITEMS.relNoteList = {
 
 
 //#region 加盟商Id
-D_ITEMS.franchiseeId = {
+
+let franchiseeId={
     label: "加盟商",
-    prop: "franchiseeId",
+    prop: "franchiseeId"
+}
+D_ITEMS.franchiseeId = {
+    ...franchiseeId,
     slot: 'slot_detail_item_franchiseeId'
 };
 COLUMNS.franchiseeId = {
-    ...D_ITEMS.franchiseeId, width: 70, width: 100,
+    ...franchiseeId, width: 100,
     formatter: function (rowData) {
         return lodash.get(rowData, `franchiseeDoc.name`);
 
     }
 };
 F_ITEMS.franchiseeId = {
-    ...D_ITEMS.franchiseeId, type: "select",
+    ...franchiseeId, type: "select",
     ajax: {
         url: "/crossList?page=tangball_franchisee",
         keyLabel: "name",
@@ -2093,7 +2097,7 @@ COLUMNS.joinTime = {
     }
 };
 F_ITEMS.joinTime_search = { ...D_ITEMS.joinTime, type: "time_period" };
-F_ITEMS.joinTime = { ...D_ITEMS.joinTime, type: "time" };
+F_ITEMS.joinTime = { ...D_ITEMS.joinTime, type: "date" };
 //#endregion
 
 //#region 场馆名称
@@ -2147,7 +2151,10 @@ D_ITEMS.phoneNumber = {
     prop: "phoneNumber",
 };
 COLUMNS.phoneNumber = { ...D_ITEMS.phoneNumber, width: 140, };
-F_ITEMS.phoneNumber = { ...D_ITEMS.phoneNumber, type: "input" };
+F_ITEMS.phoneNumber = {
+    ...D_ITEMS.phoneNumber, type: "input",
+    rules: [{ required: true, message: "不能为空" }]
+};
 //#endregion
 
 
@@ -2156,26 +2163,30 @@ F_ITEMS.phoneNumber = { ...D_ITEMS.phoneNumber, type: "input" };
 
 
 //#region 相册
-D_ITEMS.album = {
+let album={
     label: "相册",
     prop: "album",
+    
+}
+D_ITEMS.album = {
+    ...album,
     slot: "slot_detail_item_album"
 };
 COLUMNS.album = { ...D_ITEMS.album, width: 70, };
 
 F_ITEMS.album = {
-    ...D_ITEMS.album,
+    ...album,
     type: "upload",
     col_span: 24, //控制显示一行多列
     // tips: "可上传多张图"
 };
 
 D_ITEMS.albumVenue = {
-    ...D_ITEMS.album,
+    ...album,
     slot: "slot_detail_item_album"
 };
 F_ITEMS.albumVenue = {
-    ...D_ITEMS.album,
+    ...album,
     type: "upload",
     tips: "图片尺寸比例最好保持在1 : 0.8，建议尺寸：宽500px，高400px"
 };
