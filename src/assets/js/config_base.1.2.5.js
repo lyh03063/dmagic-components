@@ -377,8 +377,15 @@ MIX.listGroupData = {
     methods: {
         //函数：{单条数据操作事件}
         async singleEvent(actionType, doc) {
-            await util.ajaxGroupDataSort(actionType, doc);
-            this.$refs.listData.getDataList(); //列表更新
+            let arrNeedRefresh = ["up", "down", "top", "bottom"]
+            if (arrNeedRefresh.includes[actionType]) {//如果{000}000
+                await util.ajaxGroupDataSort(actionType, doc);
+                this.$refs.listData.getDataList(); //列表更新
+            }
+
+            if (actionType == "edit_entity") {//如果{000}000
+                alert("edit_entity");
+            }
         },
         //函数：{选择并添加数据后的ajax操作函数}
         afterSelect: FN.ajaxGroupAddSelectData,

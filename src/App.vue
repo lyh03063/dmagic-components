@@ -57,7 +57,8 @@ let arrDemo = [
   "goods_specs_2",
   "goods_specs_front_2",
   "calendar1",
-  "tool_old_cf_list"
+  "tool_old_cf_list",
+  "edit_list_data"
 ];
 
 import dm_dynamic_form from "./components/list-data/dynamic-form.vue";

@@ -410,17 +410,32 @@ MIX.listGroupData = {
         //函数：{单条数据操作事件}
         singleEvent: function () {
             var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(actionType, doc) {
+                var arrNeedRefresh;
                 return regeneratorRuntime.wrap(function _callee4$(_context4) {
                     while (1) {
                         switch (_context4.prev = _context4.next) {
                             case 0:
-                                _context4.next = 2;
+                                arrNeedRefresh = ["up", "down", "top", "bottom"];
+
+                                if (!arrNeedRefresh.includes[actionType]) {
+                                    _context4.next = 5;
+                                    break;
+                                }
+
+                                _context4.next = 4;
                                 return util.ajaxGroupDataSort(actionType, doc);
 
-                            case 2:
+                            case 4:
                                 this.$refs.listData.getDataList(); //列表更新
 
-                            case 3:
+                            case 5:
+
+                                if (actionType == "edit_entity") {
+                                    //如果{000}000
+                                    alert("edit_entity");
+                                }
+
+                            case 6:
                             case "end":
                                 return _context4.stop();
                         }

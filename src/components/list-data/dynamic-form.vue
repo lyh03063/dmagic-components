@@ -284,7 +284,7 @@ export default {
     });
 
     let ajaxParam = {
-      [this.cf.idKey == "_id" ? "_id" : "id"]: this.value[this.cf.idKey]
+      [this.cf.idKey == "_id" ? "_id" : "id"]: this.value[this.cf.idKey]//id参数存于表单数据中
     };
     Object.assign(ajaxParam, this.cf.paramAddonInit); //合并对象
 

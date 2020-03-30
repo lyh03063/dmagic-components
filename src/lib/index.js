@@ -11,6 +11,7 @@ import dm_pannel from '../components/common/pannel/index.vue'
 
 import dm_list_flex_res from '../components/common/list_flex_res/index.vue'
 import dm_collection from '../components/form_item/collection/index.vue'
+import dm_dialog_edit from '../components/list-data/dialog_edit.vue'
 
 
 import { codemirror } from "vue-codemirror";
@@ -42,7 +43,7 @@ const Components = {
   dm_loading,dm_ajax_populate,dm_space,
   dm_dynamic_form,dm_list_data,
   dm_codemirror:codemirror,
-  dm_select_list_data,dm_collection
+  dm_select_list_data,dm_collection,dm_dialog_edit
 }
 
 

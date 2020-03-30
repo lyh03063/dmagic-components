@@ -1870,7 +1870,7 @@ F_ITEMS.venueOtherInfo = _extends({}, D_ITEMS.venueOtherInfo, { default: {}, //�
 //#region 地图位置信息
 D_ITEMS.positionInfo = {
     label: "地图位置信息",
-    prop: "aaaa"
+    prop: "extend"
 };
 COLUMNS.positionInfo = _extends({}, D_ITEMS.positionInfo, { width: 70 });
 F_ITEMS.positionInfo = _extends({}, D_ITEMS.positionInfo, { default: {}, //默认值必须要有，否则新增的时候会出问题

@@ -29,7 +29,7 @@ export default {
           detail: "/info/commonDetail",
           delete: "/info/commonDelete" //删除接口
         },
-        findJsonDefault: { a: 1 },
+        findJsonDefault: {  },
         //objParamAddon列表接口的附加参数
         objParamAddon: {
           _systemId,

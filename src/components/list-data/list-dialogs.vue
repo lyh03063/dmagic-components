@@ -347,8 +347,7 @@ export default {
       this.$emit("after-show-Dialog-Modify", row);
       this.beforeModify = row;
 
-      // let str = JSON.stringify(row); //转换成字符串
-      // let rowNew = JSON.parse(str); //转换成对象
+    
 
       let rowNew = lodash.cloneDeep(row); //深拷贝
 
