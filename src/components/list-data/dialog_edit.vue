@@ -94,7 +94,6 @@ export default {
       this.cf.visible = false; //关闭弹窗
       //如果{增删改操作后是否自动刷新}为真
       if (this.cf.isRefreshAfterModify) {
-        //cf.isRefreshAfterCUD
         // this.$parent.getDataList(); //更新数据列表-暂时去掉
       }
       this.$emit("after-modify", _data, this.beforeModify); //触发外部事件
@@ -105,12 +104,7 @@ export default {
       let style = { padding: "10px 10px 10px 100px", color: "#f60" };
       return Object.assign(style, styleAdd); //合并对象
     },
-    //函数：{000函数}
-    aaaaaa: async function() {},
-    aaaaaa: async function() {},
-    aaaaaa: async function() {},
-    aaaaaa: async function() {},
-    aaaaaa: async function() {}
+   
   },
   created() {
     if (this.cf.dataIdModify) {
