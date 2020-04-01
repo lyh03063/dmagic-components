@@ -957,18 +957,13 @@ COLUMNS.category_multiple = _extends({}, D_ITEMS.category, {
 
 //#endregion
 
-//#region 网址
-
-
-//#endregion
-//#region 笔记
-
-
-//#endregion
-
 
 //#region dm组件库用到
 
+D_ITEMS.name = {
+    label: "名称",
+    prop: "name"
+};
 
 COLUMNS.name = _extends({}, D_ITEMS.name, {
     width: 200

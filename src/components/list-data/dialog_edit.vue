@@ -10,12 +10,12 @@
       :append-to-body="true"
     >
       <dm_debug_list level-up="1">
-        <dm_debug_item v-model="formModify" text="修改表单的绑定数据" />
+        <dm_debug_item v-model="IN_formModify" text="修改表单的绑定数据" />
       </dm_debug_list>
       <!--表单提示语-->
       <div class v-html="$lodash.get(cf.cfTips, `text`)" v-if="cf.cfTips" :style="getTipsStyle()"></div>
       <dm_dynamic_form
-        v-model="formModify"
+        v-model="IN_formModify"
         :cf="cf.cfFormModify"
         @submit="modifyData"
         @cancel="cf.visible = false"
@@ -32,20 +32,50 @@
 <script>
 export default {
   components: {},
-  props: ["cf"],
+  props: ["cf", "formModify"],
   data() {
     return {
       // cf.visible: null,
-      formModify: {}
+      IN_formModify: this.formModify || {}
     };
   },
+  watch: {
+    //监听
+    formModify: {
+      handler(newVal, oldVal) {
+        console.log("formModify changed");
+        this.IN_formModify = this.formModify||{};
+      },
+      // immediate: true,
+      deep: true
+    },
+    //监听
+    "cf.visible": {
+      handler(newVal, oldVal) {
+        console.log("cf.visible changed");
+        if (newVal) {
+          //打开弹窗
+          //***如果{数据id存在}更新一次，因为可能切换到另一条数据
+          if (this.cf.dataIdModify) {
+            //补充数据id**有时候需要自动响应-比如静态属性表
+            this.$set(
+              this.IN_formModify,
+              this.cf.cfFormModify.idKey,
+              this.cf.dataIdModify
+            );
 
+            // this.IN_formModify[this.cf.cfFormModify.idKey] = this.cf.dataIdModify;
+          }
+        }
+      }
+    }
+  },
   methods: {
     handelItem: util.handelItem,
     //-------------修改数据的函数--------------
     async modifyData(_data) {
       //  _data参数为了兼容单元格修改
-      _data = _data || this.formModify; //参数如果不传，使用this.formModify
+      _data = _data || this.IN_formModify; //参数如果不传，使用this.IN_formModify
       //Q1：{修改数据接口地址}存在
       if (this.cf.urlModify) {
         let ajaxParam;
@@ -76,6 +106,7 @@ export default {
       } else {
       }
       //****修改静态列表的数据+修改动态列表的数据
+      //找到对应的数据并修改成最新的
       if (this.cf.tableData) {
         this.handelItem({
           action: "merge",
@@ -87,35 +118,30 @@ export default {
       }
 
       this.$message({
-        message: "修改数据成功",
+        message: "修改数据成功1",
         duration: 1500,
         type: "success"
       });
       this.cf.visible = false; //关闭弹窗
       //如果{增删改操作后是否自动刷新}为真
       if (this.cf.isRefreshAfterModify) {
-        // this.$parent.getDataList(); //更新数据列表-暂时去掉
+        this.$parent.$parent.getDataList(); //更新数据列表-暂时去掉
       }
-      this.$emit("after-modify", _data, this.beforeModify); //触发外部事件
+      this.$emit("after-modify", _data); //触发外部事件, this.beforeModify
     },
     //函数：{获取提示样式函数}
     getTipsStyle() {
       let styleAdd = lodash.get(this.cf.cfTips, `style`);
       let style = { padding: "10px 10px 10px 100px", color: "#f60" };
       return Object.assign(style, styleAdd); //合并对象
-    },
-   
+    }
   },
   created() {
-    if (this.cf.dataIdModify) {
-      //补充数据id**
-      this.formModify[this.cf.cfFormModify.idKey] = this.cf.dataIdModify;
-    }
 
     /****************************处理通用列表编辑的配置-START****************************/
     //这里有点乱！！！！！
     //设置主参数
-    this.$set(this.cf, "visible", false); //增加到响应系统
+    this.$set(this.cf, "visible", !!this.cf.visible); //增加到响应系统-有了这一句，visible就可以不预留配置，默认关闭
 
     //如果是通用列表
     this.cf.cfFormModify = this.cf.cfFormModify || {};
@@ -134,7 +160,7 @@ export default {
       let listCF = lodash.get(PUB.listCF, `list_${_dataType}`); //根据数据类型获取对应的列表配置
       let { formItems } = listCF; //获取对应的表单项
 
-      cfFormModifyTemp.formItems = formItems; //表单字典
+      cfFormModifyTemp.formItems = formItems; //表单字段
 
       Object.assign(this.cf.cfFormModify, cfFormModifyTemp); //合并对象-优先级顺序后面要调整**
 

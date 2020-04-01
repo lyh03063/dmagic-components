@@ -1163,22 +1163,18 @@ COLUMNS.category_multiple = {
 
 //#endregion
 
-//#region 网址
 
 
-//#endregion
-//#region 笔记
-
-
-
-//#endregion
 
 
 
 
 //#region dm组件库用到
 
-
+D_ITEMS.name = {
+    label: "名称",
+    prop: "name",
+};
 
 
 COLUMNS.name = {

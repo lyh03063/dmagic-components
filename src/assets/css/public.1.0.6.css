@@ -2599,6 +2599,27 @@ li {
 .FS24 {
     font-size: 24px;
 }
+.FS26 {
+    font-size: 26px;
+}
+.FS28 {
+    font-size: 28px;
+}
+.FS30 {
+    font-size: 30px;
+}
+.FS32 {
+    font-size: 32px;
+}
+.FS34 {
+    font-size: 34px;
+}
+.FS36 {
+    font-size: 36px;
+}
+.FS38 {
+    font-size: 38px;
+}
 
 .C_000 {
     color: #000;
@@ -2872,7 +2893,10 @@ a {
     color: #666;
 }
 
-
+a.n-a-blue:link, a.n-a-blue:visited {
+    /* linkBlue超链接颜色 */
+    color: #409EFF;
+}
 /****************************超链接-END****************************/
 
 

@@ -345,10 +345,11 @@ export default {
       let valNew = this.formDataEditRow[prop]; //变量：{修改后的值}
       this.rowEdit[prop] = valNew;
 
-      //强大！！！！！-重用了同一个修改方法
-      this.$refs.listDialogs.dataIdModify = this.rowEdit[this.cf.idKey]; //需要修改的数据id
-      this.$refs.listDialogs.modifyData({ [prop]: valNew }); //执行修改
-
+      //强大！！！！！-重用了同一个修改方法-注意组件链条较长！！！！
+      this.$refs.listDialogs.cfEditDialog.dataIdModify = this.rowEdit[
+        this.cf.idKey
+      ]; //需要修改的数据id
+      this.$refs.listDialogs.$refs.dialog_edit.modifyData({ [prop]: valNew }); //执行修改
       this.isShowDialogEditRow = false;
     },
     test() {},
@@ -402,8 +403,8 @@ export default {
     selectionChange(val) {
       if (this.cf.isMultipleSelect) return;
       if (val.length > 1) {
-        this.$refs.table.clearSelection();//清除选择
-        this.$refs.table.toggleRowSelection(val.pop());//重新选中一条新数据
+        this.$refs.table.clearSelection(); //清除选择
+        this.$refs.table.toggleRowSelection(val.pop()); //重新选中一条新数据
       }
     },
     //获取提示样式的函数
@@ -665,7 +666,7 @@ export default {
       isShowBreadcrumb: true,
       isShowPageLink: true,
       isShowOperateColumn: true,
-      isRefreshAfterCUD: true,
+      isRefreshAfterCUD: false,
       isShowToolBar: true,
       cfElTable: {}, //列表配置对象
       paramAddonPublic: {} //公共附加参数

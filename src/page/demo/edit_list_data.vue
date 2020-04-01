@@ -7,11 +7,15 @@
 
     <div class>
       <el-button type="primary" @click="edit">编辑数据(自定义各种配置)</el-button>
-      <el-button type="primary" @click="edit2">编辑数据(通用列表)</el-button>
+      <el-button type="primary" @click="edit2">编辑数据(通用列表-url)</el-button>
     </div>
 
-    <dm_dialog_edit :cf="cfEditDialog"></dm_dialog_edit>
-    <dm_dialog_edit :cf="cfEditDialog2"></dm_dialog_edit>
+    <dm_dialog_edit :cf="cfEditDialog">
+       <template v-slot:slot_test="{formData}">{{formData.name}}</template>
+    </dm_dialog_edit>
+    <dm_dialog_edit :cf="cfEditDialog2">
+     
+    </dm_dialog_edit>
   </div>
 </template>
 
@@ -43,8 +47,9 @@ export default {
           col_span: 12,
           urlInit: "/crossDetail?page=info_piece",
           formItems: [
-            { label: "标题111", prop: "name" },
-            { label: "说明", prop: "desc", type: "textarea" }
+            { label: "标题", prop: "name" },
+            { label: "说明", prop: "desc", type: "textarea" },
+             { label: "带插槽", prop: "test", slot: "slot_test" }
           ],
           btns: [
             { text: "修改", event: "submit", type: "primary", validate: true },

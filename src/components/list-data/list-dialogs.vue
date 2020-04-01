@@ -7,7 +7,7 @@
       v-if="isShowDialogDetail"
       width="95%"
       :before-close="closeDialogDetailFun"
-       :close-on-click-modal="false"
+      :close-on-click-modal="false"
       :append-to-body="true"
     >
       <template v-if="!cf.customDetail">
@@ -87,37 +87,15 @@
       </dynamicForm>
     </el-dialog>
 
-    <!--修改数据表单弹窗-->
-    <el-dialog
-      title="修改数据"
-      :visible.sync="isShowDialogModify"
-      v-if="isShowDialogModify"
-      width="95%"
-      :close-on-click-modal="false"
-      :append-to-body="true"
-    >
-      <dm_debug_list level-up="1">
-        <dm_debug_item v-model="formModify" text="修改表单的绑定数据" />
-      </dm_debug_list>
-      <!--表单提示语-->
-      <div
-        class
-        v-html="$lodash.get(cf, `cfDialogForm.tips.text`)"
-        v-if="$lodash.get(cf, `cfDialogForm.tips`)"
-        :style="getTipsStyle(cf)"
-      ></div>
-      <dynamicForm
-        v-model="formModify"
-        :cf="cfFormModify"
-        @submit="modifyData"
-        @cancel="isShowDialogModify = false"
-      >
-        <template v-slot:[item.slot]="{formData}" v-for="item in cf.formItems">
+    
+
+<!--弹窗编辑数据组件-->
+    <dm_dialog_edit ref="dialog_edit" :cf="cfEditDialog" :formModify="formModify" @after-modify="afterModify">
+       <template v-slot:[item.slot]="{formData}" v-for="item in cf.formItems">
           <!--根据cf.formItems循环输出插槽--新增修改表单弹窗-->
           <slot :name="item.slot" :formData="formData" v-if="item.slot"></slot>
         </template>
-      </dynamicForm>
-    </el-dialog>
+    </dm_dialog_edit>
   </div>
 </template>
 
@@ -138,6 +116,29 @@ export default {
 
   data: function() {
     return {
+    
+      //**------------------修改表单组件配置-新--------------
+
+      cfEditDialog: {
+        // visible: true,
+        cfTips: lodash.get(this.cf, `cfDialogForm.tips`),
+        urlModify: this.cf.url.modify,
+        tableData: null,
+        isRefreshAfterModify: this.cf.isRefreshAfterCUD,
+        dataIdModify: null,
+        cfFormModify: {
+          idKey: this.cf.idKey, //键名
+          paramAddonInit: this.cf.paramAddonPublic, //初始化的附加参数
+          watch: lodash.get(this.cf, `cfForm.watch`), //监听器配置
+          col_span: lodash.get(this.cf, `cfForm.col_span`, 24), //控制显示一行多列
+          urlInit: lodash.get(this.cf, `url.detail`),
+          formItems: this.cf.formItems,
+          btns: [
+            { text: "修改", event: "submit", type: "primary", validate: true },
+            { text: "取消", event: "cancel" }
+          ]
+        }
+      },
       //------------------新增表单组件配置--------------
       cfFormAdd: {
         watch: lodash.get(this.cf, `cfForm.watch`), //监听器配置
@@ -148,29 +149,15 @@ export default {
           { text: "取消", event: "cancel" }
         ]
       },
-      //------------------修改表单组件配置--------------
-      cfFormModify: {
-        idKey: this.cf.idKey, //键名
-        paramAddonInit: this.cf.paramAddonPublic, //初始化的附加参数
-        watch: lodash.get(this.cf, `cfForm.watch`), //监听器配置
-        col_span: lodash.get(this.cf, `cfForm.col_span`, 24), //控制显示一行多列
-        urlInit: lodash.get(this.cf, `url.detail`),
-        formItems: this.cf.formItems,
-        btns: [
-          { text: "修改", event: "submit", type: "primary", validate: true },
-          { text: "取消", event: "cancel" }
-        ]
-      },
+
       formAdd: {}, //新增数据的表单数据
       formModify: {}, //修改数据的表单数据
-      isShowDialogModify: false, //是否显示修改弹窗
       beforeModify: {}, //修改前数据
       editorOption: {
         //编辑器的配置
         modules: {
           toolbar: [
             ["bold", "italic", "underline", "strike"],
-
             ["link", "image", "video"]
           ]
         }
@@ -191,7 +178,7 @@ export default {
       //监听新增表单的初始化数据
       handler(newVal, oldVal) {
         this.cfFormAdd.formItems = newVal;
-        this.cfFormModify.formItems = newVal; //调用：{初始化新增数据表单函数}
+        this.cfEditDialog.cfFormModify.formItems = newVal; //调用：{初始化新增数据表单函数}-已修改
       },
       immediate: true,
       deep: true
@@ -200,7 +187,7 @@ export default {
   computed: {
     row() {
       //来自vuex的当前行数据
-     
+
       return this.$store.state.listState[this.cf.listIndex].row;
     },
     isShowDialogAdd() {
@@ -215,7 +202,7 @@ export default {
   methods: {
     handelItem: util.handelItem,
     //获取提示样式的函数
-    getTipsStyle(cf) {
+    getTipsStyle() {
       let styleAdd = lodash.get(this.cf, `cfDialogForm.tips.style`);
       let style = { padding: "10px 10px 10px 100px", color: "#f60" };
       return Object.assign(style, styleAdd); //合并对象
@@ -238,61 +225,6 @@ export default {
       this.formAdd = this.cf.formDataAddInit || {}; //还原formAdd
     },
 
-    //-------------修改数据的函数--------------
-    async modifyData(_data) {
-      //  _data参数为了兼容单元格修改
-      _data = _data || this.formModify; //参数如果不传，使用this.formModify
-      //Q1：{修改数据接口地址}存在
-      if (this.cf.url.modify) {
-        let ajaxParam;
-
-        //如果{idKey}是"_id"
-        if (this.cf.idKey == "_id") {
-          ajaxParam = {
-            _id: this.dataIdModify,
-            _data: _data
-          };
-        } else {
-          ajaxParam = {
-            findJson: {
-              //用于定位要修改的数据
-              [this.cf.idKey]: this.dataIdModify
-            },
-            modifyJson: _data
-          };
-        }
-        Object.assign(ajaxParam, this.cf.paramAddonPublic); //合并公共参数
-
-        let response = await axios({
-          //请求接口
-          method: "post",
-          url: PUB.domain + this.cf.url.modify,
-          data: ajaxParam //传递参数
-        });
-        //Q2：{修改数据接口地址}不存在
-      } else {
-      }
-      //修改静态列表的数据+修改动态列表的数据
-      this.handelItem({
-        action: "merge",
-        items: this.tableData,
-        itemNew: _data,
-        key: this.cf.idKey,
-        prop: this.dataIdModify
-      });
-
-      this.$message({
-        message: "修改数据成功",
-        duration: 1500,
-        type: "success"
-      });
-      this.isShowDialogModify = false; //关闭弹窗
-      //如果{增删改操作后是否自动刷新}为真
-      if (this.cf.isRefreshAfterCUD) {
-        // this.$parent.getDataList(); //更新数据列表-暂时去掉
-      }
-      this.$emit("after-modify", _data, this.beforeModify); //触发外部事件
-    },
     //-------------新增数据的函数--------------
     async addData() {
       //如果{新增数据接口地址}存在
@@ -344,19 +276,25 @@ export default {
     },
     //-------------显示修改弹窗的函数--------------
     async showModify(row) {
-      this.$emit("after-show-Dialog-Modify", row);
+      this.$emit("after-show-Dialog-Modify", row);//触发外部事件
       this.beforeModify = row;
-
-    
 
       let rowNew = lodash.cloneDeep(row); //深拷贝
 
-      this.isShowDialogModify = true; //打开弹窗
+     
 
       this.formModify = rowNew; //表单赋值
-
       this.dataIdModify = rowNew[this.cf.idKey];
+
+      this.cfEditDialog.dataIdModify = this.dataIdModify; //
+      this.cfEditDialog.visible = true;
+       this.$set(this.cfEditDialog, "tableData", this.tableData);
+    },
+    afterModify(_data){
+      
+      this.$emit("after-modify", _data, this.beforeModify); //触发外部事件
     }
+
   },
   created() {
     //如果{新增表单默认新增数据}不存在，进行注册
