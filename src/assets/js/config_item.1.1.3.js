@@ -2098,9 +2098,9 @@ F_ITEMS.joinTime_search = { ...D_ITEMS.joinTime, type: "time_period" };
 F_ITEMS.joinTime = { ...D_ITEMS.joinTime, type: "date" };
 //#endregion
 
-//#region 场馆名称
+//#region 球场名称
 D_ITEMS.venueName = {
-    label: "场馆名称",
+    label: "球场名称",
     prop: "name",
 };
 COLUMNS.venueName = { ...D_ITEMS.venueName, width: 200, };
@@ -2195,9 +2195,9 @@ F_ITEMS.phoneNumber = {
 
 //#endregion
 
-//#region 场馆其他信息
+//#region 球场其他信息
 D_ITEMS.venueOtherInfo = {
-    label: "场馆其他信息",
+    label: "球场其他信息",
     prop: "extend",
 };
 COLUMNS.venueOtherInfo = { ...D_ITEMS.venueOtherInfo, width: 70, };
@@ -2206,11 +2206,11 @@ F_ITEMS.venueOtherInfo = {
     cfForm: {
         formItems: [
             {
-                label: "场馆长宽",
+                label: "球场长宽",
                 prop: "venueSize"
             },
             {
-                label: "场馆层数",
+                label: "球场层数",
                 prop: "floorCount"
             },
             {

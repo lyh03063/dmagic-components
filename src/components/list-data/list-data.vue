@@ -666,7 +666,7 @@ export default {
       isShowBreadcrumb: true,
       isShowPageLink: true,
       isShowOperateColumn: true,
-      isRefreshAfterCUD: false,
+      isRefreshAfterCUD: true,
       isShowToolBar: true,
       cfElTable: {}, //列表配置对象
       paramAddonPublic: {} //公共附加参数

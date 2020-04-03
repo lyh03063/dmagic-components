@@ -44,7 +44,7 @@ export default {
     formModify: {
       handler(newVal, oldVal) {
         console.log("formModify changed");
-        this.IN_formModify = this.formModify||{};
+        this.IN_formModify = this.formModify || {};
       },
       // immediate: true,
       deep: true
@@ -145,10 +145,9 @@ export default {
 
     //如果是通用列表
     this.cf.cfFormModify = this.cf.cfFormModify || {};
-    if (this.cf.listType == "common") {
+    if (this.cf.listType == "common") {//如果是通用型数据
       let cfFormModifyTemp = {
-        idKey: "_id",
-        watch: {},
+        idKey: "_id", watch: {},
         urlInit: "/info/commonDetail",
         btns: [
           { text: "修改", event: "submit", type: "primary", validate: true },
@@ -158,18 +157,25 @@ export default {
 
       let { _dataType } = this.cf.cfFormModify.paramAddonInit; //变量：{数据类型}
       let listCF = lodash.get(PUB.listCF, `list_${_dataType}`); //根据数据类型获取对应的列表配置
-      let { formItems } = listCF; //获取对应的表单项
+      let { formItems, cfForm } = listCF; //获取对应的表单项
 
       cfFormModifyTemp.formItems = formItems; //表单字段
+      if (cfForm) {//如果额外配置存在
+           Object.assign(cfFormModifyTemp,cfForm);//合并对象
+        }
 
-      Object.assign(this.cf.cfFormModify, cfFormModifyTemp); //合并对象-优先级顺序后面要调整**
+
+
+      //调用：{给一个对象设置默认属性函数}
+      util.setObjDefault(this.cf.cfFormModify, cfFormModifyTemp);
+
 
       //设置主参数
       this.cf.urlModify = "/info/commonModify";
     }
     /****************************处理通用列表编辑的配置-END****************************/
   },
-  async mounted() {}
+  async mounted() { }
 };
 </script>
 

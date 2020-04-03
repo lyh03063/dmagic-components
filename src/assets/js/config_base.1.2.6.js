@@ -16,13 +16,12 @@ FN.ajaxlistBykeyword = async function ({ param = {} }) {
 
 //函数：{分组追加选中数据列表的函数}
 FN.ajaxGroupAddSelectData = async function (arr) {
-    let minSort = this.$refs.listData.tableData;
     let { tableData } = this.$refs.listData;
-    let docLast = tableData.slice(-1); //最后一个元素
+    let docLast = tableData.slice(0); //第一个元素
     let sortStart = lodash.get(docLast, `[0].sort`, 9999);
     let arrDataAdd = arr.map(doc => {
         return {
-            sort: --sortStart,
+            sort: ++sortStart,
             _idRel: this.groupId,
             _idRel2: doc._id
         };
@@ -389,13 +388,12 @@ MIX.listGroupData = {
       //函数：{单条数据操作事件}
       async singleEvent(actionType, doc) {
         let arrNeedRefresh = ["up", "down", "top", "bottom"]
-        if (arrNeedRefresh.includes(actionType)) {//如果{000}000
-       
+        if (arrNeedRefresh.includes(actionType)) {//如果是排序类操作
           await util.ajaxGroupDataSort(actionType, doc);
           this.$refs.listData.getDataList(); //列表更新
         }
   
-        if (actionType == "edit_entity") {//如果{000}000
+        if (actionType == "edit_entity") {//如果是编辑实体数据
           let { _idRel2 } = doc
           this.cfEditDialogEntity.cfFormModify.paramAddonInit._id = _idRel2//***修改数据id
           this.cfEditDialogEntity.visible = true;//打开弹窗
@@ -403,6 +401,7 @@ MIX.listGroupData = {
       },
       //函数：{选择并添加数据后的ajax操作函数}
       afterSelect: FN.ajaxGroupAddSelectData,
+      ajaxGroupAddData: FN.ajaxGroupAddSelectData,
       //函数：{初始化处理arrLookup数组函数}
       initArrLookup: FN.initArrLookup,
       //函数：{查询表单提交的回调函数}

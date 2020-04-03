@@ -21,11 +21,7 @@ FN.ajaxGroupAddSelectData = async function (arr) {
     let docLast = tableData.slice(-1); //最后一个元素
     let sortStart = lodash.get(docLast, `[0].sort`, 9999);
     let arrDataAdd = arr.map(doc => {
-        return {
-            sort: --sortStart,
-            _idRel: this.groupId,
-            _idRel2: doc._id
-        };
+        return {sort: --sortStart,_idRel: this.groupId,_idRel2: doc._id };
     });
     // return;
 
@@ -34,10 +30,8 @@ FN.ajaxGroupAddSelectData = async function (arr) {
         _data: arrDataAdd
     };
     Object.assign(ajaxParam, PUB.listCF.list_relation.paramAddonPublic); //合并公共参数
-    let response = await axios({
-        //请求接口
-        method: "post",
-        url: PUB.domain + urlAdd,
+    let response = await axios({//请求接口
+        method: "post",url: PUB.domain + urlAdd,
         data: ajaxParam //传递参数
     });
 

@@ -8,10 +8,10 @@
         </td>
       </tr>
       <tr>
-        <td>选择场馆</td>
+        <td>选择球场</td>
         <td>
           <div class>
-            <!-- <div class>根据地区id,ajax查询场馆列表</div> -->
+            <!-- <div class>根据地区id,ajax查询球场列表</div> -->
 
             <el-radio
               v-model="venue"
@@ -49,7 +49,7 @@ export default {
       venueOp: [],
       cityName: this.value.cityName,
       url: {
-        list: "/crossList?page=tangball_venue" //场馆列表接口
+        list: "/crossList?page=tangball_venue" //球场列表接口
       },
       arrArea: [this.value.cityId.substr(0, 2), this.value.cityId]
     };
@@ -76,7 +76,7 @@ export default {
   },
   methods: {
     changeVanue(docVenue) {
-      //场馆变动的函数，进行数据同步
+      //球场变动的函数，进行数据同步
       this.valueNeed.venueId = docVenue.P1; //变动valueNeed
       this.valueNeed.venueName = docVenue.name; //变动valueNeed
       this.valueNeed.cityId = this.cityIdTemp; //变动valueNeed***

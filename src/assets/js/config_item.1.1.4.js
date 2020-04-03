@@ -79,6 +79,8 @@ DYDICT.prior = lodash.keyBy(DYDICT.arr_prior, 'value')
 DYDICT.arr_taskType = [
     { value: 1, label: "新需求" },
     { value: 2, label: "bug" },
+    { value: 4, label: "架构优化" },
+    { value: 5, label: "性能优化" },
     { value: 3, label: "其他" }
 ]
 
@@ -1949,7 +1951,7 @@ D_ITEMS.predictTime = {
 COLUMNS.predictTime = { ...D_ITEMS.predictTime, width: 70, };
 F_ITEMS.predictTime = {
     ...D_ITEMS.predictTime, type: "text",
-    frequency: { options: [{ value: 0.3 }, { value: 0.5 }, { value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }, { value: 5 }, { value: 8 }, { value: 10 }] }
+    frequency: { options: [{ value: 0.3 }, { value: 0.5 }, { value: 1 },{ value: 1.5 }, { value: 2 }, { value: 3 }, { value: 4 }, { value: 5 }, { value: 8 }, { value: 10 }, { value: 12 }, { value: 14 }, { value: 16 }] }
 };
 //#endregion
 
@@ -1961,7 +1963,7 @@ D_ITEMS.actualTime = {
 COLUMNS.actualTime = { ...D_ITEMS.actualTime, width: 70, };
 F_ITEMS.actualTime = {
     ...D_ITEMS.actualTime, type: "text",
-    frequency: { options: [{ value: 0.3 }, { value: 0.5 }, { value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }, { value: 5 }, { value: 8 }, { value: 10 }] }
+    frequency: { options: [{ value: 0.3 }, { value: 0.5 }, { value: 1 }, { value: 1.5 },{ value: 2 }, { value: 3 }, { value: 4 }, { value: 5 }, { value: 8 }, { value: 10 }, { value: 12 }, { value: 14 }, { value: 16 }] }
 };
 //#endregion
 

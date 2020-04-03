@@ -61,7 +61,7 @@ export default {
   props: {
     cf: {
       type: Object,
-      default: function() {
+      default: function () {
         return {};
       }
     }
@@ -81,7 +81,7 @@ export default {
       this.isShowDialog = true; //打开弹窗
       console.log("this.valueNeed:", this.valueNeed);
 
-     
+
 
       /****************************在列表查询参数中排除已选的数据-START****************************/
       {
@@ -134,10 +134,7 @@ export default {
         this.valueNeed.push(...this.selectData); //追加
       } else {
         //Q2：单选
-        this.valueNeed = lodash.get(
-          this.selectData,
-          `[0].${this.cf.valueKey || "P1"}`
-        );
+        this.valueNeed = lodash.get(this.selectData, `[0].${this.cf.valueKey || "P1"}`);
         this.label = lodash.get(
           this.selectData,
           `[0].${this.cf.labelKey || "name"}`
@@ -162,7 +159,7 @@ export default {
      * @name ajax获取label函数
      */
 
-    ajaxGetLabel: async function() {
+    ajaxGetLabel: async function () {
       if (!this.value) return;
       let {
         data: { Doc: docNeed }

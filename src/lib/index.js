@@ -13,7 +13,7 @@ import dm_list_flex_res from '../components/common/list_flex_res/index.vue'
 import dm_collection from '../components/form_item/collection/index.vue'
 import dm_dialog_edit from '../components/list-data/dialog_edit.vue'
 
-
+import dm_dialog_add from '../components/list-data/dialog_add.vue'
 import { codemirror } from "vue-codemirror";
 import "codemirror/lib/codemirror.css";
 // 引入主题后还需要在 options 中指定主题才会生效
@@ -43,13 +43,12 @@ const Components = {
   dm_loading,dm_ajax_populate,dm_space,
   dm_dynamic_form,dm_list_data,
   dm_codemirror:codemirror,
-  dm_select_list_data,dm_collection,dm_dialog_edit
+  dm_select_list_data,dm_collection,dm_dialog_edit,dm_dialog_add
 }
 
 
 const comment = {
   install: function (Vue) {
- 
     //安装以上多个组件
     Object.keys(Components).forEach(name => {
       console.log(`install:${name}`);

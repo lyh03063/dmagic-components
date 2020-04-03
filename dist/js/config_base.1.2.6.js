@@ -53,19 +53,18 @@ FN.ajaxGroupAddSelectData = function () {
     var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(arr) {
         var _this = this;
 
-        var minSort, tableData, docLast, sortStart, arrDataAdd, urlAdd, ajaxParam, response;
+        var tableData, docLast, sortStart, arrDataAdd, urlAdd, ajaxParam, response;
         return regeneratorRuntime.wrap(function _callee2$(_context2) {
             while (1) {
                 switch (_context2.prev = _context2.next) {
                     case 0:
-                        minSort = this.$refs.listData.tableData;
                         tableData = this.$refs.listData.tableData;
-                        docLast = tableData.slice(-1); //最后一个元素
+                        docLast = tableData.slice(0); //第一个元素
 
                         sortStart = lodash.get(docLast, "[0].sort", 9999);
                         arrDataAdd = arr.map(function (doc) {
                             return {
-                                sort: --sortStart,
+                                sort: ++sortStart,
                                 _idRel: _this.groupId,
                                 _idRel2: doc._id
                             };
@@ -78,7 +77,7 @@ FN.ajaxGroupAddSelectData = function () {
                         };
 
                         Object.assign(ajaxParam, PUB.listCF.list_relation.paramAddonPublic); //合并公共参数
-                        _context2.next = 10;
+                        _context2.next = 9;
                         return axios({
                             //请求接口
                             method: "post",
@@ -86,7 +85,7 @@ FN.ajaxGroupAddSelectData = function () {
                             data: ajaxParam //传递参数
                         });
 
-                    case 10:
+                    case 9:
                         response = _context2.sent;
 
 
@@ -94,7 +93,7 @@ FN.ajaxGroupAddSelectData = function () {
                         this.arrSelect2 = []; //清除该数组，否则越积越多
                         this.$refs.listData.getDataList(); //列表更新
 
-                    case 14:
+                    case 13:
                     case "end":
                         return _context2.stop();
                 }
@@ -443,7 +442,7 @@ MIX.listGroupData = {
                             case 5:
 
                                 if (actionType == "edit_entity") {
-                                    //如果{000}000
+                                    //如果是编辑实体数据
                                     _idRel2 = doc._idRel2;
 
                                     this.cfEditDialogEntity.cfFormModify.paramAddonInit._id = _idRel2; //***修改数据id
@@ -467,6 +466,7 @@ MIX.listGroupData = {
 
         //函数：{选择并添加数据后的ajax操作函数}
         afterSelect: FN.ajaxGroupAddSelectData,
+        ajaxGroupAddData: FN.ajaxGroupAddSelectData,
         //函数：{初始化处理arrLookup数组函数}
         initArrLookup: FN.initArrLookup,
         //函数：{查询表单提交的回调函数}
