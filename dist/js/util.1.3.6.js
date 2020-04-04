@@ -891,6 +891,18 @@ util.cfList.bBtns.delete = {
     eventType: "delete",
     needSelect: true,
     cfElBtn: {}
+};
+
+util.cfList.bBtns.refresh = {
+    text: "刷新",
+    eventType: "refresh",
+    cfElBtn: {
+        icon: "el-icon-refresh"
+    }
+};
+util.cfList.bBtns.exportExcel = {
+    text: "导出Excel",
+    eventType: "export_excel"
     //变量：{分组数据列表的新增按钮}
 };util.cfList.bBtns.addEntity = {
     text: "新增并引用",
@@ -1417,6 +1429,104 @@ util.changeFavicon = function (param) {
     }
 };
 //#endregion
+
+//#region tableExportExcel:确认表格导出excel函数-只支持一页
+util.tableExportExcel = function () {
+    var _ref10 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(_ref9) {
+        var _this = this;
+
+        var el = _ref9.el,
+            _ref9$fileName = _ref9.fileName,
+            fileName = _ref9$fileName === undefined ? "数据表" : _ref9$fileName;
+
+        var _window, saveAs, XLSX;
+
+        return regeneratorRuntime.wrap(function _callee5$(_context5) {
+            while (1) {
+                switch (_context5.prev = _context5.next) {
+                    case 0:
+                        _window = window, saveAs = _window.saveAs, XLSX = _window.XLSX;
+
+                        if (saveAs) {
+                            _context5.next = 3;
+                            break;
+                        }
+
+                        return _context5.abrupt("return", console.error("saveAs不存在，请先引用对应的js"));
+
+                    case 3:
+                        if (XLSX) {
+                            _context5.next = 5;
+                            break;
+                        }
+
+                        return _context5.abrupt("return", console.error("XLSX不存在，请先引用对应的js"));
+
+                    case 5:
+                        return _context5.abrupt("return", new Promise(function () {
+                            var _ref11 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(resolve, reject) {
+                                var clickStatus, et, etout;
+                                return regeneratorRuntime.wrap(function _callee4$(_context4) {
+                                    while (1) {
+                                        switch (_context4.prev = _context4.next) {
+                                            case 0:
+                                                _context4.next = 2;
+                                                return _this.$confirm("确定导出excel文件？").catch(function () {});
+
+                                            case 2:
+                                                clickStatus = _context4.sent;
+
+                                                if (!(clickStatus != "confirm")) {
+                                                    _context4.next = 5;
+                                                    break;
+                                                }
+
+                                                return _context4.abrupt("return", resolve(false));
+
+                                            case 5:
+                                                console.log("dom:", document.querySelector(el));
+                                                et = XLSX.utils.table_to_book(document.querySelector(el)); //此处传入table的DOM节点
+
+                                                etout = XLSX.write(et, { bookType: 'xlsx', bookSST: true, type: 'array' });
+
+                                                try {
+                                                    //导出文件
+                                                    saveAs(new Blob([etout], { type: 'application/octet-stream' }), fileName + "_" + util.getTimeRandom() + ".xlsx");
+                                                } catch (e) {
+                                                    console.log(e, etout);
+                                                }
+                                                _this.$message({ type: 'success', message: '导出成功!' });
+                                                resolve(true);
+                                                return _context4.abrupt("return", etout);
+
+                                            case 12:
+                                            case "end":
+                                                return _context4.stop();
+                                        }
+                                    }
+                                }, _callee4, _this);
+                            }));
+
+                            return function (_x8, _x9) {
+                                return _ref11.apply(this, arguments);
+                            };
+                        }()));
+
+                    case 6:
+                    case "end":
+                        return _context5.stop();
+                }
+            }
+        }, _callee5, this);
+    }));
+
+    return function (_x7) {
+        return _ref10.apply(this, arguments);
+    };
+}();
+
+//#endregion
+
 
 //#region aaaa:000函数
 util.aaaa = function (param) {

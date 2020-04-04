@@ -9,6 +9,7 @@
           :rows="18"
           placeholder="请输入内容"
           v-model="codeSrc"
+          @input="transform"
         ></el-input>
       </el-col>
       <el-col style="width:100px">
@@ -29,12 +30,7 @@
 
 <script>
 util.oldCFListToNew = function (cfList) {
-  let map = {
-    detailItems: "D_ITEMS",
-    columns: "COLUMNS",
-    searchFormItems: "F_ITEMS",
-    formItems: "F_ITEMS"
-  };
+  let map = { detailItems: "D_ITEMS", columns: "COLUMNS", searchFormItems: "F_ITEMS", formItems: "F_ITEMS" };
   let objResult = {};
   let arrNeed = Object.keys(map);
   arrNeed.forEach(prop => {
@@ -80,12 +76,11 @@ export default {
         if (!T.codeSrc) return;
         T.codeResult = "";
         T.codeResult = T.codeSrc.replace(/\n|\r/g, "")
-       
-        this.$message.success( '转换成功');
-        // var Reg1 = /\s{2,}/g;
-        // T_Class = T_Class.replace(Reg1, " ")//将多个空格替换成一个空格
 
+        let reg1 = /\s{2,}/g;
+        T.codeResult = T.codeResult.replace(reg1, " ")//将多个空格替换成一个空格
 
+        this.$message.success('转换成功');
       } catch (err) {
         this.$message.error(`${err.toString}`);
         console.log(`${err.toString}`);

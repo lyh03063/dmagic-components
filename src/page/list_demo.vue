@@ -1,13 +1,12 @@
 <template>
-  <div>
+  <div >
     <el-button plain @click="setAddInit" size="mini" ref="aaa">设置formDataAddInit</el-button>
 
     <dm_debug_list>
       <dm_debug_item v-model="visible" text="visible" />
-    
     </dm_debug_list>
 
-    <dm_list_data :cf="cfList"  ref="vvv">
+    <dm_list_data :cf="cfList" ref="vvv">
       <template #slot_in_toolbar="{data:{tableData}}">插槽内容可显示tableData</template>
       <template v-slot:slot_form_expand_articleTitle="{row}">
         {{row}}
@@ -21,8 +20,21 @@
         </el-popover>
       </template>
     </dm_list_data>
-
-    
+    <el-button plain @click="exportExcel" size="mini">exportExcel</el-button>
+    <table class="n-table">
+      <tr>
+        <th>属性值</th>
+        <th>效果预览</th>
+      </tr>
+      <tr>
+        <td>aaaa</td>
+        <td>0000</td>
+      </tr>
+      <tr>
+        <td>aaaa</td>
+        <td>0000</td>
+      </tr>
+    </table>
   </div>
 </template>
 
@@ -35,16 +47,16 @@ export default {
   components: { dm_list_data, dm_dynamic_form },
   data() {
     return {
-     
+
       visible: {},
       cfList: PUB.listCF.list_demo
     };
   },
   computed: {
-    cfData: function() {
+    cfData: function () {
       return this.$store.state.cfData;
     },
-    flag: function() {
+    flag: function () {
       return true;
     }
   },
@@ -59,9 +71,11 @@ export default {
     }
   },
   methods: {
-  
-
-   
+    exportExcel() {
+      alert("exportExcel");
+      this.tableExportExcel({ el: ".n-table", fileName: "表" });
+    },
+    tableExportExcel: util.tableExportExcel,
     async toggleList() {
       let result = !this.isShowList1;
       this.isShowList1 = null;
@@ -71,12 +85,12 @@ export default {
     /**
      * @name 自定义单项操作按钮点击函数
      */
-    singlebtnClick: function(eventType, row) {
+    singlebtnClick: function (eventType, row) {
     },
     /**
      * @name 自定义批量操作按钮点击函数
      */
-    bacthBtnClick: function(eventType, selection) {
+    bacthBtnClick: function (eventType, selection) {
     },
     fold(row) {
       T.$refs.list1.$refs.table.toggleRowExpansion(row, false);

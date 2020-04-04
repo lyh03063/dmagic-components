@@ -1,5 +1,5 @@
 <template>
-  <div class="DPLP LH32">
+  <div class="LH32">
     <!--component自定义组件-用于派成的权限树--->
     <component :is="item.component" v-model="formDataNeed[item.prop]" v-if="item.component"></component>
     <!--slot自定义组件-注意是isReadyFormData为真时才开始渲染-->
@@ -31,6 +31,12 @@
         ></el-option>
       </el-select>
     </template>
+    <!--dm_select_ajax_lazy下来选择框懒加载-->
+    <dm_select_ajax_lazy
+      v-model="formDataNeed[item.prop]"
+      :cf="item.cfSelectAjaxLazy"
+      v-else-if="item.type=='select_ajax_lazy'"
+    ></dm_select_ajax_lazy>
 
     <!--弹窗选择列表-->
     <select_list_data
@@ -81,7 +87,7 @@
     <time_period v-model="formDataNeed[item.prop]" v-else-if="item.type=='time_period'"></time_period>
     <!--如果是百分比滑块-->
     <el-slider
-      class="ML10 MR50"
+      class="ML10 WP50 slider"
       v-model="formDataNeed[item.prop]"
       :step="0.1"
       :max="1"
@@ -127,6 +133,7 @@
       v-model="formDataNeed[item.prop]"
       v-else-if="item.type=='editorTM'"
       :showToolbar="true"
+       :pasteImage="item.pasteImage"
     ></tiny_mce>
     <quill_editor v-model="formDataNeed[item.prop]" v-else-if="item.type=='editor'"></quill_editor>
     <!--模糊查询文本框  支持回车查询-->
@@ -179,7 +186,7 @@
 
     <!--普通文本框  支持enter触发表单提交-->
 
-    <el-input v-else v-model="formDataNeed[item.prop]" @keyup.enter.native="$emit('enterClick')"></el-input>
+    <el-input v-else v-model="formDataNeed[item.prop]" @keyup.enter.native="$emit('enterClick')" clearable></el-input>
 
     <template class v-if="item.frequency">
       <el-popover
@@ -189,6 +196,7 @@
         v-model="visibleFrequency[item.prop]"
         :open-delay="0"
       >
+     
         <!--候选值列表-->
         <i
           :class="['frequency-option',{focus:formDataNeed[item.prop]==option.value}] "
@@ -200,6 +208,7 @@
           {{option.label
           ||option.value}}
         </i>
+         <a   href="javascript:;" class="n-a" @click="formDataNeed[item.prop]=null;visibleFrequency[item.prop]=false">清除</a>
         <el-button slot="reference" icon="el-icon-more"></el-button>
       </el-popover>
     </template>
@@ -222,24 +231,9 @@ import number_range from "../../components/form_item/number_range.vue";
 import tag_list from "../../components/form_item/tag_list.vue";
 export default {
   name: "form_item", //组件名，用于递归
-  components: {
-    select_list_data,
-    //注册组件
-    vueJsonEditor: vueJsonEditor,
-
-    select_ajax,
-    input_find_vague,
-    json_editor,
-    upload_img,
-    time_period,
-    json_prop,
-    collection,
-    quill_editor,
-    tiny_mce,
-    number_range,
-    tag_list
-  },
-
+  components: {    select_list_data, vueJsonEditor: vueJsonEditor, select_ajax,
+    input_find_vague, json_editor, upload_img, time_period, json_prop,
+    collection, quill_editor, tiny_mce, number_range, tag_list  },
   // mixins: [MIX.form_item], //混入
   props: {
     cf: [Object],
@@ -252,17 +246,8 @@ export default {
       visibleFrequency: {}, //候选项可见性
       marks: {
         //百分比刻度
-        0: "0",
-        0.1: "10",
-        0.2: "20",
-        0.3: "30",
-        0.4: "40",
-        0.5: "50",
-        0.6: "60",
-        0.7: "70",
-        0.8: "80",
-        0.9: "90",
-        1: "100"
+        0: "0", 0.1: "10", 0.2: "20", 0.3: "30", 0.4: "40", 0.5: "50",
+        0.6: "60", 0.7: "70", 0.8: "80", 0.9: "90", 1: "100"
       }
     };
   },
@@ -270,7 +255,7 @@ export default {
     print() {
     }
   },
-  created() {}
+  created() { }
 };
 </script>
 
@@ -319,4 +304,9 @@ export default {
   border: 1px #3a0 solid;
 }
 /****************************常用值选项-END****************************/
+
+/* 让进度条的文字不掉下来 */
+.slider >>> .el-slider__marks-text {
+  word-break: keep-all;
+}
 </style>

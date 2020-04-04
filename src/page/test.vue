@@ -1,9 +1,10 @@
 <template>
   <div>
+    <dm_select_ajax_lazy class :cf="cfSelectAjaxLazy"></dm_select_ajax_lazy>######
     <dm_select_list_data class v-model="arrSelect" :cf="cfSelectList" @select="afterSelect"></dm_select_list_data>
 
     <dm_select_list_data class v-model="arrSelect2" :cf="cfSelectList2" @select="afterSelect"></dm_select_list_data>
-######
+
     <dm_debug_list></dm_debug_list>tangball_franchisee：
     <dm_ajax_populate :id="2" populateKey="name" page="tangball_franchisee"></dm_ajax_populate>
 
@@ -44,7 +45,6 @@
 import dm_list_data from "../components/list-data/list-data.vue";
 import dm_dynamic_form from "../components/list-data/dynamic-form.vue";
 import collection from "../components/form_item/collection/index.vue";
-
 import { codemirror } from "vue-codemirror";
 import "codemirror/lib/codemirror.css";
 // 引入主题后还需要在 options 中指定主题才会生效
@@ -65,10 +65,15 @@ import "codemirror/addon/fold/foldgutter.css"; //代码折叠样式一定要引�
 import "codemirror/addon/fold/brace-fold.js"; //代码折叠-一定要引用
 
 export default {
-  components: { dm_list_data, dm_dynamic_form, collection, codemirror },
+  components: { dm_list_data, dm_dynamic_form, collection, codemirror,  },
 
   data() {
     return {
+      cfSelectAjaxLazy: {
+        url: "/crossList?page=paicheng_project",
+        keyLabel: "projectName",
+        keyValue: "P1"
+      },
       arrSelect: [],
       arrSelect2: [],
       cfSelectList: F_ITEMS.select_list_common_url.cfSelectList,
@@ -180,7 +185,7 @@ export default {
             prop: "articleCategory",
             requireProp: ["articleContent"], //依赖文章详情，列表需返回该字段
             width: 150,
-            formatter11111: function(rowData) {
+            formatter11111: function (rowData) {
               let name = lodash.get(rowData, "categoryDoc.name");
               return name;
             }
@@ -199,7 +204,7 @@ export default {
             prop: "articleCategory",
             requireProp: ["articleContent"], //依赖文章详情，列表需返回该字段
             width: "auto",
-            formatter11111: function(rowData) {
+            formatter11111: function (rowData) {
               let name = lodash.get(rowData, "categoryDoc.name");
               return name;
             }
@@ -266,8 +271,8 @@ export default {
       this.isShowDialog = false;
     }
   },
-  created() {},
-  async mounted() {}
+  created() { },
+  async mounted() { }
 };
 </script>
 

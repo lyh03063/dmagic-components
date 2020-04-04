@@ -351,6 +351,7 @@ MIX.listGroupData = {
             readyAddDialogEntity: true, //是否准备好新增实体的弹窗组件-用于复制时重现初始化
             cfAddDialogEntity: {
                 copyId: "5e84ae2520a342107c0ad688",
+                tipsAfterAdd: false,
                 listType: "common", //通用型列表-影响urlAdd
                 cfFormAdd: { paramAddonInit: { _systemId: "sys_api", _dataType: this.dataType } }
             },
@@ -1181,7 +1182,7 @@ PUB.cfListGPublic = _extends({
     focusMenu: false }, PUB.listCFCommon3, { //展开公共配置
     singleBtns: PUB.singleBtns_list_group_data,
     batchBtns: {
-        addon: [{ uiType: "slot", slot: "slot_btn_select" }, util.cfList.bBtns.addEntity, util.cfList.bBtns.add, util.cfList.bBtns.delete]
+        addon: [{ uiType: "slot", slot: "slot_btn_select" }, util.cfList.bBtns.addEntity, util.cfList.bBtns.add, util.cfList.bBtns.refresh, util.cfList.bBtns.delete]
     },
     sortJsonDefault: { "sort": -1 },
     findJsonDefault: {}

@@ -164,8 +164,13 @@ export default {
         labelWidth: "150px",
 
         formItems: [
-          F_ITEMS.tagList,
+           F_ITEMS.prop_editorTM,
+          F_ITEMS.projectName_select_lazy,
+          F_ITEMS.predictTime,
+          F_ITEMS.complete,
+          F_ITEMS.title,
           F_ITEMS.select_list_common_url,
+          
           // F_ITEMS.prop_select_list_data,
           // F_ITEMS.diycheckbox,
           // F_ITEMS.num2,
@@ -183,7 +188,7 @@ export default {
           // F_ITEMS.num1_component,
           // F_ITEMS.complete1,
           // F_ITEMS.select1,
-          // F_ITEMS.prop_editorTM,
+         
           // F_ITEMS.extend,
           // F_ITEMS.prop_upload2,
           // F_ITEMS.prop_upload,

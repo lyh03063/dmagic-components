@@ -9,6 +9,8 @@
       <el-button type="primary" @click="add">复制新增数据(自定义各种配置)</el-button>
       <el-button type="primary" @click="add2">复制新增数据(通用列表-url)</el-button>
       <el-button type="primary" @click="add3">新增数据(通用列表-vedio)</el-button>
+
+      <el-button type="primary" @click="add4">新增数据(通用列表-vedio-不提示)</el-button>
     </div>
 
     <dm_dialog_add :cf="cfAddDialog">
@@ -16,6 +18,7 @@
     </dm_dialog_add>
     <dm_dialog_add :cf="cfAddDialog2"></dm_dialog_add>
     <dm_dialog_add :cf="cfAddDialog3"></dm_dialog_add>
+    <dm_dialog_add :cf="cfAddDialog4"></dm_dialog_add>
   </div>
 </template>
 
@@ -73,6 +76,12 @@ export default {
 
         listType: "common", //通用型列表-影响urlAdd
         cfFormAdd: { paramAddonInit: { _systemId: "sys_api", _dataType: "vedio" } }
+      },
+      //第4组配置
+      cfAddDialog4: {
+        tipsAfterAdd: false,
+        listType: "common", //通用型列表-影响urlAdd
+        cfFormAdd: { paramAddonInit: { _systemId: "sys_api", _dataType: "vedio" } }
       }
     };
   },
@@ -85,6 +94,9 @@ export default {
     },
     add3: async function () {
       this.cfAddDialog3.visible = true;
+    },
+    add4: async function () {
+      this.cfAddDialog4.visible = true;
     },
     aaaaaa: async function () { },
     aaaaaa: async function () { },

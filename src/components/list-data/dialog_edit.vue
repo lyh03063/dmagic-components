@@ -28,7 +28,6 @@
     </el-dialog>
   </div>
 </template>
-
 <script>
 export default {
   components: {},
@@ -63,7 +62,6 @@ export default {
               this.cf.cfFormModify.idKey,
               this.cf.dataIdModify
             );
-
             // this.IN_formModify[this.cf.cfFormModify.idKey] = this.cf.dataIdModify;
           }
         }
@@ -95,7 +93,6 @@ export default {
           };
         }
         Object.assign(ajaxParam, this.cf.cfFormModify.paramAddonInit); //合并公共参数，之前是cf.paramAddonPublic
-
         let response = await axios({
           //请求接口
           method: "post",
@@ -116,9 +113,8 @@ export default {
           prop: this.cf.dataIdModify
         });
       }
-
       this.$message({
-        message: "修改数据成功1",
+        message: "修改数据成功",
         duration: 1500,
         type: "success"
       });
@@ -137,12 +133,10 @@ export default {
     }
   },
   created() {
-
     /****************************处理通用列表编辑的配置-START****************************/
     //这里有点乱！！！！！
     //设置主参数
     this.$set(this.cf, "visible", !!this.cf.visible); //增加到响应系统-有了这一句，visible就可以不预留配置，默认关闭
-
     //如果是通用列表
     this.cf.cfFormModify = this.cf.cfFormModify || {};
     if (this.cf.listType == "common") {//如果是通用型数据
@@ -154,22 +148,15 @@ export default {
           { text: "取消", event: "cancel" }
         ]
       };
-
       let { _dataType } = this.cf.cfFormModify.paramAddonInit; //变量：{数据类型}
       let listCF = lodash.get(PUB.listCF, `list_${_dataType}`); //根据数据类型获取对应的列表配置
       let { formItems, cfForm } = listCF; //获取对应的表单项
-
       cfFormModifyTemp.formItems = formItems; //表单字段
       if (cfForm) {//如果额外配置存在
            Object.assign(cfFormModifyTemp,cfForm);//合并对象
         }
-
-
-
       //调用：{给一个对象设置默认属性函数}
       util.setObjDefault(this.cf.cfFormModify, cfFormModifyTemp);
-
-
       //设置主参数
       this.cf.urlModify = "/info/commonModify";
     }
@@ -178,6 +165,5 @@ export default {
   async mounted() { }
 };
 </script>
-
 <style>
 </style>

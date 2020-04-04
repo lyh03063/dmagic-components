@@ -1912,15 +1912,21 @@ F_ITEMS.positionInfo = _extends({}, D_ITEMS.positionInfo, { default: {}, //默�
 //#endregion
 
 
-//#region 0000
+//#region 选择项目
 {
     var _objBase = {
-        label: "0000",
-        prop: "aaaa"
+        label: "选择项目",
+        prop: "projectName"
     };
     D_ITEMS.aaaa = _extends({}, _objBase);
     COLUMNS.aaaa = _extends({}, _objBase, { width: 70 });
-    F_ITEMS.aaaa = _extends({}, _objBase, { type: "input" });
+    F_ITEMS.projectName_select_lazy = _extends({}, _objBase, { type: "select_ajax_lazy",
+        cfSelectAjaxLazy: {
+            url: "/crossList?page=paicheng_project",
+            keyLabel: "projectName",
+            keyValue: "P1"
+        }
+    });
 }
 
 //#endregion

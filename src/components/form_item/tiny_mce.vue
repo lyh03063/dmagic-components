@@ -1,11 +1,7 @@
 <template>
   <div class="tinymce-box">
-        <Editor v-model="myValue"
-          :init="init"
-          :disabled='false'
-            >
-        </Editor>
-    </div>
+    <Editor v-model="myValue" :init="init" :disabled="false"></Editor>
+  </div>
 </template>
 <script>
 import tinymce from 'tinymce/tinymce' //tinymce默认hidden，不引入不显示
@@ -20,51 +16,60 @@ import 'tinymce/plugins/link'
 import 'tinymce/plugins/autolink'
 import 'tinymce/plugins/nonbreaking'
 import 'tinymce/plugins/codesample'
+import 'tinymce/plugins/paste'//引入粘贴插件
+let T;
 export default {
-  components:{
-        Editor
-    },
-    name:'tinymce',
-    props:['value','showToolbar'],
-    watch:{
-    myValue:{
-      handler(){
-        this.$emit('input',this.myValue)
+  components: {
+    Editor
+  },
+  name: 'tinymce',
+  props: ['value', 'showToolbar', "pasteImage"],
+  watch: {
+    myValue: {
+      handler() {
+        T.$emit('input', T.myValue)
       },
-      immediate:true
+      immediate: true
     }
   },
   data() {
+
     return {
+
       init: {
+
         language_url: '/tinymce/langs/zh_CN.js',
         language: 'zh_CN',
         skin_url: '/tinymce/skins/ui/oxide',
-        plugins:'lists image  table  autoresize code link autolink codesample',
+        plugins: 'lists image  table   autoresize code link autolink codesample paste',//使用粘贴插件
+        paste_data_images: T.pasteImage,//开启粘贴上传图片
         menubar: false,
         statusbar: false,
-        toolbar:'undo redo |  formatselect | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | lists image  table code link codesample| removeformat',
-        autoresize_bottom_margin: 10, 
-        max_height:400,
-        min_height:200,
+        toolbar: 'undo redo |  formatselect | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | lists image  table code link codesample| removeformat',
+        autoresize_bottom_margin: 10,
+        max_height: 400,
+        min_height: 200,
         autoresize_on_init: true,
         autoresize_overflow_padding: 10,
-        images_upload_handler: this.uploadingImg,
+        images_upload_handler: T.uploadingImg,
         default_link_target: "_blank",
         // theme : "advanced",
-        readonly : 1
+        readonly: 1,
+
+
+
       },
-      myValue:this.value
+      myValue: T.value
     }
   },
 
   methods: {
-   async uploadingImg(blobInfo, succFun, failFun){
-       var img = blobInfo.blob();
-       let time = moment().format("YYYYMMDDHHmmSSsss");
+    async uploadingImg(blobInfo, succFun, failFun) {
+      var img = blobInfo.blob();
+      let time = moment().format("YYYYMMDDHHmmSSsss");
       let requestData = await axios({
         method: "post",
-        url:PUB.urlGetQiniuToken,
+        url: PUB.urlGetQiniuToken,
         data: {
           options: {
             //配置项
@@ -81,55 +86,59 @@ export default {
           }
         }
       });
-       let formData = new FormData()
-       formData.append("file",img)
-       formData.append('token',requestData.data.token)
+      let formData = new FormData()
+      formData.append("file", img)
+      formData.append('token', requestData.data.token)
       let { data } = await axios({
         method: "post",
-        url:window.PUB.urlUpload,
-        data:formData,
-        headers: { 
+        url: window.PUB.urlUpload,
+        data: formData,
+        headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
-        } 
+        }
       })
       if (data.key) {
-       let src = requestData.data.downloadDomain+'/'+data.key
+        let src = requestData.data.downloadDomain + '/' + data.key
         succFun(src)
-      }else{
+      } else {
         failFun(alert('图片上传失败'))
       }
     }
   },
-  mounted(){
+  mounted() {
     tinymce.init({});
     // tinymce.activeEditor.getBody().setAttribute('contenteditable', false);
-    if (!this.showToolbar) {
-      let execute =false
+    if (!T.showToolbar) {
+      let execute = false
       let time = setInterval(() => {
-        if (tinymce.activeEditor.getBody()!=null) {
-        execute = true
-        tinymce.activeEditor.getBody().setAttribute('contenteditable', false)
+        if (tinymce.activeEditor.getBody() != null) {
+          execute = true
+          tinymce.activeEditor.getBody().setAttribute('contenteditable', false)
         }
         if (execute) {
-            clearInterval(time)
+          clearInterval(time)
         }
-   
+
       }, 100);
     }
   },
-  created(){
-    if (!this.showToolbar) {
-      this.init.toolbar = false
+  beforeCreate() {
+    T = this;
+  },
+  created() {
+    if (!T.showToolbar) {
+      T.init.toolbar = false
     }
+    if (!T.pasteImage)  console.warn("无法粘贴上传图片，请设置pasteImage为true")
   }
 };
 </script>
 
 
 <style>
-    .tox-silver-sink{
-        z-index: 10000!important;
-    }
+.tox-silver-sink {
+  z-index: 10000 !important;
+}
 </style>
 
 

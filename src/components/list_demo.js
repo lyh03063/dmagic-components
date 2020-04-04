@@ -40,6 +40,7 @@ PUB.listCF.list_demo={
       util.cfList.sBtns.modify,
       util.cfList.sBtns.copy,
       util.cfList.sBtns.delete,
+    
       {
         title: "单项操作（圆形按钮）",
         eventType: "singleOP1",
@@ -67,11 +68,11 @@ PUB.listCF.list_demo={
   },
   //批量操作按钮的配置
   batchBtns: {
-    // add: false, //配置基础按钮隐藏（默认显示）
-    // delete: false, //配置基础按钮隐藏（默认显示）
     addon: [
       util.cfList.bBtns.add,
       util.cfList.bBtns.delete,
+      util.cfList.bBtns.refresh,
+      util.cfList.bBtns.exportExcel,
       {
         text: "批量操作（需选数据）",
         eventType: "bacthOP1",

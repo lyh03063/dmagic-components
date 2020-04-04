@@ -16,10 +16,8 @@
           <dm_debug_item v-model="cf.formDataAddInit" text="新增表单的初始数据" />
         </dm_debug_list>
       </div>
-
       <!--表单提示语-->
       <div class v-html="$lodash.get(cf.cfTips, `text`)" v-if="cf.cfTips" :style="getTipsStyle()"></div>
-
       <dm_dynamic_form
         v-model="IN_formAdd"
         :cf="cf.cfFormAdd"
@@ -35,7 +33,6 @@
     </el-dialog>
   </div>
 </template>
-
 <script>
 export default {
   components: {},
@@ -47,22 +44,20 @@ export default {
     };
   },
   watch: {
-    "cf.formDataAddInit": {
-      //监听新增表单的初始化数据
+    "cf.formDataAddInit": {//监听新增表单的初始化数据
+      immediate: true, deep: true,
       handler(newVal, oldVal) {
         this.initFormDataAdd(); //调用：{初始化新增数据表单函数}
       },
-      immediate: true,
-      deep: true
     },
     //监听
     formAdd: {
+      deep: true,
       handler(newVal, oldVal) {
         console.log("formAdd changed");
         this.IN_formAdd = this.formAdd || {};
       },
       // immediate: true,
-      deep: true
     },
     //监听
     "cf.visible": {
@@ -70,7 +65,6 @@ export default {
         console.log("cf.visible changed");
         if (newVal) {
           //打开弹窗
-
         }
       }
     },//监听复制数据的id
@@ -85,35 +79,22 @@ export default {
     handelItem: util.handelItem,
     //-------------新增数据的函数--------------
     async addData(_data) {
-
       if (this.cf.urlAdd) {//Q1:如果{新增数据接口地址}存在
         let ajaxParam;
-
-        //  delete this.IN_formAdd._id
-        //  delete this.IN_formAdd.__v
-        //   delete this.IN_formAdd.P1
         //如果{idKey}是"_id"
         if (this.cf.cfFormAdd.idKey == "_id") {
-
-
           ajaxParam = { _data: this.IN_formAdd };
         } else {
-
           ajaxParam = { data: this.IN_formAdd };
         }
         console.log("ajaxParam:", ajaxParam);
-
         Object.assign(ajaxParam, this.cf.cfFormAdd.paramAddonInit); //合并公共参数，之前是cf.paramAddonPublic
-
-
         let response = await axios({//请求接口
-          method: "post", url: PUB.domain + this.cf.urlAdd,
+          method: "post", url: `${PUB.domain}${this.cf.urlAdd}`,
           data: ajaxParam //传递参数
         });
-
         //触发外部事件-把新增前后的数据都传过去
         this.$emit("after-add", response.data.addData, this.IN_formAdd);
-
       } else {//Q2:{新增数据接口地址}不存在
         let idMax = 1;
         //如果列表有数据
@@ -125,15 +106,15 @@ export default {
         this.tableData.unshift(this.IN_formAdd); //静态数据列表追加一条数据
         this.$emit("after-add", this.IN_formAdd);
       }
-
-      this.$message({ message: "新增成功", duration: 1500, type: "success" });
+      if (this.cf.tipsAfterAdd) {//如果需要提示
+        this.$message({ message: "新增成功", duration: 1500, type: "success" });
+      }
 
       this.closeDialogAddFun(); //关闭弹窗
       //如果{增删改操作后是否自动刷新}为真
       if (this.cf.isRefreshAfterAdd) {
         this.$parent.$parent.getDataList(); //更新数据列表
       }
-
       this.initFormDataAdd(); //调用：{初始化新增数据表单函数}
       // this.formAdd = {};
     },
@@ -142,22 +123,22 @@ export default {
       if (!this.cf.formDataAddInit) {
         return;
       }
-
       this.IN_formAdd = util.deepCopy(this.cf.formDataAddInit);
     },
     closeDialogAddFun() {//关闭新增弹窗的配置事件函数
-
       this.cf.visible = false;
       this.IN_formAdd = this.cf.formDataAddInit || {}; //还原formAdd
     },
-
     getTipsStyle() { //函数：{获取提示样式函数}
       let styleAdd = lodash.get(this.cf.cfTips, `style`);
       let style = { padding: "10px 10px 10px 100px", color: "#f60" };
       return Object.assign(style, styleAdd); //合并对象
     },
-
     init() { //函数：{初始化函数}
+
+      util.setObjDefault(this.cf, { tipsAfterAdd: true });
+
+
       /****************************处理通用列表编辑的配置-START****************************/
       //这里有点乱！！！！！
       //设置主参数
@@ -178,26 +159,16 @@ export default {
           this.cf.cfFormAdd.paramAddonInit._id = copyId//加入初始参数
           cfFormAddTemp.urlInit = "/info/commonDetail"
         }
-
         let { _dataType } = this.cf.cfFormAdd.paramAddonInit; //变量：{数据类型}
         console.log("_dataType:", _dataType);
-
         let listCF = lodash.get(PUB.listCF, `list_${_dataType}`); //根据数据类型获取对应的列表配置
         let { formItems, cfForm } = listCF; //获取对应的表单项
-
         cfFormAddTemp.formItems = formItems; //表单字段
         if (cfForm) {//如果额外配置存在
-           Object.assign(cfFormAddTemp,cfForm);//合并对象
+          Object.assign(cfFormAddTemp, cfForm);//合并对象
         }
-
-
-
         //调用：{给一个对象设置默认属性函数}
         util.setObjDefault(this.cf.cfFormAdd, cfFormAddTemp);
-
-
-
-
         //设置主参数
         this.cf.urlAdd = "/info/commonAdd";
       }
@@ -206,11 +177,9 @@ export default {
   },
   created() {
     this.init()//调用：{初始化函数}
-
   },
   async mounted() { }
 };
 </script>
-
 <style>
 </style>

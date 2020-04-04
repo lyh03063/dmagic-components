@@ -56,7 +56,6 @@
                 </template>
               </dm_dynamic_form>
             </div>
-
             <el-form-item :prop="item.prop" :rules="item.rules||[]" v-if="!item.cfForm">
               <!--通过插槽方式实现字段标签-->
               <label slot="label">
@@ -78,7 +77,6 @@
             </el-form-item>
           </el-col>
         </template>
-
         <template class v-if="cf.btns&&cf.btns.length">
           <div class="TAC LH50 clear" v-if="!cf.inline">
             <el-button
@@ -104,10 +102,8 @@
     </el-form>
   </div>
 </template>
-
 <script>
 import form_item from "../../components/form_item/form_item.vue";
-
 export default {
   name: "dm_dynamic_form", //组件名，用于递归
   components: {
@@ -136,7 +132,6 @@ export default {
   data() {
     return {
       visibleFrequency: {}, //候选项可见性
-
       clearall: false, //控制变为行内块状
       spanIndex: null, //控制span属性值
       isReadyFormData: false, //表单初始化数据是否已备好的逻辑标记
@@ -180,9 +175,7 @@ export default {
       Object.assign(styleFinal, style); //合并对象
       return styleFinal;
     },
-
     //给递归表单字段做一层空对象的保障
-
     initRecursionProp() {
       this.cf.formItems.forEach(itemEach => {
         //循环：{表单字段配置数组}
@@ -226,12 +219,10 @@ export default {
         }
         return flagIn;
       };
-
       //如果存在term条件
       if (item.term) {
         flag = checkTerm(item.term);
       }
-
       return flag;
     },
     //表单校验方法，支持promise
@@ -248,7 +239,6 @@ export default {
       return promise;
     },
     async btnClick(eventName, validate) {
-
       //Q1：需要校验
       if (validate) {
         let valid = await this.validate(); //校验结果
@@ -270,8 +260,6 @@ export default {
   },
   async created() {
     this.formDataNeed = this.value;
-
-
     this.cf.formItems.forEach(itemEach => {
       //循环：{表单字段配置数组}处理默认值-之前的短路运算符有坑，会把值为0变成null
       let val1 = this.value[itemEach.prop];
@@ -282,12 +270,10 @@ export default {
         this.$set(this.formDataNeed, itemEach.prop, itemEach.default);
       }
     });
-
     let ajaxParam = {
       [this.cf.idKey == "_id" ? "_id" : "id"]: this.value[this.cf.idKey]//id参数存于表单数据中
     };
     Object.assign(ajaxParam, this.cf.paramAddonInit); //合并对象
-
     //如果初始化的ajax地址存在
     if (this.cf.urlInit) {
       let { data } = await axios({
@@ -298,12 +284,10 @@ export default {
       });
       if (data) {
         this.formDataNeed = data.Doc || data.doc; //这里要使用大写的Doc，通用数据用小写的doc
-
         if (this.needDeleteId) {
           //如果需要删除Id-这部分不应该写进来
           delete this.formDataNeed[this.cf.idKey]; //删除数据id,否则复制新增会出问题
           delete this.formDataNeed["_id"]; //删除数据id,否则复制新增会出问题
-         
         }
          delete this.formDataNeed["_data"]; //清除这个_data字段，防止一直叠加****
       } else {
@@ -316,13 +300,11 @@ export default {
     if (this.cf.watch) {
       //for of循环遍历对象，for of不能直接处理对象，本质上是同个Object.keys拼装一个新数组进行辅助
       let obj1 = this.cf.watch;
-
       for (var key of Object.keys(obj1)) {
         //增加监听器
         this.$watch(`value.${key}`, this.cf.watch[key], { immediate: true });
       }
     }
-
     this.spanIndex = Math.floor(24 / this.cf.col_span);
     if (!this.cf.col_span && this.cf.inline) {
       //如果form表单已经启动了行内模式和不进行分块
@@ -332,14 +314,12 @@ export default {
   }
 };
 </script>
-
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .clear {
   /* 清除浮动的样式 */
   clear: both;
 }
-
 .clearall.el-col {
   /* 当不需要分块时，把所有区块都设置为行内块级元素 */
   display: inline-block;
@@ -348,7 +328,6 @@ export default {
   /* 查询按钮，按钮浮动 */
   float: left;
 }
-
 .form-group-box {
   border: 1px #ddd solid;
   border-radius: 5px;
@@ -361,20 +340,16 @@ export default {
   padding: 0;
   margin: 0 0 20px 0;
 }
-
 /* 防止最下边的子表单出现过大的间距 */
-
 .el-col-24:last-child .form-group-box {
   margin-bottom: 0;
 }
-
 /* 防止最下边的字段出现过大的间距,包括双列情况 ，这个很难的-多层级嵌套时还是有问题*/
 .el-col-12:last-child .el-form-item,
 .el-col-12:nth-last-child(2) .el-form-item,
 .el-col-24:last-child .el-form-item {
   margin-bottom: 0;
 }
-
 /* 20191018增加-用于多层级嵌套表单 */
 /* .el-form-item {
   margin-bottom: 0;

@@ -1602,7 +1602,8 @@ F_ITEMS.select1 = {
 F_ITEMS.prop_editorTM = {
     label: "富文本编辑器(TinyMCE)",
     prop: "prop_editorTM",
-    type: "editorTM"
+    type: "editorTM",
+    pasteImage1: true
 };
 F_ITEMS.extend = {
     label: "负责人信息",
@@ -2286,17 +2287,24 @@ F_ITEMS.positionInfo = {
 
 
 
-//#region 0000
+//#region 选择项目
 {
     let objBase = {
-        label: "0000",
-        prop: "aaaa",
+        label: "选择项目",
+        prop: "projectName",
     }
     D_ITEMS.aaaa = {
         ...objBase,
     };
     COLUMNS.aaaa = { ...objBase, width: 70, };
-    F_ITEMS.aaaa = { ...objBase, type: "input" };
+    F_ITEMS.projectName_select_lazy = {
+        ...objBase, type: "select_ajax_lazy",
+        cfSelectAjaxLazy: {
+            url: "/crossList?page=paicheng_project",
+            keyLabel: "projectName",
+            keyValue: "P1"
+        },
+    };
 }
 
 //#endregion

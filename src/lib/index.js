@@ -7,6 +7,7 @@ import dm_loading from '../components/common/loading/loading.vue'
 import dm_ajax_populate from '../components/common/ajax_populate/ajax_populate.vue'
 import dm_space from '../components/common/space/space.vue'
 import dm_select_list_data from '../components/form_item/select_list_data/select_list_data.vue'
+import dm_select_ajax_lazy from '../components/form_item/select_ajax_lazy.vue'
 import dm_pannel from '../components/common/pannel/index.vue'
 
 import dm_list_flex_res from '../components/common/list_flex_res/index.vue'
@@ -41,7 +42,7 @@ const Components = {
   dm_pannel,dm_list_flex_res,
   dm_debug_list, dm_debug_item,
   dm_loading,dm_ajax_populate,dm_space,
-  dm_dynamic_form,dm_list_data,
+  dm_dynamic_form,dm_list_data,dm_select_ajax_lazy,
   dm_codemirror:codemirror,
   dm_select_list_data,dm_collection,dm_dialog_edit,dm_dialog_add
 }

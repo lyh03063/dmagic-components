@@ -784,14 +784,27 @@ util.cfList.bBtns.delete = {
     needSelect: true,
     cfElBtn: {}
 }
+
+
+util.cfList.bBtns.refresh = {
+    text: "刷新",
+    eventType: "refresh",
+    cfElBtn: {
+        icon: "el-icon-refresh"
+    }
+}
+util.cfList.bBtns.exportExcel = {
+    text: "导出Excel",
+    eventType: "export_excel",
+}
 //变量：{分组数据列表的新增按钮}
-util.cfList.bBtns.addEntity={
+util.cfList.bBtns.addEntity = {
     text: "新增并引用",
     eventType: "add_entity",
     cfElBtn: {
         type: "primary",
     }
-  }
+}
 
 
 util.cfList.sBtns = {}
@@ -875,24 +888,24 @@ util.cfList.sBtns.copyEntity = {
     title: "复制实体",
     eventType: "copy_entity",
     cfElBtn: {
-      circle: true,
-      icon: "el-icon-document-copy"
+        circle: true,
+        icon: "el-icon-document-copy"
     }
-  }
+}
 
 
 
-  util.cfList.sBtns.linkGroup ={
+util.cfList.sBtns.linkGroup = {
     uiType: "link",
     text: "查看分组",
     target: "_blank",
     //地址格式函数
     urlFormatter: function (row) {
-      return `#/detail_group?groupId=${row._idRel2}`;
+        return `#/detail_group?groupId=${row._idRel2}`;
     },
-  }
+}
 
-  util.cfList.sBtns.link ={
+util.cfList.sBtns.link = {
     uiType: "link",
     text: "打开链接",
     title: "打开链接",
@@ -1228,8 +1241,8 @@ util.reformCFListItem = function (cfList) {
 }
 
 const changeFavicon = link => {
-   
-  };
+
+};
 
 
 //#region changeFavicon:改变网页标题图标的函数
@@ -1238,16 +1251,49 @@ util.changeFavicon = function (param) {
     // If a <link rel="icon"> element already exists,
     // change its href to the given link.
     if ($favicon !== null) {
-      $favicon.href = link;
-      // Otherwise, create a new element and append it to <head>.
+        $favicon.href = link;
+        // Otherwise, create a new element and append it to <head>.
     } else {
-      $favicon = document.createElement("link");
-      $favicon.rel = "icon";
-      $favicon.href = link;
-      document.head.appendChild($favicon);
+        $favicon = document.createElement("link");
+        $favicon.rel = "icon";
+        $favicon.href = link;
+        document.head.appendChild($favicon);
     }
 };
 //#endregion
+
+//#region tableExportExcel:确认表格导出excel函数-只支持一页
+util.tableExportExcel = async function ({ el, fileName = "数据表" }) {
+    let {saveAs,XLSX}=window;
+    if (!saveAs) return console.error("saveAs不存在，请先引用对应的js")
+    if (!XLSX) return console.error("XLSX不存在，请先引用对应的js")
+    return new Promise(async (resolve, reject) => {
+        let clickStatus = await this.$confirm("确定导出excel文件？").catch(() => { });
+        if (clickStatus != "confirm") return resolve(false);
+        console.log("dom:", document.querySelector(el));
+        let et = XLSX.utils.table_to_book(document.querySelector(el)); //此处传入table的DOM节点
+        let etout = XLSX.write(et, { bookType: 'xlsx', bookSST: true, type: 'array' });
+        try {
+            //导出文件
+            saveAs(new Blob([etout], { type: 'application/octet-stream' }), `${fileName}_${util.getTimeRandom()}.xlsx`);
+        } catch (e) {
+            console.log(e, etout);
+        }
+        this.$message({ type: 'success', message: '导出成功!' });
+        resolve(true);
+        return etout;
+    });
+};
+
+
+
+
+//#endregion
+
+
+
+
+
 
 //#region aaaa:000函数
 util.aaaa = function (param) {
