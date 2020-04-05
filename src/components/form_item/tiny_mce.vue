@@ -41,7 +41,7 @@ export default {
         language_url: '/tinymce/langs/zh_CN.js',
         language: 'zh_CN',
         skin_url: '/tinymce/skins/ui/oxide',
-        plugins: 'lists image  table   autoresize code link autolink codesample paste',//使用粘贴插件
+        plugins: 'lists image     autoresize code link autolink codesample paste table',//使用粘贴插件
         paste_data_images: T.pasteImage,//开启粘贴上传图片
         menubar: false,
         statusbar: false,

@@ -831,7 +831,7 @@ MIX.listGroupData = {
         //-------筛选表单字段数组-------
         searchFormItems: ["title_search"],
         //-------新增、修改表单字段数组-------
-        formItems: ["title", "desc", "detail"]
+        formItems: ["title", "desc", "detail_paste"]
 
     });
     util.reformCFListItem(PUB.listCF.list_article);
@@ -999,7 +999,7 @@ MIX.listGroupData = {
         //-------筛选表单字段数组-------
         searchFormItems: ["title_search", "note_category", "importance", "difficulty", "countGroup"],
         //-------新增、修改表单字段数组-------
-        formItems: ["title", "link", "importance_radio", "difficulty_radio", "keyword", "note_category", "desc", "detail"]
+        formItems: ["title", "link", "importance_radio", "difficulty_radio", "keyword", "note_category", "desc", "detail_paste"]
 
     });
     util.reformCFListItem(PUB.listCF.list_note);
