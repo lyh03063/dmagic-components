@@ -324,7 +324,7 @@ F_ITEMS.detail = _extends({}, D_ITEMS.detail, { type: "editorTM", col_span: 24 }
 F_ITEMS.detail_paste = _extends({}, F_ITEMS.detail, { pasteImage: true //支持粘贴上传图片的编辑器vue-dm-components.2.3.9
 
 });F_ITEMS.detail_new = _extends({}, F_ITEMS.detail, {
-    type: "editorTMNew",
+    type: "editorTM",
     pasteImage: true
 });
 
@@ -1338,16 +1338,17 @@ F_ITEMS.select1 = {
     options: [{ value: 1, label: "男" }, { value: 2, label: "女" }]
 };
 F_ITEMS.prop_editorTM = {
-    label: "富文本编辑器(TinyMCE)",
+    label: "富文本编辑器(默认配置)",
     prop: "prop_editorTM",
-    type: "editorTM",
-    pasteImage: true
+    type: "editorTM"
 };
 F_ITEMS.prop_editorTMNew = {
-    label: "富文本编辑器(TinyMCE-New)",
+    label: "富文本编辑器(精简插件列表)",
     prop: "prop_editor_new",
-    type: "editorTMNew",
-    pasteImage: true
+    type: "editorTM",
+    cfTiny: {
+        plugins: ['lists', 'image', 'autoresize', 'link', 'autolink']
+    }
 
 };
 F_ITEMS.extend = (_F_ITEMS$extend = {

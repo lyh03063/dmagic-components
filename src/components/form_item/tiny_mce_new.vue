@@ -67,22 +67,22 @@ export default {
   },
   mounted() {
     console.log(`初始化:${this.id}`);
-    // tinymce.init({});
+    tinymce.init({});
     // tinymce.activeEditor.getBody().setAttribute('contenteditable', false);
     /****************************这段用于隐藏工具栏的-START****************************/
-    if (!this.showToolbar) {
-      let execute = false
-      let time = setInterval(() => {
-        if (tinymce.activeEditor.getBody() != null) {
-          execute = true
-          tinymce.activeEditor.getBody().setAttribute('contenteditable', false)
-        }
-        if (execute) {
-          clearInterval(time)
-        }
+    // if (!this.showToolbar) {
+    //   let execute = false
+    //   let time = setInterval(() => {
+    //     if (tinymce.activeEditor.getBody() != null) {
+    //       execute = true
+    //       tinymce.activeEditor.getBody().setAttribute('contenteditable', false)
+    //     }
+    //     if (execute) {
+    //       clearInterval(time)
+    //     }
 
-      }, 100);
-    }
+    //   }, 100);
+    // }
     /****************************这段用于隐藏工具栏的-END****************************/
 
 
@@ -118,7 +118,7 @@ export default {
       setup: (editor) => {
         ED = editor;//赋值
         editor.on('input change undo redo execCommand KeyUp', (e) => {
-          this.$emit('input', editor.getContent());
+          this.$emit('input', editor.getContent());//往组件外传值
         })
       }
     }
@@ -137,9 +137,7 @@ export default {
   beforeCreate() {
   },
   created() {
-    if (!this.showToolbar) {
-      this.init.toolbar = false
-    }
+  
 
   }
 };

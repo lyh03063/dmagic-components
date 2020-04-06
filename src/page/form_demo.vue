@@ -166,8 +166,9 @@ export default {
         labelWidth: "150px",
 
         formItems: [
-          F_ITEMS.prop_editorTM,
           F_ITEMS.prop_editorTMNew,
+          F_ITEMS.prop_editorTM,
+          
           F_ITEMS.projectName_select_lazy,
           F_ITEMS.predictTime,
           F_ITEMS.complete,

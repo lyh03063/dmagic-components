@@ -324,7 +324,7 @@ F_ITEMS.detail = _extends({}, D_ITEMS.detail, { type: "editorTM", col_span: 24 }
 F_ITEMS.detail_paste = _extends({}, F_ITEMS.detail, { pasteImage: true //支持粘贴上传图片的编辑器vue-dm-components.2.3.9
 
 });F_ITEMS.detail_new = _extends({}, F_ITEMS.detail, {
-    type: "editorTMNew",
+    type: "editorTM",
     pasteImage: true
 });
 
@@ -1346,7 +1346,7 @@ F_ITEMS.prop_editorTM = {
 F_ITEMS.prop_editorTMNew = {
     label: "富文本编辑器(TinyMCE-New)",
     prop: "prop_editor_new",
-    type: "editorTMNew",
+    type: "editorTM",
     pasteImage: true
 
 };
