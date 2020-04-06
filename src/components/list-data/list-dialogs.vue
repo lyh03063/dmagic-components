@@ -28,11 +28,11 @@
                     <code v-html="row[item.prop]"></code>
                 </pre>
               </div>
-              <tiny_mce
+              <tiny_mce_new
                 v-model="row[item.prop]"
                 v-else-if="item.type=='editorTM'"
                 :showToolbar="false"
-              ></tiny_mce>
+              ></tiny_mce_new>
               <!--否则，正常输出-->
               <template v-else>{{row[item.prop]}}</template>
             </td>
@@ -101,7 +101,7 @@
 
 <script>
 // import dynamicForm from "./dynamic-form";
-import tiny_mce from "../../components/form_item/tiny_mce";
+import tiny_mce_new from "../../components/form_item/tiny_mce_new";
 export default {
   name: "list_dialogs", //组件名，用于递归
   components: {
@@ -110,7 +110,7 @@ export default {
     dynamicForm: resolve => {
       require(["./dynamic-form"], resolve);
     },
-    tiny_mce
+    tiny_mce_new
   },
   props: ["cf", "tableData"],
 
@@ -278,11 +278,7 @@ export default {
     async showModify(row) {
       this.$emit("after-show-Dialog-Modify", row);//触发外部事件
       this.beforeModify = row;
-
       let rowNew = lodash.cloneDeep(row); //深拷贝
-
-     
-
       this.formModify = rowNew; //表单赋值
       this.dataIdModify = rowNew[this.cf.idKey];
 

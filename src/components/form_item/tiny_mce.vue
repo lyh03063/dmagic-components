@@ -1,5 +1,6 @@
 <template>
   <div class="tinymce-box">
+    <!--此组件已废弃-->
     <Editor v-model="myValue" :init="init" :disabled="false"></Editor>
   </div>
 </template>
@@ -17,7 +18,7 @@ import 'tinymce/plugins/autolink'
 import 'tinymce/plugins/nonbreaking'
 import 'tinymce/plugins/codesample'
 import 'tinymce/plugins/paste'//引入粘贴插件
-let T;
+// import 'tinymce/plugins/powerpaste'//引入粘贴插件
 export default {
   components: {
     Editor
@@ -27,7 +28,7 @@ export default {
   watch: {
     myValue: {
       handler() {
-        T.$emit('input', T.myValue)
+        this.$emit('input', this.myValue)
       },
       immediate: true
     }
@@ -41,25 +42,26 @@ export default {
         language_url: '/tinymce/langs/zh_CN.js',
         language: 'zh_CN',
         skin_url: '/tinymce/skins/ui/oxide',
-        plugins: 'lists image     autoresize code link autolink codesample paste table',//使用粘贴插件
-        paste_data_images: T.pasteImage,//开启粘贴上传图片
+        plugins: 'lists image     autoresize code link autolink codesample  paste table',//使用粘贴插件
+        paste_data_images: this.pasteImage,//开启粘贴上传图片
         menubar: false,
         statusbar: false,
         toolbar: 'undo redo |  formatselect | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | lists image  table code link codesample| removeformat',
-        autoresize_bottom_margin: 10,
-        max_height: 400,
+         max_height: 400,
         min_height: 200,
         autoresize_on_init: true,
         autoresize_overflow_padding: 10,
-        images_upload_handler: T.uploadingImg,
         default_link_target: "_blank",
-        // theme : "advanced",
         readonly: 1,
+        autoresize_bottom_margin: 10,
+       
+        images_upload_handler: this.uploadingImg,
+        
 
 
 
       },
-      myValue: T.value
+      myValue: this.value
     }
   },
 
@@ -108,7 +110,7 @@ export default {
   mounted() {
     tinymce.init({});
     // tinymce.activeEditor.getBody().setAttribute('contenteditable', false);
-    if (!T.showToolbar) {
+    if (!this.showToolbar) {
       let execute = false
       let time = setInterval(() => {
         if (tinymce.activeEditor.getBody() != null) {
@@ -122,14 +124,12 @@ export default {
       }, 100);
     }
   },
-  beforeCreate() {
-    T = this;
-  },
+
   created() {
-    if (!T.showToolbar) {
-      T.init.toolbar = false
+    if (!this.showToolbar) {
+      this.init.toolbar = false
     }
-    if (!T.pasteImage)  console.warn("无法粘贴上传图片，请设置pasteImage为true")
+    if (!this.pasteImage)  console.warn("无法粘贴上传图片，请设置pasteImage为true")
   }
 };
 </script>

@@ -429,8 +429,13 @@ D_ITEMS.detail = {
 //  COLUMNS.detail = {...D_ITEMS.detail, width: 120,};
 F_ITEMS.detail = { ...D_ITEMS.detail, type: "editorTM", col_span: 24, };
 
-F_ITEMS.detail_paste={...F_ITEMS.detail,pasteImage: true}//支持粘贴上传图片的编辑器vue-dm-components.2.3.9
+F_ITEMS.detail_paste = { ...F_ITEMS.detail, pasteImage: true }//支持粘贴上传图片的编辑器vue-dm-components.2.3.9
 
+F_ITEMS.detail_new = {//支持粘贴上传图片的编辑器-最新版
+    ...F_ITEMS.detail,
+    type: "editorTM",
+    pasteImage: true,
+}
 
 D_ITEMS._data = {
     label: "_data对象",
@@ -1605,7 +1610,14 @@ F_ITEMS.prop_editorTM = {
     label: "富文本编辑器(TinyMCE)",
     prop: "prop_editorTM",
     type: "editorTM",
-    pasteImage111: true
+    pasteImage: true
+};
+F_ITEMS.prop_editorTMNew = {
+    label: "富文本编辑器(TinyMCE-New)",
+    prop: "prop_editor_new",
+    type: "editorTM",
+    pasteImage: true,
+
 };
 F_ITEMS.extend = {
     label: "负责人信息",

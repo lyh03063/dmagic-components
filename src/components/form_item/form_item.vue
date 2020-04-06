@@ -129,12 +129,14 @@
     ></upload_img>
     <!--富文本编辑器-->
 
-    <tiny_mce
+    <tiny_mce_new
       v-model="formDataNeed[item.prop]"
       v-else-if="item.type=='editorTM'"
       :showToolbar="true"
        :pasteImage="item.pasteImage"
-    ></tiny_mce>
+       :cf="item.cfTiny"
+    ></tiny_mce_new>
+    
     <quill_editor v-model="formDataNeed[item.prop]" v-else-if="item.type=='editor'"></quill_editor>
     <!--模糊查询文本框  支持回车查询-->
     <input_find_vague
@@ -225,7 +227,7 @@ import time_period from "../../components/form_item/time_period.vue";
 import json_prop from "../../components/form_item/json_prop.vue";
 import collection from "../../components/form_item/collection/index.vue";
 import quill_editor from "../../components/form_item/quill_editor.vue";
-import tiny_mce from "../../components/form_item/tiny_mce";
+import tiny_mce_new from "../../components/form_item/tiny_mce_new";
 import select_list_data from "../../components/form_item/select_list_data/select_list_data.vue";
 import number_range from "../../components/form_item/number_range.vue";
 import tag_list from "../../components/form_item/tag_list.vue";
@@ -233,7 +235,7 @@ export default {
   name: "form_item", //组件名，用于递归
   components: {    select_list_data, vueJsonEditor: vueJsonEditor, select_ajax,
     input_find_vague, json_editor, upload_img, time_period, json_prop,
-    collection, quill_editor, tiny_mce, number_range, tag_list  },
+    collection, quill_editor, tiny_mce_new,tiny_mce_new, number_range, tag_list  },
   // mixins: [MIX.form_item], //混入
   props: {
     cf: [Object],

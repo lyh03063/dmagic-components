@@ -122,6 +122,7 @@ export default {
     clipboard.on("success", e => {
       this.$message.success("复制成功");
     });
+    util.changeFavicon(`http://qn-dmagic.dmagic.cn/images/icon_dm.png`)//函数：{改变网页标题图标的函数}
   }
 };
 </script>

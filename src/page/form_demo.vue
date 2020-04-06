@@ -15,7 +15,6 @@
         <checkbox_diy v-model="formData.diycheckbox" :options="options"></checkbox_diy>
       </template>
     </dm_dynamic_form>
-    
   </div>
 </template>
 
@@ -112,9 +111,10 @@ export default {
         // tagList:["2222","3333"],
         aaaa: 123,
         power_paicheng: {},
-
+        prop_editor_new: `<div class="" >456</div>`,
+        prop_editorTM: `<div class="" >123</div>`,
         power: {
-          
+
           matchCenter: {
             list_match: { add: true, delete: true },
             list_achievement: { add: true, delete: true },
@@ -160,17 +160,20 @@ export default {
           }
         ]
       },
+
+
       cfForm: {
         labelWidth: "150px",
 
         formItems: [
-           F_ITEMS.prop_editorTM,
+          F_ITEMS.prop_editorTM,
+          F_ITEMS.prop_editorTMNew,
           F_ITEMS.projectName_select_lazy,
           F_ITEMS.predictTime,
           F_ITEMS.complete,
           F_ITEMS.title,
           F_ITEMS.select_list_common_url,
-          
+
           // F_ITEMS.prop_select_list_data,
           // F_ITEMS.diycheckbox,
           // F_ITEMS.num2,
@@ -181,14 +184,14 @@ export default {
           // F_ITEMS.prop1,
           // F_ITEMS.prop_input_find_vague,
           // F_ITEMS.memberId,
-          
+
           // F_ITEMS.num1_text,
           // F_ITEMS.groupMember,
           // F_ITEMS.prop4,
           // F_ITEMS.num1_component,
           // F_ITEMS.complete1,
           // F_ITEMS.select1,
-         
+
           // F_ITEMS.extend,
           // F_ITEMS.prop_upload2,
           // F_ITEMS.prop_upload,
