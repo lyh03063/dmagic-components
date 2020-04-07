@@ -20,21 +20,8 @@
         </el-popover>
       </template>
     </dm_list_data>
-    <el-button plain @click="exportExcel" size="mini">exportExcel</el-button>
-    <table class="n-table">
-      <tr>
-        <th>属性值</th>
-        <th>效果预览</th>
-      </tr>
-      <tr>
-        <td>aaaa</td>
-        <td>0000</td>
-      </tr>
-      <tr>
-        <td>aaaa</td>
-        <td>0000</td>
-      </tr>
-    </table>
+   
+    <com1 class="" ></com1>
   </div>
 </template>
 
@@ -43,8 +30,23 @@ import "../components/list_demo.js";
 let T;
 import dm_list_data from "../components/list-data/list-data.vue";
 import dm_dynamic_form from "../components/list-data/dynamic-form.vue";
+
+
+  // 注册一个全局组件-针对某个列
+    Vue.component('com_test1', {
+        template: `<span class="C_f30 B">{{doc.name}}</span>`,
+        props: ["doc"],//接收属性
+    })
+
+
+
+
+
 export default {
-  components: { dm_list_data, dm_dynamic_form },
+  components: { dm_list_data, dm_dynamic_form,
+  
+  com1:{template:`<div class="" >5555</div>`}
+  },
   data() {
     return {
 
@@ -82,14 +84,10 @@ export default {
       await this.$nextTick(); //延迟到视图更新
       this.isShowList1 = result;
     },
-    /**
-     * @name 自定义单项操作按钮点击函数
-     */
+    //自定义单项操作按钮点击函数
     singlebtnClick: function (eventType, row) {
     },
-    /**
-     * @name 自定义批量操作按钮点击函数
-     */
+    //自定义批量操作按钮点击函数
     bacthBtnClick: function (eventType, selection) {
     },
     fold(row) {

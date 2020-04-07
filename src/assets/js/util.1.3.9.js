@@ -366,12 +366,7 @@ if (WIN.Vuex) { //如果{Vuex}存在
             changeActiveMenu(state, activeMenuIndex) { //改变聚焦菜单
                 state.activeMenuIndex = activeMenuIndex
             },
-            openDialogAdd(state, listIndex) { //打开新增弹窗事件
-                state.listState[listIndex].isShowDialogAdd = true;
-            },
-            closeDialogAdd(state, listIndex) { //关闭新增弹窗事件
-                state.listState[listIndex].isShowDialogAdd = false;
-            },
+           
             openDialogDetail(state, param) { //打开详情弹窗事件
                 state.listState[param.listIndex].isShowDialogDetail = true;
                 // state.listState[param.listIndex].tableDataDetail.forEach(doc => {
@@ -546,15 +541,7 @@ util.getTimeStatus = function (param) { //
 //#region ajaxPopulate:ajax填充数据列表的某个字段函数/可用于动态数据字典
 util.ajaxPopulate = async function (populateConfig) {
     //补充ajax配置20191128
-    let {
-        ajax,
-        listData,
-        page,
-        populateColumn,
-        idColumn,
-        idColumn2,
-        findJson = {}
-    } = populateConfig;
+    let { ajax, listData, page, populateColumn, idColumn, idColumn2, findJson = {} } = populateConfig;
     let arrId = [];
     listData.forEach(itemEach => { //循环：{原数据数组}
         let idEach = itemEach[idColumn]
@@ -567,25 +554,18 @@ util.ajaxPopulate = async function (populateConfig) {
         }
     })
     arrId = Array.from(new Set(arrId)) //去重
+    if (!arrId.length) return listData ;//没有arrId,就不要再发送请求，节省性能
     let urlAjax = `/crossList?page=${page}`;
-    let paramAjax = {
-        pageSize: 999
-    }
+    let paramAjax = { pageSize: 999 }
     if (ajax) { //如果{ajax配置}存在*****
         let { url, param = {} } = ajax
         urlAjax = url;
         Object.assign(paramAjax, param); //合并对象
     }
     //补充id数组过滤条件****
-    lodash.set(paramAjax, `findJson.${idColumn2}`, {
-        "$in": arrId,
-        ...findJson
-    });
-    let { data } = await axios({
-        //请求接口
-        method: "post",
-        url: WIN.PUB.domain + urlAjax,
-        data: paramAjax //传递参数
+    lodash.set(paramAjax, `findJson.${idColumn2}`, { "$in": arrId, ...findJson });
+    let { data } = await axios({ //请求接口
+        method: "post", url: `${WIN.PUB.domain}${urlAjax}`, data: paramAjax //传递参数
     });
     var dict = lodash.keyBy(data.list, idColumn2)
     listData.forEach(itemEach => { //循环：{原数据数组}
@@ -1262,7 +1242,7 @@ util.changeFavicon = function (link) {
 
 //#region tableExportExcel:确认表格导出excel函数-只支持一页
 util.tableExportExcel = async function ({ el, fileName = "数据表" }) {
-    let {saveAs,XLSX}=window;
+    let { saveAs, XLSX } = window;
     if (!saveAs) return console.error("saveAs不存在，请先引用对应的js")
     if (!XLSX) return console.error("XLSX不存在，请先引用对应的js")
     return new Promise(async (resolve, reject) => {

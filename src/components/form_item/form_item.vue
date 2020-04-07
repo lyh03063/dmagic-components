@@ -1,9 +1,10 @@
 <template>
   <div class="LH32">
     <!--component自定义组件-用于派成的权限树--->
-    <component :is="item.component" v-model="formDataNeed[item.prop]" v-if="item.component"></component>
+    <component :is="item.component" v-model="formDataNeed[item.prop]" :formData="formDataNeed" v-if="item.component"></component>
     <!--slot自定义组件-注意是isReadyFormData为真时才开始渲染-->
     <slot :name="item.slot" :formData="formDataNeed" v-else-if="item.slot"></slot>
+    
     <!--下拉框-->
     <template class v-else-if="item.type=='select'">
       <select_ajax

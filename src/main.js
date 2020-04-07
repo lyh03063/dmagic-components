@@ -94,12 +94,8 @@ const store = new Vuex.Store({ //定义Vuex的存储对象
         changeActiveMenu(state, activeMenuIndex) { //改变聚焦菜单
             state.activeMenuIndex = activeMenuIndex
         },
-        openDialogAdd(state, listIndex) { //打开新增弹窗事件
-            state.listState[listIndex].isShowDialogAdd = true;
-        },
-        closeDialogAdd(state, listIndex) { //关闭新增弹窗事件
-            state.listState[listIndex].isShowDialogAdd = false;
-        },
+        
+      
         openDialogDetail(state, param) { //打开详情弹窗事件
             state.listState[param.listIndex].isShowDialogDetail = true;
             state.listState[param.listIndex].row = param.row; //将行数据保存到vuex

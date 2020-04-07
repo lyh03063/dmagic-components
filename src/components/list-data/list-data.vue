@@ -121,14 +121,11 @@
               <slot :name="column.slot" :row="scope.row" v-if="column.slot"></slot>
               <!--Q2:有formatter-->
               <span class v-else-if="column.formatter">{{column.formatter(scope.row)}}</span>
-              <!--Q3:可跳转的统计数字链接-->
-              <a
-                class="link-blue"
-                href="javascript:;"
-                @click="filterData({pid:scope.row[cf.idKey],listIndex:column.statistics.listIndex, targetIdKey:column.statistics.targetIdKey})"
-                v-else-if="column.statistics"
-              >{{scope.row[column.prop]}}</a>
-              <!--Q4:其他-->
+              <!--Q3:有formatter-->
+              <span class v-else-if="column.formatter">{{column.formatter(scope.row)}}</span>
+              <!--Q4:有组件名-->
+              <component v-else-if="column.component" :is="column.component" :doc="scope.row"></component>
+              <!--Q5:其他-->
               <span class v-else>{{scope.row[column.prop]}}</span>
               <i
                 class="el-icon-edit icon-edit"
@@ -180,6 +177,7 @@
         background
         layout="total, sizes, prev, pager, next, jumper"
         @current-change="handleCurrentChange"
+        :current-page.sync="objParam.pageIndex"
         :total="allCount"
         :pageSize="objParam.pageSize"
         :page-sizes="[2,10,20,50,100, 200,500]"
@@ -239,7 +237,8 @@ import dynamicForm from "./dynamic-form";
 // import { log } from "util";
 export default {
   name: "dm_list_data", //组件名，用于递归
-  components: { listDialogs, dynamicForm }, //注册组件
+  components: {    listDialogs, dynamicForm,
+  }, //注册组件
   props: {
     value: Array, //绑定的静态数据
     cf: {
@@ -252,7 +251,8 @@ export default {
   },
   data() {
     return {
-      id:`id_${util.getTimeRandom()}`,//随机Id，导出excel表格时需用到
+
+      id: `id_${util.getTimeRandom()}`,//随机Id，导出excel表格时需用到
       //------------------单元格编辑配置--------------
       rowEdit: null, columnEdit: null, formDataEditRow: {},
       cfFormEditRow: {
@@ -310,17 +310,33 @@ export default {
     tableExportExcel: util.tableExportExcel,//导出excel函数
     //函数：{单元格编辑函数}
     async tdEdit(row, column) {
-      let { edit, prop } = column;
+
+      let { edit, cfEdit, prop } = column;
+      if (!edit) return;
+
+
       this.columnEdit = column;
       this.rowEdit = row;
-      if (edit) {
-        //如果需要编辑
-        let itemTarget = this.cf.formItems.find(doc => doc.prop == prop); //获取对应的表单字段
-        this.cfFormEditRow.formItems = [itemTarget]; //改变字段配置
-        this.isShowDialogEditRow = true;
-        await util.timeout(500); //延迟
-        this.formDataEditRow[prop] = row[prop]; //表单赋值
-      }
+
+      let formItems = this.cf.formItems;//列表对应的表单字段数组
+      /*
+      cfEdit如果要切换其他列表，还是比较麻烦的！！！
+       if (cfEdit) {//如果{编辑配置存在}
+              let { listIndex } = cfEdit
+              formItems = PUB.listCF[listIndex].formItems
+            }
+      */
+
+
+
+
+      let itemTarget = formItems.find(doc => doc.prop == prop); //获取对应的表单字段
+      this.cfFormEditRow.formItems = [itemTarget]; //改变表单字段配置
+
+
+      this.isShowDialogEditRow = true;
+      await util.timeout(500); //延迟
+      this.formDataEditRow[prop] = row[prop]; //表单赋值
     },
     //函数：{单元格编辑表单提交函数}
     submitFormEditRow() {
@@ -410,7 +426,7 @@ export default {
           await this.getDataList(); //第一次加载此函数，页面才不会空
           this.$message.success('刷新成功');
         } else if (eventType == "export_excel") {
-          let {jQuery}=window;
+          let { jQuery } = window;
           if (!jQuery) return console.error("jQuery不存在，请先引用对应的js")
           let elHead = `#${this.id} .el-table__header-wrapper table`;
           let elBody = `#${this.id} .el-table__body-wrapper table`;
@@ -427,14 +443,43 @@ export default {
     },
     showAdd() {
       //清空初始化数据ajax地址，赋值数据时可能添加了这个，
-      this.$refs.listDialogs.cfFormAdd.urlInit = null; //
+      // this.$refs.listDialogs.cfFormAdd.urlInit = null; //
+      // this.$emit("after-show-Dialog-Add");
+      // this.$store.commit("openDialogAdd", this.cf.listIndex);
+
+
+      this.$refs.listDialogs.cfAddDialog.cfFormAdd.urlInit = null
+      this.$refs.listDialogs.cfAddDialog.visible = true
+      this.$refs.listDialogs.formAdd = { ...this.cf.formDataAddInit }//还原表单
       this.$emit("after-show-Dialog-Add");
-      this.$store.commit("openDialogAdd", this.cf.listIndex);
+
+
+
     },
     //函数：{显示复制数据弹窗函数}
     showCopy(row) {
+      console.log("showCopy-row:", row);
+
+
+      // this.$refs.listDialogs.cfFormAdd.paramAddonInit = this.cf.paramAddonPublic; //初始化的附加参数
+      // this.$refs.listDialogs.cfFormAdd.urlInit = this.cf.url.detail; //初始化数据ajax地址
+      // this.$refs.listDialogs.cfFormAdd.idKey = this.cf.idKey; //初始化的idKey
+      // this.$refs.listDialogs.formAdd = lodash.cloneDeep(row);
+      // this.$store.commit("openDialogAdd", this.cf.listIndex);
+
+      // this.$refs.listDialogs.cfAddDialog.formDataAddInit = { ...this.cf.paramAddonPublic, ...this.cf.formDataAddInit }
+      this.$refs.listDialogs.cfAddDialog.cfFormAdd.urlInit = this.cf.url.detail
+       let rowNew=lodash.cloneDeep(row);
+      this.$refs.listDialogs.formAdd = { ...this.cf.formDataAddInit, ...rowNew }
+      this.$refs.listDialogs.cfAddDialog.visible = true
+
+
+
+
       this.$emit("after-show-dialog-copy");
-      this.$store.commit("openDialogAdd", this.cf.listIndex);
+
+
+
     },
     // 删除选中数据的方法
     deleteSelection() {
@@ -580,12 +625,20 @@ export default {
       if (this.cf.dynamicDict) {
         //如果{填充配置数组}存在.
         for await (const populateCFEach of this.cf.dynamicDict) {
-          // await   funPopulate(populateCFEach);//调用：{根据填充配置进行一次ajax请求关联数据的函数}
           let paramPopulate = lodash.cloneDeep(populateCFEach); //深拷贝
           paramPopulate.listData = this.tableData; //补充listData属性
           this.tableData = await util.ajaxPopulate(paramPopulate);
-          // this.$emit("input", this.tableData); //****触发外部value的改变，使用watch的话不太好，会有延迟
         }
+
+        //这个优化可能没那么简单，要有足够的合并数据机制
+        // await Promise.all(this.cf.dynamicDict.map(async populateCFEach => {
+        //   let paramPopulate = lodash.cloneDeep(populateCFEach); //深拷贝
+        //   paramPopulate.listData = this.tableData; //补充listData属性
+        //   this.tableData = await util.ajaxPopulate(paramPopulate);
+        // }))
+
+
+
       }
       this.$emit("after-search", this.tableData); //触发外部事件
     }
@@ -673,11 +726,7 @@ export default {
         this.showDetail(row);
       } else if (eventType == "copy") {
         //Q4：复制按钮点击事件
-        this.$refs.listDialogs.cfFormAdd.paramAddonInit = this.cf.paramAddonPublic; //初始化的附加参数
-        this.$refs.listDialogs.cfFormAdd.urlInit = this.cf.url.detail; //初始化数据ajax地址
-        this.$refs.listDialogs.cfFormAdd.idKey = this.cf.idKey; //初始化的idKey
-        this.$refs.listDialogs.formAdd = lodash.cloneDeep(row);
-        //  delete this.$refs.listDialogs.formAdd[this.cf.idKey]//删除数据id,否则新增会出问题
+
         this.showCopy(row); //调用：{显示复制数据弹窗函数}
       }
     });

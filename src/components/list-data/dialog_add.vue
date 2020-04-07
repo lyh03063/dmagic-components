@@ -90,8 +90,7 @@ export default {
         console.log("ajaxParam:", ajaxParam);
         Object.assign(ajaxParam, this.cf.cfFormAdd.paramAddonInit); //合并公共参数，之前是cf.paramAddonPublic
         let response = await axios({//请求接口
-          method: "post", url: `${PUB.domain}${this.cf.urlAdd}`,
-          data: ajaxParam //传递参数
+          method: "post", url: `${PUB.domain}${this.cf.urlAdd}`,data: ajaxParam //传递参数
         });
         //触发外部事件-把新增前后的数据都传过去
         this.$emit("after-add", response.data.addData, this.IN_formAdd);

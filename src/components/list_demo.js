@@ -99,6 +99,12 @@ PUB.listCF.list_demo={
       // style:{"color":"#3a0"}
     }
   },
+  formDataAddInit111:{
+    bbb:"来自formDataAddInit"
+  },
+  paramAddonPublic:{
+    ccc:"来自paramAddonPublic"
+  },
   deleteFindJson: {
     //ajax查询参数中需要删除的参数
     //  articleTitle: true
@@ -187,6 +193,13 @@ PUB.listCF.list_demo={
       prop: "CreateTime",
       width: 145,
       slot: "slot_column_CreateTime"
+    },
+    {
+      
+      label: "自定义全局组件",
+      prop: "com_test1",
+      width: 145,
+      component: "com_test1",
     },
     COLUMNS.extend
   ],

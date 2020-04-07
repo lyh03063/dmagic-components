@@ -48,47 +48,11 @@
       </span>
     </el-dialog>
 
-    <!--新增数据表单弹窗-->
-    <el-dialog
-      title="新增数据"
-      :visible.sync="isShowDialogAdd"
-      v-if="isShowDialogAdd"
-      width="95%"
-      :before-close="closeDialogAddFun"
-      :close-on-click-modal="false"
-      :append-to-body="true"
-    >
-      <div class>
-        <dm_debug_list level-up="1">
-          <dm_debug_item v-model="formAdd" text="新增表单的绑定数据" />
-          <dm_debug_item v-model="cf.formDataAddInit" text="新增表单的初始数据" />
-        </dm_debug_list>
-      </div>
 
-      <!--表单提示语-->
-      <div
-        class
-        v-html="$lodash.get(cf, `cfDialogForm.tips.text`)"
-        v-if="$lodash.get(cf, `cfDialogForm.tips`)"
-        :style="getTipsStyle(cf)"
-      ></div>
-
-      <dynamicForm
-        v-model="formAdd"
-        :cf="cfFormAdd"
-        @submit="addData"
-        @cancel="closeDialogAddFun"
-        :needDeleteId="true"
-      >
-        <template v-slot:[item.slot]="{formData}" v-for="item in cf.formItems">
-          <!--根据cf.formItems循环输出插槽--新增修改表单弹窗-->
-          <slot :name="item.slot" :formData="formData" v-if="item.slot"></slot>
-        </template>
-      </dynamicForm>
-    </el-dialog>
-
-    
-
+   <!--弹窗新增数据组件--> 
+ <dm_dialog_add ref="dialog_add" :cf="cfAddDialog" :formAdd="formAdd">
+      <template v-slot:slot_test="{formData}">{{formData.name}}</template>
+    </dm_dialog_add>
 <!--弹窗编辑数据组件-->
     <dm_dialog_edit ref="dialog_edit" :cf="cfEditDialog" :formModify="formModify" @after-modify="afterModify">
        <template v-slot:[item.slot]="{formData}" v-for="item in cf.formItems">
@@ -116,6 +80,26 @@ export default {
 
   data: function() {
     return {
+       cfAddDialog: {
+        // visible: true,
+        cfTips: lodash.get(this.cf, `cfDialogForm.tips`),
+        urlAdd: this.cf.url.add,
+        tableData: null,
+        isRefreshAfterAdd: this.cf.isRefreshAfterCUD,
+        formDataAddInit: { },
+        cfFormAdd: {
+          idKey: this.cf.idKey,
+          paramAddonInit: this.cf.paramAddonPublic,
+          watch: lodash.get(this.cf, `cfForm.watch`),
+          col_span: lodash.get(this.cf, `cfForm.col_span`, 24), //控制显示一行多列
+          urlInit: "",
+          formItems: this.cf.formItems,
+          btns: [
+            { text: "新增---", event: "submit", type: "primary", validate: true },
+            { text: "取消", event: "cancel" }
+          ]
+        }
+      },
     
       //**------------------修改表单组件配置-新--------------
 
@@ -165,14 +149,7 @@ export default {
     };
   },
   watch: {
-    "cf.formDataAddInit": {
-      //监听新增表单的初始化数据
-      handler(newVal, oldVal) {
-        this.initFormDataAdd(); //调用：{初始化新增数据表单函数}
-      },
-      immediate: true,
-      deep: true
-    },
+   
     // 当父组件的配置改变时里面的配置随之改变
     "cf.formItems": {
       //监听新增表单的初始化数据
@@ -190,10 +167,7 @@ export default {
 
       return this.$store.state.listState[this.cf.listIndex].row;
     },
-    isShowDialogAdd() {
-      //是否显示添加弹窗
-      return this.$store.state.listState[this.cf.listIndex].isShowDialogAdd; //从vuex的store里面读取值
-    },
+ 
     isShowDialogDetail() {
       //是否显示详情弹窗
       return this.$store.state.listState[this.cf.listIndex].isShowDialogDetail; //从vuex的store里面读取值
@@ -207,73 +181,14 @@ export default {
       let style = { padding: "10px 10px 10px 100px", color: "#f60" };
       return Object.assign(style, styleAdd); //合并对象
     },
-    initFormDataAdd() {
-      //函数：{初始化新增数据表单函数}
-      if (!this.cf.formDataAddInit) {
-        return;
-      }
-
-      this.formAdd = util.deepCopy(this.cf.formDataAddInit);
-    },
+  
     closeDialogDetailFun(done) {
       //关闭详情弹窗的配置事件函数
       this.$store.commit("closeDialogDetail", this.cf.listIndex); //执行store的closeDialogAdd事件
     },
-    closeDialogAddFun(done) {
-      //关闭新增弹窗的配置事件函数
-      this.$store.commit("closeDialogAdd", this.cf.listIndex); //执行store的closeDialogAdd事件
-      this.formAdd = this.cf.formDataAddInit || {}; //还原formAdd
-    },
+  
 
-    //-------------新增数据的函数--------------
-    async addData() {
-      //如果{新增数据接口地址}存在
-      if (this.cf.url.add) {
-        let ajaxParam;
-        //如果{idKey}是"_id"
-        if (this.cf.idKey == "_id") {
-          ajaxParam = { _data: this.formAdd };
-        } else {
-          ajaxParam = { data: this.formAdd };
-        }
-        Object.assign(ajaxParam, this.cf.paramAddonPublic); //合并公共参数
-        let response = await axios({
-          //请求接口
-          method: "post",
-          url: PUB.domain + this.cf.url.add,
-          data: ajaxParam //传递参数
-        });
-
-        //触发外部事件-把新增前后的数据都传过去
-        this.$emit("after-add", response.data.addData, this.formAdd);
-        //Q2:{新增数据接口地址}不存在
-      } else {
-        let idMax = 1;
-        //如果列表有数据
-        if (this.tableData.length) {
-          let arrId = this.tableData.map(doc => doc["P1"]); //id数组
-          idMax = Math.max(...arrId) + 1; //获取最大id
-        }
-        this.formAdd["P1"] = idMax; //补充id
-        this.tableData.unshift(this.formAdd); //静态数据列表追加一条数据
-        this.$emit("after-add", this.formAdd);
-      }
-
-      this.$message({
-        message: "新增成功",
-        duration: 1500,
-        type: "success"
-      });
-
-      this.closeDialogAddFun(); //关闭弹窗
-      //如果{增删改操作后是否自动刷新}为真
-      if (this.cf.isRefreshAfterCUD) {
-        this.$parent.getDataList(); //更新数据列表
-      }
-
-      this.initFormDataAdd(); //调用：{初始化新增数据表单函数}
-      // this.formAdd = {};
-    },
+   
     //-------------显示修改弹窗的函数--------------
     async showModify(row) {
       this.$emit("after-show-Dialog-Modify", row);//触发外部事件
@@ -293,10 +208,7 @@ export default {
 
   },
   created() {
-    //如果{新增表单默认新增数据}不存在，进行注册
-    if (!this.cf.formDataAddInit) {
-      this.$set(this.cf, "formDataAddInit", {});
-    }
+    
   },
   mounted() {}
 };
