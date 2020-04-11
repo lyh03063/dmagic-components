@@ -5,10 +5,10 @@ import moment from 'moment' //导入moment方法库
 window.moment = moment
 Vue.prototype.$moment = moment //让vue实例中可访问$moment
 
-import "./assets/js/util.1.3.9.js" //改成跟线上版同步
-// import "./assets/js/config_detail.1.0.5.js"
-// import "./assets/js/config_column.1.0.6.js"
-import "./assets/js/config_item.1.1.9.js"
+import "./assets/js/util.1.4.1.js" //改成跟线上版同步
+
+import "./assets/js/config_base_sys_api.1.0.4.js"
+import "./assets/js/config_item.1.2.1.js"
 import "./assets/js/public.js"
 import "./assets/js/config_base.1.3.5.js"
 

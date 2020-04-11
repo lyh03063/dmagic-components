@@ -8,7 +8,7 @@ let ED
 export default {
   components: {},
   name: 'tinymce_new',
-  props: ['value',  "cf"],
+  props: ['value', "cf"],
   watch: {
     value(val) {
       //  ED.setContent(val);//编辑器填充内容-这里光标会跳动！！！先不搞
@@ -25,40 +25,18 @@ export default {
   methods: {
 
     async uploadingImg(blobInfo, succFun, failFun) {
-      var img = blobInfo.blob();
-      let time = moment().format("YYYYMMDDHHmmSSsss");
-      let requestData = await axios({
-        method: "post",
-        url: PUB.urlGetQiniuToken,
-        data: {
-          options: {
-            //配置项
-            forceSaveKey: true, //使用自定义的key
-            saveKey: `${time}_${img.name}`, //自定义的key
-            //返回数据格式y
-            returnBody: `{      "key": $(key), "hash": $(etag), "w": $(imageInfo.width), "h": $(imageInfo.height),
-        "size": $(fsize),
-          "bucket": $(bucket),
-            "fname": $(fname),
-              "ext": $(ext),
-                "time": "$(year)-$(mon)-$(day) $(hour):$(min):$(sec) "
-    }`
-          }
-        }
-      });
-      let formData = new FormData()
-      formData.append("file", img)
-      formData.append('token', requestData.data.token)
-      let { data } = await axios({
-        method: "post",
-        url: window.PUB.urlUpload,
-        data: formData,
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      })
+      var file = blobInfo.blob();
+
+      let { data: dataToken } = await util.getQiNiuToken(file)//调用：{ajax获取七牛云token的函数}
+      let {token}=dataToken
+
+
+    
+
+      let { data } =await util.uploadQiNiuFile({ file, token })//调用：{ajax上传文件到七牛云的函数}
+
       if (data.key) {
-        let src = requestData.data.downloadDomain + '/' + data.key
+        let src = dataToken.downloadDomain + '/' + data.key
         succFun(src)
       } else {
         failFun(alert('图片上传失败'))
@@ -67,41 +45,26 @@ export default {
   },
   mounted() {
     console.log(`初始化:${this.id}`);
-    tinymce.init({});
-    // tinymce.activeEditor.getBody().setAttribute('contenteditable', false);
-    /****************************这段用于隐藏工具栏的-START****************************/
-    // if (!this.showToolbar) {
-    //   let execute = false
-    //   let time = setInterval(() => {
-    //     if (tinymce.activeEditor.getBody() != null) {
-    //       execute = true
-    //       tinymce.activeEditor.getBody().setAttribute('contenteditable', false)
-    //     }
-    //     if (execute) {
-    //       clearInterval(time)
-    //     }
+    // tinymce.init({});
 
-    //   }, 100);
-    // }
-    /****************************这段用于隐藏工具栏的-END****************************/
 
 
 
 
     let cfTiny = {
-      language_url: '/tinymce_new/langs/zh_CN.js',
-      skin_url: '/tinymce_new/skins/ui/oxide',
+      // language_url: '/tinymce_new/langs/zh_CN.js',
+      // skin_url: '/tinymce_new/skins/ui/oxide',
 
       selector: `#${this.id}`,
       language: 'zh_CN', // 需要在官网自己下载一个全局的langs包。同时我提供的powerpaste本身自带一个langs包里面含中文，所以可以100%支持中文。
       plugins: [
         // plugins中，用powerpaste替换原来的paste
-        'powerpaste', 'lists', 'image', 'autoresize', 'code', 'link', 'autolink', 'codesample', 'table',
+        'quickbars', 'lists', 'image', 'autoresize', 'code', 'link', 'autolink', 'codesample', 'table', 'powerpaste',
 
       ],
       menubar: false,
       statusbar: false,
-
+      // inline: true,
       toolbar: 'undo redo |  formatselect | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | lists image  table code link codesample| removeformat',
       max_height: 400,
       min_height: 200,
@@ -114,7 +77,10 @@ export default {
       powerpaste_html_import: 'propmt',// propmt, merge, clear
       // powerpaste_allow_local_images: true,
       paste_data_images: false,//这个已经没什么用了
-      images_upload_handler: this.uploadingImg,
+      images_upload_handler: this.uploadingImg,//图片上传配置
+      contextmenu: "bold italic forecolor  fontcolor| link image imagetools table spellchecker",
+      // quickbars_insert_toolbar: 'quickimage quicktable',
+      quickbars_selection_toolbar: 'bold  forecolor | link  quickimage |removeformat',
       setup: (editor) => {
         ED = editor;//赋值
         editor.on('input change undo redo execCommand KeyUp', (e) => {
@@ -137,7 +103,7 @@ export default {
   beforeCreate() {
   },
   created() {
-  
+
 
   }
 };

@@ -1,6 +1,6 @@
-PUB.listCF=PUB.listCF||{}
+PUB.listCF = PUB.listCF || {}
 
-PUB.listCF.list_demo={
+PUB.listCF.list_demo = {
   breadcrumb: [
     { value: "首页", path: "/listHome" },
     { value: "其他数据" },
@@ -40,7 +40,7 @@ PUB.listCF.list_demo={
       util.cfList.sBtns.modify,
       util.cfList.sBtns.copy,
       util.cfList.sBtns.delete,
-    
+
       {
         title: "单项操作（圆形按钮）",
         eventType: "singleOP1",
@@ -58,7 +58,7 @@ PUB.listCF.list_demo={
         uiType: "link",
         text: "新窗口打开页面",
         target: "_blank",
-        urlFormatter: function(row) {
+        urlFormatter: function (row) {
           return `http://www.baidu.com?id=${row.name}`;
         },
         url: "http://www.baidu.com?id=" //这里要配置好参数名，内部会把参数加进来
@@ -74,11 +74,13 @@ PUB.listCF.list_demo={
       util.cfList.bBtns.refresh,
       util.cfList.bBtns.exportExcel,
       {
-        text: "批量操作（需选数据）",
+        text: "批量操作（需选数据2）",
         eventType: "bacthOP1",
         needSelect: true,
+        hide:true,
         cfElBtn: {
-          icon: "el-icon-user-solid"
+          id:"id_bacthOP1",
+          icon: "el-icon-user-solid",
         }
       },
       { text: "其他操作（不需选中数据）", eventType: "bacthOP2" },
@@ -89,7 +91,8 @@ PUB.listCF.list_demo={
         url: "http://www.baidu.com",
         cfElBtn: {
           type: "primary",
-          icon: "el-icon-user-solid"
+          icon: "el-icon-user-solid",
+          class:"DPN"
         }
       },
       { uiType: "slot", slot: "slot_in_toolbar" }
@@ -99,11 +102,11 @@ PUB.listCF.list_demo={
       // style:{"color":"#3a0"}
     }
   },
-  formDataAddInit111:{
-    bbb:"来自formDataAddInit"
+  formDataAddInit111: {
+    bbb: "来自formDataAddInit"
   },
-  paramAddonPublic:{
-    ccc:"来自paramAddonPublic"
+  paramAddonPublic: {
+    ccc: "来自paramAddonPublic"
   },
   deleteFindJson: {
     //ajax查询参数中需要删除的参数
@@ -161,7 +164,7 @@ PUB.listCF.list_demo={
       prop: "articleCategory",
       requireProp: ["articleContent"], //依赖文章详情，列表需返回该字段
       width: 150,
-      formatter11111: function(rowData) {
+      formatter11111: function (rowData) {
         let name = lodash.get(rowData, "categoryDoc.name");
         return name;
       }
@@ -184,8 +187,8 @@ PUB.listCF.list_demo={
       label: "描述",
       prop: "desc",
       width: 145,
-      edit:true,
-      
+      edit: true,
+
     },
     {
       sortable: "custom",
@@ -195,7 +198,7 @@ PUB.listCF.list_demo={
       slot: "slot_column_CreateTime"
     },
     {
-      
+
       label: "自定义全局组件",
       prop: "com_test1",
       width: 145,
@@ -206,7 +209,13 @@ PUB.listCF.list_demo={
   //-------筛选表单字段数组-------
   searchFormItems: [F_ITEMS.select1, F_ITEMS.name_search],
   //-------详情字段数组-------
-  detailItems: [COLUMNS.name],
+  detailItems: [COLUMNS.name, {
+
+    label: "自定义全局组件",
+    prop: "com_test1",
+    width: 145,
+    component: "com_test1",
+  },],
   //-------新增、修改表单字段数组-------
-  formItems: [F_ITEMS.name,F_ITEMS.desc]
+  formItems: [F_ITEMS.name, F_ITEMS.desc]
 }

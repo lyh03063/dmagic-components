@@ -176,7 +176,9 @@ DYDICT.personCharge = {
     },
     populateColumn: "adminDoc",
     idColumn: "personCharge",
-    idColumn2: "userName"
+    idColumn2: "userName",
+
+
 };
 
 //#endregion
@@ -2005,8 +2007,13 @@ F_ITEMS.personCharge = {
         url: "/info/getCommonList",
         keyLabel: "nickName",
         keyValue: "userName"
+    },
+    frequency: {
+        sytle: { width: '48px' },
+        dataType:"array",
+        options: [{ value: "13691916429", label: "刘咏辉" }, { value: "13415028975", label: "林丰浩" },]
     }
-};
+  };
 //#endregion
 
 
@@ -2216,7 +2223,12 @@ F_ITEMS.phoneNumber = {
     F_ITEMS.albumVenue = {
         ...album,
         type: "upload",
-        tips: "图片尺寸比例最好保持在1 : 0.8，建议尺寸：宽500px，高400px"
+        tips: "图片尺寸比例最好保持在1 : 0.8，建议尺寸：宽500px，高400px",
+        uploadConfig: {
+            limit: 5,
+            // preview: true
+        }
+
     };
 }
 

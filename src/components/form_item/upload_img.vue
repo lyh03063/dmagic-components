@@ -17,7 +17,7 @@
       :list-type="uploadConfigNeed.listType"
       :on-preview="handlePictureCardPreview"
       :on-remove="handleRemove"
-      :before-remove="beforeRemove" 
+      :before-remove="beforeRemove"
       :on-success="uploaded"
       :on-exceed="exceed"
       :multiple="true"
@@ -128,37 +128,23 @@ export default {
      */
 
     async beforeUpload(file) {
-      let time = moment().format("YYYYMMDDHHmmSSsss");
-      //请求获取token接口
-      let { data } = await axios({
-        method: "post",
-        url: PUB.urlGetQiniuToken,
-        data: {
-          options: {
-            //配置项
-            forceSaveKey: true, //使用自定义的key
-            saveKey: `${time}_${file.name}`, //自定义的key
-            //返回数据格式y
-            returnBody: `{"key":   $(key), "hash": $(etag), "w": $(imageInfo.width), "h": $(imageInfo.height), 
-            "size": $(fsize),
-            "bucket": $(bucket),
-            "fname": $(fname),
-            "ext": $(ext),
-            "time": "$(year)-$(mon)-$(day) $(hour):$(min):$(sec) "
-            }`
-          }
-        }
-      });
-      let { token, downloadDomain } = data;
+
+      let maxSize = 200
+      const isLimit = file.size / 1024 / 1024 < maxSize;
+      if (!isLimit) {
+       return  this.$message.error(`上传文件大小不能超过${maxSize}MB!`);
+      }
+
+
+      
+
+      let {data:dataToken} = await util.getQiNiuToken(file)//调用：{ajax获取七牛云token的函数}
+      let { token, downloadDomain } = dataToken;
       this.downloadDomain = downloadDomain; //更新七牛云下载域名
 
       this.postData.token = token;
-      const isLt2M = file.size / 1024 / 1024 < 200;
 
-      if (!isLt2M) {
-        this.$message.error("上传文件大小不能超过 200MB!");
-      }
-      return isLt2M;
+      return isLimit;
     },
     //处理图片上传后的同步
     uploaded(response) {
@@ -167,7 +153,7 @@ export default {
       let url = `${this.downloadDomain}/${key}`; //图片的绝对路径
       this.valueNeed.push({ url, name: fname }); //
     },
-    
+
 
     //处理图片删除后的同步
     handleRemove(file, fileList) {
@@ -202,7 +188,7 @@ export default {
       }
     }
   },
-  mounted() {}
+  mounted() { }
 };
 </script>
 

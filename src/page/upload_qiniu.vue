@@ -81,18 +81,7 @@ export default {
   },
   async created() {
     this.$store.commit("changeActiveMenu",'upload_qiniu');
-    // var token;
-    // var policy = {};
-    // var bucketName = "test";
-    // var AK = "NRMJl2D1rXCOG3G9lqUAraOAkNzNxIn84n4iYbJ0";
-    // var SK = "CA9R-Qlijmw-WcAS2CDDyBGmh7zxW42y6f1TRsxI";
-    // var deadline = Math.round(new Date().getTime() / 1000) + 3600;
-    // policy.scope = bucketName;
-    // policy.deadline = deadline;
-    //  policy.forceSaveKey = true;
-    //  policy.saveKey = "1234";//指定文件名
-    // token = genUpToken(AK, SK, policy);
-    // this.postData.token = token;
+   
   }
 };
 </script>

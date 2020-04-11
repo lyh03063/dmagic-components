@@ -21,6 +21,8 @@
               <slot :name="item.slot" :row="row" v-if="item.slot"></slot>
               <!--如果该字段带有formatter,使用formatter返回的代码输出-->
               <div v-else-if="item.formatter" v-html="item.formatter(row)"></div>
+              <!--有组件名-->
+              <component v-else-if="item.component" :is="item.component" :doc="row"></component>
               <!--否则如果该字段带type是html，使用html原文输出-->
               <div v-else-if="item.type=='html'" v-html="row[item.prop]"></div>
               <div v-else-if="item.type=='htmlJson'" v-highlight>
@@ -95,7 +97,7 @@ export default {
           urlInit: "",
           formItems: this.cf.formItems,
           btns: [
-            { text: "新增---", event: "submit", type: "primary", validate: true },
+            { text: "新增", event: "submit", type: "primary", validate: true },
             { text: "取消", event: "cancel" }
           ]
         }

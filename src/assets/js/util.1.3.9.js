@@ -1269,7 +1269,13 @@ util.tableExportExcel = async function ({ el, fileName = "数据表" }) {
 //#endregion
 
 
-
+//#region nextTickStatus:强制某个状态值更新
+util.nextTickStatus = async function (key) {
+    this[key] = false;
+    await this.$nextTick();//延迟到视图更新
+    this[key] = true;
+};
+//#endregion
 
 
 
@@ -1279,4 +1285,5 @@ util.aaaa = function (param) {
 };
 //#endregion
 Vue.prototype.$util = util //让vue实例中可访问$util
+Vue.prototype.$nextTickStatus = util.nextTickStatus //让vue实例中可访问$nextTickStatus
 Vue.prototype.$lodash = lodash //让vue实例中可访问$util

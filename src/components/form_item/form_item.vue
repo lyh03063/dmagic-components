@@ -1,13 +1,19 @@
 <template>
-  <div class="LH32">
+  <div class="LH32" ref="formItemBox" v-if="ready">
     <!--component自定义组件-用于派成的权限树--->
-    <component :is="item.component" v-model="formDataNeed[item.prop]" :formData="formDataNeed" v-if="item.component"></component>
+    <component
+      :is="item.component"
+      v-model="formDataNeed[item.prop]"
+      :formData="formDataNeed"
+      v-if="item.component"
+    ></component>
     <!--slot自定义组件-注意是isReadyFormData为真时才开始渲染-->
     <slot :name="item.slot" :formData="formDataNeed" v-else-if="item.slot"></slot>
-    
+
     <!--下拉框-->
     <template class v-else-if="item.type=='select'">
       <select_ajax
+        ref="select_ajax"
         class
         v-model="formDataNeed[item.prop]"
         :multiple="item.multiple"
@@ -134,10 +140,10 @@
       v-model="formDataNeed[item.prop]"
       v-else-if="item.type=='editorTM'"
       :showToolbar="true"
-       :pasteImage="item.pasteImage"
-       :cf="item.cfTiny"
+      :pasteImage="item.pasteImage"
+      :cf="item.cfTiny"
     ></tiny_mce_new>
-    
+
     <quill_editor v-model="formDataNeed[item.prop]" v-else-if="item.type=='editor'"></quill_editor>
     <!--模糊查询文本框  支持回车查询-->
     <input_find_vague
@@ -189,7 +195,12 @@
 
     <!--普通文本框  支持enter触发表单提交-->
 
-    <el-input v-else v-model="formDataNeed[item.prop]" @keyup.enter.native="$emit('enterClick')" clearable></el-input>
+    <el-input
+      v-else
+      v-model="formDataNeed[item.prop]"
+      @keyup.enter.native="$emit('enterClick')"
+      clearable
+    ></el-input>
 
     <template class v-if="item.frequency">
       <el-popover
@@ -199,19 +210,22 @@
         v-model="visibleFrequency[item.prop]"
         :open-delay="0"
       >
-     
         <!--候选值列表-->
         <i
           :class="['frequency-option',{focus:formDataNeed[item.prop]==option.value}] "
           v-for="(option,i) in item.frequency.options"
           :key="i"
-          @click="formDataNeed[item.prop]=option.value;visibleFrequency[item.prop]=false"
+          @click="slectFOption(option)"
           :style="item.frequency.sytle||{'width':'48px'}"
         >
           {{option.label
           ||option.value}}
         </i>
-         <a   href="javascript:;" class="n-a" @click="formDataNeed[item.prop]=null;visibleFrequency[item.prop]=false">清除</a>
+        <a
+          href="javascript:;"
+          class="n-a"
+          @click="formDataNeed[item.prop]=null;visibleFrequency[item.prop]=false"
+        >清除</a>
         <el-button slot="reference" icon="el-icon-more"></el-button>
       </el-popover>
     </template>
@@ -236,7 +250,7 @@ export default {
   name: "form_item", //组件名，用于递归
   components: {    select_list_data, vueJsonEditor: vueJsonEditor, select_ajax,
     input_find_vague, json_editor, upload_img, time_period, json_prop,
-    collection, quill_editor, tiny_mce_new,tiny_mce_new, number_range, tag_list  },
+    collection, quill_editor, tiny_mce_new, tiny_mce_new, number_range, tag_list  },
   // mixins: [MIX.form_item], //混入
   props: {
     cf: [Object],
@@ -244,6 +258,7 @@ export default {
   },
   data() {
     return {
+      ready: true,
       item: this.cf,
       formDataNeed: this.value,
       visibleFrequency: {}, //候选项可见性
@@ -255,7 +270,29 @@ export default {
     };
   },
   methods: {
-    print() {
+    //函数：{点击候选值后的函数}
+    async slectFOption(option) {
+      let { dataType } = this.item.frequency
+      console.log(`dataType:${dataType}`);
+      if (dataType == "array") {//如果{数据类型}是数组
+        this.formDataNeed[this.item.prop] = [option.value];
+
+        // this.$set(this.formDataNeed, this.item.prop, [option.value]);
+
+
+      } else {
+        this.formDataNeed[this.item.prop] = option.value;
+      }
+      this.visibleFrequency[this.item.prop] = false
+
+      // this.ready = false;
+      // await this.$nextTick();//延迟到视图更新
+      // this.ready = true;
+
+      this.$nextTickStatus("ready")
+
+
+
     }
   },
   created() { }

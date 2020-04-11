@@ -1,13 +1,15 @@
 <template>
   <div >
     <el-button plain @click="setAddInit" size="mini" ref="aaa">设置formDataAddInit</el-button>
-
+ <label class="n-button plain DPIB" for="id_btn_list_demo_add">替身按钮-新增</label>
     <dm_debug_list>
       <dm_debug_item v-model="visible" text="visible" />
     </dm_debug_list>
 
-    <dm_list_data :cf="cfList" ref="vvv">
+    <dm_list_data :cf="cfList" ref="vvv" @bacth-btn-click="bacthBtnClick">
       <template #slot_in_toolbar="{data:{tableData}}">插槽内容可显示tableData</template>
+
+     
       <template v-slot:slot_form_expand_articleTitle="{row}">
         {{row}}
         <el-link type="primary" @click="fold(row)">收起</el-link>
@@ -73,6 +75,11 @@ export default {
     }
   },
   methods: {
+    
+    //自定义批量操作按钮点击函数
+    bacthBtnClick: function (eventType, selection) {
+      console.log(`eventType:${eventType}`);
+    },
     exportExcel() {
       alert("exportExcel");
       this.tableExportExcel({ el: ".n-table", fileName: "表" });
@@ -87,9 +94,7 @@ export default {
     //自定义单项操作按钮点击函数
     singlebtnClick: function (eventType, row) {
     },
-    //自定义批量操作按钮点击函数
-    bacthBtnClick: function (eventType, selection) {
-    },
+    
     fold(row) {
       T.$refs.list1.$refs.table.toggleRowExpansion(row, false);
     },

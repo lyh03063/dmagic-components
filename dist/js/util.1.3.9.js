@@ -391,14 +391,6 @@ if (WIN.Vuex) {
                 //改变聚焦菜单
                 state.activeMenuIndex = activeMenuIndex;
             },
-            openDialogAdd: function openDialogAdd(state, listIndex) {
-                //打开新增弹窗事件
-                state.listState[listIndex].isShowDialogAdd = true;
-            },
-            closeDialogAdd: function closeDialogAdd(state, listIndex) {
-                //关闭新增弹窗事件
-                state.listState[listIndex].isShowDialogAdd = false;
-            },
             openDialogDetail: function openDialogDetail(state, param) {
                 //打开详情弹窗事件
                 state.listState[param.listIndex].isShowDialogDetail = true;
@@ -622,10 +614,18 @@ util.ajaxPopulate = function () {
                             }
                         });
                         arrId = Array.from(new Set(arrId)); //去重
+
+                        if (arrId.length) {
+                            _context2.next = 6;
+                            break;
+                        }
+
+                        return _context2.abrupt("return", listData);
+
+                    case 6:
+                        //没有arrId,就不要再发送请求，节省性能
                         urlAjax = "/crossList?page=" + page;
-                        paramAjax = {
-                            pageSize: 999
-                        };
+                        paramAjax = { pageSize: 999 };
 
                         if (ajax) {
                             //如果{ajax配置}存在*****
@@ -635,18 +635,13 @@ util.ajaxPopulate = function () {
                             Object.assign(paramAjax, param); //合并对象
                         }
                         //补充id数组过滤条件****
-                        lodash.set(paramAjax, "findJson." + idColumn2, _extends({
-                            "$in": arrId
-                        }, findJson));
-                        _context2.next = 10;
-                        return axios({
-                            //请求接口
-                            method: "post",
-                            url: WIN.PUB.domain + urlAjax,
-                            data: paramAjax //传递参数
+                        lodash.set(paramAjax, "findJson." + idColumn2, _extends({ "$in": arrId }, findJson));
+                        _context2.next = 12;
+                        return axios({ //请求接口
+                            method: "post", url: "" + WIN.PUB.domain + urlAjax, data: paramAjax //传递参数
                         });
 
-                    case 10:
+                    case 12:
                         _ref3 = _context2.sent;
                         data = _ref3.data;
                         dict = lodash.keyBy(data.list, idColumn2);
@@ -671,7 +666,7 @@ util.ajaxPopulate = function () {
                         });
                         return _context2.abrupt("return", util.deepCopy(listData));
 
-                    case 15:
+                    case 17:
                     case "end":
                         return _context2.stop();
                 }
@@ -1526,10 +1521,41 @@ util.tableExportExcel = function () {
 //#endregion
 
 
+//#region nextTickStatus:强制某个状态值更新
+util.nextTickStatus = function () {
+    var _ref12 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(key) {
+        return regeneratorRuntime.wrap(function _callee6$(_context6) {
+            while (1) {
+                switch (_context6.prev = _context6.next) {
+                    case 0:
+                        this[key] = false;
+                        _context6.next = 3;
+                        return this.$nextTick();
+
+                    case 3:
+                        //延迟到视图更新
+                        this[key] = true;
+
+                    case 4:
+                    case "end":
+                        return _context6.stop();
+                }
+            }
+        }, _callee6, this);
+    }));
+
+    return function (_x10) {
+        return _ref12.apply(this, arguments);
+    };
+}();
+//#endregion
+
+
 //#region aaaa:000函数
 util.aaaa = function (param) {
     return 1111;
 };
 //#endregion
 Vue.prototype.$util = util; //让vue实例中可访问$util
+Vue.prototype.$nextTickStatus = util.nextTickStatus; //让vue实例中可访问$nextTickStatus
 Vue.prototype.$lodash = lodash; //让vue实例中可访问$util

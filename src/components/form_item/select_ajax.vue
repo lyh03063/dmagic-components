@@ -66,6 +66,7 @@ export default {
         alert("异常:" + error);
       });
       let list = data.list;
+      if (!list) return console.warn("select_ajax的没有请求获取到数据")
 
       this.options = list.map(item => {
         //将list数组转换成options的结构

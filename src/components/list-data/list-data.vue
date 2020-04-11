@@ -33,7 +33,7 @@
       <dynamicForm @submit1="searchList" :cf="cfSearchForm" v-model="objParam.findJson"></dynamicForm>
     </div>
     <!-- v-if="cf.flag"这个规则去掉 -->
-    <el-row size="mini" class="MB10" v-if="cf.isShowToolBar">
+    <el-row size="mini" class="MB10" v-show="cf.isShowToolBar">
       <template class v-if="$lodash.hasIn(cf, 'batchBtns.addon')">
         <template class v-for="(item,index) in cf.batchBtns.addon">
           <slot class v-if="item.uiType=='slot'" :name="item.slot" :data="$data"></slot>
@@ -43,12 +43,14 @@
             :href="item.url||'javascript:;'"
             :key="index"
             v-else
+            v-show="!item.hide"
           >
             <el-button
               v-bind="item.cfElBtn"
               @click="batchBtnClick(item.eventType,item.needSelect)"
               :key="index"
               size="mini"
+              :id="getBacthButtonId(item)"
             >{{$lodash.get(item, `cfElBtn.text`)||item.text}}</el-button>
           </a>
         </template>
@@ -307,6 +309,12 @@ export default {
     }
   },
   methods: {
+    //函数：{获取工具栏按钮id}
+    getBacthButtonId(item) {
+      return `id_btn_${this.cf.listIndex}_${item.eventType}`
+    },
+
+
     tableExportExcel: util.tableExportExcel,//导出excel函数
     //函数：{单元格编辑函数}
     async tdEdit(row, column) {
@@ -407,13 +415,13 @@ export default {
     },
     //自定义批量操作按钮的点击事件
     async batchBtnClick(eventType, needSelect) {
+      let selection 
       if (needSelect) {
         //  得到选中的数据对象
-        var selection = this.$refs.table.selection;
+         selection = this.$refs.table.selection;
         //  有选中的就遍历得到P1，进行批量删除
-        if (selection.length > 0) {
-          this.$emit("bacth-btn-click", eventType, selection); //抛出自定义事件
-        } else {
+        if (selection.length == 0) {
+         
           return this.$message({ message: "未选中数据", type: "error" });
         }
         if (eventType == "delete") {//批量删除
@@ -439,7 +447,7 @@ export default {
 
         }
       }
-      return this.$emit("bacth-btn-click", eventType); //抛出自定义事件
+      return this.$emit("bacth-btn-click", eventType,selection); //抛出自定义事件
     },
     showAdd() {
       //清空初始化数据ajax地址，赋值数据时可能添加了这个，
@@ -469,7 +477,7 @@ export default {
 
       // this.$refs.listDialogs.cfAddDialog.formDataAddInit = { ...this.cf.paramAddonPublic, ...this.cf.formDataAddInit }
       this.$refs.listDialogs.cfAddDialog.cfFormAdd.urlInit = this.cf.url.detail
-       let rowNew=lodash.cloneDeep(row);
+      let rowNew = lodash.cloneDeep(row);
       this.$refs.listDialogs.formAdd = { ...this.cf.formDataAddInit, ...rowNew }
       this.$refs.listDialogs.cfAddDialog.visible = true
 

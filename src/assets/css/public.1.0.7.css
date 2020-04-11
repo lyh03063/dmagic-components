@@ -2930,3 +2930,32 @@ a.n-a-blue:link, a.n-a-blue:visited {
 .TDEC_LT {
     text-decoration: line-through
 }
+
+/* 公共按钮样式的处理-蓝色按钮 */
+.n-button {
+    border: 1px #409eff solid;
+    background-color: #409eff;
+    color: #fff;
+    
+    border-radius: 5px;
+    padding: 10px;
+    line-height: 1;
+    cursor: pointer;
+
+}
+
+.n-button:hover {
+    background-color: #66B1FF;
+}
+
+/* 公共按钮样式的处理-朴素按钮 */
+.n-button.plain{
+    border: 1px #ddd solid;
+    background-color: #fff;
+    color: #333;
+}
+
+.n-button.plain:hover {
+    background-color: #f0f0f0;
+
+}
