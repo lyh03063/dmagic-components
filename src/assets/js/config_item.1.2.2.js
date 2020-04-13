@@ -424,14 +424,36 @@ F_ITEMS.auditStatus = {
 };
 //#endregion
 //#region 通用数据
-D_ITEMS.title = {
-    label: "标题",
-    prop: "title"
-};
-COLUMNS.title_fixed = { ...D_ITEMS.title, width: 320, fixed: true };
-F_ITEMS.title = { ...D_ITEMS.title };
-F_ITEMS.title_search = { ...D_ITEMS.title, type: "input_find_vague" };
 
+
+
+
+
+//#region 标题
+{
+    let objBase = {
+        label: "标题",
+        prop: "title",
+    }
+    D_ITEMS.title = {
+        ...objBase
+    };
+    COLUMNS.title_fixed = { ...objBase, width: 320, fixed: true };
+    COLUMNS.title = { ...objBase, width: 200,  };
+    COLUMNS.title_w250 = { ...objBase, width: 250,  };
+    COLUMNS.title_w300 = { ...objBase, width: 300,  };
+    COLUMNS.title_w100 = { ...objBase, width: 100,  };
+    COLUMNS.title_w150 = { ...objBase, width: 150,  };
+    COLUMNS.title_w200 = { ...objBase, width: 200,  };
+    F_ITEMS.title = { ...objBase };
+    F_ITEMS.title_search = { ...objBase, type: "input_find_vague" };
+    
+    COLUMNS.title_fixed_w150 = { ...COLUMNS.title_fixed, width: 150 };
+    COLUMNS.title_fixed_w150_edit = { ...COLUMNS.title_fixed_w150, edit: true };
+    COLUMNS.title_fixed_edit = { ...COLUMNS.title_fixed, edit: true };
+}
+
+//#endregion
 
 
 D_ITEMS.desc = {
@@ -1104,9 +1126,7 @@ F_ITEMS.countOrder = { ...D_ITEMS.countOrder, type: "number" };
 
 //#region 通用
 
-COLUMNS.title_fixed_w150 = { ...COLUMNS.title_fixed, width: 150 };
-COLUMNS.title_fixed_w150_edit = { ...COLUMNS.title_fixed_w150, edit: true };
-COLUMNS.title_fixed_edit = { ...COLUMNS.title_fixed, edit: true };
+
 
 
 
@@ -1687,7 +1707,8 @@ F_ITEMS.prop_upload2 = {
     type: "upload",
     uploadConfig: {
         limit: 2,
-        listType: "text"
+        listType: "text",
+        
     }
 };
 F_ITEMS.prop_upload = {
@@ -1696,7 +1717,8 @@ F_ITEMS.prop_upload = {
     type: "upload",
     uploadConfig: {
         limit: 3,
-        preview: true
+        preview: true,
+        dataType: "string"//字符串，只支持单图
     }
 };
 F_ITEMS.prop_vueJsonEditor = {

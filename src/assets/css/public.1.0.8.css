@@ -2959,3 +2959,11 @@ a.n-a-blue:link, a.n-a-blue:visited {
     background-color: #f0f0f0;
 
 }
+
+
+
+.n-boder-box{
+    border: 1px #ebeef5 solid;
+    border-radius: 5px;
+    
+}

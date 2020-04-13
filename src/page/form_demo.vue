@@ -166,6 +166,7 @@ export default {
         labelWidth: "150px",
 
         formItems: [
+        
           F_ITEMS.prop_upload,
           F_ITEMS.personCharge,
           F_ITEMS.prop_editorTMNew,

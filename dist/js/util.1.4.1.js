@@ -1015,6 +1015,31 @@ util.cfList.sBtns.link = {
         circle: true,
         icon: "el-icon-link"
     }
+};
+
+util.cfList.sBtns.download = {
+    uiType: "link",
+    title: "下载文件",
+    text: "下载文件",
+    target: "_blank",
+    //地址格式函数
+    urlFormatter: function urlFormatter(row) {
+        var url = lodash.get(row, "file[0].url", "");
+        return url + "?download";
+    }
+
+};
+
+util.cfList.sBtns.openFile = {
+    uiType: "link",
+    title: "打开文件",
+    text: "打开文件",
+    target: "_blank",
+    //地址格式函数
+    urlFormatter: function urlFormatter(row) {
+        var url = lodash.get(row, "file[0].url", "");
+        return "" + url;
+    }
 
     //所有的标准版单项按钮数组
 };util.cfList.sBtns.arrAllBtns = [util.cfList.sBtns.detail, util.cfList.sBtns.modify, util.cfList.sBtns.copy, util.cfList.sBtns.delete];
@@ -1383,28 +1408,66 @@ util.getDictLabel = function (key, val) {
 
 //函数：{改造列表字段配置形式的函数（字符串转对象）}-dm列表组件专用
 //让列表的配置更简洁且能跟踪错误，避免像之前那样很难定位错误！！！！
+//20200413优化，兼容字符串和对象形式的配置
 util.reformCFListItem = function (cfList) {
     var map = {
         columns: "COLUMNS", searchFormItems: "F_ITEMS", detailItems: "D_ITEMS", formItems: "F_ITEMS"
     };
-    var arrNeed = Object.keys(map);
-    arrNeed.forEach(function (prop) {
+    var arrNeed = Object.keys(map); //变量：{需要处理的字段名数组}
+    arrNeed.forEach(function (propBig) {
         //循环：{需要处理的字段名数组}
-        var keyPub = map[prop];
-        var arrKey = cfList[prop];
-        if (!keyPub) return console.error("\u627E\u4E0D\u5230" + prop + "\u5BF9\u5E94\u7684\u516C\u5171\u53D8\u91CF");
 
-        var objTarget = window[map[prop]];
-        var arr2 = arrKey.map(function (item) {
-            if (!objTarget[item]) {
-                //如果字段不存在
-                return console.error(keyPub + "." + item + "\u5B57\u6BB5\u4E0D\u5B58\u5728");
+
+        var keyPub = map[propBig];
+        var arrKey = cfList[propBig]; //变量：{某项配置字段数组}
+        if (!keyPub) return console.error("\u627E\u4E0D\u5230" + propBig + "\u5BF9\u5E94\u7684\u516C\u5171\u53D8\u91CF");
+
+        var objTarget = window[map[propBig]]; //目标存储字段的公共变量
+        var arrNew = arrKey.map(function (prop) {
+            //新数组
+            var type = util.type(prop); //变量：{数据类型}
+            if (type == "string") {
+                //如果{数据类型}是字符串
+                if (!objTarget[prop]) {
+                    //如果字段不存在
+                    return console.error(keyPub + "." + prop + "\u5B57\u6BB5\u4E0D\u5B58\u5728");
+                }
+                return objTarget[prop];
             }
-            return objTarget[item];
+            return prop; //如果不是字符串，直接返回
         });
-        cfList[prop] = arr2;
+        cfList[propBig] = arrNew;
     });
 };
+
+//#region handleCommonListCF:***处理通用列表配置数据函数
+util.handleCommonListCF = function (_ref9) {
+    var _dataType = _ref9._dataType,
+        listCFAddon = _ref9.listCFAddon;
+
+
+    var _systemId = PUB._systemId;
+    var listIndex = "list_" + _dataType;
+    PUB.listCF[listIndex] = _extends({
+        idKey: "_id", //键名
+        pageSize: 20,
+        listIndex: listIndex, //vuex对应的字段~
+        focusMenu: true, //进行菜单聚焦
+        //objParamAddon列表接口的附加参数
+        objParamAddon: {
+            _systemId: _systemId,
+            _dataType: _dataType
+        },
+        //公共的附加参数，针对所有接口
+        paramAddonPublic: {
+            _systemId: _systemId,
+            _dataType: _dataType
+        }
+    }, listCFAddon);
+    //调用：{改造列表字段配置形式的函数（字符串转对象）}
+    util.reformCFListItem(PUB.listCF[listIndex]);
+};
+//#endregion
 
 //#region changeFavicon:改变网页标题图标的函数
 util.changeFavicon = function (link) {
@@ -1425,12 +1488,12 @@ util.changeFavicon = function (link) {
 
 //#region tableExportExcel:确认表格导出excel函数-只支持一页
 util.tableExportExcel = function () {
-    var _ref10 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(_ref9) {
+    var _ref11 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(_ref10) {
         var _this = this;
 
-        var el = _ref9.el,
-            _ref9$fileName = _ref9.fileName,
-            fileName = _ref9$fileName === undefined ? "数据表" : _ref9$fileName;
+        var el = _ref10.el,
+            _ref10$fileName = _ref10.fileName,
+            fileName = _ref10$fileName === undefined ? "数据表" : _ref10$fileName;
 
         var _window, saveAs, XLSX;
 
@@ -1457,7 +1520,7 @@ util.tableExportExcel = function () {
 
                     case 5:
                         return _context5.abrupt("return", new Promise(function () {
-                            var _ref11 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(resolve, reject) {
+                            var _ref12 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(resolve, reject) {
                                 var clickStatus, et, etout;
                                 return regeneratorRuntime.wrap(function _callee4$(_context4) {
                                     while (1) {
@@ -1501,7 +1564,7 @@ util.tableExportExcel = function () {
                             }));
 
                             return function (_x8, _x9) {
-                                return _ref11.apply(this, arguments);
+                                return _ref12.apply(this, arguments);
                             };
                         }()));
 
@@ -1514,7 +1577,7 @@ util.tableExportExcel = function () {
     }));
 
     return function (_x7) {
-        return _ref10.apply(this, arguments);
+        return _ref11.apply(this, arguments);
     };
 }();
 
@@ -1523,7 +1586,7 @@ util.tableExportExcel = function () {
 
 //#region nextTickStatus:强制某个状态值更新
 util.nextTickStatus = function () {
-    var _ref12 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(key) {
+    var _ref13 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(key) {
         return regeneratorRuntime.wrap(function _callee6$(_context6) {
             while (1) {
                 switch (_context6.prev = _context6.next) {
@@ -1545,7 +1608,7 @@ util.nextTickStatus = function () {
     }));
 
     return function (_x10) {
-        return _ref12.apply(this, arguments);
+        return _ref13.apply(this, arguments);
     };
 }();
 //#endregion
@@ -1553,7 +1616,7 @@ util.nextTickStatus = function () {
 
 //#region getQiNiuToken:ajax获取七牛云token的函数
 util.getQiNiuToken = function () {
-    var _ref13 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(file) {
+    var _ref14 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(file) {
         var random, name, requestData;
         return regeneratorRuntime.wrap(function _callee7$(_context7) {
             while (1) {
@@ -1591,16 +1654,16 @@ util.getQiNiuToken = function () {
     }));
 
     return function (_x11) {
-        return _ref13.apply(this, arguments);
+        return _ref14.apply(this, arguments);
     };
 }();
 //#endregion
 
 //#region uploadQiNiuFile:ajax上传文件到七牛云的函数
 util.uploadQiNiuFile = function () {
-    var _ref15 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8(_ref14) {
-        var file = _ref14.file,
-            token = _ref14.token;
+    var _ref16 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8(_ref15) {
+        var file = _ref15.file,
+            token = _ref15.token;
         var formData, requestData;
         return regeneratorRuntime.wrap(function _callee8$(_context8) {
             while (1) {
@@ -1633,9 +1696,40 @@ util.uploadQiNiuFile = function () {
     }));
 
     return function (_x12) {
-        return _ref15.apply(this, arguments);
+        return _ref16.apply(this, arguments);
     };
 }();
+//#endregion
+
+
+//#region handleCommonListCF:处理通用列表配置数据函数
+util.handleCommonListCF = function (_ref17) {
+    var _dataType = _ref17._dataType,
+        listCFAddon = _ref17.listCFAddon;
+
+    {
+        var _systemId = PUB._systemId;
+        var listIndex = "list_" + _dataType;
+        PUB.listCF[listIndex] = _extends({
+            idKey: "_id", //键名
+            pageSize: 20,
+            listIndex: listIndex, //vuex对应的字段~
+            focusMenu: true, //进行菜单聚焦
+            //objParamAddon列表接口的附加参数
+            objParamAddon: {
+                _systemId: _systemId,
+                _dataType: _dataType
+            },
+            //公共的附加参数，针对所有接口
+            paramAddonPublic: {
+                _systemId: _systemId,
+                _dataType: _dataType
+            }
+        }, listCFAddon);
+        //调用：{改造列表字段配置形式的函数（字符串转对象）}
+        util.reformCFListItem(PUB.listCF[listIndex]);
+    }
+};
 //#endregion
 
 
@@ -1644,6 +1738,8 @@ util.aaaa = function (param) {
     return 1111;
 };
 //#endregion
+
+
 Vue.prototype.$util = util; //让vue实例中可访问$util
 Vue.prototype.$nextTickStatus = util.nextTickStatus; //让vue实例中可访问$nextTickStatus
 Vue.prototype.$lodash = lodash; //让vue实例中可访问$util

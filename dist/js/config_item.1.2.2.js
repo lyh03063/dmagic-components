@@ -315,13 +315,32 @@ F_ITEMS.auditStatus = {
 };
 //#endregion
 //#region 通用数据
-D_ITEMS.title = {
-    label: "标题",
-    prop: "title"
-};
-COLUMNS.title_fixed = _extends({}, D_ITEMS.title, { width: 320, fixed: true });
-F_ITEMS.title = _extends({}, D_ITEMS.title);
-F_ITEMS.title_search = _extends({}, D_ITEMS.title, { type: "input_find_vague" });
+
+
+//#region 标题
+{
+    var _objBase2 = {
+        label: "标题",
+        prop: "title"
+    };
+    D_ITEMS.title = _extends({}, _objBase2);
+    COLUMNS.title_fixed = _extends({}, _objBase2, { width: 320, fixed: true });
+    COLUMNS.title = _extends({}, _objBase2, { width: 200 });
+    COLUMNS.title_w250 = _extends({}, _objBase2, { width: 250 });
+    COLUMNS.title_w300 = _extends({}, _objBase2, { width: 300 });
+    COLUMNS.title_w100 = _extends({}, _objBase2, { width: 100 });
+    COLUMNS.title_w150 = _extends({}, _objBase2, { width: 150 });
+    COLUMNS.title_w200 = _extends({}, _objBase2, { width: 200 });
+    F_ITEMS.title = _extends({}, _objBase2);
+    F_ITEMS.title_search = _extends({}, _objBase2, { type: "input_find_vague" });
+
+    COLUMNS.title_fixed_w150 = _extends({}, COLUMNS.title_fixed, { width: 150 });
+    COLUMNS.title_fixed_w150_edit = _extends({}, COLUMNS.title_fixed_w150, { edit: true });
+    COLUMNS.title_fixed_edit = _extends({}, COLUMNS.title_fixed, { edit: true });
+}
+
+//#endregion
+
 
 D_ITEMS.desc = {
     label: "说明",
@@ -924,9 +943,6 @@ F_ITEMS.countOrder = _extends({}, D_ITEMS.countOrder, { type: "number" });
 
 //#region 通用
 
-COLUMNS.title_fixed_w150 = _extends({}, COLUMNS.title_fixed, { width: 150 });
-COLUMNS.title_fixed_w150_edit = _extends({}, COLUMNS.title_fixed_w150, { edit: true });
-COLUMNS.title_fixed_edit = _extends({}, COLUMNS.title_fixed, { edit: true });
 
 COLUMNS.importance_edit = _extends({}, COLUMNS.importance, {
     edit: true
@@ -1404,6 +1420,7 @@ F_ITEMS.prop_upload2 = {
     uploadConfig: {
         limit: 2,
         listType: "text"
+
     }
 };
 F_ITEMS.prop_upload = {
@@ -1412,7 +1429,8 @@ F_ITEMS.prop_upload = {
     type: "upload",
     uploadConfig: {
         limit: 3,
-        preview: true
+        preview: true,
+        dataType: "string" //字符串，只支持单图
     }
 };
 F_ITEMS.prop_vueJsonEditor = {
@@ -1947,13 +1965,13 @@ F_ITEMS.positionInfo = _extends({}, D_ITEMS.positionInfo, { default: {}, //默�
 
 //#region icon地址
 {
-    var _objBase2 = {
+    var _objBase3 = {
         label: "icon地址",
         prop: "iconSrc"
     };
-    D_ITEMS.iconSrc = _extends({}, _objBase2);
-    COLUMNS.iconSrc = _extends({}, _objBase2, { width: 70 });
-    F_ITEMS.iconSrc = _extends({}, _objBase2, { type: "input" });
+    D_ITEMS.iconSrc = _extends({}, _objBase3);
+    COLUMNS.iconSrc = _extends({}, _objBase3, { width: 70 });
+    F_ITEMS.iconSrc = _extends({}, _objBase3, { type: "input" });
 }
 
 //#endregion
@@ -1961,32 +1979,19 @@ F_ITEMS.positionInfo = _extends({}, D_ITEMS.positionInfo, { default: {}, //默�
 
 //#region 选择项目
 {
-    var _objBase3 = {
+    var _objBase4 = {
         label: "选择项目",
         prop: "projectName"
     };
-    D_ITEMS.aaaa = _extends({}, _objBase3);
-    COLUMNS.aaaa = _extends({}, _objBase3, { width: 70 });
-    F_ITEMS.projectName_select_lazy = _extends({}, _objBase3, { type: "select_ajax_lazy",
+    D_ITEMS.aaaa = _extends({}, _objBase4);
+    COLUMNS.aaaa = _extends({}, _objBase4, { width: 70 });
+    F_ITEMS.projectName_select_lazy = _extends({}, _objBase4, { type: "select_ajax_lazy",
         cfSelectAjaxLazy: {
             url: "/crossList?page=paicheng_project",
             keyLabel: "projectName",
             keyValue: "P1"
         }
     });
-}
-
-//#endregion
-
-//#region 0000
-{
-    var _objBase4 = {
-        label: "0000",
-        prop: "aaaa"
-    };
-    D_ITEMS.aaaa = _extends({}, _objBase4);
-    COLUMNS.aaaa = _extends({}, _objBase4, { width: 70 });
-    F_ITEMS.aaaa = _extends({}, _objBase4, { type: "input" });
 }
 
 //#endregion
@@ -2013,6 +2018,19 @@ F_ITEMS.positionInfo = _extends({}, D_ITEMS.positionInfo, { default: {}, //默�
     D_ITEMS.aaaa = _extends({}, _objBase6);
     COLUMNS.aaaa = _extends({}, _objBase6, { width: 70 });
     F_ITEMS.aaaa = _extends({}, _objBase6, { type: "input" });
+}
+
+//#endregion
+
+//#region 0000
+{
+    var _objBase7 = {
+        label: "0000",
+        prop: "aaaa"
+    };
+    D_ITEMS.aaaa = _extends({}, _objBase7);
+    COLUMNS.aaaa = _extends({}, _objBase7, { width: 70 });
+    F_ITEMS.aaaa = _extends({}, _objBase7, { type: "input" });
 }
 
 //#endregion

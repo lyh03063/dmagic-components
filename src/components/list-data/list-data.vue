@@ -123,10 +123,14 @@
               <slot :name="column.slot" :row="scope.row" v-if="column.slot"></slot>
               <!--Q2:有formatter-->
               <span class v-else-if="column.formatter">{{column.formatter(scope.row)}}</span>
-              <!--Q3:有formatter-->
-              <span class v-else-if="column.formatter">{{column.formatter(scope.row)}}</span>
+
               <!--Q4:有组件名-->
-              <component v-else-if="column.component" :is="column.component" :doc="scope.row"></component>
+              <component
+                v-else-if="column.component"
+                :is="column.component"
+                @list-event-in="comListEventIn"
+                :doc="scope.row"
+              ></component>
               <!--Q5:其他-->
               <span class v-else>{{scope.row[column.prop]}}</span>
               <i
@@ -309,6 +313,15 @@ export default {
     }
   },
   methods: {
+    //函数：{列组件传递的事件函数}
+    comListEventIn(param = {}) {
+      let { callbackInList } = param;//变量：{回调函数}
+      if (callbackInList) {//如果{回调函数}存在
+        callbackInList(this)
+      }
+      this.$emit("list-event-in",param)//继续往列表外传递
+    },
+   
     //函数：{获取工具栏按钮id}
     getBacthButtonId(item) {
       return `id_btn_${this.cf.listIndex}_${item.eventType}`
@@ -415,13 +428,13 @@ export default {
     },
     //自定义批量操作按钮的点击事件
     async batchBtnClick(eventType, needSelect) {
-      let selection 
+      let selection
       if (needSelect) {
         //  得到选中的数据对象
-         selection = this.$refs.table.selection;
+        selection = this.$refs.table.selection;
         //  有选中的就遍历得到P1，进行批量删除
         if (selection.length == 0) {
-         
+
           return this.$message({ message: "未选中数据", type: "error" });
         }
         if (eventType == "delete") {//批量删除
@@ -447,13 +460,11 @@ export default {
 
         }
       }
-      return this.$emit("bacth-btn-click", eventType,selection); //抛出自定义事件
+      return this.$emit("bacth-btn-click", eventType, selection); //抛出自定义事件
     },
     showAdd() {
       //清空初始化数据ajax地址，赋值数据时可能添加了这个，
-      // this.$refs.listDialogs.cfFormAdd.urlInit = null; //
-      // this.$emit("after-show-Dialog-Add");
-      // this.$store.commit("openDialogAdd", this.cf.listIndex);
+
 
 
       this.$refs.listDialogs.cfAddDialog.cfFormAdd.urlInit = null
@@ -469,13 +480,7 @@ export default {
       console.log("showCopy-row:", row);
 
 
-      // this.$refs.listDialogs.cfFormAdd.paramAddonInit = this.cf.paramAddonPublic; //初始化的附加参数
-      // this.$refs.listDialogs.cfFormAdd.urlInit = this.cf.url.detail; //初始化数据ajax地址
-      // this.$refs.listDialogs.cfFormAdd.idKey = this.cf.idKey; //初始化的idKey
-      // this.$refs.listDialogs.formAdd = lodash.cloneDeep(row);
-      // this.$store.commit("openDialogAdd", this.cf.listIndex);
-
-      // this.$refs.listDialogs.cfAddDialog.formDataAddInit = { ...this.cf.paramAddonPublic, ...this.cf.formDataAddInit }
+     
       this.$refs.listDialogs.cfAddDialog.cfFormAdd.urlInit = this.cf.url.detail
       let rowNew = lodash.cloneDeep(row);
       this.$refs.listDialogs.formAdd = { ...this.cf.formDataAddInit, ...rowNew }
@@ -652,6 +657,7 @@ export default {
     }
   },
   created() {
+     
     //调用：{给一个对象设置默认属性函数}
     util.setObjDefault(this.cf, {
       idKey: "P1", isMultipleSelect: true, isShowCheckedBox: true, isShowSearchForm: true,

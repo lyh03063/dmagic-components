@@ -899,7 +899,32 @@ util.cfList.sBtns.link = {
     }
 }
 
+util.cfList.sBtns.download = {
+    uiType: "link",
+    title: "下载文件",
+    text: "下载文件",
+    target: "_blank",
+    //地址格式函数
+    urlFormatter: function (row) {
+        let url = lodash.get(row, `file[0].url`, "");
+        return `${url}?download`;
+    },
 
+}
+
+
+util.cfList.sBtns.openFile = {
+    uiType: "link",
+    title: "打开文件",
+    text: "打开文件",
+    target: "_blank",
+    //地址格式函数
+    urlFormatter: function (row) {
+        let url = lodash.get(row, `file[0].url`, "");
+        return `${url}`;
+    },
+
+}
 
 //所有的标准版单项按钮数组
 util.cfList.sBtns.arrAllBtns = [util.cfList.sBtns.detail, util.cfList.sBtns.modify, util.cfList.sBtns.copy, util.cfList.sBtns.delete]
@@ -1199,29 +1224,64 @@ util.getDictLabel = function (key, val) {
 
 //函数：{改造列表字段配置形式的函数（字符串转对象）}-dm列表组件专用
 //让列表的配置更简洁且能跟踪错误，避免像之前那样很难定位错误！！！！
+//20200413优化，兼容字符串和对象形式的配置
 util.reformCFListItem = function (cfList) {
     let map = {
-        columns: "COLUMNS", searchFormItems: "F_ITEMS", detailItems: "D_ITEMS", formItems: "F_ITEMS",
+      columns: "COLUMNS", searchFormItems: "F_ITEMS", detailItems: "D_ITEMS", formItems: "F_ITEMS",
     }
-    let arrNeed = Object.keys(map);
-    arrNeed.forEach(prop => {//循环：{需要处理的字段名数组}
-        let keyPub = map[prop]
-        let arrKey = cfList[prop];
-        if (!keyPub) return console.error(`找不到${prop}对应的公共变量`)
-
-        let objTarget = window[map[prop]]
-        let arr2 = arrKey.map(item => {
-            if (!objTarget[item]) {//如果字段不存在
-                return console.error(`${keyPub}.${item}字段不存在`)
-            }
-            return objTarget[item]
-        })
-        cfList[prop] = arr2
+    let arrNeed = Object.keys(map);//变量：{需要处理的字段名数组}
+    arrNeed.forEach(propBig => {//循环：{需要处理的字段名数组}
+  
+  
+      let keyPub = map[propBig]
+      let arrKey = cfList[propBig];//变量：{某项配置字段数组}
+      if (!keyPub) return console.error(`找不到${propBig}对应的公共变量`)
+  
+      let objTarget = window[map[propBig]]//目标存储字段的公共变量
+      let arrNew = arrKey.map(prop => {//新数组
+        let type = util.type(prop)//变量：{数据类型}
+        if (type == "string") {//如果{数据类型}是字符串
+          if (!objTarget[prop]) {//如果字段不存在
+            return console.error(`${keyPub}.${prop}字段不存在`)
+          }
+          return objTarget[prop]
+        }
+        return prop//如果不是字符串，直接返回
+  
+      })
+      cfList[propBig] = arrNew
     })
-}
+  }
+
+//#region handleCommonListCF:***处理通用列表配置数据函数
+util.handleCommonListCF = function ({ _dataType, listCFAddon }) {
 
 
-
+    let _systemId = PUB._systemId;
+    let listIndex = `list_${_dataType}`
+    PUB.listCF[listIndex] = {
+      idKey: "_id", //键名
+      pageSize: 20,
+      listIndex, //vuex对应的字段~
+      focusMenu: true, //进行菜单聚焦
+      //objParamAddon列表接口的附加参数
+      objParamAddon: {
+        _systemId,
+        _dataType
+      },
+      //公共的附加参数，针对所有接口
+      paramAddonPublic: {
+        _systemId,
+        _dataType
+      },
+      ...listCFAddon,
+    }
+    //调用：{改造列表字段配置形式的函数（字符串转对象）}
+    util.reformCFListItem(PUB.listCF[listIndex])
+  
+  
+  };
+  //#endregion
 
 //#region changeFavicon:改变网页标题图标的函数
 util.changeFavicon = function (link) {
@@ -1307,21 +1367,52 @@ util.getQiNiuToken = async function (file) {
 //#endregion
 
 //#region uploadQiNiuFile:ajax上传文件到七牛云的函数
-util.uploadQiNiuFile =async function ({file,token}) {
+util.uploadQiNiuFile = async function ({ file, token }) {
     let formData = new FormData()
     formData.append("file", file)
     formData.append('token', token)
     let requestData = await axios({
-      method: "post",
-      url: window.PUB.urlUpload,
-      data: formData,
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
+        method: "post",
+        url: window.PUB.urlUpload,
+        data: formData,
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
     })
     return requestData
 };
 //#endregion
+
+
+//#region handleCommonListCF:处理通用列表配置数据函数
+util.handleCommonListCF = function ({ _dataType, listCFAddon }) {
+    {
+        let _systemId = PUB._systemId;
+        let listIndex = `list_${_dataType}`
+        PUB.listCF[listIndex] = {
+            idKey: "_id", //键名
+            pageSize: 20,
+            listIndex, //vuex对应的字段~
+            focusMenu: true, //进行菜单聚焦
+            //objParamAddon列表接口的附加参数
+            objParamAddon: {
+                _systemId,
+                _dataType
+            },
+            //公共的附加参数，针对所有接口
+            paramAddonPublic: {
+                _systemId,
+                _dataType
+            },
+            ...listCFAddon,
+        }
+        //调用：{改造列表字段配置形式的函数（字符串转对象）}
+        util.reformCFListItem(PUB.listCF[listIndex])
+
+    }
+};
+//#endregion
+
 
 
 
@@ -1330,6 +1421,13 @@ util.aaaa = function (param) {
     return 1111
 };
 //#endregion
+
+
+
+
+
+
+
 Vue.prototype.$util = util //让vue实例中可访问$util
 Vue.prototype.$nextTickStatus = util.nextTickStatus //让vue实例中可访问$nextTickStatus
 Vue.prototype.$lodash = lodash //让vue实例中可访问$util

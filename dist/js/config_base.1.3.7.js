@@ -173,7 +173,8 @@ FN.initArrLookup = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(funct
                             complete: "$targetDoc.complete",
                             personCharge: "$targetDoc.personCharge",
                             predictTime: "$targetDoc.predictTime",
-                            actualTime: "$targetDoc.actualTime"
+                            actualTime: "$targetDoc.actualTime",
+                            file: "$targetDoc.file"
 
                         }
                     }];

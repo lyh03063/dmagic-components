@@ -109,6 +109,7 @@ FN.initArrLookup = async function () {
                 personCharge: "$targetDoc.personCharge",
                 predictTime: "$targetDoc.predictTime",
                 actualTime: "$targetDoc.actualTime",
+                file: "$targetDoc.file",
 
             }
         }
