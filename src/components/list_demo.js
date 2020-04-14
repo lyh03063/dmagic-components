@@ -86,16 +86,18 @@ PUB.listCF.list_demo = {
       { text: "其他操作（不需选中数据）", eventType: "bacthOP2" },
       {
         uiType: "link",
-        text: "新窗口打开页面",
+        text: "新窗口打开页面111",
         target: "_blank",
         url: "http://www.baidu.com",
         cfElBtn: {
           type: "primary",
           icon: "el-icon-user-solid",
-          class:"DPN"
         }
       },
-      { uiType: "slot", slot: "slot_in_toolbar" }
+      { uiType: "component", component: "com_toolbar1" ,ref:"toolbar_com1"},
+      
+      { uiType: "slot", slot: "slot_in_toolbar" },
+      { uiType: "slot", slot: "slot_in_toolbar" },
     ],
     tips: {
       text: "提示语123"

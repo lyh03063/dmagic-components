@@ -108,6 +108,9 @@ export default {
     return {
       formData1: { obj: { num: 123 } },
       formData: {
+        uploadAvatar:"http://qn-dmagic.dmagic.cn/202004141713623737_3796_1.png",
+        prop_time_period2: { "start": "2020-04-01 00:00:01", "end": "2021-01-01 23:59:59" },
+        prop_time_period3: "2020-04-01 00:00:01",
         // tagList:["2222","3333"],
         aaaa: 123,
         power_paicheng: {},
@@ -166,12 +169,16 @@ export default {
         labelWidth: "150px",
 
         formItems: [
-        
-          F_ITEMS.prop_upload,
-          F_ITEMS.personCharge,
-          F_ITEMS.prop_editorTMNew,
-          F_ITEMS.prop_editorTM,
-          
+          F_ITEMS.upload_single1,//单文件上传
+          F_ITEMS.uploadAvatar,//单文件上传
+          F_ITEMS.prop_time_period1,//日范围
+          F_ITEMS.prop_time_period2,//月范围
+          F_ITEMS.prop_time_period3,//年范围
+          // F_ITEMS.prop_upload,
+          // F_ITEMS.personCharge,
+          // F_ITEMS.prop_editorTMNew,
+          // F_ITEMS.prop_editorTM,
+
           // F_ITEMS.projectName_select_lazy,
           // F_ITEMS.predictTime,
           // F_ITEMS.complete,

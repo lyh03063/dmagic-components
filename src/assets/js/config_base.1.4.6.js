@@ -1011,6 +1011,11 @@ PUB.cfListGPublic = {
     }
     //#endregion
     util.reformCFListItem(PUB.listCF[listIndex])
+    //需要补充的拆解字段****
+    PUB.$projectAddon[listIndex] = {
+        dataType: "$targetDoc.dataType",
+        countData: "$targetDoc.countData"
+    }
 }
 //#endregion
 //#region 分组下的笔记列表页

@@ -1414,6 +1414,100 @@ F_ITEMS.aaaa = 11111;
 //#region dm组件库用到
 
 //#region form_demo的字段
+
+
+//#region 时间段1(日范围)
+{
+    let prop = "prop_time_period1", objBase = { label: "时间段(日范围)", prop, }
+    D_ITEMS[prop] = { ...objBase, };
+    COLUMNS[prop] = { ...objBase, width: 70, };
+    F_ITEMS[prop] = {
+        ...objBase, type: "time_period",
+    };
+}
+//#endregion
+
+//#region 时间段2(月范围)
+{
+    let prop = "prop_time_period2", objBase = { label: "时间段(月范围)", prop, }
+    D_ITEMS[prop] = { ...objBase, };
+    COLUMNS[prop] = { ...objBase, width: 70, };
+    F_ITEMS[prop] = {
+        ...objBase, type: "time_period",
+        cfItem: {
+            keyStart:"start",
+            keyEnd:"end",
+            //两层配置结构，为了更好拓展
+            "cfDataPicker": {
+                "type": "monthrange",
+                "align": "right",
+                "unlink-panels": true,
+                "range-separator": "至",
+                "value-format": "yyyy-MM-dd HH:mm:ss",
+                "default-time": ['00:00:01', '23:59:59'],
+                "picker-options": {},
+
+            },
+        }
+    };
+}
+//#endregion
+
+//#region 时间段3(年)
+{
+    let prop = "prop_time_period3", objBase = { label: "时间段(年)", prop, }
+    D_ITEMS[prop] = { ...objBase, };
+    COLUMNS[prop] = { ...objBase, width: 70, };
+    F_ITEMS[prop] = {
+        ...objBase, type: "time_period",
+        cfItem: {
+            //两层配置结构，为了更好拓展
+            "cfDataPicker": {
+                "type": "year",
+                "align": "right",
+                "unlink-panels": true,
+                "range-separator": "至",
+                "value-format": "yyyy-MM-dd HH:mm:ss",
+                "default-time": ['00:00:01', '23:59:59'],
+                "picker-options": {},
+
+            },
+        }
+    };
+}
+//#endregion
+
+
+//#region 单文件上传
+{
+    let prop = "upload_single1", objBase = { label: "单文件上传", prop, }
+    D_ITEMS[prop] = { ...objBase, };
+    COLUMNS[prop] = { ...objBase, width: 70, };
+    F_ITEMS[prop] = {
+        ...objBase, type: "upload_single"
+    };
+}
+//#endregion
+
+
+//#region 头像上传2
+{
+    let prop = "uploadAvatar", objBase = { label: "头像上传", prop, }
+    D_ITEMS[prop] = { ...objBase, };
+    COLUMNS[prop] = { ...objBase, width: 70, };
+    F_ITEMS[prop] = {
+        ...objBase, type: "upload_single",
+        cfItem: {
+            isAvatar: true,//头像
+            //两层配置结构，为了更好拓展
+            "cfUpload": {},
+        }
+    };
+}
+//#endregion
+
+
+
 F_ITEMS.tagList = {
     label: "标签",
     prop: "tagList",
@@ -1725,6 +1819,10 @@ F_ITEMS.prop_upload2 = {
 
     }
 };
+
+
+
+
 F_ITEMS.prop_upload = {
     label: "图片上传",
     prop: "prop_upload",
@@ -2483,7 +2581,7 @@ F_ITEMS.positionInfo = {
     D_ITEMS[prop] = {
         ...objBase,
     };
-    COLUMNS[prop] = { ...objBase, width: 70, };
+    COLUMNS[prop] = { ...objBase, width: 190, };
     F_ITEMS[prop] = { ...objBase, type: "input" };
     F_ITEMS[`${prop}_search`] = { ...objBase, type: "input_find_vague" };
 }
@@ -2505,49 +2603,49 @@ F_ITEMS.positionInfo = {
 //#region 文件
 {
     let objBase = {
-      label: "文件",
-      prop: "file",
+        label: "文件",
+        prop: "file",
     }
     D_ITEMS.file = {
-      ...objBase,
+        ...objBase,
     };
     COLUMNS.file = {
-      ...objBase, width: 190,
-      formatter: function (row) {
-        return lodash.get(row, `file[0].url`, "");
-  
-      }
-  
+        ...objBase, width: 190,
+        formatter: function (row) {
+            return lodash.get(row, `file[0].url`, "");
+
+        }
+
     };
-  
-  
+
+
     F_ITEMS.file = {
-      ...objBase, type: "upload",
-      uploadConfig: {
-        limit: 1,
-        listType: "text"
-      }
-  
+        ...objBase, type: "upload",
+        uploadConfig: {
+            limit: 1,
+            listType: "text"
+        }
+
     };
-  }
-  
-  //#endregion
-  
-  
-  //#region 图片预览
-  {
+}
+
+//#endregion
+
+
+//#region 图片预览
+{
     let objBase = {
-      label: "图片预览",
-      prop: "imagePreview",
+        label: "图片预览",
+        prop: "imagePreview",
     }
     D_ITEMS.imagePreview = {
-      ...objBase,
-      component: "com_imagePreview"
+        ...objBase,
+        component: "com_imagePreview"
     };
     COLUMNS.imagePreview = { ...objBase, width: 100, component: "com_imagePreview" };
-  }
-  
-  //#endregion
+}
+
+//#endregion
 
 
 

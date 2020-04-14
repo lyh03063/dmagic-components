@@ -2,13 +2,16 @@
   <div>
     <el-button plain @click="setAddInit" size="mini" ref="aaa">设置formDataAddInit</el-button>
     <label class="n-button plain DPIB" for="id_btn_list_demo_add">替身按钮-新增</label>
+
+    <el-button plain @click="setChildComponent" size="mini">触发列表内的子组件的方法</el-button>
+
     <dm_debug_list>
       <dm_debug_item v-model="visible" text="visible" />
     </dm_debug_list>
 
     <dm_list_data
       :cf="cfList"
-      ref="vvv"
+      ref="listMain"
       @bacth-btn-click="bacthBtnClick"
       @list-event-in="handleListEventIn"
     >
@@ -57,8 +60,43 @@ Vue.component('com_test1', {
       await util.timeout(1500); //延迟
 
       this.$emit("list-event-in", {
+        eventType: "test2222", doc: this.doc      });
+
+
+    }
+  }
+})
+
+// 注册一个全局组件
+Vue.component('com_toolbar1', {
+  template: `<span class="C_f30 B MR8" @click="fnClick">设置组件</span>`,
+  props: ["data"],//接收属性
+  data: function () {
+    return {
+      xxx: 123
+    }
+
+  },
+  methods: {
+    fnTest() {
+      alert("工具栏子组件的fnTest方法被触发");
+    },
+    async fnClick() {
+      console.log(`fnClick`);
+      //往列表内部传递事件
+      this.$emit("list-event-in", {
+        eventType: "test1-----1",
+        callbackInList: (T) => {
+          T.showAdd()//打开列表弹窗
+          console.log("this.doc:", this.doc);
+        }
+      });
+
+      await util.timeout(1500); //延迟
+
+      this.$emit("list-event-in", {
         eventType: "test2222",
-        doc:this.doc
+        doc: this.doc
 
       });
 
@@ -66,8 +104,6 @@ Vue.component('com_test1', {
     }
   }
 })
-
-
 
 
 
@@ -102,7 +138,12 @@ export default {
     }
   },
   methods: {
+    setChildComponent() {
+      console.log("$refs.listMain.$refs.toolbar_com1", this.$refs.listMain.$refs.toolbar_com1);
+      let comTarget = this.$refs.listMain.$refs.toolbar_com1[0];//目标子组件，注意定位后是一个数组，取第一个元素
+      comTarget.fnTest()
 
+    },
     handleListEventIn: function (param) {
       alert(`list-event-in被列表外部监听到,eventType为${param.eventType}`);
       console.log("param.doc:", param.doc);

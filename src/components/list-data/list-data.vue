@@ -37,6 +37,16 @@
       <template class v-if="$lodash.hasIn(cf, 'batchBtns.addon')">
         <template class v-for="(item,index) in cf.batchBtns.addon">
           <slot class v-if="item.uiType=='slot'" :name="item.slot" :data="$data"></slot>
+
+          <!--组件形式，配置ref用于外部控制-->
+          <component
+            :key="index"
+            v-else-if="item.uiType=='component'"
+            :is="item.component"
+            :ref="item.ref"
+            @list-event-in="comListEventIn"
+            :data="$data"
+          ></component>
           <a
             class="MR10"
             :target="item.target"
@@ -319,9 +329,9 @@ export default {
       if (callbackInList) {//如果{回调函数}存在
         callbackInList(this)
       }
-      this.$emit("list-event-in",param)//继续往列表外传递
+      this.$emit("list-event-in", param)//继续往列表外传递
     },
-   
+
     //函数：{获取工具栏按钮id}
     getBacthButtonId(item) {
       return `id_btn_${this.cf.listIndex}_${item.eventType}`
@@ -480,7 +490,7 @@ export default {
       console.log("showCopy-row:", row);
 
 
-     
+
       this.$refs.listDialogs.cfAddDialog.cfFormAdd.urlInit = this.cf.url.detail
       let rowNew = lodash.cloneDeep(row);
       this.$refs.listDialogs.formAdd = { ...this.cf.formDataAddInit, ...rowNew }
@@ -657,7 +667,7 @@ export default {
     }
   },
   created() {
-     
+
     //调用：{给一个对象设置默认属性函数}
     util.setObjDefault(this.cf, {
       idKey: "P1", isMultipleSelect: true, isShowCheckedBox: true, isShowSearchForm: true,
