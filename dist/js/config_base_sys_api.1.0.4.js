@@ -132,4 +132,6 @@ PUB.arrDetailGroupMoudles = ["note", "group", "url", "vedio"];
 //#endregion  
 
 //变量：{特殊的分组数据列表模块名称数组}-需要有单独对应的分组列表模板vue-会在导入vue文件时用到
-PUB.arrGroupMoudlesSpe = ["note", "group"];
+PUB.arrGroupMoudlesSpe = [
+  //  "group"
+];

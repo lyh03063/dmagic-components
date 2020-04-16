@@ -1446,7 +1446,6 @@ util.handleCommonListCF = function (_ref9) {
         listCFAddon = _ref9.listCFAddon;
 
 
-    var _systemId = PUB._systemId;
     var listIndex = "list_" + _dataType;
     PUB.listCF[listIndex] = _extends({
         idKey: "_id", //键名
@@ -1455,12 +1454,12 @@ util.handleCommonListCF = function (_ref9) {
         focusMenu: true, //进行菜单聚焦
         //objParamAddon列表接口的附加参数
         objParamAddon: {
-            _systemId: _systemId,
+
             _dataType: _dataType
         },
         //公共的附加参数，针对所有接口
         paramAddonPublic: {
-            _systemId: _systemId,
+
             _dataType: _dataType
         }
     }, listCFAddon);

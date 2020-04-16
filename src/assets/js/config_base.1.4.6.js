@@ -219,7 +219,7 @@ window.setFamiliarityAjaxCF = function (listCF, idKey = "_id") {
     util.setObjDefault(listCF, { dynamicDict: [] });
     let dict = {
         ajax: {
-            param: { _systemId, _dataType: "familiarity", findJson: { userId: PUB.$sys.userId }, },
+            param: { _dataType: "familiarity", findJson: { userId: PUB.$sys.userId }, },
             url: "/info/getCommonList",
         },
         populateColumn: "familiarityDoc",
@@ -494,8 +494,7 @@ MIX.listGroupData = {
 
 
 {
-    let _dataType = "admin",
-        _systemId = PUB._systemId;
+    let _dataType = "admin";
     let listIndex = `list_${_dataType}`
     PUB.listCF[listIndex] = {
         idKey: "_id", //键名
@@ -505,9 +504,9 @@ MIX.listGroupData = {
         threeTitle: "管理员", //面包屑2级菜单
         ...PUB.listCFCommon2,//展开公共配置
         //objParamAddon列表接口的附加参数
-        objParamAddon: { _systemId, _dataType },
+        objParamAddon: {  _dataType },
         //公共的附加参数，针对所有接口
-        paramAddonPublic: { _systemId, _dataType },
+        paramAddonPublic: {  _dataType },
 
 
         //-------详情字段数组-------
@@ -541,9 +540,9 @@ MIX.listGroupData = {
         focusMenu: true, //进行菜单聚焦
         breadcrumb: [{ value: "首页", path: "#/listHome" }, { value: "所有数据" }],
         ...PUB.listCFCommon2,//展开公共配置
-        objParamAddon: { _systemId, _dataType },
+        objParamAddon: {  _dataType },
         //公共的附加参数，针对所有接口
-        paramAddonPublic: { _systemId, _dataType },
+        paramAddonPublic: { _dataType },
 
 
         //-------详情字段数组-------
@@ -576,9 +575,9 @@ MIX.listGroupData = {
         threeTitle: "文章分类", //面包屑2级菜单
         ...PUB.listCFCommon2,//展开公共配置
         //objParamAddon列表接口的附加参数
-        objParamAddon: { _systemId, _dataType },
+        objParamAddon: {  _dataType },
         //公共的附加参数，针对所有接口
-        paramAddonPublic: { _systemId, _dataType },
+        paramAddonPublic: {  _dataType },
         //-------详情字段数组-------
         detailItems: ["category_name", "category_remark"],
         //-------列配置数组-------
@@ -607,9 +606,9 @@ MIX.listGroupData = {
         threeTitle: "文章", //面包屑2级菜单
         ...PUB.listCFCommon2,//展开公共配置
         //objParamAddon列表接口的附加参数
-        objParamAddon: { _systemId, _dataType },
+        objParamAddon: {  _dataType },
         //公共的附加参数，针对所有接口
-        paramAddonPublic: { _systemId, _dataType },
+        paramAddonPublic: { _dataType },
 
         //-------详情字段数组-------
         detailItems: ["title", "desc"],
@@ -628,8 +627,7 @@ MIX.listGroupData = {
 
 //#region 数据类型列表页
 {
-    let _dataType = "data_type",
-        _systemId = PUB._systemId;
+    let _dataType = "data_type"
     let listIndex = `list_${_dataType}`
     PUB.listCF[listIndex] = {
         idKey: "_id", //键名
@@ -639,9 +637,9 @@ MIX.listGroupData = {
         breadcrumb: [{ value: "首页", path: "#/listHome" }, { value: "数据类型" }],
         ...PUB.listCFCommon2,//展开公共配置
         //objParamAddon列表接口的附加参数
-        objParamAddon: { _systemId, _dataType },
+        objParamAddon: {  _dataType },
         //公共的附加参数，针对所有接口
-        paramAddonPublic: { _systemId, _dataType },
+        paramAddonPublic: {  _dataType },
 
         //-------详情字段数组-------
         detailItems: ["_id", "dataTypekey", "title", "desc"],
@@ -661,8 +659,7 @@ MIX.listGroupData = {
 
 //#region 分组列表页
 {
-    let _dataType = "group",
-        _systemId = PUB._systemId;
+    let _dataType = "group";
     let listIndex = `list_${_dataType}`
     PUB.listCF[listIndex] = {
         idKey: "_id", //键名
@@ -683,9 +680,9 @@ MIX.listGroupData = {
                 }
             ]
         },
-        objParamAddon: { _systemId, _dataType },
+        objParamAddon: {  _dataType },
         //公共的附加参数，针对所有接口
-        paramAddonPublic: { _systemId, _dataType },
+        paramAddonPublic: {  _dataType },
 
         //-------详情字段数组-------
         detailItems: ["_id", "title", "alias", "desc", "group_dataType"],
@@ -704,8 +701,7 @@ MIX.listGroupData = {
 
 //#region 笔记分类列表页
 {
-    let _dataType = "note_category",
-        _systemId = PUB._systemId;
+    let _dataType = "note_category";
     let listIndex = `list_${_dataType}`
     PUB.listCF[listIndex] = {
         idKey: "_id", //键名
@@ -715,9 +711,9 @@ MIX.listGroupData = {
         breadcrumb: [{ value: "首页", path: "#/listHome" }, { value: "笔记分类" }],
         ...PUB.listCFCommon2,//展开公共配置
         //objParamAddon列表接口的附加参数
-        objParamAddon: { _systemId, _dataType },
+        objParamAddon: { _dataType },
         //公共的附加参数，针对所有接口
-        paramAddonPublic: { _systemId, _dataType },
+        paramAddonPublic: { _dataType },
 
 
         //-------详情字段数组-------
@@ -761,9 +757,9 @@ MIX.listGroupData = {
             DYDICT.note_category
         ],
         //objParamAddon列表接口的附加参数//传入联表查询参数
-        objParamAddon: { _systemId, _dataType, arrLookup: [] },
+        objParamAddon: { _dataType, arrLookup: [] },
         //公共的附加参数，针对所有接口
-        paramAddonPublic: { _systemId, _dataType },
+        paramAddonPublic: { _dataType },
 
         //操作列配置
         columnOperate: {
@@ -819,9 +815,9 @@ F_ITEMS.relNoteList = {
         focusMenu: true, //进行菜单聚焦
         breadcrumb: [{ value: "首页", path: "#/listHome" }, { value: "关系数据" }],
         ...PUB.listCFCommon2,//展开公共配置
-        objParamAddon: { _systemId, _dataType },
+        objParamAddon: { _dataType },
         //公共的附加参数，针对所有接口
-        paramAddonPublic: { _systemId, _dataType },
+        paramAddonPublic: { _dataType },
 
 
         //-------详情字段数组-------
@@ -853,9 +849,9 @@ F_ITEMS.relNoteList = {
         focusMenu: true, //进行菜单聚焦
         threeTitle: "角色", //面包屑2级菜单
         ...PUB.listCFCommon2,//展开公共配置
-        objParamAddon: { _systemId, _dataType },
+        objParamAddon: { _dataType },
         //公共的附加参数，针对所有接口
-        paramAddonPublic: { _systemId, _dataType },
+        paramAddonPublic: { _dataType },
 
         //-------详情字段数组-------
         detailItems: ["Id", "roleName", "rolePower"],
@@ -888,9 +884,9 @@ F_ITEMS.relNoteList = {
         ...PUB.listCFCommon3,//展开公共配置
         //objParamAddon列表接口的附加参数
         // singleBtns:PUB.singleBtns_copy_link_sort,
-        objParamAddon: { _systemId, _dataType },
+        objParamAddon: { _dataType },
         //公共的附加参数，针对所有接口
-        paramAddonPublic: { _systemId, _dataType },
+        paramAddonPublic: { _dataType },
 
         //-------详情字段数组-------
         detailItems: ["title", "desc", "link"],
@@ -921,9 +917,9 @@ F_ITEMS.relNoteList = {
         breadcrumb: [{ value: "首页", path: "#/listHome" }, { value: "教学视频" }],
         ...PUB.listCFCommon2,//展开公共配置
 
-        objParamAddon: { _systemId, _dataType },
+        objParamAddon: { _dataType },
         //公共的附加参数，针对所有接口
-        paramAddonPublic: { _systemId, _dataType },
+        paramAddonPublic: { _dataType },
 
 
         //-------详情字段数组-------
@@ -997,8 +993,8 @@ PUB.cfListGPublic = {
                 util.cfList.sBtns.linkGroup
             ]
         },
-        objParamAddon: { findJson: {}, _systemId, _dataType },
-        paramAddonPublic: { _systemId, _dataType },//公共的附加参数，针对所有接口
+        objParamAddon: { findJson: {}, _dataType },
+        paramAddonPublic: { _dataType },//公共的附加参数，针对所有接口
         dynamicDict: [DYDICT.note_category], //dynamicDict动态数据字典配置
         //-------详情字段数组-------
         detailItems: ["title", "desc", "countData", "_id", "_idRel", "_idRel2", "sort"],
@@ -1039,8 +1035,8 @@ PUB.cfListGPublic = {
                 ...PUB.singleBtns_list_group_data.addon,
             ]
         },
-        objParamAddon: { findJson: {}, _systemId, _dataType },
-        paramAddonPublic: { _systemId, _dataType },//公共的附加参数，针对所有接口
+        objParamAddon: { findJson: {}, _dataType },
+        paramAddonPublic: { _dataType },//公共的附加参数，针对所有接口
         //dynamicDict动态数据字典配置
         dynamicDict: [DYDICT.note_category],
         //-------详情字段数组-------
@@ -1073,8 +1069,8 @@ PUB.cfListGPublic = {
                 util.cfList.sBtns.link
             ]
         },
-        objParamAddon: { findJson: {}, _systemId, _dataType },
-        paramAddonPublic: { _systemId, _dataType },//公共的附加参数，针对所有接口
+        objParamAddon: { findJson: {}, _dataType },
+        paramAddonPublic: { _dataType },//公共的附加参数，针对所有接口
         //dynamicDict动态数据字典配置
         dynamicDict: [DYDICT.note_category],
         //-------详情字段数组-------
@@ -1096,8 +1092,8 @@ PUB.cfListGPublic = {
     PUB.listCF[listIndex] = {
         ...PUB.cfListGPublic,
         listIndex, //vuex对应的字段~
-        objParamAddon: { findJson: {}, _systemId, _dataType },
-        paramAddonPublic: { _systemId, _dataType },//公共的附加参数，针对所有接口
+        objParamAddon: { findJson: {}, _dataType },
+        paramAddonPublic: { _dataType },//公共的附加参数，针对所有接口
         //dynamicDict动态数据字典配置
         dynamicDict: [DYDICT.note_category],
         //-------详情字段数组-------

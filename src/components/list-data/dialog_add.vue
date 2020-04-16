@@ -36,7 +36,7 @@
 <script>
 export default {
   components: {},
-  props: ["cf", "formAdd"],
+  props: ["cf", "formAdd","tableData"],//静态列表的新增数据需要tableData传入
   data() {
     return {
       // cf.visible: null,
@@ -87,14 +87,24 @@ export default {
         } else {
           ajaxParam = { data: this.IN_formAdd };
         }
+
+        if (PUB._paramAjaxAddon) {//如果需要合并公共变量的基础ajax参数--注意顺序
+          Object.assign(ajaxParam, PUB._paramAjaxAddon)//合并公共变量的基础参数
+        }
+
         console.log("ajaxParam:", ajaxParam);
         Object.assign(ajaxParam, this.cf.cfFormAdd.paramAddonInit); //合并公共参数，之前是cf.paramAddonPublic
+
+
+
+
+
         let response = await axios({//请求接口
-          method: "post", url: `${PUB.domain}${this.cf.urlAdd}`,data: ajaxParam //传递参数
+          method: "post", url: `${PUB.domain}${this.cf.urlAdd}`, data: ajaxParam //传递参数
         });
         //触发外部事件-把新增前后的数据都传过去
         this.$emit("after-add", response.data.addData, this.IN_formAdd);
-      } else {//Q2:{新增数据接口地址}不存在
+      } else {//Q2:{新增数据接口地址}不存在-静态列表
         let idMax = 1;
         //如果列表有数据
         if (this.tableData.length) {

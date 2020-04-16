@@ -168,7 +168,7 @@ export default {
     /**
      * @name 获取该字段样式函数
      */
-    getItemStyle: function(item) {
+    getItemStyle: function (item) {
       let styleFinal = {}; //最终的样式对象
       styleFinal["min-height"] = this.cf.itemMinHeight || "51px"; //字段高度
       let { style = {} } = item;
@@ -273,7 +273,15 @@ export default {
     let ajaxParam = {
       [this.cf.idKey == "_id" ? "_id" : "id"]: this.value[this.cf.idKey]//id参数存于表单数据中
     };
+
+    if (PUB._paramAjaxAddon) {//如果需要合并公共变量的基础ajax参数--注意顺序
+      Object.assign(ajaxParam, PUB._paramAjaxAddon)//合并公共变量的基础参数
+    }
+
+
     Object.assign(ajaxParam, this.cf.paramAddonInit); //合并对象
+
+
     //如果初始化的ajax地址存在
     if (this.cf.urlInit) {
       let { data } = await axios({
@@ -289,7 +297,7 @@ export default {
           delete this.formDataNeed[this.cf.idKey]; //删除数据id,否则复制新增会出问题
           delete this.formDataNeed["_id"]; //删除数据id,否则复制新增会出问题
         }
-         delete this.formDataNeed["_data"]; //清除这个_data字段，防止一直叠加****
+        delete this.formDataNeed["_data"]; //清除这个_data字段，防止一直叠加****
       } else {
         this.$message.error("ajax读取初始化数据失败！");
       }

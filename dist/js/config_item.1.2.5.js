@@ -1160,6 +1160,99 @@ F_ITEMS.aaaa = 11111;
 //#region dm组件库用到
 
 //#region form_demo的字段
+
+
+//#region 时间段1(日范围)
+{
+    var _prop2 = "prop_time_period1",
+        _objBase5 = { label: "时间段(日范围)", prop: _prop2 };
+    D_ITEMS[_prop2] = _extends({}, _objBase5);
+    COLUMNS[_prop2] = _extends({}, _objBase5, { width: 70 });
+    F_ITEMS[_prop2] = _extends({}, _objBase5, { type: "time_period"
+    });
+}
+//#endregion
+
+//#region 时间段2(月范围)
+{
+    var _prop3 = "prop_time_period2",
+        _objBase6 = { label: "时间段(月范围)", prop: _prop3 };
+    D_ITEMS[_prop3] = _extends({}, _objBase6);
+    COLUMNS[_prop3] = _extends({}, _objBase6, { width: 70 });
+    F_ITEMS[_prop3] = _extends({}, _objBase6, { type: "time_period",
+        cfItem: {
+            keyStart: "start",
+            keyEnd: "end",
+            //两层配置结构，为了更好拓展
+            "cfDataPicker": {
+                "type": "monthrange",
+                "align": "right",
+                "unlink-panels": true,
+                "range-separator": "至",
+                "value-format": "yyyy-MM-dd HH:mm:ss",
+                "default-time": ['00:00:01', '23:59:59'],
+                "picker-options": {}
+
+            }
+        }
+    });
+}
+//#endregion
+
+//#region 时间段3(年)
+{
+    var _prop4 = "prop_time_period3",
+        _objBase7 = { label: "时间段(年)", prop: _prop4 };
+    D_ITEMS[_prop4] = _extends({}, _objBase7);
+    COLUMNS[_prop4] = _extends({}, _objBase7, { width: 70 });
+    F_ITEMS[_prop4] = _extends({}, _objBase7, { type: "time_period",
+        cfItem: {
+            //两层配置结构，为了更好拓展
+            "cfDataPicker": {
+                "type": "year",
+                "align": "right",
+                "unlink-panels": true,
+                "range-separator": "至",
+                "value-format": "yyyy-MM-dd HH:mm:ss",
+                "default-time": ['00:00:01', '23:59:59'],
+                "picker-options": {}
+
+            }
+        }
+    });
+}
+//#endregion
+
+
+//#region 单文件上传
+{
+    var _prop5 = "upload_single1",
+        _objBase8 = { label: "单文件上传", prop: _prop5 };
+    D_ITEMS[_prop5] = _extends({}, _objBase8);
+    COLUMNS[_prop5] = _extends({}, _objBase8, { width: 70 });
+    F_ITEMS[_prop5] = _extends({}, _objBase8, { type: "upload_single"
+    });
+}
+//#endregion
+
+
+//#region 头像上传2
+{
+    var _prop6 = "uploadAvatar",
+        _objBase9 = { label: "头像上传", prop: _prop6 };
+    D_ITEMS[_prop6] = _extends({}, _objBase9);
+    COLUMNS[_prop6] = _extends({}, _objBase9, { width: 70 });
+    F_ITEMS[_prop6] = _extends({}, _objBase9, { type: "upload_single",
+        cfItem: {
+            isAvatar: true, //头像
+            //两层配置结构，为了更好拓展
+            "cfUpload": {}
+        }
+    });
+}
+//#endregion
+
+
 F_ITEMS.tagList = {
     label: "标签",
     prop: "tagList",
@@ -1431,6 +1524,7 @@ F_ITEMS.prop_upload2 = {
 
     }
 };
+
 F_ITEMS.prop_upload = {
     label: "图片上传",
     prop: "prop_upload",
@@ -1860,15 +1954,15 @@ F_ITEMS.area = _extends({}, D_ITEMS.area, { slot: "slot_area",
 
 //#region 详细地址
 {
-    var _prop2 = "address";
-    var _objBase5 = {
+    var _prop7 = "address";
+    var _objBase10 = {
         label: "详细地址",
-        prop: _prop2
+        prop: _prop7
     };
-    D_ITEMS[_prop2] = _extends({}, _objBase5);
-    COLUMNS[_prop2] = _extends({}, _objBase5, { width: 120 });
-    F_ITEMS[_prop2] = _extends({}, _objBase5, { type: "input" });
-    F_ITEMS[_prop2 + "_search"] = _extends({}, _objBase5, { type: "input_find_vague" });
+    D_ITEMS[_prop7] = _extends({}, _objBase10);
+    COLUMNS[_prop7] = _extends({}, _objBase10, { width: 120 });
+    F_ITEMS[_prop7] = _extends({}, _objBase10, { type: "input" });
+    F_ITEMS[_prop7 + "_search"] = _extends({}, _objBase10, { type: "input_find_vague" });
 }
 
 //#endregion
@@ -1980,13 +2074,13 @@ F_ITEMS.positionInfo = _extends({}, D_ITEMS.positionInfo, { default: {}, //默�
 
 //#region icon地址
 {
-    var _objBase6 = {
+    var _objBase11 = {
         label: "icon地址",
         prop: "iconSrc"
     };
-    D_ITEMS.iconSrc = _extends({}, _objBase6);
-    COLUMNS.iconSrc = _extends({}, _objBase6, { width: 70 });
-    F_ITEMS.iconSrc = _extends({}, _objBase6, { type: "input" });
+    D_ITEMS.iconSrc = _extends({}, _objBase11);
+    COLUMNS.iconSrc = _extends({}, _objBase11, { width: 70 });
+    F_ITEMS.iconSrc = _extends({}, _objBase11, { type: "input" });
 }
 
 //#endregion
@@ -1994,13 +2088,13 @@ F_ITEMS.positionInfo = _extends({}, D_ITEMS.positionInfo, { default: {}, //默�
 
 //#region 选择项目
 {
-    var _objBase7 = {
+    var _objBase12 = {
         label: "选择项目",
         prop: "projectName"
     };
-    D_ITEMS.projectName = _extends({}, _objBase7);
-    COLUMNS.projectName = _extends({}, _objBase7, { width: 70 });
-    F_ITEMS.projectName_select_lazy = _extends({}, _objBase7, { type: "select_ajax_lazy",
+    D_ITEMS.projectName = _extends({}, _objBase12);
+    COLUMNS.projectName = _extends({}, _objBase12, { width: 70 });
+    F_ITEMS.projectName_select_lazy = _extends({}, _objBase12, { type: "select_ajax_lazy",
         cfSelectAjaxLazy: {
             url: "/crossList?page=paicheng_project",
             keyLabel: "projectName",
@@ -2013,41 +2107,41 @@ F_ITEMS.positionInfo = _extends({}, D_ITEMS.positionInfo, { default: {}, //默�
 
 //#region 生日
 {
-    var _objBase8 = {
+    var _objBase13 = {
         label: "生日",
         prop: "birthday"
     };
-    D_ITEMS.birthday = _extends({}, _objBase8);
-    COLUMNS.birthday = _extends({}, _objBase8, { width: 120 });
-    F_ITEMS.birthday = _extends({}, _objBase8, { type: "date" });
+    D_ITEMS.birthday = _extends({}, _objBase13);
+    COLUMNS.birthday = _extends({}, _objBase13, { width: 120 });
+    F_ITEMS.birthday = _extends({}, _objBase13, { type: "date" });
 }
 
 //#endregion
 
 //#region 头像
 {
-    var _objBase9 = {
+    var _objBase14 = {
         label: "头像",
         prop: "headSrc"
     };
-    D_ITEMS.headSrc = _extends({}, _objBase9);
-    COLUMNS.headSrc = _extends({}, _objBase9, { width: 70 });
-    F_ITEMS.headSrc = _extends({}, _objBase9, { type: "upload" });
+    D_ITEMS.headSrc = _extends({}, _objBase14);
+    COLUMNS.headSrc = _extends({}, _objBase14, { width: 70 });
+    F_ITEMS.headSrc = _extends({}, _objBase14, { type: "upload" });
 }
 
 //#endregion
 
 //#region QQ号
 {
-    var _prop3 = "qqNumber";
-    var _objBase10 = {
+    var _prop8 = "qqNumber";
+    var _objBase15 = {
         label: "QQ号",
-        prop: _prop3
+        prop: _prop8
     };
-    D_ITEMS[_prop3] = _extends({}, _objBase10);
-    COLUMNS[_prop3] = _extends({}, _objBase10, { width: 70 });
-    F_ITEMS[_prop3] = _extends({}, _objBase10, { type: "input" });
-    F_ITEMS[_prop3 + "_search"] = _extends({}, _objBase10, { type: "input_find_vague" });
+    D_ITEMS[_prop8] = _extends({}, _objBase15);
+    COLUMNS[_prop8] = _extends({}, _objBase15, { width: 70 });
+    F_ITEMS[_prop8] = _extends({}, _objBase15, { type: "input" });
+    F_ITEMS[_prop8 + "_search"] = _extends({}, _objBase15, { type: "input_find_vague" });
 }
 
 //#endregion
@@ -2055,15 +2149,15 @@ F_ITEMS.positionInfo = _extends({}, D_ITEMS.positionInfo, { default: {}, //默�
 
 //#region 邮箱
 {
-    var _prop4 = "email";
-    var _objBase11 = {
+    var _prop9 = "email";
+    var _objBase16 = {
         label: "邮箱",
-        prop: _prop4
+        prop: _prop9
     };
-    D_ITEMS[_prop4] = _extends({}, _objBase11);
-    COLUMNS[_prop4] = _extends({}, _objBase11, { width: 100 });
-    F_ITEMS[_prop4] = _extends({}, _objBase11, { type: "input" });
-    F_ITEMS[_prop4 + "_search"] = _extends({}, _objBase11, { type: "input_find_vague" });
+    D_ITEMS[_prop9] = _extends({}, _objBase16);
+    COLUMNS[_prop9] = _extends({}, _objBase16, { width: 100 });
+    F_ITEMS[_prop9] = _extends({}, _objBase16, { type: "input" });
+    F_ITEMS[_prop9 + "_search"] = _extends({}, _objBase16, { type: "input_find_vague" });
 }
 
 //#endregion
@@ -2071,45 +2165,45 @@ F_ITEMS.positionInfo = _extends({}, D_ITEMS.positionInfo, { default: {}, //默�
 
 //#region 公司名
 {
-    var _prop5 = "companyName";
-    var _objBase12 = {
+    var _prop10 = "companyName";
+    var _objBase17 = {
         label: "公司名",
-        prop: _prop5
+        prop: _prop10
     };
-    D_ITEMS[_prop5] = _extends({}, _objBase12);
-    COLUMNS[_prop5] = _extends({}, _objBase12, { width: 70 });
-    F_ITEMS[_prop5] = _extends({}, _objBase12, { type: "input" });
-    F_ITEMS[_prop5 + "_search"] = _extends({}, _objBase12, { type: "input_find_vague" });
+    D_ITEMS[_prop10] = _extends({}, _objBase17);
+    COLUMNS[_prop10] = _extends({}, _objBase17, { width: 190 });
+    F_ITEMS[_prop10] = _extends({}, _objBase17, { type: "input" });
+    F_ITEMS[_prop10 + "_search"] = _extends({}, _objBase17, { type: "input_find_vague" });
 }
 
 //#endregion
 
 //#region 微信号
 {
-    var _prop6 = "wxNumber",
-        _objBase13 = { label: "微信号", prop: _prop6 };
-    D_ITEMS[_prop6] = _extends({}, _objBase13);
-    COLUMNS[_prop6] = _extends({}, _objBase13, { width: 70 });
-    F_ITEMS[_prop6] = _extends({}, _objBase13, { type: "input" });
+    var _prop11 = "wxNumber",
+        _objBase18 = { label: "微信号", prop: _prop11 };
+    D_ITEMS[_prop11] = _extends({}, _objBase18);
+    COLUMNS[_prop11] = _extends({}, _objBase18, { width: 70 });
+    F_ITEMS[_prop11] = _extends({}, _objBase18, { type: "input" });
 }
 //#endregion
 
 
 //#region 文件
 {
-    var _objBase14 = {
+    var _objBase19 = {
         label: "文件",
         prop: "file"
     };
-    D_ITEMS.file = _extends({}, _objBase14);
-    COLUMNS.file = _extends({}, _objBase14, { width: 190,
+    D_ITEMS.file = _extends({}, _objBase19);
+    COLUMNS.file = _extends({}, _objBase19, { width: 190,
         formatter: function formatter(row) {
             return lodash.get(row, "file[0].url", "");
         }
 
     });
 
-    F_ITEMS.file = _extends({}, _objBase14, { type: "upload",
+    F_ITEMS.file = _extends({}, _objBase19, { type: "upload",
         uploadConfig: {
             limit: 1,
             listType: "text"
@@ -2123,74 +2217,18 @@ F_ITEMS.positionInfo = _extends({}, D_ITEMS.positionInfo, { default: {}, //默�
 
 //#region 图片预览
 {
-    var _objBase15 = {
+    var _objBase20 = {
         label: "图片预览",
         prop: "imagePreview"
     };
-    D_ITEMS.imagePreview = _extends({}, _objBase15, {
+    D_ITEMS.imagePreview = _extends({}, _objBase20, {
         component: "com_imagePreview"
     });
-    COLUMNS.imagePreview = _extends({}, _objBase15, { width: 100, component: "com_imagePreview" });
+    COLUMNS.imagePreview = _extends({}, _objBase20, { width: 100, component: "com_imagePreview" });
 }
 
 //#endregion
 
-
-//#region 0000
-{
-    var _prop7 = "aaaa",
-        _objBase16 = { label: "0000", prop: _prop7 };
-    D_ITEMS[_prop7] = _extends({}, _objBase16);
-    COLUMNS[_prop7] = _extends({}, _objBase16, { width: 70 });
-    F_ITEMS[_prop7] = _extends({}, _objBase16, { type: "input" });
-    // F_ITEMS[`${prop}_search`] = { ...objBase, type: "input_find_vague" };
-}
-//#endregion
-
-
-//#region 0000
-{
-    var _prop8 = "aaaa",
-        _objBase17 = { label: "0000", prop: _prop8 };
-    D_ITEMS[_prop8] = _extends({}, _objBase17);
-    COLUMNS[_prop8] = _extends({}, _objBase17, { width: 70 });
-    F_ITEMS[_prop8] = _extends({}, _objBase17, { type: "input" });
-    // F_ITEMS[`${prop}_search`] = { ...objBase, type: "input_find_vague" };
-}
-//#endregion
-
-//#region 0000
-{
-    var _prop9 = "aaaa",
-        _objBase18 = { label: "0000", prop: _prop9 };
-    D_ITEMS[_prop9] = _extends({}, _objBase18);
-    COLUMNS[_prop9] = _extends({}, _objBase18, { width: 70 });
-    F_ITEMS[_prop9] = _extends({}, _objBase18, { type: "input" });
-    // F_ITEMS[`${prop}_search`] = { ...objBase, type: "input_find_vague" };
-}
-//#endregion
-
-//#region 0000
-{
-    var _prop10 = "aaaa",
-        _objBase19 = { label: "0000", prop: _prop10 };
-    D_ITEMS[_prop10] = _extends({}, _objBase19);
-    COLUMNS[_prop10] = _extends({}, _objBase19, { width: 70 });
-    F_ITEMS[_prop10] = _extends({}, _objBase19, { type: "input" });
-    // F_ITEMS[`${prop}_search`] = { ...objBase, type: "input_find_vague" };
-}
-//#endregion
-
-//#region 0000
-{
-    var _prop11 = "aaaa",
-        _objBase20 = { label: "0000", prop: _prop11 };
-    D_ITEMS[_prop11] = _extends({}, _objBase20);
-    COLUMNS[_prop11] = _extends({}, _objBase20, { width: 70 });
-    F_ITEMS[_prop11] = _extends({}, _objBase20, { type: "input" });
-    // F_ITEMS[`${prop}_search`] = { ...objBase, type: "input_find_vague" };
-}
-//#endregion
 
 //#region 0000
 {
@@ -2202,6 +2240,7 @@ F_ITEMS.positionInfo = _extends({}, D_ITEMS.positionInfo, { default: {}, //默�
     // F_ITEMS[`${prop}_search`] = { ...objBase, type: "input_find_vague" };
 }
 //#endregion
+
 
 //#region 0000
 {
@@ -2232,6 +2271,61 @@ F_ITEMS.positionInfo = _extends({}, D_ITEMS.positionInfo, { default: {}, //默�
     D_ITEMS[_prop15] = _extends({}, _objBase24);
     COLUMNS[_prop15] = _extends({}, _objBase24, { width: 70 });
     F_ITEMS[_prop15] = _extends({}, _objBase24, { type: "input" });
+    // F_ITEMS[`${prop}_search`] = { ...objBase, type: "input_find_vague" };
+}
+//#endregion
+
+//#region 0000
+{
+    var _prop16 = "aaaa",
+        _objBase25 = { label: "0000", prop: _prop16 };
+    D_ITEMS[_prop16] = _extends({}, _objBase25);
+    COLUMNS[_prop16] = _extends({}, _objBase25, { width: 70 });
+    F_ITEMS[_prop16] = _extends({}, _objBase25, { type: "input" });
+    // F_ITEMS[`${prop}_search`] = { ...objBase, type: "input_find_vague" };
+}
+//#endregion
+
+//#region 0000
+{
+    var _prop17 = "aaaa",
+        _objBase26 = { label: "0000", prop: _prop17 };
+    D_ITEMS[_prop17] = _extends({}, _objBase26);
+    COLUMNS[_prop17] = _extends({}, _objBase26, { width: 70 });
+    F_ITEMS[_prop17] = _extends({}, _objBase26, { type: "input" });
+    // F_ITEMS[`${prop}_search`] = { ...objBase, type: "input_find_vague" };
+}
+//#endregion
+
+//#region 0000
+{
+    var _prop18 = "aaaa",
+        _objBase27 = { label: "0000", prop: _prop18 };
+    D_ITEMS[_prop18] = _extends({}, _objBase27);
+    COLUMNS[_prop18] = _extends({}, _objBase27, { width: 70 });
+    F_ITEMS[_prop18] = _extends({}, _objBase27, { type: "input" });
+    // F_ITEMS[`${prop}_search`] = { ...objBase, type: "input_find_vague" };
+}
+//#endregion
+
+//#region 0000
+{
+    var _prop19 = "aaaa",
+        _objBase28 = { label: "0000", prop: _prop19 };
+    D_ITEMS[_prop19] = _extends({}, _objBase28);
+    COLUMNS[_prop19] = _extends({}, _objBase28, { width: 70 });
+    F_ITEMS[_prop19] = _extends({}, _objBase28, { type: "input" });
+    // F_ITEMS[`${prop}_search`] = { ...objBase, type: "input_find_vague" };
+}
+//#endregion
+
+//#region 0000
+{
+    var _prop20 = "aaaa",
+        _objBase29 = { label: "0000", prop: _prop20 };
+    D_ITEMS[_prop20] = _extends({}, _objBase29);
+    COLUMNS[_prop20] = _extends({}, _objBase29, { width: 70 });
+    F_ITEMS[_prop20] = _extends({}, _objBase29, { type: "input" });
     // F_ITEMS[`${prop}_search`] = { ...objBase, type: "input_find_vague" };
 }
 //#endregion

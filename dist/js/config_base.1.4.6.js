@@ -241,7 +241,7 @@ PUB.singleBtns4 = {
     util.setObjDefault(listCF, { dynamicDict: [] });
     var dict = {
         ajax: {
-            param: { _systemId: _systemId, _dataType: "familiarity", findJson: { userId: PUB.$sys.userId } },
+            param: { _dataType: "familiarity", findJson: { userId: PUB.$sys.userId } },
             url: "/info/getCommonList"
         },
         populateColumn: "familiarityDoc",
@@ -706,8 +706,7 @@ MIX.listGroupData = {
 
 
 {
-    var _dataType = "admin",
-        _systemId2 = PUB._systemId;
+    var _dataType = "admin";
     var listIndex = "list_" + _dataType;
     PUB.listCF[listIndex] = _extends({
         idKey: "_id", //键名
@@ -716,9 +715,9 @@ MIX.listGroupData = {
         focusMenu: true, //进行菜单聚焦
         threeTitle: "管理员" }, PUB.listCFCommon2, { //展开公共配置
         //objParamAddon列表接口的附加参数
-        objParamAddon: { _systemId: _systemId2, _dataType: _dataType },
+        objParamAddon: { _dataType: _dataType },
         //公共的附加参数，针对所有接口
-        paramAddonPublic: { _systemId: _systemId2, _dataType: _dataType },
+        paramAddonPublic: { _dataType: _dataType },
 
         //-------详情字段数组-------
         detailItems: ["Id", "userName", "passWord"],
@@ -748,9 +747,9 @@ MIX.listGroupData = {
         focusMenu: true, //进行菜单聚焦
         breadcrumb: [{ value: "首页", path: "#/listHome" }, { value: "所有数据" }]
     }, PUB.listCFCommon2, { //展开公共配置
-        objParamAddon: { _systemId: _systemId, _dataType: _dataType2 },
+        objParamAddon: { _dataType: _dataType2 },
         //公共的附加参数，针对所有接口
-        paramAddonPublic: { _systemId: _systemId, _dataType: _dataType2 },
+        paramAddonPublic: { _dataType: _dataType2 },
 
         //-------详情字段数组-------
         detailItems: ["title", "desc"],
@@ -772,7 +771,7 @@ MIX.listGroupData = {
     var _extends2;
 
     var _dataType3 = "article_category",
-        _systemId3 = PUB._systemId;
+        _systemId2 = PUB._systemId;
     var _listIndex = "list_" + _dataType3;
     PUB.listCF[_listIndex] = _extends((_extends2 = {
         idKey: "_id", //键名
@@ -780,9 +779,9 @@ MIX.listGroupData = {
         listIndex: _listIndex, //vuex对应的字段~
         focusMenu: true }, _defineProperty(_extends2, "focusMenu", true), _defineProperty(_extends2, "threeTitle", "文章分类"), _extends2), PUB.listCFCommon2, { //展开公共配置
         //objParamAddon列表接口的附加参数
-        objParamAddon: { _systemId: _systemId3, _dataType: _dataType3 },
+        objParamAddon: { _dataType: _dataType3 },
         //公共的附加参数，针对所有接口
-        paramAddonPublic: { _systemId: _systemId3, _dataType: _dataType3 },
+        paramAddonPublic: { _dataType: _dataType3 },
         //-------详情字段数组-------
         detailItems: ["category_name", "category_remark"],
         //-------列配置数组-------
@@ -799,7 +798,7 @@ MIX.listGroupData = {
 //#region 文章列表页
 {
     var _dataType4 = "article",
-        _systemId4 = PUB._systemId;
+        _systemId3 = PUB._systemId;
     var _listIndex2 = "list_" + _dataType4;
     PUB.listCF[_listIndex2] = _extends({
         idKey: "_id", //键名
@@ -808,9 +807,9 @@ MIX.listGroupData = {
         focusMenu: true, //进行菜单聚焦
         threeTitle: "文章" }, PUB.listCFCommon2, { //展开公共配置
         //objParamAddon列表接口的附加参数
-        objParamAddon: { _systemId: _systemId4, _dataType: _dataType4 },
+        objParamAddon: { _dataType: _dataType4 },
         //公共的附加参数，针对所有接口
-        paramAddonPublic: { _systemId: _systemId4, _dataType: _dataType4 },
+        paramAddonPublic: { _dataType: _dataType4 },
 
         //-------详情字段数组-------
         detailItems: ["title", "desc"],
@@ -827,8 +826,7 @@ MIX.listGroupData = {
 
 //#region 数据类型列表页
 {
-    var _dataType5 = "data_type",
-        _systemId5 = PUB._systemId;
+    var _dataType5 = "data_type";
     var _listIndex3 = "list_" + _dataType5;
     PUB.listCF[_listIndex3] = _extends({
         idKey: "_id", //键名
@@ -838,9 +836,9 @@ MIX.listGroupData = {
         breadcrumb: [{ value: "首页", path: "#/listHome" }, { value: "数据类型" }]
     }, PUB.listCFCommon2, { //展开公共配置
         //objParamAddon列表接口的附加参数
-        objParamAddon: { _systemId: _systemId5, _dataType: _dataType5 },
+        objParamAddon: { _dataType: _dataType5 },
         //公共的附加参数，针对所有接口
-        paramAddonPublic: { _systemId: _systemId5, _dataType: _dataType5 },
+        paramAddonPublic: { _dataType: _dataType5 },
 
         //-------详情字段数组-------
         detailItems: ["_id", "dataTypekey", "title", "desc"],
@@ -858,8 +856,7 @@ MIX.listGroupData = {
 
 //#region 分组列表页
 {
-    var _dataType6 = "group",
-        _systemId6 = PUB._systemId;
+    var _dataType6 = "group";
     var _listIndex4 = "list_" + _dataType6;
     PUB.listCF[_listIndex4] = _extends({
         idKey: "_id", //键名
@@ -877,9 +874,9 @@ MIX.listGroupData = {
                 url: "#/detail_group?groupId=" //这里要配置好参数名，内部会把参数加进来
             }])
         },
-        objParamAddon: { _systemId: _systemId6, _dataType: _dataType6 },
+        objParamAddon: { _dataType: _dataType6 },
         //公共的附加参数，针对所有接口
-        paramAddonPublic: { _systemId: _systemId6, _dataType: _dataType6 },
+        paramAddonPublic: { _dataType: _dataType6 },
 
         //-------详情字段数组-------
         detailItems: ["_id", "title", "alias", "desc", "group_dataType"],
@@ -896,8 +893,7 @@ MIX.listGroupData = {
 
 //#region 笔记分类列表页
 {
-    var _dataType7 = "note_category",
-        _systemId7 = PUB._systemId;
+    var _dataType7 = "note_category";
     var _listIndex5 = "list_" + _dataType7;
     PUB.listCF[_listIndex5] = _extends({
         idKey: "_id", //键名
@@ -907,9 +903,9 @@ MIX.listGroupData = {
         breadcrumb: [{ value: "首页", path: "#/listHome" }, { value: "笔记分类" }]
     }, PUB.listCFCommon2, { //展开公共配置
         //objParamAddon列表接口的附加参数
-        objParamAddon: { _systemId: _systemId7, _dataType: _dataType7 },
+        objParamAddon: { _dataType: _dataType7 },
         //公共的附加参数，针对所有接口
-        paramAddonPublic: { _systemId: _systemId7, _dataType: _dataType7 },
+        paramAddonPublic: { _dataType: _dataType7 },
 
         //-------详情字段数组-------
         detailItems: ["title", "desc", "category"],
@@ -928,7 +924,7 @@ MIX.listGroupData = {
 //#region 笔记列表页
 {
     var _dataType8 = "note",
-        _systemId8 = PUB._systemId;
+        _systemId4 = PUB._systemId;
     var _listIndex6 = "list_" + _dataType8;
     PUB.listCF[_listIndex6] = _extends({
         idKey: "_id", //键名
@@ -944,9 +940,9 @@ MIX.listGroupData = {
         //dynamicDict动态数据字典配置
         dynamicDict: [DYDICT.note_category],
         //objParamAddon列表接口的附加参数//传入联表查询参数
-        objParamAddon: { _systemId: _systemId8, _dataType: _dataType8, arrLookup: [] },
+        objParamAddon: { _dataType: _dataType8, arrLookup: [] },
         //公共的附加参数，针对所有接口
-        paramAddonPublic: { _systemId: _systemId8, _dataType: _dataType8 },
+        paramAddonPublic: { _dataType: _dataType8 },
 
         //操作列配置
         columnOperate: {
@@ -988,7 +984,7 @@ F_ITEMS.relNoteList = _extends({}, D_ITEMS.relNoteList, {
 //#region 关系列表页
 {
     var _dataType9 = "relation",
-        _systemId9 = PUB._systemId;
+        _systemId5 = PUB._systemId;
     var _listIndex7 = "list_" + _dataType9;
     PUB.listCF[_listIndex7] = _extends({
         idKey: "_id", //键名
@@ -997,9 +993,9 @@ F_ITEMS.relNoteList = _extends({}, D_ITEMS.relNoteList, {
         focusMenu: true, //进行菜单聚焦
         breadcrumb: [{ value: "首页", path: "#/listHome" }, { value: "关系数据" }]
     }, PUB.listCFCommon2, { //展开公共配置
-        objParamAddon: { _systemId: _systemId9, _dataType: _dataType9 },
+        objParamAddon: { _dataType: _dataType9 },
         //公共的附加参数，针对所有接口
-        paramAddonPublic: { _systemId: _systemId9, _dataType: _dataType9 },
+        paramAddonPublic: { _dataType: _dataType9 },
 
         //-------详情字段数组-------
         detailItems: ["_id", "_idRel", "_idRel2", "sort"],
@@ -1019,7 +1015,7 @@ F_ITEMS.relNoteList = _extends({}, D_ITEMS.relNoteList, {
 
 {
     var _dataType10 = "role",
-        _systemId10 = PUB._systemId;
+        _systemId6 = PUB._systemId;
     var _listIndex8 = "list_" + _dataType10;
     PUB.listCF[_listIndex8] = _extends({
         idKey: "_id", //键名
@@ -1027,9 +1023,9 @@ F_ITEMS.relNoteList = _extends({}, D_ITEMS.relNoteList, {
         listIndex: _listIndex8, //vuex对应的字段~
         focusMenu: true, //进行菜单聚焦
         threeTitle: "角色" }, PUB.listCFCommon2, { //展开公共配置
-        objParamAddon: { _systemId: _systemId10, _dataType: _dataType10 },
+        objParamAddon: { _dataType: _dataType10 },
         //公共的附加参数，针对所有接口
-        paramAddonPublic: { _systemId: _systemId10, _dataType: _dataType10 },
+        paramAddonPublic: { _dataType: _dataType10 },
 
         //-------详情字段数组-------
         detailItems: ["Id", "roleName", "rolePower"],
@@ -1049,7 +1045,7 @@ F_ITEMS.relNoteList = _extends({}, D_ITEMS.relNoteList, {
 
 {
     var _dataType11 = "url",
-        _systemId11 = PUB._systemId;
+        _systemId7 = PUB._systemId;
     var _listIndex9 = "list_" + _dataType11;
     PUB.listCF[_listIndex9] = _extends({
         idKey: "_id", //键名
@@ -1060,9 +1056,9 @@ F_ITEMS.relNoteList = _extends({}, D_ITEMS.relNoteList, {
     }, PUB.listCFCommon3, { //展开公共配置
         //objParamAddon列表接口的附加参数
         // singleBtns:PUB.singleBtns_copy_link_sort,
-        objParamAddon: { _systemId: _systemId11, _dataType: _dataType11 },
+        objParamAddon: { _dataType: _dataType11 },
         //公共的附加参数，针对所有接口
-        paramAddonPublic: { _systemId: _systemId11, _dataType: _dataType11 },
+        paramAddonPublic: { _dataType: _dataType11 },
 
         //-------详情字段数组-------
         detailItems: ["title", "desc", "link"],
@@ -1081,7 +1077,7 @@ F_ITEMS.relNoteList = _extends({}, D_ITEMS.relNoteList, {
 //#region 视频列表页
 {
     var _dataType12 = "vedio",
-        _systemId12 = PUB._systemId;
+        _systemId8 = PUB._systemId;
     var _listIndex10 = "list_" + _dataType12;
     PUB.listCF[_listIndex10] = _extends({
         idKey: "_id", //键名
@@ -1091,9 +1087,9 @@ F_ITEMS.relNoteList = _extends({}, D_ITEMS.relNoteList, {
         breadcrumb: [{ value: "首页", path: "#/listHome" }, { value: "教学视频" }]
     }, PUB.listCFCommon2, { //展开公共配置
 
-        objParamAddon: { _systemId: _systemId12, _dataType: _dataType12 },
+        objParamAddon: { _dataType: _dataType12 },
         //公共的附加参数，针对所有接口
-        paramAddonPublic: { _systemId: _systemId12, _dataType: _dataType12 },
+        paramAddonPublic: { _dataType: _dataType12 },
 
         //-------详情字段数组-------
         detailItems: ["title", "desc", "link", "vedio", "detail"],
@@ -1139,8 +1135,8 @@ PUB.cfListGPublic = _extends({
         singleBtns: {
             addon: [].concat(_toConsumableArray(PUB.singleBtns_list_group_data.addon), [util.cfList.sBtns.linkGroup])
         },
-        objParamAddon: { findJson: {}, _systemId: _systemId, _dataType: _dataType13 },
-        paramAddonPublic: { _systemId: _systemId, _dataType: _dataType13 }, //公共的附加参数，针对所有接口
+        objParamAddon: { findJson: {}, _dataType: _dataType13 },
+        paramAddonPublic: { _dataType: _dataType13 }, //公共的附加参数，针对所有接口
         dynamicDict: [DYDICT.note_category], //dynamicDict动态数据字典配置
         //-------详情字段数组-------
         detailItems: ["title", "desc", "countData", "_id", "_idRel", "_idRel2", "sort"],
@@ -1152,6 +1148,11 @@ PUB.cfListGPublic = _extends({
         formItems: ["_idRel", "_idRel2", "sort"]
         //#endregion
     });util.reformCFListItem(PUB.listCF[_listIndex11]);
+    //需要补充的拆解字段****
+    PUB.$projectAddon[_listIndex11] = {
+        dataType: "$targetDoc.dataType",
+        countData: "$targetDoc.countData"
+    };
 }
 //#endregion
 //#region 分组下的笔记列表页
@@ -1170,8 +1171,8 @@ PUB.cfListGPublic = _extends({
         singleBtns: {
             addon: [].concat(_toConsumableArray(PUB.singleBtns_list_group_data.addon))
         },
-        objParamAddon: { findJson: {}, _systemId: _systemId, _dataType: _dataType14 },
-        paramAddonPublic: { _systemId: _systemId, _dataType: _dataType14 }, //公共的附加参数，针对所有接口
+        objParamAddon: { findJson: {}, _dataType: _dataType14 },
+        paramAddonPublic: { _dataType: _dataType14 }, //公共的附加参数，针对所有接口
         //dynamicDict动态数据字典配置
         dynamicDict: [DYDICT.note_category],
         //-------详情字段数组-------
@@ -1199,8 +1200,8 @@ PUB.cfListGPublic = _extends({
         singleBtns: {
             addon: [].concat(_toConsumableArray(PUB.singleBtns_list_group_data.addon), [util.cfList.sBtns.link])
         },
-        objParamAddon: { findJson: {}, _systemId: _systemId, _dataType: _dataType15 },
-        paramAddonPublic: { _systemId: _systemId, _dataType: _dataType15 }, //公共的附加参数，针对所有接口
+        objParamAddon: { findJson: {}, _dataType: _dataType15 },
+        paramAddonPublic: { _dataType: _dataType15 }, //公共的附加参数，针对所有接口
         //dynamicDict动态数据字典配置
         dynamicDict: [DYDICT.note_category],
         //-------详情字段数组-------
@@ -1221,8 +1222,8 @@ PUB.cfListGPublic = _extends({
     var _listIndex14 = "detail_group_vedio";
     PUB.listCF[_listIndex14] = _extends({}, PUB.cfListGPublic, {
         listIndex: _listIndex14, //vuex对应的字段~
-        objParamAddon: { findJson: {}, _systemId: _systemId, _dataType: _dataType16 },
-        paramAddonPublic: { _systemId: _systemId, _dataType: _dataType16 }, //公共的附加参数，针对所有接口
+        objParamAddon: { findJson: {}, _dataType: _dataType16 },
+        paramAddonPublic: { _dataType: _dataType16 }, //公共的附加参数，针对所有接口
         //dynamicDict动态数据字典配置
         dynamicDict: [DYDICT.note_category],
         //-------详情字段数组-------

@@ -302,6 +302,9 @@ export default {
     "cf.objParamAddon": {
       immediate: true, deep: true,
       handler(newVal, oldVal) {
+        if (PUB._paramAjaxAddon) {//如果需要合并公共变量的基础ajax参数--注意顺序
+          Object.assign(this.objParam, PUB._paramAjaxAddon)//合并公共变量的基础参数
+        }
         Object.assign(this.objParam, this.cf.objParamAddon); //合并对象
         this.objParam = util.deepCopy(this.objParam); //深拷贝强制更新
       },
@@ -535,6 +538,8 @@ export default {
         [this.cf.idKey == "_id" ? "_id" : "id"]: row[this.cf.idKey]
       };
       Object.assign(ajaxParam, this.cf.paramAddonPublic); //合并公共参数
+
+
       if (this.cf.url.detail) {
         //如果{详情ajax地址}存在
         let { data } = await axios({//请求接口
@@ -560,8 +565,8 @@ export default {
           deleteData = [this.tableData.find(doc => doc[this.cf.idKey] == dataId)];
         }
         deleteData = util.deepCopy(deleteData);
-        //Q1:{删除数据接口}存在
-        if (this.cf.url.delete) {
+       
+        if (this.cf.url.delete) { //Q1:{删除数据接口}存在
           let ajaxParam;
           if (this.cf.idKey == "_id") {
             ajaxParam = { _id: dataId };
@@ -574,6 +579,9 @@ export default {
             };
           }
           Object.assign(ajaxParam, this.cf.paramAddonPublic); //合并公共参数
+
+
+
           //用户点击了确认
           await axios({//请求接口
             method: "post", url: PUB.domain + this.cf.url.delete,
@@ -585,14 +593,17 @@ export default {
           if (this.cf.isRefreshAfterCUD) {
             this.getDataList(); //更新数据列表
           }
-        } else {
-          //Q2:{删除数据接口}不存在
+        } else {//Q2:{删除数据接口}不存在
+          
           let arrId = deleteData.map(doc => doc[this.cf.idKey]); //删除的id数组
           //过滤出剩余数据
           this.tableData = this.tableData.filter(
             doc => !arrId.includes(doc[this.cf.idKey])
           );
-          // this.$emit("input", this.tableData); //****触发外部value的改变，使用watch的话不太好，会有延迟
+
+          
+          // console.log("this.tableData:$$$$$", this.tableData);
+           this.$emit("input", this.tableData); //****触发外部value的改变，使用watch的话不太好，会有延迟
         }
         this.$message({ message: "删除成功", duration: 1500, type: "success" });
         this.$emit("after-delete", deleteData); //触发外部事件
@@ -628,8 +639,15 @@ export default {
         }
       }
       /****************************将空数组处理成null-END****************************/
+
+
+
+
       let urlList = lodash.get(this.cf, `url.list`);
       // this.tableData = this.value; //提取静态数据
+
+
+
       if (urlList) {
         //Q1:{列表接口地址}存在
         let { data } = await axios({//请求接口
@@ -673,6 +691,7 @@ export default {
       idKey: "P1", isMultipleSelect: true, isShowCheckedBox: true, isShowSearchForm: true,
       isShowBreadcrumb: true, isShowPageLink: true, isShowOperateColumn: true,
       isRefreshAfterCUD: true, isShowToolBar: true,
+
       cfElTable: {}, //列表配置对象
       paramAddonPublic: {} //公共附加参数
     });
@@ -693,6 +712,14 @@ export default {
       //改变列表的初始状态值
       this.$store.commit("setListFindJson", { listIndex: this.cf.listIndex, findJson: {} });
     }
+
+    if (PUB._paramAjaxAddon) {//如果需要合并公共变量的基础ajax参数
+
+      Object.assign(this.cf.paramAddonPublic, PUB._paramAjaxAddon)//合并公共变量的基础参数
+    }
+
+
+
     this.objParam.findJson = findJsonDefault;
     this.objParam.sortJson = lodash.cloneDeep(this.cf.sortJsonDefault); //处理排序参数
     /****************************拼装selectJson参数-START****************************/

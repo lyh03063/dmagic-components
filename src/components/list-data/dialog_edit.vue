@@ -92,7 +92,12 @@ export default {
             modifyJson: _data
           };
         }
+        if (PUB._paramAjaxAddon) {//如果需要合并公共变量的基础ajax参数--注意顺序
+          Object.assign(ajaxParam, PUB._paramAjaxAddon)//合并公共变量的基础参数
+        }
         Object.assign(ajaxParam, this.cf.cfFormModify.paramAddonInit); //合并公共参数，之前是cf.paramAddonPublic
+
+
         let response = await axios({
           //请求接口
           method: "post",
@@ -141,6 +146,7 @@ export default {
     this.cf.cfFormModify = this.cf.cfFormModify || {};
     if (this.cf.listType == "common") {//如果是通用型数据
       let cfFormModifyTemp = {
+
         idKey: "_id", watch: {},
         urlInit: "/info/commonDetail",
         btns: [
@@ -153,10 +159,15 @@ export default {
       let { formItems, cfForm } = listCF; //获取对应的表单项
       cfFormModifyTemp.formItems = formItems; //表单字段
       if (cfForm) {//如果额外配置存在
-           Object.assign(cfFormModifyTemp,cfForm);//合并对象
-        }
+        Object.assign(cfFormModifyTemp, cfForm);//合并对象
+      }
       //调用：{给一个对象设置默认属性函数}
       util.setObjDefault(this.cf.cfFormModify, cfFormModifyTemp);
+
+      console.log("this.cf.cfFormModify:######", this.cf.cfFormModify);
+
+
+
       //设置主参数
       this.cf.urlModify = "/info/commonModify";
     }

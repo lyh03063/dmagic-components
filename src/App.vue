@@ -60,7 +60,8 @@ let arrDemo = [
   "tool_old_cf_list",
   "tool_replace_space",
   "edit_list_data",
-  "add_list_data"
+  "add_list_data",
+  "switch_systemId",
 ];
 
 import dm_dynamic_form from "./components/list-data/dynamic-form.vue";

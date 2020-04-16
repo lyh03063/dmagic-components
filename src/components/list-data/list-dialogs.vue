@@ -52,7 +52,7 @@
 
 
    <!--弹窗新增数据组件--> 
- <dm_dialog_add ref="dialog_add" :cf="cfAddDialog" :formAdd="formAdd">
+ <dm_dialog_add ref="dialog_add" :cf="cfAddDialog" :formAdd="formAdd" :tableData="tableData" @after-add="afterAdd">
       <template v-slot:slot_test="{formData}">{{formData.name}}</template>
     </dm_dialog_add>
 <!--弹窗编辑数据组件-->
@@ -203,8 +203,12 @@ export default {
       this.cfEditDialog.visible = true;
        this.$set(this.cfEditDialog, "tableData", this.tableData);
     },
+    afterAdd(_data){
+      console.log(`afterAdd---1`);
+      this.$emit("after-add", _data); //触发外部事件
+    },
     afterModify(_data){
-      
+      console.log(`afterModify---1`);
       this.$emit("after-modify", _data, this.beforeModify); //触发外部事件
     }
 

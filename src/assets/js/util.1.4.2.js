@@ -1264,7 +1264,6 @@ util.reformCFListItem = function (cfList) {
 util.handleCommonListCF = function ({ _dataType, listCFAddon }) {
 
 
-    let _systemId = PUB._systemId;
     let listIndex = `list_${_dataType}`
     PUB.listCF[listIndex] = {
       idKey: "_id", //键名
@@ -1273,12 +1272,12 @@ util.handleCommonListCF = function ({ _dataType, listCFAddon }) {
       focusMenu: true, //进行菜单聚焦
       //objParamAddon列表接口的附加参数
       objParamAddon: {
-        _systemId,
+      
         _dataType
       },
       //公共的附加参数，针对所有接口
       paramAddonPublic: {
-        _systemId,
+       
         _dataType
       },
       ...listCFAddon,
