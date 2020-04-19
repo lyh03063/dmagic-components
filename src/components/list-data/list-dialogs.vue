@@ -1,5 +1,11 @@
 <template>
   <div class>
+    
+<dm_debug_list>
+      <dm_debug_item v-model="cf" text="tttt"/>
+   
+    </dm_debug_list>
+
     <!--查看详情弹窗-->
     <el-dialog
       title="查看详情"
@@ -81,11 +87,12 @@ export default {
   props: ["cf", "tableData"],
 
   data: function() {
+    
     return {
        cfAddDialog: {
         // visible: true,
         cfTips: lodash.get(this.cf, `cfDialogForm.tips`),
-        urlAdd: this.cf.url.add,
+        urlAdd: lodash.get(this.cf, `url.add`),
         tableData: null,
         isRefreshAfterAdd: this.cf.isRefreshAfterCUD,
         formDataAddInit: { },
@@ -108,7 +115,7 @@ export default {
       cfEditDialog: {
         // visible: true,
         cfTips: lodash.get(this.cf, `cfDialogForm.tips`),
-        urlModify: this.cf.url.modify,
+        urlModify: lodash.get(this.cf, `url.modify`),
         tableData: null,
         isRefreshAfterModify: this.cf.isRefreshAfterCUD,
         dataIdModify: null,

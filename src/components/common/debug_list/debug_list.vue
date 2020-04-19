@@ -1,26 +1,34 @@
 <template>
   <table  class="n-table n-table-debug MT5 MB5" v-if="debug">
     <tr>
-      <td class="WP15 FWB">{{$parent.$options.name||"数据"}}</td>
-      <td class="WP15 FWB">说明</td>
-      <td class="FWB">字段值</td>
+      <td class="WP15 TAR FWB tb_th">{{$parent.$options.name||"数据"}} </td>
+      <td class="FWB Cur1 tb_th" @click="isShowItem=!isShowItem">字段值 <i  :class="classArrow" ></i></td>
     </tr>
-    <!--插槽-->
-    <slot class v-if="isReady"></slot>
+    <tbody v-show="isShowItem">
+<!--插槽-->
+    <slot class v-if="isReady" ></slot>
+    </tbody>
+
+    
   </table>
 </template>
 
 <script>
 export default {
+
   data: function() {
     return {
-      isReady: false
+      isReady: false,
+      isShowItem:true,
     };
   },
 
   computed: {
     debug() {
       return this.$store.state.debug;
+    },
+    classArrow(){
+      return this.isShowItem?"el-icon-arrow-right":"el-icon-arrow-down"
     }
   },
 
@@ -56,6 +64,10 @@ export default {
 
 table.n-table.n-table-debug td,
 table.n-table.n-table-debug th {
-  padding: 5px;
+  padding: 2px;
+  font-size: 13px;
+}
+.tb_th{
+  background-color: #f0f0f0;
 }
 </style>

@@ -1,13 +1,12 @@
 <template>
 
   <tr>
-    <td class>
+    <td class="TAR">
       <span class="debug-text" :title="pathNeed">{{pathNeed}}</span>
+      <span class="C_999" v-if="text">({{text}})</span>
       <!-- <JsonViewer :value="JSON.parse(getValueStr(pathNeed))" class="valueShowInTip"></JsonViewer> -->
     </td>
-    <td class>
-      <span class="debug-text" :title="text">{{text}}</span>
-    </td>
+    
     <td class="PSR" :class="{'changing':isChanging}" @dblclick="isEdit=true">
       <el-tooltip class="item MR6 PSA L3 T2" effect="light" placement="left" >
         <i class="el-icon-view"></i>
@@ -50,7 +49,7 @@ export default {
     //注册组件
     json_editor,JsonViewer
   },
-  mixins: [MIX.form_item], //混入
+  mixins: [MIX.form_item_new], //混入
   props: ["path", "text", "value"],
   data() {
     return {
@@ -120,7 +119,7 @@ export default {
 .valueShow {
   width: 100%;
   overflow-y: auto;
-  max-height: 20px;
+  max-height: 14px;
   padding: 0 0 0 18px;
   word-break: break-all;
 }
@@ -147,8 +146,10 @@ export default {
 }
 table.n-table.n-table-debug td,
 table.n-table.n-table-debug th {
-  padding: 3px;
-  line-height: 18px;
+  padding: 2px;
+  line-height: 14px;
+  font-size: 13px;
+  font-family: Arial, Helvetica, sans-serif;
 
 }
 .changing {
@@ -161,7 +162,7 @@ table.n-table.n-table-debug th {
 
   white-space: nowrap;
   overflow: hidden;
-  max-height: 20px;
+  max-height: 14px;
   display: inline-block;
   text-overflow: ellipsis;
 }

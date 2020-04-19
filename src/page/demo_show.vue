@@ -23,12 +23,17 @@ import edit_list_data from "./demo/edit_list_data.vue";
 import add_list_data from "./demo/add_list_data.vue";
 
 import switch_systemId from "./demo/switch_systemId.vue";
+
+import test_debug_list from "./demo/test_debug_list.vue";
+import tree_data_menu from "./demo/tree_data_menu.vue";
+import tree_data_normal from "./demo/tree_data_normal.vue";
 export default {
   components: { pannel, list_flex_res, goods_specs,
     goods_specs_2, goods_specs_front, goods_specs_front_2, 
-    goods_cart, calendar1, 
+    goods_cart, calendar1, tree_data_menu,tree_data_normal,
     tool_old_cf_list, tool_replace_space,
-    edit_list_data, add_list_data ,switch_systemId },
+    edit_list_data, add_list_data ,switch_systemId ,test_debug_list
+    },
 
   data() {
     return {

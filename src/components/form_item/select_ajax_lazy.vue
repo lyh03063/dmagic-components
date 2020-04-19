@@ -42,6 +42,10 @@ export default {
     //函数：{ajax获取选项函数}
     async ajaxGetOptions() {
       this.loading = true;
+
+      if (PUB._paramAjaxAddon) {//如果需要合并公共变量的基础ajax参数--注意顺序
+        util.setObjDefault(this.param, PUB._paramAjaxAddon);//合并公共变量的基础参数-优先级低于个性化配置
+      }
       let { data } = await axios({//请求接口//传递参数
         method: "post", url: `${PUB.domain}${this.cf.url} `, data: this.param
       })

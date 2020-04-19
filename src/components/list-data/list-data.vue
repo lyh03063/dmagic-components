@@ -25,7 +25,8 @@
       class="MB12"
     >
       <el-breadcrumb-item v-for="(item,index) in cf.breadcrumb" :key="index">
-        <a :href="item.path" v-if="item.path">{{item.value}}</a>
+        <!-- <a :href="item.path" v-if="item.path">{{item.value}}</a> -->
+        <router-link :to="item.path" v-if="item.path">{{item.value}}</router-link>
         <span v-else>{{item.value}}</span>
       </el-breadcrumb-item>
     </el-breadcrumb>
@@ -565,7 +566,7 @@ export default {
           deleteData = [this.tableData.find(doc => doc[this.cf.idKey] == dataId)];
         }
         deleteData = util.deepCopy(deleteData);
-       
+
         if (this.cf.url.delete) { //Q1:{删除数据接口}存在
           let ajaxParam;
           if (this.cf.idKey == "_id") {
@@ -594,16 +595,16 @@ export default {
             this.getDataList(); //更新数据列表
           }
         } else {//Q2:{删除数据接口}不存在
-          
+
           let arrId = deleteData.map(doc => doc[this.cf.idKey]); //删除的id数组
           //过滤出剩余数据
           this.tableData = this.tableData.filter(
             doc => !arrId.includes(doc[this.cf.idKey])
           );
 
-          
+
           // console.log("this.tableData:$$$$$", this.tableData);
-           this.$emit("input", this.tableData); //****触发外部value的改变，使用watch的话不太好，会有延迟
+          this.$emit("input", this.tableData); //****触发外部value的改变，使用watch的话不太好，会有延迟
         }
         this.$message({ message: "删除成功", duration: 1500, type: "success" });
         this.$emit("after-delete", deleteData); //触发外部事件
@@ -667,6 +668,10 @@ export default {
         //如果{填充配置数组}存在.
         for await (const populateCFEach of this.cf.dynamicDict) {
           let paramPopulate = lodash.cloneDeep(populateCFEach); //深拷贝
+
+
+          
+
           paramPopulate.listData = this.tableData; //补充listData属性
           this.tableData = await util.ajaxPopulate(paramPopulate);
         }

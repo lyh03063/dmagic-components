@@ -17,7 +17,21 @@
       <el-menu-item index="upload_qiniu" route="/upload_qiniu">上传七牛云</el-menu-item>
       <el-menu-item index="test" route="/test">测试</el-menu-item>
 
-      <el-submenu index="demo_show">
+      
+
+      <el-submenu index="demo_tool">
+        <template slot="title">
+          <span class>小工具</span>
+        </template>
+        <el-menu-item
+          :index="item"
+          :route="`/demo_show?com=${item}`"
+          v-for="item in arrTool"
+          :key="item"
+        >{{item}}</el-menu-item>
+      </el-submenu>
+
+      <el-submenu index="demo_more">
         <template slot="title">
           <span class>更多demo</span>
         </template>
@@ -51,23 +65,47 @@
 <script>
 //变量：{demo数组}
 let arrDemo = [
+  "tree_data_normal",
+  "tree_data_menu",
   "pannel",
   "list_flex_res",
   "goods_cart",
   "goods_specs_2",
   "goods_specs_front_2",
   "calendar1",
-  "tool_old_cf_list",
-  "tool_replace_space",
   "edit_list_data",
   "add_list_data",
   "switch_systemId",
+  "test_debug_list",
 ];
-
+let arrTool = [
+ 
+  "tool_old_cf_list",
+  "tool_replace_space",
+ 
+];
 import dm_dynamic_form from "./components/list-data/dynamic-form.vue";
 export default {
   components: { dm_dynamic_form },
   name: "app",
+   data() {
+    return {
+      arrDemo,arrTool,
+      dataConfigForCopy: "", //用于拷贝的配置字符串
+      dataConfig: {}, //内部组件配置数据
+      // activeIndex: "1",
+      showDialog: false,
+      showCFForm: false, //是否显示组件配置表单
+      cfForm: {
+        labelWidth: "110px",
+        // col_span: 12,
+        formItems: [],
+        btns: [
+          // { text: "关闭", event: "cancel" }
+        ]
+      }
+    };
+  },
   computed: {
     activeMenuIndex() {
       // //
@@ -75,7 +113,7 @@ export default {
       // //当前激活的菜单index
       return this.$store.state.activeMenuIndex; //从vuex的store里面读取值
     },
-    cfData: function() {
+    cfData: function () {
       return this.$store.state.cfData;
     }
   },
@@ -100,24 +138,7 @@ export default {
       deep: true
     }
   },
-  data() {
-    return {
-      arrDemo,
-      dataConfigForCopy: "", //用于拷贝的配置字符串
-      dataConfig: {}, //内部组件配置数据
-      // activeIndex: "1",
-      showDialog: false,
-      showCFForm: false, //是否显示组件配置表单
-      cfForm: {
-        labelWidth: "110px",
-        // col_span: 12,
-        formItems: [],
-        btns: [
-          // { text: "关闭", event: "cancel" }
-        ]
-      }
-    };
-  },
+ 
   mounted() {
     var clipboard = new Clipboard(".btn-copy");
     clipboard.on("success", e => {

@@ -169,6 +169,8 @@ export default {
         labelWidth: "150px",
 
         formItems: [
+          F_ITEMS.treeDataMenu,//单文件上传
+          F_ITEMS.treeData1,//单文件上传
           F_ITEMS.upload_single1,//单文件上传
           F_ITEMS.uploadAvatar,//单文件上传
           F_ITEMS.prop_time_period1,//日范围
