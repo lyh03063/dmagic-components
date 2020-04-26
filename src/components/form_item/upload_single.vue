@@ -85,6 +85,9 @@ export default {
       let { key, fname } = response;
       let url = `${this.downloadDomain}/${key}`; //图片的绝对路径
       this.valueNeed = url; //
+
+      //调用：{ajax添加一个文件本部信息函数}
+      util.ajaxAddFileBaseInfo({ fileSource: "upload_single", fileUrl: url, responseQiniu: response })
     },
   },
   created() {

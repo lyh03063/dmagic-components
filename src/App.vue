@@ -1,5 +1,10 @@
 <template>
   <div id="app">
+    
+<dm_debug_list>
+      <dm_debug_item v-model="dataConfig" />
+    </dm_debug_list>
+
     <el-menu
       :default-active="activeMenuIndex"
       class="el-menu-demo"
@@ -65,6 +70,8 @@
 <script>
 //变量：{demo数组}
 let arrDemo = [
+  "form_demo3",
+  "title_bar_demo",
   "tree_data_normal",
   "tree_data_menu",
   "pannel",
@@ -76,7 +83,7 @@ let arrDemo = [
   "edit_list_data",
   "add_list_data",
   "switch_systemId",
-  "test_debug_list",
+  "test_debug_list","pannel_new_demo"
 ];
 let arrTool = [
  
@@ -131,6 +138,7 @@ export default {
       handler(newVal, oldVal) {
         //来自vuex的当前行数据
         // this.$store.state.listState[this.cf.listIndex].row;
+        console.log(`dataConfig变动###`);
 
         this.$store.commit("setCfData", this.dataConfig);
       },

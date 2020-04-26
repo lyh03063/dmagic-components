@@ -30,6 +30,7 @@
         <span v-else>{{item.value}}</span>
       </el-breadcrumb-item>
     </el-breadcrumb>
+    <!--查询表单-->
     <div class="search-form-box MB10" v-if="cf.isShowSearchForm">
       <dynamicForm @submit1="searchList" :cf="cfSearchForm" v-model="objParam.findJson"></dynamicForm>
     </div>
@@ -283,7 +284,7 @@ export default {
       //------------------筛选表单组件配置--------------
       cfSearchForm: {
         // col_span: 8,//控制显示一行多列
-        labelWidth: "auto", size: "mini", inline: true,
+        labelWidth: "90px", size: "mini", inline: true,
         formItems: this.cf.searchFormItems,
         watch: lodash.get(this.cf, `cfSearchForm.watch`), //监听器配置
         btns: [{ text: "查询", event: "submit1", type: "primary" }]

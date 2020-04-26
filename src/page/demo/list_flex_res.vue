@@ -18,7 +18,16 @@
       </dm_list_flex_res>
     </dm_pannel>
 
-    <dm_pannel class="MB20" title="2到10列">
+    <dm_pannel class="MB20" title="1到10列">
+       <dm_list_flex_res
+        class="MB20"
+        :list="productList"
+        
+        #default="{item}"
+        col="1"
+      >
+        <div class="group">{{item.title}}</div>
+      </dm_list_flex_res>
       <dm_list_flex_res
         class="MB20"
         :list="productList"

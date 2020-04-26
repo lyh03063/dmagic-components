@@ -868,7 +868,13 @@ util.setLocalStorageObj = function (key, val) {
 //#region getLocalStorageObj:从LocalStorage获取一个对象的函数
 util.getLocalStorageObj = function (key) {
     if (!localStorage[key]) return false;
-    return JSON.parse(localStorage[key]); //
+    if (localStorage[key]) {
+        //Q1:对应的存储变量存在
+        return JSON.parse(localStorage[key]); //
+    } else {
+        //Q2:对应的存储变量不存在
+        return { error: "没有获取对应的localStorage" };
+    }
 };
 //#endregion
 
@@ -1187,22 +1193,25 @@ util.clearArr = function (arr) {
 //#region ajaxGroupDataSort:调用分组数据排序接口的函数
 util.ajaxGroupDataSort = function () {
     var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(actionType, doc) {
-        var _id;
+        var _id, _systemId;
 
         return regeneratorRuntime.wrap(function _callee3$(_context3) {
             while (1) {
                 switch (_context3.prev = _context3.next) {
                     case 0:
                         _id = doc._id;
-                        _context3.next = 3;
+                        //***获取系统id,注意优先级
+
+                        _systemId = lodash.get(PUB, "_paramAjaxAddon._systemId", PUB._systemId);
+                        _context3.next = 4;
                         return axios({
                             //请求接口
                             method: "post",
                             url: PUB.domain + "/info/groupDataSort",
-                            data: { _systemId: PUB._systemId, _id: _id, actionType: actionType //传递参数
+                            data: { _systemId: _systemId, _id: _id, actionType: actionType //传递参数
                             } });
 
-                    case 3:
+                    case 4:
                     case "end":
                         return _context3.stop();
                 }

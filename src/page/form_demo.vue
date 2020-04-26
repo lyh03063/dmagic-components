@@ -100,6 +100,8 @@ let styleMenuPowerItem = `margin-bottom:10px;padding:0 5px`;
 let styleMenuGPowerItem = `margin-bottom:0;border:none;padding:0`;
 
 
+
+
 export default {
   name: "form_demo",
   components: { checkbox_diy },
@@ -108,7 +110,7 @@ export default {
     return {
       formData1: { obj: { num: 123 } },
       formData: {
-        uploadAvatar:"http://qn-dmagic.dmagic.cn/202004141713623737_3796_1.png",
+        uploadAvatar: "http://qn-dmagic.dmagic.cn/202004141713623737_3796_1.png",
         prop_time_period2: { "start": "2020-04-01 00:00:01", "end": "2021-01-01 23:59:59" },
         prop_time_period3: "2020-04-01 00:00:01",
         // tagList:["2222","3333"],
@@ -169,17 +171,20 @@ export default {
         labelWidth: "150px",
 
         formItems: [
-          F_ITEMS.treeDataMenu,//单文件上传
-          F_ITEMS.treeData1,//单文件上传
+           F_ITEMS.collection1,
+          F_ITEMS.addressObj,
+          F_ITEMS.prop_upload,
+          F_ITEMS.treeDataMenu,//树
+          F_ITEMS.treeData1,//树
           F_ITEMS.upload_single1,//单文件上传
           F_ITEMS.uploadAvatar,//单文件上传
-          F_ITEMS.prop_time_period1,//日范围
-          F_ITEMS.prop_time_period2,//月范围
-          F_ITEMS.prop_time_period3,//年范围
+          // F_ITEMS.prop_time_period1,//日范围
+          // F_ITEMS.prop_time_period2,//月范围
+          // F_ITEMS.prop_time_period3,//年范围
           // F_ITEMS.prop_upload,
           // F_ITEMS.personCharge,
           // F_ITEMS.prop_editorTMNew,
-          // F_ITEMS.prop_editorTM,
+          F_ITEMS.prop_editorTM,
 
           // F_ITEMS.projectName_select_lazy,
           // F_ITEMS.predictTime,
@@ -222,6 +227,23 @@ export default {
         { label: "label2", value: "2" }
       ]
     };
+  },
+  computed: {
+
+    cfData: function () {//配置数据
+      return this.$store.state.cfData;
+    }
+  },
+  watch: {
+    cfData: {//配置数据
+      handler(newVal, oldVal) {
+        console.log(`cfData##############变动`);
+        var t_json = JSON.stringify(this.cfData); //：{Json对象转换Json字符串函数}
+        this.cfForm = util.parseJson(t_json);
+      },
+      // immediate: true,
+      deep: true
+    }
   },
   created() {
     T = this;
@@ -361,7 +383,7 @@ export default {
 
     var strJson = util.stringify(this.cfForm);
     let json1 = JSON.parse(strJson);
-    this.$store.commit("setCfData", json1);
+    this.$store.commit("setCfData", json1);//同步配置界面的配置信息
   }
 };
 </script>

@@ -56,6 +56,11 @@ export default {
   height: 0;
   margin: 0;
 }
+
+.n-col-1 .n-flex-group {
+  width: 100%;
+}
+
 .n-col-2 .n-flex-group {
   width: 48%;
 }

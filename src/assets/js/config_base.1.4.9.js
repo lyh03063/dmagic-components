@@ -502,7 +502,7 @@ MIX.listGroupData = {
         pageSize: 20,
         listIndex, //vuex对应的字段~
         focusMenu: true, //进行菜单聚焦
-        threeTitle: "管理员", //面包屑2级菜单
+        breadcrumb: [ { value: "首页", path: "listHome" }, { value: "管理员" } ],
         ...PUB.listCFCommon2,//展开公共配置
         //objParamAddon列表接口的附加参数
         objParamAddon: { _dataType },
@@ -513,7 +513,7 @@ MIX.listGroupData = {
         //-------详情字段数组-------
         detailItems: ["Id", "userName", "passWord"],
         //-------列配置数组-------
-        columns: ["Id", "userName", "passWord", "nickName", "role"],
+        columns: ["Id", "userName",  "nickName", "role"],
         //-------筛选表单字段数组-------
         searchFormItems: ["Id"],
         //-------新增、修改表单字段数组-------
@@ -571,8 +571,8 @@ MIX.listGroupData = {
         pageSize: 20,
         listIndex, //vuex对应的字段~
         focusMenu: true, //进行菜单聚焦
-        focusMenu: true, //进行菜单聚焦
-        threeTitle: "文章分类", //面包屑2级菜单
+
+        breadcrumb: [ { value: "首页", path: "listHome" }, { value: "文章分类" } ],
         ...PUB.listCFCommon2,//展开公共配置
         //objParamAddon列表接口的附加参数
         objParamAddon: { _dataType },
@@ -602,7 +602,7 @@ MIX.listGroupData = {
         pageSize: 20,
         listIndex, //vuex对应的字段~
         focusMenu: true, //进行菜单聚焦
-        threeTitle: "文章", //面包屑2级菜单
+        breadcrumb: [ { value: "首页", path: "listHome" }, { value: "文章" } ],
         ...PUB.listCFCommon2,//展开公共配置
         //objParamAddon列表接口的附加参数
         objParamAddon: { _dataType },
@@ -848,7 +848,7 @@ F_ITEMS.relNoteList = {
         pageSize: 20,
         listIndex, //vuex对应的字段~
         focusMenu: true, //进行菜单聚焦
-        threeTitle: "角色", //面包屑2级菜单
+        breadcrumb: [ { value: "首页", path: "listHome" }, { value: "角色" } ],
         ...PUB.listCFCommon2,//展开公共配置
         objParamAddon: { _dataType },
         //公共的附加参数，针对所有接口

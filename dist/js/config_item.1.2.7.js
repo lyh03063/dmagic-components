@@ -430,11 +430,11 @@ D_ITEMS.role = {
 };
 COLUMNS.role = _extends({}, D_ITEMS.role, { width: 120 });
 F_ITEMS.role = {
-    label: "所属角色",
+    label: "所属角色1",
     prop: "role",
     type: "select",
     ajax: {
-        param: { _systemId: _systemId, _dataType: "role" },
+        param: { _dataType: "role" },
         url: "/info/getCommonList",
         keyLabel: "name",
         keyValue: "_id"
@@ -2395,7 +2395,15 @@ F_ITEMS.positionInfo = _extends({}, D_ITEMS.positionInfo, { default: {}, //默�
         _objBase33 = { label: "系统Id", prop: _prop24 };
     D_ITEMS[_prop24] = _extends({}, _objBase33);
     COLUMNS[_prop24] = _extends({}, _objBase33, { width: 100, edit: true });
-    F_ITEMS[_prop24] = _extends({}, _objBase33, { type: "input" });
+    F_ITEMS[_prop24] = _extends({}, _objBase33, { type: "select", multiple: true, //多选
+
+        ajax: {
+            param: { _systemId: _systemId, _dataType: "system" },
+            url: "/info/getCommonList",
+            keyLabel: "title",
+            keyValue: "systemId"
+        }
+    });
     // F_ITEMS[`${prop}_search`] = { ...objBase, type: "input_find_vague" };
 }
 //#endregion

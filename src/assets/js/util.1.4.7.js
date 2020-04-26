@@ -1055,11 +1055,13 @@ util.clearArr = function (arr) {
 //#region ajaxGroupDataSort:调用分组数据排序接口的函数
 util.ajaxGroupDataSort = async function (actionType, doc) {
     let { _id } = doc;
+    //***获取系统id,注意优先级
+    let _systemId= lodash.get(PUB, `_paramAjaxAddon._systemId`,PUB._systemId);
     await axios({
         //请求接口
         method: "post",
         url: `${PUB.domain}/info/groupDataSort`,
-        data: { _systemId: PUB._systemId, _id, actionType } //传递参数
+        data: { _systemId, _id, actionType } //传递参数
     });
 };
 //#endregion

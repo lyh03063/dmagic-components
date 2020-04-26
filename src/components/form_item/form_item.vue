@@ -45,6 +45,14 @@
       v-else-if="item.type=='select_ajax_lazy'"
     ></dm_select_ajax_lazy>
 
+    <!--地区选择下拉框-->
+    <dm_select_area
+      v-model="formDataNeed[item.prop]"
+      :value-type="item.valueType"
+      :cf="item.cfSelectAjaxLazy"
+      v-else-if="item.type=='select_area'"
+    ></dm_select_area>
+
     <!--弹窗选择列表-->
     <select_list_data
       v-model="formDataNeed[item.prop]"

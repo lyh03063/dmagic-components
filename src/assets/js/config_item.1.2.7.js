@@ -2818,10 +2818,19 @@ F_ITEMS.positionInfo = {
     let prop = "_systemId", objBase = { label: "系统Id", prop, }
     D_ITEMS[prop] = { ...objBase, };
     COLUMNS[prop] = { ...objBase, width: 100, edit: true };
-    F_ITEMS[prop] = { ...objBase, type: "input" };
+    F_ITEMS[prop] = {
+      ...objBase, type: "select", multiple: true, //多选
+  
+      ajax: {
+        param: { _systemId, _dataType: "system" },
+        url: "/info/getCommonList",
+        keyLabel: "title",
+        keyValue: "systemId",
+      }
+    };
     // F_ITEMS[`${prop}_search`] = { ...objBase, type: "input_find_vague" };
-}
-//#endregion
+  }
+  //#endregion
 
 //#region 站点logo
 {

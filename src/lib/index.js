@@ -11,8 +11,11 @@ import dm_select_ajax_lazy from '../components/form_item/select_ajax_lazy.vue'
 import dm_pannel from '../components/common/pannel/index.vue'
 
 import dm_list_flex_res from '../components/common/list_flex_res/index.vue'
+import dm_title_bar from '../components/common/title_bar.vue'
+import dm_pannel_new from '../components/common/pannel_new.vue'
 import dm_collection from '../components/form_item/collection/index.vue'
 import dm_tree_data from '../components/form_item/tree_data.vue'
+import dm_select_area from '../components/form_item/select_area.vue'
 import dm_dialog_edit from '../components/list-data/dialog_edit.vue'
 
 import dm_dialog_add from '../components/list-data/dialog_add.vue'
@@ -46,7 +49,7 @@ const Components = {
   dm_dynamic_form,dm_list_data,dm_select_ajax_lazy,
   dm_codemirror:codemirror,
   dm_select_list_data,dm_collection,dm_dialog_edit,dm_dialog_add,
-  dm_tree_data,
+  dm_tree_data,dm_title_bar,dm_pannel_new,dm_select_area
 }
 
 

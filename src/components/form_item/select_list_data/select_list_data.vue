@@ -56,7 +56,7 @@
 // import dm_list_data from "../../components/list-data/list-data.vue";
 import collection from "../../../components/form_item/collection/index.vue";
 export default {
-  mixins: [MIX.form_item], //混入
+  mixins: [MIX.form_item_new], //混入
   components: { collection },
   props: {
     cf: {

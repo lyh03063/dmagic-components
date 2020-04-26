@@ -28,16 +28,18 @@ export default {
       var file = blobInfo.blob();
 
       let { data: dataToken } = await util.getQiNiuToken(file)//调用：{ajax获取七牛云token的函数}
-      let {token}=dataToken
+      let { token } = dataToken
 
 
-    
 
-      let { data } =await util.uploadQiNiuFile({ file, token })//调用：{ajax上传文件到七牛云的函数}
+
+      let { data } = await util.uploadQiNiuFile({ file, token })//调用：{ajax上传文件到七牛云的函数}
 
       if (data.key) {
         let src = dataToken.downloadDomain + '/' + data.key
         succFun(src)
+        //调用：{ajax添加一个文件本部信息函数}
+        util.ajaxAddFileBaseInfo({ fileSource: "tiny_mce", fileUrl: src, responseQiniu: data })
       } else {
         failFun(alert('图片上传失败'))
       }

@@ -59,6 +59,7 @@
 import draggable from "vuedraggable";
 // action="https://jsonplaceholder.typicode.com/posts/"
 export default {
+  name: "",
   props: {
     uploadConfig: {
       type: Object
@@ -132,13 +133,13 @@ export default {
       let maxSize = 200
       const isLimit = file.size / 1024 / 1024 < maxSize;
       if (!isLimit) {
-       return  this.$message.error(`上传文件大小不能超过${maxSize}MB!`);
+        return this.$message.error(`上传文件大小不能超过${maxSize}MB!`);
       }
 
 
-      
 
-      let {data:dataToken} = await util.getQiNiuToken(file)//调用：{ajax获取七牛云token的函数}
+
+      let { data: dataToken } = await util.getQiNiuToken(file)//调用：{ajax获取七牛云token的函数}
       let { token, downloadDomain } = dataToken;
       this.downloadDomain = downloadDomain; //更新七牛云下载域名
 
@@ -147,11 +148,22 @@ export default {
       return isLimit;
     },
     //处理图片上传后的同步
-    uploaded(response) {
+    async uploaded(response) {
       //  response= util.parseJson(response)//转成json
+      console.log(`response:#####`, response);
       let { key, fname } = response;
       let url = `${this.downloadDomain}/${key}`; //图片的绝对路径
       this.valueNeed.push({ url, name: fname }); //
+
+      //调用：{ajax添加一个文件本部信息函数}
+      util.ajaxAddFileBaseInfo({ fileSource: "upload_img", fileUrl: url, responseQiniu: response })
+
+    
+
+
+
+
+
     },
 
 

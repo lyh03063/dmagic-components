@@ -12,9 +12,16 @@
         <i class="el-icon-view"></i>
         <div slot="content">
           <pre class="valueShowInTip" v-if="getDataType(pathNeed)=='null'">{{getValueStr(pathNeed)}}</pre>
-          <JsonViewer  
-          :expand-depth=2
-          :value="getValueStr(pathNeed)" class="valueShowInTip" v-else ></JsonViewer>
+          <div class="" v-else>
+             <el-link type="info" @click="expandLevel">继续展开</el-link>
+              <el-link type="info" @click="foldLevel">继续折叠</el-link>
+  
+
+               <JsonViewer  
+          :expand-depth="depth"
+          :value="getValueStr(pathNeed)" class="valueShowInTip"  v-if="readyJsonViewer" ></JsonViewer>
+          </div>
+       
           <!--  -->
         </div>
       </el-tooltip>
@@ -53,6 +60,8 @@ export default {
   props: ["path", "text", "value"],
   data() {
     return {
+      readyJsonViewer:true,//用于重新选人jsonview
+      depth:2,
       isEdit: false,
       pathNeed: this.path,
       isChanging: false,
@@ -80,6 +89,16 @@ export default {
   },
 
   methods: {
+    //函数：{JsonViewer展开多一层函数}
+    expandLevel(){
+      this.depth++;
+      this.$nextTickStatus("readyJsonViewer")//更新视图
+    },
+    //函数：{JsonViewer收起多一层函数}
+    foldLevel(){
+      this.depth--;
+      this.$nextTickStatus("readyJsonViewer")//更新视图
+    },
     async addClassChange() {
       this.isChanging = true;
       await util.timeout(300); //延迟
@@ -138,7 +157,7 @@ export default {
 .valueShowInTip {
   overflow-y: auto;
   max-height: 350px;
-  font-size: 16px;
+  font-size: 12px;
   /* background-color: */
 }
 .jv-container.jv-light .jv-item.jv-object{

@@ -1,8 +1,10 @@
 <template>
-  <table  class="n-table n-table-debug MT5 MB5" v-if="debug">
+  <table  class="n-table n-table-debug MT5 MB5" v-if="debug&&isShowTable">
     <tr>
       <td class="WP15 TAR FWB tb_th">{{$parent.$options.name||"数据"}} </td>
-      <td class="FWB Cur1 tb_th" @click="isShowItem=!isShowItem">字段值 <i  :class="classArrow" ></i></td>
+      <td class="FWB  tb_th" > <span class="Cur1" @click="isShowItem=!isShowItem">字段值 <i  :class="classArrow" ></i></span>
+      <i  class="el-icon-close F2 Cur1 " @click="isShowTable=false" style="padding:3px"></i>
+      </td>
     </tr>
     <tbody v-show="isShowItem">
 <!--插槽-->
@@ -20,6 +22,7 @@ export default {
     return {
       isReady: false,
       isShowItem:true,
+      isShowTable:true,
     };
   },
 

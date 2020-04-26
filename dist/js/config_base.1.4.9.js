@@ -2,8 +2,6 @@
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
@@ -714,7 +712,8 @@ MIX.listGroupData = {
         pageSize: 20,
         listIndex: listIndex, //vuex对应的字段~
         focusMenu: true, //进行菜单聚焦
-        threeTitle: "管理员" }, PUB.listCFCommon2, { //展开公共配置
+        breadcrumb: [{ value: "首页", path: "listHome" }, { value: "管理员" }]
+    }, PUB.listCFCommon2, { //展开公共配置
         //objParamAddon列表接口的附加参数
         objParamAddon: { _dataType: _dataType },
         //公共的附加参数，针对所有接口
@@ -723,7 +722,7 @@ MIX.listGroupData = {
         //-------详情字段数组-------
         detailItems: ["Id", "userName", "passWord"],
         //-------列配置数组-------
-        columns: ["Id", "userName", "passWord", "nickName", "role"],
+        columns: ["Id", "userName", "nickName", "role"],
         //-------筛选表单字段数组-------
         searchFormItems: ["Id"],
         //-------新增、修改表单字段数组-------
@@ -769,15 +768,16 @@ MIX.listGroupData = {
 //#region 文章分类列表页
 
 {
-    var _extends2;
-
     var _dataType3 = "article_category";
     var _listIndex = "list_" + _dataType3;
-    PUB.listCF[_listIndex] = _extends((_extends2 = {
+    PUB.listCF[_listIndex] = _extends({
         idKey: "_id", //键名
         pageSize: 20,
         listIndex: _listIndex, //vuex对应的字段~
-        focusMenu: true }, _defineProperty(_extends2, "focusMenu", true), _defineProperty(_extends2, "threeTitle", "文章分类"), _extends2), PUB.listCFCommon2, { //展开公共配置
+        focusMenu: true, //进行菜单聚焦
+
+        breadcrumb: [{ value: "首页", path: "listHome" }, { value: "文章分类" }]
+    }, PUB.listCFCommon2, { //展开公共配置
         //objParamAddon列表接口的附加参数
         objParamAddon: { _dataType: _dataType3 },
         //公共的附加参数，针对所有接口
@@ -804,7 +804,8 @@ MIX.listGroupData = {
         pageSize: 20,
         listIndex: _listIndex2, //vuex对应的字段~
         focusMenu: true, //进行菜单聚焦
-        threeTitle: "文章" }, PUB.listCFCommon2, { //展开公共配置
+        breadcrumb: [{ value: "首页", path: "listHome" }, { value: "文章" }]
+    }, PUB.listCFCommon2, { //展开公共配置
         //objParamAddon列表接口的附加参数
         objParamAddon: { _dataType: _dataType4 },
         //公共的附加参数，针对所有接口
@@ -1024,7 +1025,8 @@ F_ITEMS.relNoteList = _extends({}, D_ITEMS.relNoteList, {
         pageSize: 20,
         listIndex: _listIndex8, //vuex对应的字段~
         focusMenu: true, //进行菜单聚焦
-        threeTitle: "角色" }, PUB.listCFCommon2, { //展开公共配置
+        breadcrumb: [{ value: "首页", path: "listHome" }, { value: "角色" }]
+    }, PUB.listCFCommon2, { //展开公共配置
         objParamAddon: { _dataType: _dataType10 },
         //公共的附加参数，针对所有接口
         paramAddonPublic: { _dataType: _dataType10 },

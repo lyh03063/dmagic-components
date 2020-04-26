@@ -20,10 +20,11 @@ import 'tinymce/plugins/codesample'
 import 'tinymce/plugins/paste'//引入粘贴插件
 // import 'tinymce/plugins/powerpaste'//引入粘贴插件
 export default {
+  name: "dm_tiny_mce",
   components: {
     Editor
   },
-  name: 'tinymce',
+  
   props: ['value', 'showToolbar', "pasteImage"],
   watch: {
     myValue: {
@@ -47,16 +48,16 @@ export default {
         menubar: false,
         statusbar: false,
         toolbar: 'undo redo |  formatselect | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | lists image  table code link codesample| removeformat',
-         max_height: 400,
+        max_height: 400,
         min_height: 200,
         autoresize_on_init: true,
         autoresize_overflow_padding: 10,
         default_link_target: "_blank",
         readonly: 1,
         autoresize_bottom_margin: 10,
-       
+
         images_upload_handler: this.uploadingImg,
-        
+
 
 
 
@@ -101,7 +102,13 @@ export default {
       })
       if (data.key) {
         let src = requestData.data.downloadDomain + '/' + data.key
+
+
+
+
         succFun(src)
+
+       
       } else {
         failFun(alert('图片上传失败'))
       }
@@ -129,7 +136,7 @@ export default {
     if (!this.showToolbar) {
       this.init.toolbar = false
     }
-    if (!this.pasteImage)  console.warn("无法粘贴上传图片，请设置pasteImage为true")
+    if (!this.pasteImage) console.warn("无法粘贴上传图片，请设置pasteImage为true")
   }
 };
 </script>
