@@ -1,28 +1,29 @@
 <template>
-
   <tr>
     <td class="TAR">
-      <span class="debug-text" :title="pathNeed">{{pathNeed}}</span>
-      <span class="C_999" v-if="text">({{text}})</span>
+      <span class="debug-text">
+        <span class :title="pathNeed">{{pathNeed}}</span>
+        <span class="C_999" v-if="text">({{text}})</span>
+      </span>
+
       <!-- <JsonViewer :value="JSON.parse(getValueStr(pathNeed))" class="valueShowInTip"></JsonViewer> -->
     </td>
-    
+
     <td class="PSR" :class="{'changing':isChanging}" @dblclick="isEdit=true">
-      <el-tooltip class="item MR6 PSA L3 T2" effect="light" placement="left" >
+      <el-tooltip class="item MR6 PSA L3 T2" effect="light" placement="left">
         <i class="el-icon-view"></i>
         <div slot="content">
           <pre class="valueShowInTip" v-if="getDataType(pathNeed)=='null'">{{getValueStr(pathNeed)}}</pre>
-          <div class="" v-else>
-             <el-link type="info" @click="expandLevel">继续展开</el-link>
-              <el-link type="info" @click="foldLevel">继续折叠</el-link>
-  
-
-               <JsonViewer  
-          :expand-depth="depth"
-          :value="getValueStr(pathNeed)" class="valueShowInTip"  v-if="readyJsonViewer" ></JsonViewer>
+          <div class v-else>
+            <el-link type="info" @click="expandLevel">继续展开</el-link>
+            <el-link type="info" @click="foldLevel">继续折叠</el-link>
+            <JsonViewer
+              :expand-depth="depth"
+              :value="getValueStr(pathNeed)"
+              class="valueShowInTip"
+              v-if="readyJsonViewer"
+            ></JsonViewer>
           </div>
-       
-          <!--  -->
         </div>
       </el-tooltip>
 
@@ -45,7 +46,6 @@
       </div>
     </td>
   </tr>
-  
 </template>
 
 <script>
@@ -54,14 +54,14 @@ import JsonViewer from 'vue-json-viewer'
 export default {
   components: {
     //注册组件
-    json_editor,JsonViewer
+    json_editor, JsonViewer
   },
   mixins: [MIX.form_item_new], //混入
   props: ["path", "text", "value"],
   data() {
     return {
-      readyJsonViewer:true,//用于重新选人jsonview
-      depth:2,
+      readyJsonViewer: true,//用于重新选人jsonview
+      depth: 2,
       isEdit: false,
       pathNeed: this.path,
       isChanging: false,
@@ -90,12 +90,12 @@ export default {
 
   methods: {
     //函数：{JsonViewer展开多一层函数}
-    expandLevel(){
+    expandLevel() {
       this.depth++;
       this.$nextTickStatus("readyJsonViewer")//更新视图
     },
     //函数：{JsonViewer收起多一层函数}
-    foldLevel(){
+    foldLevel() {
       this.depth--;
       this.$nextTickStatus("readyJsonViewer")//更新视图
     },
@@ -115,15 +115,15 @@ export default {
       let arrType = ["object", "array"];
       if (arrType.includes(type)) {
         //如果类型是对象或数组
-       // data = JSON.stringify(data, null, 4); //{Json对象转换Json字符串函数}-后面两个参数可以设置缩进
-      }else if(type=="null") {
+        // data = JSON.stringify(data, null, 4); //{Json对象转换Json字符串函数}-后面两个参数可以设置缩进
+      } else if (type == "null") {
         data = "null"; //转成字符串
       } else {
         data += ""; //转成字符串
       }
       return data;
     },
- 
+
   },
   created() {
     //获取v-model变量名（表达式）
@@ -160,7 +160,7 @@ export default {
   font-size: 12px;
   /* background-color: */
 }
-.jv-container.jv-light .jv-item.jv-object{
+.jv-container.jv-light .jv-item.jv-object {
   width: 100%;
 }
 table.n-table.n-table-debug td,
@@ -169,7 +169,6 @@ table.n-table.n-table-debug th {
   line-height: 14px;
   font-size: 13px;
   font-family: Arial, Helvetica, sans-serif;
-
 }
 .changing {
   background: #f60;

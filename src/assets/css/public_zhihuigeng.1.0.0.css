@@ -1,0 +1,585 @@
+
+.icon-zhg {
+    background-image: url(http://qn-dmagic.dmagic.cn/202004291139692424_89151_zhihuigeng_icons.png);
+    display: inline-block;
+    transform-origin:0 0;
+  
+  }
+  
+  .size_100_100 {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .icon_light {
+    background-position: -1696px -635px;
+  }
+  
+  .icon_camera {
+    background-position: -1520px -635px;
+  }
+  
+  .icon_irrigator {
+    background-position: -1868px -635px;
+  }
+  
+  .icon_carbon_dioxide {
+    background-position: -2026px -635px;
+  }
+  
+  .icon_temperature_humidity {
+    background-position: -2181px -635px;
+  }
+  
+  .icon_gateway {
+    background-position: -2316px -636px;
+  }
+  
+  .icon_gps {
+    background-position: -2451px -635px;
+  }
+  
+  .icon_lock {
+    background-position: -2586px -636px;
+  }
+  
+  .icon_switch {
+    background-position: -2726px -631px;
+  }
+  
+  .icon_ejector_fan {
+    background-position: -2866px -631px;
+  }
+  
+  .icon_water_level {
+    background-position: -1826px -811px;
+  }
+  
+  .icon_wind_speed {
+    background-position: -2046px -811px;
+  }
+  
+  .icon_wind_direction {
+    background-position: -2167px -811px;
+  }
+  
+  .icon_pm10 {
+    background-position: -2287px -811px;
+  }
+  
+  .icon_PM2_5 {
+    background-position: -2407px -811px;
+  }
+  
+  .icon_noise {
+    background-position: -2527px -811px;
+  }
+  
+  .icon_precipitation {
+    background-position: -2647px -811px;
+  }
+  
+  .icon_atmos {
+    background-position: -2768px -811px;
+  }
+  
+  .icon_light_sensor {
+    background-position: -2888px -811px;
+  }
+  
+  .icon_default_device {
+    background-position: -3008px -811px;
+  }
+  
+  .icon_rolling_shutter {
+    background-position: -2788px -971px;
+  }
+  
+  .icon_sunscreen {
+    background-position: -2928px -971px;
+  }
+  
+  .icon_humidifier {
+    background-position: -3071px -971px;
+  }
+  
+  .icon_film_rolling_machine {
+    background-position: -3231px -971px;
+  }
+  
+  .icon_insect_proof_lamp {
+    background-position: -3374px -971px;
+  }
+  
+  .icon_water_pump {
+    background-position: -3517px -971px;
+  }
+  
+  .icon_water_fertilizer_barrel {
+    background-position: -3677px -971px;
+  }
+  
+  .icon_valve {
+    background-position: -3837px -971px;
+  }
+  
+  .icon_conductivity {
+    background-position: -3833px -1137px;
+  }
+  
+  .icon_ph {
+    background-position: -3980px -1138px;
+  }
+  
+  .icon_camera_off {
+    background-position: -2498px -455px;
+  }
+  
+  /****************************资产icon-START****************************/
+  
+  .icon_orchard {
+    background-position: -1520px -127px;
+  }
+  
+  .icon_tea_garden {
+    background-position: -1696px -127px;
+  }
+  
+  .icon_vegetable_field {
+    background-position: -1872px -127px;
+  }
+  
+  .icon_fish_pond {
+    background-position: -2202px -127px;
+  }
+  
+  .icon_grain_field {
+    background-position: -2366px -127px;
+  }
+  
+  .icon_processing_line {
+    background-position: -2536px -127px;
+  }
+  
+  .icon_material_warehouse {
+    background-position: -2668px -127px;
+  }
+  
+  .icon_product_warehouse {
+    background-position: -2816px -127px;
+  }
+  
+  .icon_exclusive_shop {
+    background-position: -2958px -127px;
+  }
+  /****************************资产icon-END****************************/
+  
+  /****************************媒体图标-START****************************/
+  
+  .icon_play {
+    background-position: -2001px -1098px;
+    width: 80px;
+    height: 79px;
+  }
+  
+  .icon_stop_play {
+    background-position: -2146px -1098px;
+    width: 80px;
+    height: 79px;
+  }
+  
+  .icon_slider_b {
+    background-position: -1600px -1113px;
+    width: 300px;
+    height: 8px;
+  }
+  
+  .icon_slider_t {
+    background-position: -1600px -1155px;
+    width: 240px;
+    height: 8px;
+  }
+  
+  .icon_slider_point {
+    background-position: -1600px -1187px;
+    width: 70px;
+    height: 70px;
+  }
+  
+  .icon_slider_sub {
+    background-position: -1541px -1115px;
+    width: 32px;
+    height: 32px;
+  }
+  
+  .icon_slider_add {
+    background-position: -1920px -1101px;
+    width: 32px;
+    height: 32px;
+  }
+  
+  .icon_reduce {
+    background-position: -2963px -1153px;
+    width: 80px;
+    height: 80px;
+  }
+  
+  .icon_enlarge {
+    background-position: -3073px -1153px;
+    width: 80px;
+    height: 80px;
+  }
+  
+  /****************************媒体图标-END****************************/
+  
+  /****************************其他小图标-START****************************/
+  .icon_menu_home {
+    background-position: -150px -556px;
+    width: 54px;
+    height: 54px;
+  }
+  
+  .icon_menu_home_active {
+    background-position: -215px -556px;
+    width: 54px;
+    height: 54px;
+  }
+  
+  .icon_menu_selection {
+    background-position: -406px -556px;
+    width: 54px;
+    height: 54px;
+  }
+  
+  .icon_menu_selection_active {
+    background-position: -499px -556px;
+    width: 54px;
+    height: 54px;
+  }
+  
+  .icon_menu_my {
+    background-position: -644px -556px;
+    width: 54px;
+    height: 54px;
+  }
+  
+  .icon_menu_my_active {
+    background-position: -717px -556px;
+    width: 54px;
+    height: 54px;
+  }
+  
+  .icon_edit_middle {
+    background-position: -770px -398px;
+    width: 60px;
+    height: 60px;
+  }
+  
+  .icon_weather {
+    background-position: -613px -785px;
+    width: 40px;
+    height: 40px;
+  }
+  
+  .icon_humidity {
+    background-position: -698px -782px;
+    width: 40px;
+    height: 40px;
+  }
+  
+  .icon_air_quality {
+    background-position: -777px -784px;
+    width: 40px;
+    height: 40px;
+  }
+  
+  .icon_camera_small {
+    background-position: -830px -531px;
+    width: 70px;
+    height: 70px;
+  }
+  
+  .icon_assets {
+    background-position: -193px -933px;
+    width: 46px;
+    height: 46px;
+  }
+  
+  .icon_product {
+    background-position: -276px -931px;
+    width: 46px;
+    height: 46px;
+  }
+  
+  .icon_equipment {
+    background-position: -360px -931px;
+    width: 46px;
+    height: 46px;
+  }
+  
+  .icon_Password {
+    background-position: -175px -1092px;
+    width: 50px;
+    height: 50px;
+  }
+  
+  .icon_phone {
+    background-position: -269px -1092px;
+    width: 50px;
+    height: 50px;
+  }
+  
+  .icon_vCode {
+    background-position: -380px -1092px;
+    width: 50px;
+    height: 50px;
+  }
+  
+  .icon_time_point {
+    background-position: -1221px -378px;
+    width: 24px;
+    height: 24px;
+  }
+  
+  .icon_return {
+    background-position: -1164px -531px;
+    width: 20px;
+    height: 34px;
+  }
+  
+  .icon_return_white {
+    background-position: -1201px -530px;
+    width: 20px;
+    height: 34px;
+  }
+  
+  .icon_more {
+    background-position: -1269px -544px;
+    width: 14px;
+    height: 22px;
+  }
+  
+  .icon_add {
+    background-position: -1323px -534px;
+    width: 32px;
+    height: 32px;
+  }
+  
+  .icon_search {
+    background-position: -1164px -614px;
+    width: 42px;
+    height: 42px;
+  }
+  
+  .icon_search_white {
+    background-position: -1334px -614px;
+    width: 42px;
+    height: 42px;
+  }
+  
+  .icon_scan_middle {
+    background-position: -1247px -614px;
+    width: 42px;
+    height: 42px;
+  }
+  
+  .icon_abnormal_1 {
+    background-position: -1550px -297px;
+    width: 40px;
+    height: 40px;
+  }
+  
+  .icon_abnormal_2 {
+    background-position: -1670px -293px;
+    width: 92px;
+    height: 44px;
+  }
+  
+  .icon_normal {
+    background-position: -1826px -293px;
+    width: 92px;
+    height: 44px;
+  }
+  
+  .icon_my_farm {
+    background-position: -2002px -302px;
+    width: 41px;
+    height: 25px;
+  }
+  
+  .icon_delete {
+    background-position: -2106px -297px;
+    width: 40px;
+    height: 40px;
+  }
+  
+  .icon_dialog_close {
+    background-position: -2237px -302px;
+    width: 30px;
+    height: 30px;
+  }
+  
+  .icon_telephone {
+    background-position: -2426px -304px;
+    width: 30px;
+    height: 30px;
+  }
+  
+  .icon_edit_small {
+    background-position: -2500px -304px;
+    width: 36px;
+    height: 36px;
+  }
+  
+  .icon_add_middle {
+    background-position: -1533px -442px;
+    width: 50px;
+    height: 50px;
+  }
+  
+  .icon_switch_on {
+    background-position: -1696px -441px;
+    width: 104px;
+    height: 58px;
+  }
+  
+  .icon_switch_off {
+    background-position: -1864px -441px;
+    width: 104px;
+    height: 58px;
+  }
+  
+  .icon_delete_2 {
+    background-position: -2069px -447px;
+    width: 34px;
+    height: 34px;
+  }
+  
+  .icon_edit_3 {
+    background-position: -2137px -447px;
+    width: 34px;
+    height: 34px;
+  }
+  
+  .icon_publish {
+    background-position: -2202px -447px;
+    width: 34px;
+    height: 34px;
+  }
+  
+  .icon_lower_shelf {
+    background-position: -2272px -447px;
+    width: 34px;
+    height: 34px;
+  }
+  
+  .icon_close {
+    background-position: -1726px -840px;
+    width: 40px;
+    height: 40px;
+  }
+  
+  .icon_search2 {
+    background-position: -2353px -1123px;
+    width: 30px;
+    height: 30px;
+  }
+  
+  .icon_scan_3 {
+    background-position: -2431px -1123px;
+    width: 40px;
+    height: 40px;
+  }
+  
+  .icon_radio {
+    background-position: -2535px -1122px;
+    width: 42px;
+    height: 42px;
+  }
+  
+  .icon_radio_active {
+    background-position: -2607px -1123px;
+    width: 42px;
+    height: 42px;
+  }
+  
+  .icon_bucket {
+    background-position: -2849px -1177px;
+    width: 34px;
+    height: 38px;
+  }
+  
+  .icon_flash_lamp {
+    background-position: -3907px -350px;
+    width: 26px;
+    height: 42px;
+  }
+  
+  .icon_to_left {
+    background-position: -3217px -1164px;
+    width: 80px;
+    height: 73px;
+  }
+  
+  .icon_to_right {
+    background-position: -3344px -1164px;
+    width: 80px;
+    height: 73px;
+  }
+  
+  .icon_to_top {
+    background-position: -3517px -1175px;
+    width: 73px;
+    height: 80px;
+  }
+  
+  .icon_to_bottom {
+    background-position: -3637px -1153px;
+    width: 73px;
+    height: 80px;
+  }
+  /****************************其他小图标-END****************************/
+  
+  /****************************其他大图标-START****************************/
+  .icon_default_avatar {
+    background-position: -175px -735px;
+    width: 130px;
+    height: 130px;
+  }
+  
+  .icon_default_picture {
+    background-position: -1510px -840px;
+    width: 160px;
+    height: 160px;
+  }
+  
+  .icon_no_record {
+    background-position: -3070px -621px;
+    width: 200px;
+    height: 140px;
+  }
+  
+  .icon_network_failure {
+    background-position: -3351px -609px;
+    width: 200px;
+    height: 140px;
+  }
+  
+  .icon_home_entry {
+    background-position: -3070px -305px;
+    width: 124px;
+    height: 124px;
+  }
+  
+  .icon_banner {
+    background-position: -150px -127px;
+    width: 750px;
+    height: 340px;
+  }
+  
+  .icon_scan_big {
+    background-position: -3907px -432px;
+    width: 518px;
+    height: 518px;
+  }
+  /****************************其他大图标-END****************************/

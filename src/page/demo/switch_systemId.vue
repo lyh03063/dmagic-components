@@ -5,9 +5,7 @@
 </template>
 
 <script>
-PUB._paramAjaxAddon = {
-  _systemId: "sys_longting"
-}
+
 export default {
   components: {},
   props: ["aaa"],
@@ -23,6 +21,10 @@ export default {
 
   },
   created() {
+
+    PUB._paramAjaxAddon = {
+  _systemId: "sys_longting"
+}
     
     delete this.cfList.objParamAddon._systemId//临时清除
     // this.cfList.objParamAddon = this.cfList.objParamAddon || {}

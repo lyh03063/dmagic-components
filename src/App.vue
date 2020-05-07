@@ -70,6 +70,7 @@
 <script>
 //变量：{demo数组}
 let arrDemo = [
+  "object_demo",
   "form_demo3",
   "title_bar_demo",
   "tree_data_normal",
@@ -128,7 +129,7 @@ export default {
     cfData: {
       handler(newVal, oldVal) {
         // alert("1111");
-        this.dataConfig = this.cfData;
+        this.dataConfig = this.cfData;//*** */
         this.dataConfigForCopy = JSON.stringify(this.dataConfig); //Json对象转换Json字符串
       },
       immediate: true,

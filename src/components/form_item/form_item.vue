@@ -116,6 +116,9 @@
       :marks="marks"
     ></el-slider>
 
+    <!--如果是对象编辑器-->
+    <dm_object v-model="formDataNeed[item.prop]" v-else-if="item.type=='object'" :cf="item.cfItem"></dm_object>
+
     <!--如果是vue-json编辑器-->
     <vue-json-editor
       v-model="formDataNeed[item.prop]"
@@ -211,11 +214,7 @@
       v-else-if="item.type=='tree_data'"
       :style="item.style"
     ></dm_tree_data>
-    <span
-      class="PR5"
-      v-else-if="item.type=='tree_data'"
-      :style="item.style"
-    >{{formDataNeed[item.prop]}}</span>
+
     <!--ajax_populate-->
     <dm_ajax_populate
       v-else-if="item.type=='ajax_populate'"
@@ -284,7 +283,7 @@ export default {
   name: "form_item", //组件名，用于递归
   components: {    select_list_data, vueJsonEditor: vueJsonEditor, select_ajax,
     input_find_vague, json_editor, upload_img, upload_single, time_period, json_prop,
-    collection, quill_editor, tiny_mce_new, tiny_mce_new, number_range, tag_list,   },
+    collection, quill_editor, tiny_mce_new, tiny_mce_new, number_range, tag_list,  },
   // mixins: [MIX.form_item], //混入
   props: {
     cf: [Object],

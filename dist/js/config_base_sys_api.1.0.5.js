@@ -122,9 +122,6 @@ PUB.menuList = [{
 //#region 路由配置
 PUB.arrRouteListName = ["modify_password", "listHome", "list_common"];
 
-//#region 列表模块名数组配置
-PUB.arrListName = ["html_api", "html_api_category", "css_api", "css_api_category", "js_api", "js_api_category", "familiarity", "exercises", "front_demo"];
-//#endregion
 //#region 分组数据列表页模块引用配置
 //变量：{分组数据列表的模块名称数组}-会在导入js配置文件时用到
 PUB.arrDetailGroupMoudles = ["note", "group", "url", "vedio"];

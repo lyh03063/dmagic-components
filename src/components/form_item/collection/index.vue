@@ -33,6 +33,12 @@
             <slot v-else-if="dataSlot" :name="dataSlot" :doc="handelShowDoc(doc)"></slot>
             <span v-else>{{handelShowDoc(doc)}}</span>
             <div class="tool-bar" v-if="focusItem==i&&showToolbar">
+              <i
+                class="el-icon-download btn-op Rotate180"
+                title="置顶"
+                @click="move(i, 'top')"
+                v-if="i>0"
+              ></i>
               <i class="el-icon-top btn-op" title="上移" @click="move(i, 'up')" v-if="i>0"></i>
               <i
                 class="el-icon-bottom btn-op"
@@ -41,17 +47,27 @@
                 v-if="i<valueNeed.length-1"
               ></i>
               <i
+                class="el-icon-download btn-op"
+                title="置底"
+                @click="move(i, 'bottom')"
+                v-if="i<valueNeed.length-1"
+              ></i>
+              <i
                 class="el-icon-edit btn-op"
                 title="编辑"
                 @click="showEditDataDialog(i)"
                 v-if="ifShow('btn-edit')"
               ></i>
+             
               <i
                 class="el-icon-copy-document btn-op"
                 title="复制"
                 @click="copyData(i)"
                 v-if="ifShow('btn-copy')"
               ></i>
+              <!--插槽-自定义工具栏按钮-->
+              <slot name="btn_toolbar" :doc="handelShowDoc(doc)"></slot>
+
               <i
                 class="el-icon-delete btn-op"
                 title="删除"
@@ -96,13 +112,13 @@ export default {
     //注册组件
     json_editor
   },
-  mixins: [MIX.form_item], //混入
+  mixins: [MIX.form_item_new], //混入
   props: {
     dataSlot: String,
     //新增按钮配置
     cfElBtnAdd: {
       type: Object,
-      default: function() {
+      default: function () {
         return {};
       }
     },
@@ -119,7 +135,7 @@ export default {
     //隐藏部分
     hidePart: {
       type: Object,
-      default: function() {
+      default: function () {
         return {};
       }
     }
@@ -209,17 +225,17 @@ export default {
     afterBlur() {
       this.editItem = "999";
     },
-    move: function(index, type) {
+    move: function (index, type) {
       this.focusItem = "999";
       util.moveData(index, type, this.valueNeed);
     },
-    copyData: function(index) {
+    copyData: function (index) {
       let copy = util.deepCopy(this.valueNeed[index]);
       copy.__id = util.getTimeRandom(); //修改__id,避免key重复
       this.valueNeed.splice(index, 0, copy); //从下标为1的元素开始删除0个元素.
       this.$message.success("复制成功");
     },
-    deleteData: async function(index) {
+    deleteData: async function (index) {
       this.valueNeed.splice(index, 1); //从下标为1的元素开始删除1个元素.
     }
   },

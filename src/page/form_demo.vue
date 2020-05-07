@@ -99,7 +99,56 @@ function getFormMenuGPowerSimple({ menuName = "XXX" }) {
 let styleMenuPowerItem = `margin-bottom:10px;padding:0 5px`;
 let styleMenuGPowerItem = `margin-bottom:0;border:none;padding:0`;
 
+F_ITEMS.checkbox1 = {
+  label: "复选框",
+  prop: "checkbox1",
+  default: false,
+  type: "checkbox",
+  options: DYDICT.arr_importance
+}
 
+//#region 简历-工作经历
+{
+  let _dataType = "resume_work_experience";
+  let listCFAddon = {
+    breadcrumb: [{ value: "首页", path: "listHome" }, { value: "简历-工作经历" }],
+    ...PUB.listCFCommon2,//展开公共配置
+    detailItems: ["companyName", "positionName", "onJobPeriod", "descJob"],
+    columns: ["companyName", "positionName", "onJobPeriod", "descJob"],
+    searchFormItems: ["companyName"],
+    formItems: ["companyName", "positionName", "onJobPeriod", "descJob"],
+  }
+  util.handleCommonListCF({ _dataType, listCFAddon })//调用：{处理通用列表配置数据函数}
+}
+//#endregion
+
+//#region 字段-我的工作经历
+{
+  let prop = "relWorkExperience", objBase = { label: "我的工作经历", prop, }
+  D_ITEMS[prop] = { ...objBase, };
+  COLUMNS[prop] = { ...objBase, width: 70, };
+  F_ITEMS[prop] = { ...objBase, type: "input" };
+  F_ITEMS[prop] = {
+    ...objBase, type: "select_list_data",
+    cfSelectList: {//选择列表配置
+      dataName: "工作经历", valueKey: "_id", labelKey: "companyName", multiple: true, //多选
+      selectJson: { _id: 1, companyName: 1, }, //需要保留的集合字段
+      cfList: util.deepCopy(PUB.listCF.list_resume_work_experience),
+       //编辑实体数据弹窗配置
+      cfEditDialogEntity1111: {
+        listType: "common", //通用型列表-影响urlModify
+        cfFormModify: {
+          paramAddonInit: {
+            _id: "xxx",
+            _systemId: "$all",
+            _dataType: "url"
+          }
+        }
+      }
+    }
+  };
+}
+//#endregion
 
 
 export default {
@@ -110,6 +159,7 @@ export default {
     return {
       formData1: { obj: { num: 123 } },
       formData: {
+        relWorkExperience:[{"_id":"5e9523985d347653d40cd985","companyName":"深圳软通动力1"},{"_id":"5eb3ab6c1178991cb84c4a4f","companyName":"公司333"}],
         uploadAvatar: "http://qn-dmagic.dmagic.cn/202004141713623737_3796_1.png",
         prop_time_period2: { "start": "2020-04-01 00:00:01", "end": "2021-01-01 23:59:59" },
         prop_time_period3: "2020-04-01 00:00:01",
@@ -171,13 +221,17 @@ export default {
         labelWidth: "150px",
 
         formItems: [
-           F_ITEMS.collection1,
-          F_ITEMS.addressObj,
-          F_ITEMS.prop_upload,
-          F_ITEMS.treeDataMenu,//树
+          F_ITEMS.relWorkExperience,
           F_ITEMS.treeData1,//树
-          F_ITEMS.upload_single1,//单文件上传
-          F_ITEMS.uploadAvatar,//单文件上传
+          F_ITEMS.object_1,
+          F_ITEMS.checkbox1,
+
+          // F_ITEMS.addressObj,
+          // F_ITEMS.prop_upload,
+          // F_ITEMS.treeDataMenu,//树
+
+          // F_ITEMS.upload_single1,//单文件上传
+          // F_ITEMS.uploadAvatar,//单文件上传
           // F_ITEMS.prop_time_period1,//日范围
           // F_ITEMS.prop_time_period2,//月范围
           // F_ITEMS.prop_time_period3,//年范围
@@ -196,7 +250,7 @@ export default {
           // F_ITEMS.diycheckbox,
           // F_ITEMS.num2,
           // F_ITEMS.num1,
-          // F_ITEMS.collection1,
+
           // F_ITEMS.collection2,
           // F_ITEMS.prop_numberRange,
           // F_ITEMS.prop1,
@@ -238,7 +292,9 @@ export default {
     cfData: {//配置数据
       handler(newVal, oldVal) {
         console.log(`cfData##############变动`);
+        console.log(`this.cfData:`, this.cfData);
         var t_json = JSON.stringify(this.cfData); //：{Json对象转换Json字符串函数}
+        console.log(`t_json:`, t_json);
         this.cfForm = util.parseJson(t_json);
       },
       // immediate: true,
@@ -247,6 +303,9 @@ export default {
   },
   created() {
     T = this;
+    PUB._paramAjaxAddon = {
+      _systemId: "$all"
+    }
   },
   async mounted() {
     this.$store.commit("changeActiveMenu", "form_demo");
@@ -264,10 +323,12 @@ export default {
         collectionCfForm: {
           formItems: [
             {
+              col_span: 12,
               label: "字段标签",
               prop: "label"
             },
             {
+              col_span: 12,
               label: "字段属性",
               prop: "prop"
             },
@@ -276,27 +337,7 @@ export default {
               prop: "type",
               type: "radio",
               default: "input",
-              options: [
-                { value: "input", label: "文本框" },
-                {
-                  value: "input_find_vague",
-                  label: "文本框(用于列表的模糊查询)"
-                },
-                { value: "textarea", label: "文本域" },
-                { value: "select", label: "下拉框" },
-                { value: "radio", label: "单选框" },
-                { value: "checkbox", label: "复选框" },
-                { value: "date", label: "日期选择器" },
-                { value: "dateTime", label: "日期时间选择器" },
-                { value: "upload", label: "图片/文件上传" },
-                { value: "jsonEditor", label: "json编辑器" },
-                { value: "vueJsonEditor", label: "json编辑器（加强版）" },
-                { value: "editor", label: "富文本编辑器" },
-                { value: "time_period", label: "时间段查询框" },
-                { value: "password", label: "密码框" },
-                { value: "form", label: "子表单" },
-                { value: "collection", label: "集合" }
-              ]
+              options: DYDICT.arr_type,
             },
             {
               term: { type: "upload" },

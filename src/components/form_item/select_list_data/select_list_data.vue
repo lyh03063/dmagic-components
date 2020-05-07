@@ -1,6 +1,6 @@
 
 <template>
-  <div class="DPIB">
+  <div class>
     <dm_debug_list>
       <dm_debug_item v-model="value" text="value" />
       <dm_debug_item v-model="valueNeed" text="valueNeed" />
@@ -8,47 +8,58 @@
       <dm_debug_item v-model="selectData" text="selectData" />
       <dm_debug_item v-model="cf" text="cf" />
     </dm_debug_list>
-    <span :title="valueNeed" v-if="!cf.multiple">{{label||valueNeed}}</span>
 
-    <el-input
-      placeholder="隐藏辅助文本框，用于更新校验"
-      ref="input_help"
-      style="width:0px;height:0px;overflow:hidden"
-    ></el-input>
-    <el-button plain @click="showDialog" size="mini">选择{{cf.dataName||"数据"}}</el-button>
-    <div class="MT8" v-if="cf.multiple&&!cf.hideCollection">
-      <collection
-        v-model="valueNeed"
-        :show-toolbar="true"
-        :cf-form="{}"
-        :hidePart="{'btn-add':1,'btn-edit':1,'btn-copy':1}"
-        data-slot="dataSlot1"
-      >
-        <!--插槽内容-->
-        <template v-slot:dataSlot1="{doc}">{{doc[cf.labelKey]}}</template>
-      </collection>
-    </div>
+    <div class v-if="ready">
+      <span :title="valueNeed" v-if="!cf.multiple">{{label||valueNeed}}</span>
 
-    <!--选择数据弹窗-->
-    <el-dialog
-      custom-class="n-el-dialog"
-      width="95%"
-      top="5vh"
-      :title="`选择${cf.dataName||'数据'}`"
-      :close-on-press-escape="false"
-      :close-on-click-modal="false"
-      :append-to-body="true"
-      v-bind:visible.sync="isShowDialog"
-      v-if="isShowDialog"
-    >
-      <div class>
-        <dm_list_data :cf="cfList" ref="listSelectData"></dm_list_data>
-        <div class="TAC PT10 PB10">
-          <el-button type="primary" @click="confirmSelect">确认选择</el-button>
-          <el-button plain @click="isShowDialog=false">关闭</el-button>
-        </div>
+      <el-input
+        placeholder="隐藏辅助文本框，用于更新校验"
+        ref="input_help"
+        style="width:0px;height:0px;overflow:hidden"
+      ></el-input>
+      <el-button plain @click="showDialog" size="mini">选择{{cf.dataName||"数据"}}</el-button>
+      <i class="el-icon-refresh" title="刷新数据" @click="refresh"></i>
+      <div class="MT8" v-if="cf.multiple&&!cf.hideCollection">
+        <collection
+          v-model="valueNeed"
+          :show-toolbar="true"
+          :cf-form="{}"
+          :hidePart="{'btn-add':1,'btn-edit':1,'btn-copy':1}"
+          data-slot="dataSlot1"
+        >
+          <!--插槽内容-->
+          <template v-slot:dataSlot1="{doc}">{{doc[cf.labelKey]}}</template>
+          <!--插槽内容-编辑实体数据按钮-->
+          <template v-slot:btn_toolbar="{doc}">
+            <i class="el-icon-edit btn-op" title="编辑实体" @click="dialogEditEntity(doc)"></i>
+          </template>
+        </collection>
       </div>
-    </el-dialog>
+
+      <!--选择数据弹窗-->
+      <el-dialog
+        custom-class="n-el-dialog"
+        width="95%"
+        top="5vh"
+        :title="`选择${cf.dataName||'数据'}`"
+        :close-on-press-escape="false"
+        :close-on-click-modal="false"
+        :append-to-body="true"
+        v-bind:visible.sync="isShowDialog"
+        v-if="isShowDialog"
+      >
+        <div class>
+          <dm_list_data :cf="cfList" ref="listSelectData"></dm_list_data>
+          <div class="TAC PT10 PB10">
+            <el-button type="primary" @click="confirmSelect">确认选择</el-button>
+            <el-button plain @click="isShowDialog=false">关闭</el-button>
+          </div>
+        </div>
+      </el-dialog>
+
+      <!--编辑实体数据弹窗-->
+      <dm_dialog_edit :cf="cf.cfEditDialogEntity"></dm_dialog_edit>
+    </div>
   </div>
 </template>
 
@@ -70,13 +81,59 @@ export default {
 
   data() {
     return {
+      ready: false,
       label: null, //数据标题
       selectData: [],
       isShowDialog: false, //是否显示弹窗
-      cfList: this.cf.cfList
+      cfList: this.cf.cfList,
+
+
     };
   },
   methods: {
+    //函数：{刷新列表函数}
+    refresh: async function () {
+      //根据当前已选数据的id数组，ajax查询并更新数据
+
+      //变量：{已选数据的id数组}
+      let arrId = this.valueNeed.map(d => d._id);
+      let ajaxListUrl = lodash.get(this.cf.cfList, `url.list`);
+      let _dataType = lodash.get(this.cf.cfList, `objParamAddon._dataType`);
+
+      let { data: { list } } = await axios({
+        method: "post",
+        url: `${PUB.domain}${ajaxListUrl}`,
+        data: {
+          pageSize: 999, _dataType, _systemId: "$all",
+          findJson: {
+            _id: { $in: arrId }
+          }
+        }
+      });
+      var dict = lodash.keyBy(list, '_id')//变量：{临时数据字典}
+      this.valueNeed.forEach(doc => {//循环：{已选数据数组}
+        let docDict = dict[doc._id]//在字典中的文档
+        for (var prop in doc) {
+          doc[prop] = docDict[prop]//更新
+        }
+      })
+
+
+    },
+
+    //函数：{编辑实体函数}
+    dialogEditEntity(doc) {
+      //更新要修改的数据id
+      this.cf.cfEditDialogEntity.cfFormModify.paramAddonInit._id = doc._id
+      this.cf.cfEditDialogEntity.visible = true;//显示弹窗
+
+
+
+      console.log(`doc._id:`, doc._id);
+      console.log(`this.cf.cfEditDialogEntity.visible:`, this.cf.cfEditDialogEntity.visible);
+
+    },
+
     showDialog() {
       this.isShowDialog = true; //打开弹窗
       console.log("this.valueNeed:", this.valueNeed);
@@ -145,9 +202,7 @@ export default {
 
       this.$emit("select", this.valueNeed); //抛出事件并传递数据
 
-      // await this.$nextTick(); //延迟到视图更新
-      //       this.$parent.$parent.$forceUpdate()//强制视图更新
-      // this.$parent.$forceUpdate()//强制视图更新
+
       // this.$forceUpdate()//强制视图更新
       //弹窗内的表单元素聚焦会触发字段的校验，但赋值后并不消失，forceUpdate方法不管用
       //这里用到一个辅助的el-input组件的聚焦失焦来解决
@@ -161,6 +216,7 @@ export default {
 
     ajaxGetLabel: async function () {
       if (!this.value) return;
+      if (!this.cf.pageName) return;
       let {
         data: { Doc: docNeed }
       } = await axios({
@@ -184,6 +240,27 @@ export default {
     this.cfList.isShowBreadcrumb = false; //隐藏面包屑导航
     this.cfList.pageSize = 10; //隐藏面包屑导航
     this.cfList.focusMenu = false; //不聚焦菜单
+
+
+    let _dataType = lodash.get(this.cf.cfList, `objParamAddon._dataType`);
+    if (_dataType && !this.cf.cfEditDialogEntity) {//如果{_dataType}存在，即通用数据列表
+      let cfEditDialogEntityDefault = {
+        listType: "common", //通用型列表-影响urlModify
+        visible: false,
+        cfFormModify: {
+          paramAddonInit: {
+            _id: "xxx", _systemId: "$all", _dataType
+          }
+        }
+      }
+      this.$set(this.cf, "cfEditDialogEntity", cfEditDialogEntityDefault);
+      //调用：{给一个对象设置默认属性函数}
+      // util.setObjDefault(this.cf.cfEditDialogEntity, cfEditDialogEntityDefault);
+
+    }
+
+    this.ready = true;
+
   },
   async mounted() {
     this.ajaxGetLabel(); //调用：{ajax获取label函数}

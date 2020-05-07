@@ -708,7 +708,7 @@ util.parseJson = function (str) {
     //函数定义：{字符串转json函数（含function还原处理）}
     //将带function字符串的还原成真正发function
     var json = JSON.parse(str, function (k, v) {
-        if (v.indexOf && v.indexOf("function") > -1) {
+        if (v && v.indexOf && v.indexOf("function") > -1) {
             return eval("(function(){return " + v + " })()");
         }
         return v;
@@ -1878,6 +1878,27 @@ util.ajaxDeleteBaseFile = function () {
     };
 }();
 //#endregion
+
+
+//#region encodeObjPropFnStr//函数：{对象属性函数字符串编码函数}
+util.encodeObjPropFnStr = function (code) {
+    code = "<<fn>>" + code + "<</fn>>"; //formatter是函数类型要特殊处理
+    code = code.replace(/\n/g, ''); //替换换行符
+    code = code.replace(/\"/g, "<#dbquote#>"); //临时处理双引号
+    code = code.replace(/\s{2,}/g, " "); //将多个空格替换成一个空格
+    return code;
+};
+//#endregion
+
+//#region decodeObjPropFnStr//函数：{对象属性函数字符串解码函数--变成真正的函数语句}
+util.decodeObjPropFnStr = function (code) {
+    code = code.replace(/"<<fn>>/g, "");
+    code = code.replace(/<<\/fn>>"/g, "");
+    code = code.replace(/<#dbquote#>/g, '"');
+    return code;
+};
+//#endregion
+
 
 //#region aaaa:000函数
 util.aaaa = function (param) {

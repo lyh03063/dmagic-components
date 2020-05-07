@@ -13,9 +13,7 @@
     <dm_dialog_edit :cf="cfEditDialog">
        <template v-slot:slot_test="{formData}">{{formData.name}}</template>
     </dm_dialog_edit>
-    <dm_dialog_edit :cf="cfEditDialog2">
-     
-    </dm_dialog_edit>
+    <dm_dialog_edit :cf="cfEditDialog2"></dm_dialog_edit>
   </div>
 </template>
 
