@@ -10,7 +10,7 @@
 
     <codemirror v-model="code" :options="cmOptions" ref="myCm"></codemirror>
     {{selectData}}
-    <el-button plain @click="formatCode" size="mini" class="MT10">格式化</el-button>
+    <el-button plain @click="formatCode" size="mini" class="MT10">格式化(不成功)</el-button>
 
     <el-button plain @click="isShowDialog=true" size="mini">选择数据</el-button>
 
@@ -46,6 +46,8 @@ import dm_list_data from "../components/list-data/list-data.vue";
 import dm_dynamic_form from "../components/list-data/dynamic-form.vue";
 import collection from "../components/form_item/collection/index.vue";
 import { codemirror } from "vue-codemirror";
+
+// import uglify from "uglify-js";
 import "codemirror/lib/codemirror.css";
 // 引入主题后还需要在 options 中指定主题才会生效
 
@@ -91,7 +93,6 @@ export default {
         // autoCloseBrackets: true,
         foldGutter: true,
         gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
-
         // more codemirror options, 更多 codemirror 的高级配置...
       },
       code: `
@@ -255,12 +256,18 @@ export default {
       let T = this;
       //T.cm.setValue("aaaaa")编辑器设置代码
       // this.cm.commands["selectAll"]();
+      console.log(`T.cm:`, T.cm);
       function getSelectedRange() {
         return { from: T.cm.getCursor(true), to: T.cm.getCursor(false) };
       }
 
-      var range = getSelectedRange();
-      T.cm.autoFormatRange(range.from, range.to);
+      console.log(`T.cm.lineCount:`, T.cm.lineCount());//获取到代码行数
+      let code=T.cm.getValue();
+
+      T.cm.setValue(code+"aaaa");
+
+      // var range = getSelectedRange();
+      // T.cm.autoFormatRange(range.from, range.to);
     },
     //函数：{确认选择数据函数}
     confirmSelect() {

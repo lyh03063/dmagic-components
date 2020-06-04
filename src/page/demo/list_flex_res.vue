@@ -28,6 +28,8 @@
       >
         <div class="group">{{item.title}}</div>
       </dm_list_flex_res>
+
+      <dm_title_bar class="MB20" title="2列"></dm_title_bar>
       <dm_list_flex_res
         class="MB20"
         :list="productList"

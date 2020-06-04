@@ -45,7 +45,7 @@ export default {
       }
     }
   },
-  mounted() {
+  async mounted() {
     console.log(`初始化:${this.id}`);
     // tinymce.init({});
 
@@ -94,6 +94,7 @@ export default {
       Object.assign(cfTiny, this.cf);//合并对象
     }
 
+    await util.loadJs({ url: PUB.urlJS.tinymce })//加载
 
 
 

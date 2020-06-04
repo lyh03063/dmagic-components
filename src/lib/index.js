@@ -19,6 +19,8 @@ import dm_object from '../components/form_item/object.vue'
 import dm_select_area from '../components/form_item/select_area.vue'
 import dm_dialog_edit from '../components/list-data/dialog_edit.vue'
 
+import dm_com_row_js_code from '../components/common/com_row_js_code.vue'
+import dm_echart from '../components/common/echart.vue'
 import dm_dialog_add from '../components/list-data/dialog_add.vue'
 import { codemirror } from "vue-codemirror";
 import "codemirror/lib/codemirror.css";
@@ -38,7 +40,7 @@ import "codemirror/addon/selection/active-line"; //高亮当前行
 import "codemirror/addon/fold/foldgutter"; //代码折叠-一定要引用
 import "codemirror/addon/fold/foldgutter.css"; //代码折叠样式一定要引用
 import "codemirror/addon/fold/brace-fold.js"; //代码折叠-一定要引用
-
+import dm_code from '../components/form_item/codemirror.vue'
 
 
 
@@ -48,9 +50,10 @@ const Components = {
   dm_debug_list, dm_debug_item,
   dm_loading,dm_ajax_populate,dm_space,
   dm_dynamic_form,dm_list_data,dm_select_ajax_lazy,
-  dm_codemirror:codemirror,
+  dm_codemirror:codemirror,dm_code,
   dm_select_list_data,dm_collection,dm_dialog_edit,dm_dialog_add,
   dm_tree_data,dm_title_bar,dm_pannel_new,dm_select_area,dm_object,
+  dm_com_row_js_code,dm_echart
 }
 
 
@@ -58,7 +61,6 @@ const comment = {
   install: function (Vue) {
     //安装以上多个组件
     Object.keys(Components).forEach(name => {
-      console.log(`install:${name}`);
       Vue.component(name, Components[name])
       // Vue.component(name, VueComment)
     })

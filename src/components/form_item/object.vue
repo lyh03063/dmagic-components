@@ -137,9 +137,7 @@ export default {
     //两层配置结构，为了更好拓展
 
 
-    util.setObjDefault(this.cf, {
-      cfForm, 
-    });
+    util.setObjDefault(this.cf, {cfForm, });
 
 
     this.initValueNeedEdit()//调用：{初始化编辑状态下的对象数据函数}

@@ -31,14 +31,20 @@ import title_bar_demo from "./demo/title_bar_demo.vue";
 import pannel_new_demo from "./demo/pannel_new_demo.vue";
 import form_demo3 from "./demo/form_demo3.vue";
 import object_demo from "./demo/object_demo.vue";
+import el_table_drag from "./demo/el_table_drag.vue";
+import list_drag_sort_demo from "./demo/list_drag_sort_demo.vue";
+import list_tree_data from "./demo/list_tree_data.vue";
+import echarts_demo from "./demo/echarts_demo.vue";
 export default {
-  components: { pannel, list_flex_res, goods_specs,
-    goods_specs_2, goods_specs_front, goods_specs_front_2, 
-    goods_cart, calendar1, tree_data_menu,tree_data_normal,
+  components: {    pannel, list_flex_res, goods_specs,
+    goods_specs_2, goods_specs_front, goods_specs_front_2,
+    goods_cart, calendar1, tree_data_menu, tree_data_normal,
     tool_old_cf_list, tool_replace_space,
-    edit_list_data, add_list_data ,switch_systemId ,test_debug_list,title_bar_demo,
-    pannel_new_demo,form_demo3,object_demo
-    },
+    edit_list_data, add_list_data, switch_systemId, test_debug_list, title_bar_demo,
+    pannel_new_demo, form_demo3, object_demo, el_table_drag, list_drag_sort_demo,
+    list_tree_data,echarts_demo
+
+  },
 
   data() {
     return {

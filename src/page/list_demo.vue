@@ -44,9 +44,11 @@ import dm_dynamic_form from "../components/list-data/dynamic-form.vue";
 // 注册一个全局组件-针对某个列
 Vue.component('com_test1', {
   template: `<span class="C_f30 B" @click="fnClick">{{doc.name}}</span>`,
-  props: ["doc"],//接收属性
+  props: ["doc","vm_list_data"],//接收属性
   methods: {
     async fnClick() {
+
+      console.log(`this.$parent:`, this.$parent.$parent.$parent);
       console.log(`fnClick`);
       //往列表内部传递事件
       this.$emit("list-event-in", {

@@ -20,7 +20,7 @@
 
 <script>
 import checkbox_diy from "../components/form_item/checkbox_diy.vue";
-let T;
+
 
 //函数定义：{获取菜单权限表单配置(标准版)函数}
 function getFormMenuGPower({ menuName = "XXX" }) {
@@ -107,59 +107,33 @@ F_ITEMS.checkbox1 = {
   options: DYDICT.arr_importance
 }
 
-//#region 简历-工作经历
-{
-  let _dataType = "resume_work_experience";
-  let listCFAddon = {
-    breadcrumb: [{ value: "首页", path: "listHome" }, { value: "简历-工作经历" }],
-    ...PUB.listCFCommon2,//展开公共配置
-    detailItems: ["companyName", "positionName", "onJobPeriod", "descJob"],
-    columns: ["companyName", "positionName", "onJobPeriod", "descJob"],
-    searchFormItems: ["companyName"],
-    formItems: ["companyName", "positionName", "onJobPeriod", "descJob"],
-  }
-  util.handleCommonListCF({ _dataType, listCFAddon })//调用：{处理通用列表配置数据函数}
-}
-//#endregion
 
-//#region 字段-我的工作经历
-{
-  let prop = "relWorkExperience", objBase = { label: "我的工作经历", prop, }
-  D_ITEMS[prop] = { ...objBase, };
-  COLUMNS[prop] = { ...objBase, width: 70, };
-  F_ITEMS[prop] = { ...objBase, type: "input" };
-  F_ITEMS[prop] = {
-    ...objBase, type: "select_list_data",
-    cfSelectList: {//选择列表配置
-      dataName: "工作经历", valueKey: "_id", labelKey: "companyName", multiple: true, //多选
-      selectJson: { _id: 1, companyName: 1, }, //需要保留的集合字段
-      cfList: util.deepCopy(PUB.listCF.list_resume_work_experience),
-       //编辑实体数据弹窗配置
-      cfEditDialogEntity1111: {
-        listType: "common", //通用型列表-影响urlModify
-        cfFormModify: {
-          paramAddonInit: {
-            _id: "xxx",
-            _systemId: "$all",
-            _dataType: "url"
-          }
-        }
-      }
-    }
-  };
-}
-//#endregion
+PUB.listCF.list_resume_work_experience.formItems.push(lodash.cloneDeep(F_ITEMS.relWorkExperience))
+
 
 
 export default {
   name: "form_demo",
-  components: { checkbox_diy },
+  components: { checkbox_diy, },
 
   data() {
     return {
       formData1: { obj: { num: 123 } },
       formData: {
-        relWorkExperience:[{"_id":"5e9523985d347653d40cd985","companyName":"深圳软通动力1"},{"_id":"5eb3ab6c1178991cb84c4a4f","companyName":"公司333"}],
+        // complete:0,
+        prop_upload: [{
+          "url": "http://qn-dmagic.dmagic.cn/20200507213775033_97109_1.png",
+          "name": "1.png",
+          "uid": 1588858624367,
+          "status": "success"
+        }, {
+          "url": "http://www.dmagic.cn/images/IconS/IconS_1190.png",
+          "name": "1.png",
+          "uid": 15888586243671,
+          "status": "success"
+        }],
+        relJsCode: [{ "_id": "5eb3c96a1178991cb84c4a55", "title": "测试嵌套" }],
+        relWorkExperience: [{"_id":"5e9cfaf0faa8f3507cbaa701","companyName":"公司A"},{"_id":"5e9523985d347653d40cd985","companyName":"深圳软通动力1"},{"_id":"5eb3ab6c1178991cb84c4a4f","companyName":"公司333"}],
         uploadAvatar: "http://qn-dmagic.dmagic.cn/202004141713623737_3796_1.png",
         prop_time_period2: { "start": "2020-04-01 00:00:01", "end": "2021-01-01 23:59:59" },
         prop_time_period3: "2020-04-01 00:00:01",
@@ -221,7 +195,9 @@ export default {
         labelWidth: "150px",
 
         formItems: [
-          F_ITEMS.relWorkExperience,
+          //  F_ITEMS.complete,
+          F_ITEMS.relJsCode,
+          // F_ITEMS.relWorkExperience,
           F_ITEMS.treeData1,//树
           F_ITEMS.object_1,
           F_ITEMS.checkbox1,
@@ -235,14 +211,14 @@ export default {
           // F_ITEMS.prop_time_period1,//日范围
           // F_ITEMS.prop_time_period2,//月范围
           // F_ITEMS.prop_time_period3,//年范围
-          // F_ITEMS.prop_upload,
+          F_ITEMS.prop_upload,
           // F_ITEMS.personCharge,
           // F_ITEMS.prop_editorTMNew,
           F_ITEMS.prop_editorTM,
 
           // F_ITEMS.projectName_select_lazy,
           // F_ITEMS.predictTime,
-          // F_ITEMS.complete,
+          
           // F_ITEMS.title,
           // F_ITEMS.select_list_common_url,
 
@@ -266,7 +242,7 @@ export default {
 
           // F_ITEMS.extend,
           // F_ITEMS.prop_upload2,
-          // F_ITEMS.prop_upload,
+
           // F_ITEMS.prop_vueJsonEditor
         ],
         btns: [
@@ -302,7 +278,7 @@ export default {
     }
   },
   created() {
-    T = this;
+
     PUB._paramAjaxAddon = {
       _systemId: "$all"
     }

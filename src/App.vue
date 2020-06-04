@@ -35,6 +35,17 @@
           :key="item"
         >{{item}}</el-menu-item>
       </el-submenu>
+      <el-submenu index="list_demo_xxxx">
+        <template slot="title">
+          <span class>列表demo</span>
+        </template>
+        <el-menu-item
+          :index="item"
+          :route="`/demo_show?com=${item}`"
+          v-for="item in arrListDemo"
+          :key="item"
+        >{{item}}</el-menu-item>
+      </el-submenu>
 
       <el-submenu index="demo_more">
         <template slot="title">
@@ -68,8 +79,17 @@
 </template>
 
 <script>
+
+let arrListDemo = [
+  "list_drag_sort_demo",
+ "list_tree_data",
+];
+
+
 //变量：{demo数组}
 let arrDemo = [
+  "echarts_demo",
+  "el_table_drag",
   "object_demo",
   "form_demo3",
   "title_bar_demo",
@@ -98,7 +118,7 @@ export default {
   name: "app",
    data() {
     return {
-      arrDemo,arrTool,
+      arrDemo,arrTool,arrListDemo,
       dataConfigForCopy: "", //用于拷贝的配置字符串
       dataConfig: {}, //内部组件配置数据
       // activeIndex: "1",

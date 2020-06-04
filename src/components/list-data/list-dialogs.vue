@@ -1,9 +1,7 @@
 <template>
   <div class>
-    
-<dm_debug_list>
-      <dm_debug_item v-model="cf" text="tttt"/>
-   
+    <dm_debug_list>
+      <dm_debug_item v-model="cf" text="tttt" />
     </dm_debug_list>
 
     <!--查看详情弹窗-->
@@ -56,17 +54,30 @@
       </span>
     </el-dialog>
 
-
-   <!--弹窗新增数据组件--> 
- <dm_dialog_add ref="dialog_add" :cf="cfAddDialog" :formAdd="formAdd" :tableData="tableData" @after-add="afterAdd">
-      <template v-slot:slot_test="{formData}">{{formData.name}}</template>
+    <!--弹窗新增数据组件-->
+    <dm_dialog_add
+      ref="dialog_add"
+      :cf="cfAddDialog"
+      :formAdd="formAdd"
+      :tableData="tableData"
+      @after-add="afterAdd"
+    >
+      <template v-slot:[item.slot]="{formData}" v-for="item in cf.formItems">
+        <!--根据cf.formItems循环输出插槽--新增修改表单弹窗-->
+        <slot :name="item.slot" :formData="formData" v-if="item.slot"></slot>
+      </template>
     </dm_dialog_add>
-<!--弹窗编辑数据组件-->
-    <dm_dialog_edit ref="dialog_edit" :cf="cfEditDialog" :formModify="formModify" @after-modify="afterModify">
-       <template v-slot:[item.slot]="{formData}" v-for="item in cf.formItems">
-          <!--根据cf.formItems循环输出插槽--新增修改表单弹窗-->
-          <slot :name="item.slot" :formData="formData" v-if="item.slot"></slot>
-        </template>
+    <!--弹窗编辑数据组件-->
+    <dm_dialog_edit
+      ref="dialog_edit"
+      :cf="cfEditDialog"
+      :formModify="formModify"
+      @after-modify="afterModify"
+    >
+      <template v-slot:[item.slot]="{formData}" v-for="item in cf.formItems">
+        <!--根据cf.formItems循环输出插槽--新增修改表单弹窗-->
+        <slot :name="item.slot" :formData="formData" v-if="item.slot"></slot>
+      </template>
     </dm_dialog_edit>
   </div>
 </template>
@@ -86,16 +97,16 @@ export default {
   },
   props: ["cf", "tableData"],
 
-  data: function() {
-    
+  data: function () {
+
     return {
-       cfAddDialog: {
+      cfAddDialog: {
         // visible: true,
         cfTips: lodash.get(this.cf, `cfDialogForm.tips`),
         urlAdd: lodash.get(this.cf, `url.add`),
         tableData: null,
         isRefreshAfterAdd: this.cf.isRefreshAfterCUD,
-        formDataAddInit: { },
+        formDataAddInit: {},
         cfFormAdd: {
           idKey: this.cf.idKey,
           paramAddonInit: this.cf.paramAddonPublic,
@@ -109,7 +120,7 @@ export default {
           ]
         }
       },
-    
+
       //**------------------修改表单组件配置-新--------------
 
       cfEditDialog: {
@@ -158,7 +169,7 @@ export default {
     };
   },
   watch: {
-   
+
     // 当父组件的配置改变时里面的配置随之改变
     "cf.formItems": {
       //监听新增表单的初始化数据
@@ -176,7 +187,7 @@ export default {
 
       return this.$store.state.listState[this.cf.listIndex].row;
     },
- 
+
     isShowDialogDetail() {
       //是否显示详情弹窗
       return this.$store.state.listState[this.cf.listIndex].isShowDialogDetail; //从vuex的store里面读取值
@@ -190,14 +201,14 @@ export default {
       let style = { padding: "10px 10px 10px 100px", color: "#f60" };
       return Object.assign(style, styleAdd); //合并对象
     },
-  
+
     closeDialogDetailFun(done) {
       //关闭详情弹窗的配置事件函数
       this.$store.commit("closeDialogDetail", this.cf.listIndex); //执行store的closeDialogAdd事件
     },
-  
 
-   
+
+
     //-------------显示修改弹窗的函数--------------
     async showModify(row) {
       this.$emit("after-show-Dialog-Modify", row);//触发外部事件
@@ -208,22 +219,22 @@ export default {
 
       this.cfEditDialog.dataIdModify = this.dataIdModify; //
       this.cfEditDialog.visible = true;
-       this.$set(this.cfEditDialog, "tableData", this.tableData);
+      this.$set(this.cfEditDialog, "tableData", this.tableData);
     },
-    afterAdd(_data){
+    afterAdd(_data) {
       console.log(`afterAdd---1`);
       this.$emit("after-add", _data); //触发外部事件
     },
-    afterModify(_data){
+    afterModify(_data) {
       console.log(`afterModify---1`);
       this.$emit("after-modify", _data, this.beforeModify); //触发外部事件
     }
 
   },
   created() {
-    
+
   },
-  mounted() {}
+  mounted() { }
 };
 </script>
 

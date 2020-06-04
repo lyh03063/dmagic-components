@@ -142,6 +142,11 @@ export default {
     //这里有点乱！！！！！
     //设置主参数
     this.$set(this.cf, "visible", !!this.cf.visible); //增加到响应系统-有了这一句，visible就可以不预留配置，默认关闭
+
+
+console.log(`this.cf.visible:###################s`, this.cf.visible);
+
+
     //如果是通用列表
     this.cf.cfFormModify = this.cf.cfFormModify || {};
     if (this.cf.listType == "common") {//如果是通用型数据
@@ -164,7 +169,7 @@ export default {
       //调用：{给一个对象设置默认属性函数}
       util.setObjDefault(this.cf.cfFormModify, cfFormModifyTemp);
 
-      console.log("this.cf.cfFormModify:######", this.cf.cfFormModify);
+      // console.log("this.cf.cfFormModify:######", this.cf.cfFormModify);
 
 
 

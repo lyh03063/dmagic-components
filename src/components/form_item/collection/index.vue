@@ -4,80 +4,84 @@
       <dm_debug_item v-model="showToolbar" text="showToolbar" />
       <dm_debug_item v-model="valueNeed" text="valueNeed" />
       <dm_debug_item v-model="hidePart" text="隐藏部件" />
+      <dm_debug_item v-model="dragging" />
     </dm_debug_list>
     <!-- 这里不能使用MB8样式，会被element自带覆盖 -->
     <el-button @click="addGroup" v-if="ifShow('btn-add')" v-bind="cfElBtnAdd">{{cfElBtnAdd.text}}</el-button>
 
     <div class v-if="valueNeed && valueNeed.length">
       <ul>
-        <li
-          v-for="(doc,i) in valueNeed"
-          :key="doc.__id"
-          :class="{'data-group':true,'edit':editItem==i,'data-form-group':listType=='form'}"
-          @mouseenter="focusItem=i"
-          @mouseleave="focusItem=999"
-          @dblclick.ctrl="editItem=i"
-        >
-          <i class="sort-num" v-if="listType!='form'">{{i+1}}</i>
-          <div v-if="editItem==i">
-            <!--注意这里v-model要直接绑定valueNeed才行-->
-            <json_editor v-model="valueNeed[i]" @blur="afterBlur"></json_editor>
-          </div>
-          <template class v-else>
-            <dm_dynamic_form
-              ref="dynamicForm"
-              :cf="cfForm"
-              v-model="valueNeed[i]"
-              v-if="listType=='form'"
-            ></dm_dynamic_form>
-            <slot v-else-if="dataSlot" :name="dataSlot" :doc="handelShowDoc(doc)"></slot>
-            <span v-else>{{handelShowDoc(doc)}}</span>
-            <div class="tool-bar" v-if="focusItem==i&&showToolbar">
-              <i
-                class="el-icon-download btn-op Rotate180"
-                title="置顶"
-                @click="move(i, 'top')"
-                v-if="i>0"
-              ></i>
-              <i class="el-icon-top btn-op" title="上移" @click="move(i, 'up')" v-if="i>0"></i>
-              <i
-                class="el-icon-bottom btn-op"
-                title="下移"
-                @click="move(i, 'down')"
-                v-if="i<valueNeed.length-1"
-              ></i>
-              <i
-                class="el-icon-download btn-op"
-                title="置底"
-                @click="move(i, 'bottom')"
-                v-if="i<valueNeed.length-1"
-              ></i>
-              <i
-                class="el-icon-edit btn-op"
-                title="编辑"
-                @click="showEditDataDialog(i)"
-                v-if="ifShow('btn-edit')"
-              ></i>
-             
-              <i
-                class="el-icon-copy-document btn-op"
-                title="复制"
-                @click="copyData(i)"
-                v-if="ifShow('btn-copy')"
-              ></i>
-              <!--插槽-自定义工具栏按钮-->
-              <slot name="btn_toolbar" :doc="handelShowDoc(doc)"></slot>
+        <draggable v-model="valueNeed" :options="optionsDrag" @start="dragStart" @end="dragEnd">
+          <li
+            v-for="(doc,i) in valueNeed"
+            :key="doc.__id"
+            :class="{'data-group':true,'edit':editItem==i,'active':focusItem==i,'data-form-group':listType=='form'}"
+            @mouseenter="mouseenterG(i)"
+            @mouseleave="focusItem=999"
+            @dblclick.ctrl="editItem=i"
+          >
+            <i class="sort-num" v-if="listType!='form'">{{i+1}}</i>
+            <div class="FX1">
+              <div v-if="editItem==i">
+                <!--注意这里v-model要直接绑定valueNeed才行-->
+                <json_editor v-model="valueNeed[i]" @blur="afterBlur"></json_editor>
+              </div>
+              <template class v-else>
+                <dm_dynamic_form
+                  ref="dynamicForm"
+                  :cf="cfForm"
+                  v-model="valueNeed[i]"
+                  v-if="listType=='form'"
+                ></dm_dynamic_form>
+                <slot v-else-if="dataSlot" :name="dataSlot" :doc="handelShowDoc(doc)"></slot>
+                <span v-else>{{handelShowDoc(doc)}}</span>
+                <div class="tool-bar" v-if="focusItem==i&&showToolbar">
+                  <i
+                    class="el-icon-download btn-op Rotate180"
+                    title="置顶"
+                    @click="move(i, 'top')"
+                    v-if="i>0"
+                  ></i>
+                  <i class="el-icon-top btn-op" title="上移" @click="move(i, 'up')" v-if="i>0"></i>
+                  <i
+                    class="el-icon-bottom btn-op"
+                    title="下移"
+                    @click="move(i, 'down')"
+                    v-if="i<valueNeed.length-1"
+                  ></i>
+                  <i
+                    class="el-icon-download btn-op"
+                    title="置底"
+                    @click="move(i, 'bottom')"
+                    v-if="i<valueNeed.length-1"
+                  ></i>
+                  <i
+                    class="el-icon-edit btn-op"
+                    title="编辑"
+                    @click="showEditDataDialog(i)"
+                    v-if="ifShow('btn-edit')"
+                  ></i>
 
-              <i
-                class="el-icon-delete btn-op"
-                title="删除"
-                @click="deleteData(i)"
-                v-if="ifShow('btn-delete')"
-              ></i>
+                  <i
+                    class="el-icon-copy-document btn-op"
+                    title="复制"
+                    @click="copyData(i)"
+                    v-if="ifShow('btn-copy')"
+                  ></i>
+                  <!--插槽-自定义工具栏按钮-->
+                  <slot name="btn_toolbar" :doc="handelShowDoc(doc)"></slot>
+
+                  <i
+                    class="el-icon-delete btn-op"
+                    title="删除"
+                    @click="deleteData(i)"
+                    v-if="ifShow('btn-delete')"
+                  ></i>
+                </div>
+              </template>
             </div>
-          </template>
-        </li>
-        <li></li>
+          </li>
+        </draggable>
       </ul>
     </div>
 
@@ -105,12 +109,13 @@
 
 <script>
 import json_editor from "../../../components/form_item/json_editor.vue";
+import draggable from "vuedraggable";
 
 export default {
   name: "collection",
   components: {
     //注册组件
-    json_editor
+    json_editor, draggable
   },
   mixins: [MIX.form_item_new], //混入
   props: {
@@ -140,6 +145,24 @@ export default {
       }
     }
   },
+
+  data() {
+    return {
+      dragging: false,
+      editIndex: 0, //编辑对象的索引
+      showDialog: false,
+      // cfForm: ,
+      editItem: "999", //处于编辑状态的项目Index
+      focusItem: "999",
+      dataIn: null,
+      optionsDrag: {
+        handle: ".sort-num",  // 在列表项中拖动句柄选择器，设置某些地方拖动才有效。
+        animation: 150,  // ms, 动画速度运动项目排序时，' 0 ' -没有动画。
+        // dragClass: "sortable-drag",  //拖动元素的class。
+        chosenClass: "sortable-drag",  // 设置被选中的元素的class
+      }
+    };
+  },
   watch: {
     value: {
       handler(newVal, oldVal) {
@@ -152,18 +175,21 @@ export default {
       deep: true
     }
   },
-  data() {
-    return {
-      editIndex: 0, //编辑对象的索引
-      showDialog: false,
-      // cfForm: ,
-      editItem: "999", //处于编辑状态的项目Index
-      focusItem: "999",
-      dataIn: null
-    };
-  },
-
   methods: {
+    //函数：{开始拖拽排序函数}
+    mouseenterG: async function (i) {
+      if (this.dragging) return
+      this.focusItem = i
+    },
+    //函数：{开始拖拽排序函数}
+    dragStart: async function () {
+      this.focusItem = "999";
+      this.dragging = true;
+    },
+    //函数：{开始拖拽排序函数}
+    dragEnd: async function () {
+      this.dragging = false;
+    },
     //函数：{返回是否显示置底区块函数}
     ifShow(part) {
       let flag = false;
@@ -257,17 +283,24 @@ export default {
 .data-group {
   position: relative;
   font-size: 12px;
-  height: 26px;
+  /* height: 26px; */
   line-height: 26px;
   background-color: #f0f0f0;
   margin: 0 0 10px 0;
   overflow: hidden;
+  display: flex;
 }
 
 .data-group.edit {
   height: auto;
   padding: 0 0;
 }
+
+.data-group.active {
+  /* background: #e4f5e2; */
+  outline: 1px #3a0 solid;
+}
+
 .tool-bar {
   position: absolute;
   right: 0px;
@@ -307,12 +340,19 @@ export default {
 
 .sort-num {
   text-align: center;
-  height: 26px;
   line-height: 26px;
   width: 20px;
   display: inline-block;
   background: #c5c1c1;
   color: #fff;
   font-style: normal;
+  cursor: move;
+  margin-right: 8px;
+}
+
+.sortable-drag {
+  background: salmon;
+  border: 1px #f00 solid;
+  border-radius: 5px;
 }
 </style>

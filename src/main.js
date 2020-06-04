@@ -6,12 +6,12 @@ import moment from 'moment' //导入moment方法库
 window.moment = moment
 Vue.prototype.$moment = moment //让vue实例中可访问$moment
 
-import "./assets/js/util.1.5.1.js" //改成跟线上版同步
+import "./assets/js/util.js" //改成跟线上版同步
 
 import "./assets/js/config_base_sys_api.1.0.4.js"
 import "./assets/js/config_item.1.3.7.js"
 import "./assets/js/public.js"
-import "./assets/js/config_base.1.4.8.js"
+import "./assets/js/config_base.1.5.4.js"
 
 import comment from "./lib/index.js"
 comment.install(Vue) //还真可以共用！！！！！！！20200201

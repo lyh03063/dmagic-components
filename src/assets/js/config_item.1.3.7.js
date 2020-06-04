@@ -528,15 +528,15 @@ COLUMNS.venueName = {"prop":"name","label":"场馆名称","width":200,"fixed":fa
 
  
 F_ITEMS.name = {"prop":"name","label":"标题"};F_ITEMS.name_search = {"prop":"name","label":"标题","type":"input_find_vague"};F_ITEMS.roleName = {"prop":"name","label":"角色名"};F_ITEMS.category_name = {"prop":"name","label":"分类名"};F_ITEMS.venueName = {"prop":"name","label":"场馆名称","rules":[{ required: true, message: "不能为空" }]};
-//字段rolePower:权限
+//字段power:权限
  
  
-D_ITEMS.rolePower = {"prop":"rolePower","label":"权限"}; 
+D_ITEMS.rolePower = {"prop":"power","label":"权限"}; 
 
-COLUMNS.rolePower = {"prop":"rolePower","label":"权限","width":120,"fixed":false,"edit":false};
+COLUMNS.rolePower = {"prop":"power","label":"权限","width":120,"fixed":false,"edit":false};
 
  
-F_ITEMS.rolePower = {"prop":"rolePower","label":"权限","cfForm":{ labelWidth: "150px", formItems: [{ label: "资讯中心", prop: "newsCenter", style: styleMenuGPowerItem, default: {}, cfForm: { col_span: 12, formItems: [{ prop: "list_article", style: styleMenuPowerItem, cfForm: getFormMenuGPower({ menuName: "资讯列表" }) }, { prop: "list_article_category", style: styleMenuPowerItem, cfForm: getFormMenuGPower({ menuName: "资讯分类" }) }, ] } }, { label: "系统管理", prop: "systemManage", style: styleMenuGPowerItem, default: {}, cfForm: { col_span: 12, formItems: [{ prop: "list_admin", style: styleMenuPowerItem, cfForm: getFormMenuGPower({ menuName: "管理员" }) }, { prop: "list_role", style: styleMenuPowerItem, cfForm: getFormMenuGPower({ menuName: "角色" }) }, { prop: "list_area", style: styleMenuPowerItem, cfForm: getFormMenuGPower({ menuName: "地区管理" }) }, ] } } ] },"default":{}};
+F_ITEMS.rolePower = {"prop":"power","label":"权限","cfForm":{ labelWidth: "150px", formItems: [{ label: "资讯中心", prop: "newsCenter", style: styleMenuGPowerItem, default: {}, cfForm: { col_span: 12, formItems: [{ prop: "list_article", style: styleMenuPowerItem, cfForm: getFormMenuGPower({ menuName: "资讯列表" }) }, { prop: "list_article_category", style: styleMenuPowerItem, cfForm: getFormMenuGPower({ menuName: "资讯分类" }) }, ] } }, { label: "系统管理", prop: "systemManage", style: styleMenuGPowerItem, default: {}, cfForm: { col_span: 12, formItems: [{ prop: "list_admin", style: styleMenuPowerItem, cfForm: getFormMenuGPower({ menuName: "管理员" }) }, { prop: "list_role", style: styleMenuPowerItem, cfForm: getFormMenuGPower({ menuName: "角色" }) }, { prop: "list_area", style: styleMenuPowerItem, cfForm: getFormMenuGPower({ menuName: "地区管理" }) }, ] } } ] },"default":{}};
 //字段familiarity:熟悉度
  
  
@@ -901,7 +901,7 @@ D_ITEMS.collection1 = {"prop":"collection1","label":"集合（带工具栏和插
 COLUMNS.collection1 = {"prop":"collection1","label":"集合（带工具栏和插槽）1","edit":false,"fixed":false};
 
  
-F_ITEMS.collection1 = {"prop":"collection1","label":"集合（带工具栏和插槽）1","type":"collection","dataSlot":"slot_collection1","style":{ "margin-top": "50px" },"cfElBtnAdd":{ text: "+添加一组a", type: "primary", size: "mini", plain: false },"collectionCfForm":{ col_span: 12, formItems: [{ label: "时间", prop: "time", type: "date" }, { label: "金额", prop: "money" } ] }};
+F_ITEMS.collection1 = {"prop":"collection1","label":"集合（带工具栏和插槽）1","type":"collection","dataSlot":"slot_collection1","style":{ "margin-top": "50px" },"cfElBtnAdd":{ text: "+添加一组", type: "primary", size: "large", plain: false },"collectionCfForm":{ col_span: 12, formItems: [{ label: "时间", prop: "time", type: "date" }, { label: "金额", prop: "money" } ] }};
 //字段collection2:集合（无工具栏）
  
  
@@ -1861,6 +1861,42 @@ DYDICT.arr_equipment_state_class = [{"label":"offline","value":0},{"label":"onli
  
  
 
+//字段jsCode:js代码
+ 
+ 
+D_ITEMS.jsCode = {"prop":"jsCode","label":"js代码"}; 
+
+COLUMNS.jsCode = {"prop":"jsCode","label":"js代码","edit":false,"fixed":false,"width":70};
+
+ 
+F_ITEMS.jsCode = {"prop":"jsCode","label":"js代码","type":"codemirror"};
+//字段fileName:文件名
+ 
+ 
+D_ITEMS.fileName = {"prop":"fileName","label":"文件名"}; 
+
+COLUMNS.fileName = {"prop":"fileName","label":"文件名","edit":false,"fixed":false,"width":160};
+
+ 
+F_ITEMS.fileName = {"prop":"fileName","label":"文件名"};
+//字段orderGoodsDesc:商品说明
+ 
+ 
+D_ITEMS.orderGoodsDesc = {"prop":"orderGoodsDesc","label":"商品说明"}; 
+
+COLUMNS.orderGoodsDesc = {"prop":"orderGoodsDesc","label":"商品说明","edit":false,"fixed":false,"width":270};
+
+ 
+F_ITEMS.orderGoodsDesc = {"prop":"orderGoodsDesc","label":"商品说明"};
+//字段countJsCode:子代码块数
+ 
+ 
+D_ITEMS.countJsCode = {"prop":"countJsCode","label":"子代码块数"}; 
+
+COLUMNS.countJsCode = {"prop":"countJsCode","label":"子代码块数","edit":false,"fixed":false,"width":110,"formatter":function (rowData) { return lodash.get(rowData.relJsCode, `length`,0); },"requireProp":["relJsCode"]};
+
+ 
+F_ITEMS.countJsCode = {"prop":"countJsCode","label":"子代码块数"};
 //字段arrCfDItem:详情配置集合
  
  

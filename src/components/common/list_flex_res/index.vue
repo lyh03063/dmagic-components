@@ -15,7 +15,7 @@ export default {
       default: 4
     },
     style_g: {
-      default:function(){
+      default: function () {
         return {}
       }
     },
@@ -96,15 +96,7 @@ export default {
   /* .n-flex-main {
     padding: 10px;
   } */
-  .n-col-2 .n-flex-group {
-    width: 100%;
-  }
-  .n-col-3 .n-flex-group {
-    width: 48%;
-  }
-  .n-col-4 .n-flex-group {
-    width: 48%;
-  }
+  /* */
   .n-col-5 .n-flex-group {
     width: 32%;
   }
@@ -121,6 +113,15 @@ export default {
 
 /*屏幕宽度小于360px*/
 @media screen and (max-width: 360px) {
+  .n-col-2 .n-flex-group {
+    width: 100%;
+  }
+  .n-col-3 .n-flex-group {
+    width: 48%;
+  }
+  .n-col-4 .n-flex-group {
+    width: 48%;
+  }
   .n-col-4 .n-flex-group {
     width: 100%;
   }

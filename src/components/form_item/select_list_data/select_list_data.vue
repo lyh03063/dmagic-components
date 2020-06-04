@@ -20,7 +20,7 @@
       <el-button plain @click="showDialog" size="mini">选择{{cf.dataName||"数据"}}</el-button>
       <i class="el-icon-refresh" title="刷新数据" @click="refresh"></i>
       <div class="MT8" v-if="cf.multiple&&!cf.hideCollection">
-        <collection
+        <dm_collection
           v-model="valueNeed"
           :show-toolbar="true"
           :cf-form="{}"
@@ -28,12 +28,35 @@
           data-slot="dataSlot1"
         >
           <!--插槽内容-->
-          <template v-slot:dataSlot1="{doc}">{{doc[cf.labelKey]}}</template>
+          <template v-slot:dataSlot1="{doc}">
+            <div class v-if="cf.componentRow">
+              <component
+                class
+                :is="cf.componentRow"
+                :doc="doc"
+                :docComplete="getDocComplete(doc._id)"
+                :cf="cf"
+              ></component>
+            </div>
+
+            <span class v-else>{{doc[cf.labelKey]}}----</span>
+          </template>
+
           <!--插槽内容-编辑实体数据按钮-->
           <template v-slot:btn_toolbar="{doc}">
-            <i class="el-icon-edit btn-op" title="编辑实体" @click="dialogEditEntity(doc)"></i>
+            <i
+              class="el-icon-edit btn-op ML10 MR10 Cur1"
+              title="编辑实体"
+              @click="dialogEditEntity(doc)"
+            ></i>
+
+            <i
+              class="el-icon-document-copy btn-op ML10 MR10 Cur1"
+              title="复制实体"
+              @click="dialogCopyEntity(doc)"
+            ></i>
           </template>
-        </collection>
+        </dm_collection>
       </div>
 
       <!--选择数据弹窗-->
@@ -58,17 +81,18 @@
       </el-dialog>
 
       <!--编辑实体数据弹窗-->
-      <dm_dialog_edit :cf="cf.cfEditDialogEntity"></dm_dialog_edit>
+      <dm_dialog_edit :cf="cf_IN.cfEditDialogEntity"></dm_dialog_edit>
+      <!--新增实体数据弹窗-->
+      <dm_dialog_add :cf="cf_IN.cfCopyDialogEntity" @after-add="afterAdd"></dm_dialog_add>
     </div>
   </div>
 </template>
 
 <script>
 // import dm_list_data from "../../components/list-data/list-data.vue";
-import collection from "../../../components/form_item/collection/index.vue";
 export default {
   mixins: [MIX.form_item_new], //混入
-  components: { collection },
+  components: {},
   props: {
     cf: {
       type: Object,
@@ -81,19 +105,52 @@ export default {
 
   data() {
     return {
+      dict: {},//完整数据的数据字典
+      cf_IN: null,
       ready: false,
       label: null, //数据标题
       selectData: [],
       isShowDialog: false, //是否显示弹窗
       cfList: this.cf.cfList,
+      listComplete: []
 
 
     };
   },
+  watch: {
+    valueNeed: {
+      handler(newVal, oldVal) {
+        //触发外部保存数据！！！！，不进行深度监听，降低请求频率
+        this.$emit("son_change", this.valueNeed);
+      },
+    }
+  },
   methods: {
+    //函数：{添加数据后的回调函数}
+    afterAdd: function (doc, formData) {
+      console.log(`doc:`, doc);
+      console.log(`formData:`, formData);
+      let { _id, } = doc
+      let { title } = doc._data;
+      this.valueNeed.unshift({ _id, title })//签名插入数据
+      this.refresh()//调用：{刷新列表函数}
+
+
+
+    },
+
+
+    //函数：{获取完整的文档函数}
+    getDocComplete: function (_id) {
+      let docNeed = this.listComplete.find(doc => doc._id == _id)
+      console.log(`docNeed:`, docNeed);
+      return docNeed
+
+    },
     //函数：{刷新列表函数}
     refresh: async function () {
       //根据当前已选数据的id数组，ajax查询并更新数据
+      if (!(this.valueNeed && this.valueNeed.length)) return;
 
       //变量：{已选数据的id数组}
       let arrId = this.valueNeed.map(d => d._id);
@@ -110,27 +167,33 @@ export default {
           }
         }
       });
-      var dict = lodash.keyBy(list, '_id')//变量：{临时数据字典}
+      this.dict = lodash.keyBy(list, '_id')//变量：{临时数据字典}
+      this.listComplete = list;
       this.valueNeed.forEach(doc => {//循环：{已选数据数组}
-        let docDict = dict[doc._id]//在字典中的文档
+        let docDict = this.dict[doc._id]//在字典中的文档
         for (var prop in doc) {
           doc[prop] = docDict[prop]//更新
         }
       })
 
 
-    },
 
+    },
+    //函数：{复制实体函数}
+    dialogCopyEntity(doc) {
+      console.log(`doc:`, doc);
+      //更新要修改的数据id
+      this.cf_IN.cfCopyDialogEntity.copyId = doc._id
+      this.cf_IN.cfCopyDialogEntity.visible = true;//显示弹窗
+
+
+    },
     //函数：{编辑实体函数}
     dialogEditEntity(doc) {
       //更新要修改的数据id
-      this.cf.cfEditDialogEntity.cfFormModify.paramAddonInit._id = doc._id
-      this.cf.cfEditDialogEntity.visible = true;//显示弹窗
+      this.cf_IN.cfEditDialogEntity.cfFormModify.paramAddonInit._id = doc._id
+      this.cf_IN.cfEditDialogEntity.visible = true;//显示弹窗
 
-
-
-      console.log(`doc._id:`, doc._id);
-      console.log(`this.cf.cfEditDialogEntity.visible:`, this.cf.cfEditDialogEntity.visible);
 
     },
 
@@ -144,8 +207,7 @@ export default {
       {
         let arrIdWithOut; //变量：{需要排除的id数组}，避免重复显示和添加
         let idKey = this.cf.valueKey; //数据键名
-        if (this.valueNeed.length) {
-          //如果已选数据存在
+        if (this.valueNeed.length) {//如果已选数据存在
           arrIdWithOut = this.valueNeed.map(doc => doc[idKey]);
         }
         if (!arrIdWithOut) return;
@@ -201,7 +263,7 @@ export default {
       this.isShowDialog = false; //关闭弹窗
 
       this.$emit("select", this.valueNeed); //抛出事件并传递数据
-
+      this.refresh()//调用：{刷新列表函数}
 
       // this.$forceUpdate()//强制视图更新
       //弹窗内的表单元素聚焦会触发字段的校验，但赋值后并不消失，forceUpdate方法不管用
@@ -243,27 +305,56 @@ export default {
 
 
     let _dataType = lodash.get(this.cf.cfList, `objParamAddon._dataType`);
-    if (_dataType && !this.cf.cfEditDialogEntity) {//如果{_dataType}存在，即通用数据列表
-      let cfEditDialogEntityDefault = {
-        listType: "common", //通用型列表-影响urlModify
-        visible: false,
-        cfFormModify: {
-          paramAddonInit: {
-            _id: "xxx", _systemId: "$all", _dataType
+
+    if (_dataType) {//如果{_dataType}存在，即通用数据列表
+      if (!this.cf.cfEditDialogEntity) {//如果cf.cfEditDialogEntity不存在
+        let cfEditDialogEntityDefault = {
+          listType: "common", //通用型列表-影响urlModify
+          visible: false,
+          cfFormModify: {
+            paramAddonInit: {
+              _id: "xxx", _systemId: "$all", _dataType
+            }
           }
         }
+        this.$set(this.cf, "cfEditDialogEntity", cfEditDialogEntityDefault);
       }
-      this.$set(this.cf, "cfEditDialogEntity", cfEditDialogEntityDefault);
-      //调用：{给一个对象设置默认属性函数}
-      // util.setObjDefault(this.cf.cfEditDialogEntity, cfEditDialogEntityDefault);
+
+      if (!this.cf.cfCopyDialogEntity) {//如果cf.cfCopyDialogEntity不存在
+        console.log(`_dataType:###11111`, _dataType);
+        let cfCopyDialogEntityDefault = {
+          copyId: "xxx",
+          listType: "common", //通用型列表-影响urlAdd
+          visible: false,
+          cfFormAdd: {
+            paramAddonInit: {
+              _id: "xxx", _systemId: "$all", _dataType
+            }
+          }
+        }
+        this.$set(this.cf, "cfCopyDialogEntity", cfCopyDialogEntityDefault);
+      }
+
+
+
+
 
     }
 
-    this.ready = true;
 
+    this.cf_IN = lodash.cloneDeep(this.cf); //使用cf_IN副本，避免出现无限嵌套的情况
+
+
+
+
+    this.ready = true;
+    this.refresh()//调用：{刷新列表函数}
   },
   async mounted() {
-    this.ajaxGetLabel(); //调用：{ajax获取label函数}
+    if (!this.cf.multiple) {//如果不是多选
+      this.ajaxGetLabel(); //调用：{ajax获取label函数}
+    }
+
   }
 };
 </script>

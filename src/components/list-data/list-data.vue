@@ -89,6 +89,7 @@
       @sort-change="sortChange"
       @selection-change="selectionChange"
       @filter-change="filterHandler"
+      :row-key="cf.idKey"
     >
       <el-table-column
         fixed
@@ -252,6 +253,7 @@
 // import Vue from "vue";
 import listDialogs from "./list-dialogs";
 import dynamicForm from "./dynamic-form";
+import Sortable from 'sortablejs';
 // import { log } from "util";
 export default {
   name: "dm_list_data", //组件名，用于递归
@@ -328,6 +330,28 @@ export default {
     }
   },
   methods: {
+
+    //函数：{行拖拽功能初始化函数}
+    rowDrop() {
+      // 此时找到的元素是要拖拽元素的父容器-
+      //***注意id的使用，这样才能支持但跟页面内多组拖拽排序
+      const tbody = document.querySelector(`#${this.id} .el-table__body-wrapper tbody`);
+      const _this = this;
+      Sortable.create(tbody, {
+        //  指定父元素下可被拖拽的子元素
+        draggable: ".el-table__row",
+        onEnd({ newIndex, oldIndex }) {
+          let docOld = _this.tableData[oldIndex];
+          let docNew = _this.tableData[newIndex];
+          const currRow = _this.tableData.splice(oldIndex, 1)[0];
+          _this.tableData.splice(newIndex, 0, currRow);
+          _this.$emit("sort_by_drag", { docOld, docNew })//抛出事件
+
+        }
+      });
+    },
+
+
     //函数：{列组件传递的事件函数}
     comListEventIn(param = {}) {
       let { callbackInList } = param;//变量：{回调函数}
@@ -462,8 +486,14 @@ export default {
           await this.getDataList(); //第一次加载此函数，页面才不会空
           this.$message.success('刷新成功');
         } else if (eventType == "export_excel") {
+          await util.loadJs({ url: PUB.urlJS.xlsxFull })//加载
+          await util.loadJs({ url: PUB.urlJS.fileSaver })//加载
           let { jQuery } = window;
           if (!jQuery) return console.error("jQuery不存在，请先引用对应的js")
+
+
+
+
           let elHead = `#${this.id} .el-table__header-wrapper table`;
           let elBody = `#${this.id} .el-table__body-wrapper table`;
           $(elBody).find("tbody").prepend($(elHead).find("tr:first").clone())
@@ -671,7 +701,7 @@ export default {
           let paramPopulate = lodash.cloneDeep(populateCFEach); //深拷贝
 
 
-          
+
 
           paramPopulate.listData = this.tableData; //补充listData属性
           this.tableData = await util.ajaxPopulate(paramPopulate);
@@ -794,6 +824,11 @@ export default {
     //不加这一句的话一开始空数组是undefined，但提交时却变成 []，神奇！！
     //等待模板加载后，
     this.getDataList(); //第一次加载此函数，页面才不会空
+
+    if (this.cf.dragSort) {//如果{允许拖拽排序}为真
+      this.rowDrop();//调用：{行拖拽功能初始化函数}
+    }
+
   }
 };
 </script>

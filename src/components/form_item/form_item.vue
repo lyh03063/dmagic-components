@@ -215,6 +215,14 @@
       :style="item.style"
     ></dm_tree_data>
 
+    <!--codemirror代码块-->
+    <dm_code
+      v-model="formDataNeed[item.prop]"
+      :cf="item.cfItem"
+      v-else-if="item.type=='codemirror'"
+      :style="item.style"
+      
+    ></dm_code>
     <!--ajax_populate-->
     <dm_ajax_populate
       v-else-if="item.type=='ajax_populate'"
@@ -299,7 +307,8 @@ export default {
         //百分比刻度
         0: "0", 0.1: "10", 0.2: "20", 0.3: "30", 0.4: "40", 0.5: "50",
         0.6: "60", 0.7: "70", 0.8: "80", 0.9: "90", 1: "100"
-      }
+      },
+      
     };
   },
   methods: {
