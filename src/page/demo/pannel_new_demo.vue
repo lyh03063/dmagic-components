@@ -1,18 +1,33 @@
 <template>
   <div>
+    <dm_pannel_new class="MB20" :cf="cfPannel1">
+      <template #titleBar_boxMiddle>
+        <div class="DPIB">
+          <el-button plain  size="mini">传递标题栏的插槽-按钮</el-button>
+        </div>
+      </template>
+    </dm_pannel_new>
+
     <dm_pannel_new class="MB20" :cf="cfPannel1">面板内容</dm_pannel_new>
 
-    <dm_pannel_new class="MB20"  title="极简-直接使用title属性">直接使用title属性</dm_pannel_new>
+    <dm_pannel_new class="MB20" title="极简-直接使用title属性">直接使用title属性</dm_pannel_new>
 
-     <dm_pannel_new class="MB20"  title="极简-直接使用title/skin属性-pannel_A" skin="pannel_A">直接使用title/skin属性</dm_pannel_new>
+    <dm_pannel_new
+      class="MB20"
+      title="极简-直接使用title/skin属性-pannel_A"
+      skin="pannel_A"
+    >直接使用title/skin属性</dm_pannel_new>
 
- <dm_pannel_new class="MB20"  title="极简-直接使用title/skin属性-pannel_A__version2" skin="pannel_A__version2" urlMore="#bbbb">直接使用title/skin属性</dm_pannel_new>
+    <dm_pannel_new
+      class="MB20"
+      title="极简-直接使用title/skin属性-pannel_A__version2"
+      skin="pannel_A__version2"
+      urlMore="#bbbb"
+    >直接使用title/skin属性</dm_pannel_new>
 
     <dm_pannel_new class="MB20" :cf="cfPannel2">面板内容</dm_pannel_new>
 
     <dm_pannel_new class="MB20" :cf="cfPannel3" title="pannel_A风格">pannel_A风格面板内容</dm_pannel_new>
-
-    
 
     <dm_pannel_new class="MB20" :cf="cfPannel4" title="pannel_A风格微调-改变标题栏风格">pannel_A风格面板内容</dm_pannel_new>
 
@@ -26,7 +41,7 @@ export default {
   data() {
     return {
       cfPannel1: {
-        title:"xxxx",
+        title: "xxxx",
         cfTitleBar: {
           skin: "default",
           boxMiddle: {

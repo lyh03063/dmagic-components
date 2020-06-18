@@ -32,14 +32,13 @@
     </el-breadcrumb>
     <!--查询表单-->
     <div class="search-form-box MB10" v-if="cf.isShowSearchForm">
-      <dynamicForm @submit1="searchList" :cf="cfSearchForm" v-model="objParam.findJson"></dynamicForm>
+      <dm_dynamic_form @submit1="searchList" :cf="cfSearchForm" v-model="objParam.findJson"></dm_dynamic_form>
     </div>
     <!-- v-if="cf.flag"这个规则去掉 -->
     <el-row size="mini" class="MB10" v-show="cf.isShowToolBar">
       <template class v-if="$lodash.hasIn(cf, 'batchBtns.addon')">
         <template class v-for="(item,index) in cf.batchBtns.addon">
           <slot class v-if="item.uiType=='slot'" :name="item.slot" :data="$data"></slot>
-
           <!--组件形式，配置ref用于外部控制-->
           <component
             :key="index"
@@ -78,6 +77,7 @@
     <el-table
       class="table-need-export"
       v-bind="cf.cfElTable"
+      v-loading="loading"
       highlight-current-row
       ref="table"
       :data="tableData"
@@ -136,7 +136,6 @@
               <slot :name="column.slot" :row="scope.row" v-if="column.slot"></slot>
               <!--Q2:有formatter-->
               <span class v-else-if="column.formatter">{{column.formatter(scope.row)}}</span>
-
               <!--Q4:有组件名-->
               <component
                 v-else-if="column.component"
@@ -191,18 +190,18 @@
         </template>
       </el-table-column>
     </el-table>
-    <div class="OFH">
+    <div class="OFH" v-if="isShowPageLink">
       <el-pagination
-        background
-        layout="total, sizes, prev, pager, next, jumper"
+  
+      
         @current-change="handleCurrentChange"
         :current-page.sync="objParam.pageIndex"
         :total="allCount"
         :pageSize="objParam.pageSize"
-        :page-sizes="[2,10,20,50,100, 200,500]"
+    
         @size-change="handleSizeChange"
-        style="float:right;margin:10px 0 0 0;"
-        v-if="cf.isShowPageLink"
+  
+        v-bind="cf.cfPagination"
       ></el-pagination>
     </div>
     <!-- @after-delete="$emit('after-delete')" -->
@@ -229,35 +228,24 @@
       </template>
       <!--列表用到的各种弹窗-->
     </listDialogs>
-    <!--行内编辑字段弹窗-->
-    <el-dialog
-      custom-class="n-el-dialog"
-      width="65%"
-      title="编辑单项内容"
-      :close-on-press-escape="false"
-      :close-on-click-modal="false"
-      :append-to-body="true"
-      v-bind:visible.sync="isShowDialogEditRow"
-      v-if="isShowDialogEditRow"
-    >
-      <dm_dynamic_form
-        :cf="cfFormEditRow"
-        v-model="formDataEditRow"
-        @submit="submitFormEditRow"
-        @cancel="isShowDialogEditRow=false"
-      ></dm_dynamic_form>
-    </el-dialog>
+    <div class v-if="isShowDialogEditRow2">
+      <!--行内编辑字段弹窗2-->
+      <dm_dialog_edit
+        :cf="cfEditDialogRow"
+        :formModify="formModifyRow"
+        @after-modify="afterModifyItem"
+      ></dm_dialog_edit>
+    </div>
   </div>
 </template>
 <script>
 // import Vue from "vue";
 import listDialogs from "./list-dialogs";
-import dynamicForm from "./dynamic-form";
-import Sortable from 'sortablejs';
+
 // import { log } from "util";
 export default {
   name: "dm_list_data", //组件名，用于递归
-  components: {    listDialogs, dynamicForm,
+  components: {    listDialogs, 
   }, //注册组件
   props: {
     value: Array, //绑定的静态数据
@@ -271,18 +259,14 @@ export default {
   },
   data() {
     return {
-
       id: `id_${util.getTimeRandom()}`,//随机Id，导出excel表格时需用到
+      loading:false,//加载中
+      formModifyRow: {},//字段修改弹窗表单数据
+      cfEditDialogRow: {},//字段修改弹窗配置
+      cfEditItem: null,//当前修改字段的附加配置
       //------------------单元格编辑配置--------------
-      rowEdit: null, columnEdit: null, formDataEditRow: {},
-      cfFormEditRow: {
-        labelWidth: "150px", formItems: [F_ITEMS.name],
-        btns: [
-          { text: "提交", event: "submit", type: "primary", validate: true },
-          { text: "取消", event: "cancel" }
-        ]
-      },
-      isShowDialogEditRow: false, //是否显示行内编辑弹窗
+      rowEdit: null,
+      isShowDialogEditRow2: false, //是否显示行内编辑弹窗
       //------------------筛选表单组件配置--------------
       cfSearchForm: {
         // col_span: 8,//控制显示一行多列
@@ -292,7 +276,7 @@ export default {
         btns: [{ text: "查询", event: "submit1", type: "primary" }]
       },
       //------------------列表的数据总量--------------
-      allCount: 20,
+      allCount: 0,
       //------------------ajax请求数据列表的传参对象--------------
       objParam: {
         findJson: {},
@@ -301,6 +285,23 @@ export default {
       },
       tableData: [] //列表数据
     };
+  },
+  computed: {
+    isShowPageLink: function () {
+
+      let flag = this.cf.isShowPageLink
+
+      if (this.cf.isShowPageLinkHasAPage) {//如果{满一页才显示分页}
+
+        let flag2 = this.allCount >= this.objParam.pageSize
+        flag = flag && flag2
+
+      }
+      return flag
+
+    }
+
+
   },
   watch: {
     "cf.objParamAddon": {
@@ -330,14 +331,16 @@ export default {
     }
   },
   methods: {
-
     //函数：{行拖拽功能初始化函数}
-    rowDrop() {
+    async rowDrop() {
+
+       await util.loadJs({ url: `//qn-static.dmagic.cn/Sortable.1.10.2.min.js` })//加载
       // 此时找到的元素是要拖拽元素的父容器-
       //***注意id的使用，这样才能支持但跟页面内多组拖拽排序
       const tbody = document.querySelector(`#${this.id} .el-table__body-wrapper tbody`);
       const _this = this;
       Sortable.create(tbody, {
+         handle: '.drag_handel',//执行拖拽的元素
         //  指定父元素下可被拖拽的子元素
         draggable: ".el-table__row",
         onEnd({ newIndex, oldIndex }) {
@@ -346,12 +349,9 @@ export default {
           const currRow = _this.tableData.splice(oldIndex, 1)[0];
           _this.tableData.splice(newIndex, 0, currRow);
           _this.$emit("sort_by_drag", { docOld, docNew })//抛出事件
-
         }
       });
     },
-
-
     //函数：{列组件传递的事件函数}
     comListEventIn(param = {}) {
       let { callbackInList } = param;//变量：{回调函数}
@@ -360,55 +360,75 @@ export default {
       }
       this.$emit("list-event-in", param)//继续往列表外传递
     },
-
     //函数：{获取工具栏按钮id}
     getBacthButtonId(item) {
       return `id_btn_${this.cf.listIndex}_${item.eventType}`
     },
-
-
     tableExportExcel: util.tableExportExcel,//导出excel函数
     //函数：{单元格编辑函数}
     async tdEdit(row, column) {
-
       let { edit, cfEdit, prop } = column;
+      this.cfEditItem = cfEdit;//变量：{当前修改字段的附加配置}
       if (!edit) return;
-
-
-      this.columnEdit = column;
-      this.rowEdit = row;
-
-      let formItems = this.cf.formItems;//列表对应的表单字段数组
-      /*
-      cfEdit如果要切换其他列表，还是比较麻烦的！！！
-       if (cfEdit) {//如果{编辑配置存在}
-              let { listIndex } = cfEdit
-              formItems = PUB.listCF[listIndex].formItems
-            }
-      */
-
-
-
-
-      let itemTarget = formItems.find(doc => doc.prop == prop); //获取对应的表单字段
-      this.cfFormEditRow.formItems = [itemTarget]; //改变表单字段配置
-
-
-      this.isShowDialogEditRow = true;
-      await util.timeout(500); //延迟
-      this.formDataEditRow[prop] = row[prop]; //表单赋值
+      this.rowEdit = row;//当前修改的原行数据
+      let formItemsAdd = this.cf.formItems;//列表对应的新增表单字段数组
+      let itemTarget;
+      let formItemsNeed;
+      let cfListNeed = this.cf;
+      let idKeyFrom = this.cf.idKey
+      let paramAddonInit//变量：{ajax的公共参数}
+      if (cfEdit) {//如果{编辑配置存在}
+        let { listIndex, formItems, paramAddon = {}, idKey } = cfEdit
+        idKeyFrom = idKey || idKeyFrom;
+        cfListNeed = PUB.listCF[listIndex];
+        paramAddonInit = paramAddon
+        if (formItems) {//Q1：{编辑配置中的表单字段}存在-直接使用
+          formItemsNeed = formItems; //改变表单字段配置
+        } else {//Q2：{编辑配置中的表单字段}不存在-获取listIndex对应的表单
+          formItemsAdd = cfListNeed.formItems
+        }
+      }
+      if (!formItemsNeed) {//如果{对应的表单字段}不存在
+        itemTarget = formItemsAdd.find(doc => doc.prop == prop); //获取对应的表单字段
+        if (itemTarget) {
+          formItemsNeed = [itemTarget]; //改变表单字段配置
+        }
+      }
+      if (!formItemsNeed) {//如果{对应的表单字段}不存在
+        return alert(`找不到对应的表单字段`)
+      }
+      this.formModifyRow = row;//**先填充一次表单---因为里面的初始化也需要从这里拿id数据
+      this.cfEditDialogRow = {
+        visible: false,
+        urlModify: lodash.get(cfListNeed, `url.modify`),//--------
+        dataIdModify: null,
+        cfFormModify: {
+          paramAddonInit,
+          idKey: cfListNeed.idKey, //键名
+          urlInit: lodash.get(cfListNeed, `url.detail`),//--------
+          formItems: this.cf.formItems,
+          btns: [
+            { text: "修改", event: "submit", type: "primary", validate: true },
+            { text: "取消", event: "cancel" }
+          ]
+        }
+      }
+      this.cfEditDialogRow.dataIdModify = row[idKeyFrom]//修改数据的id
+      this.cfEditDialogRow.cfFormModify.formItems = formItemsNeed;//修改表单字段
+      this.formModifyRow[cfListNeed.idKey] = this.cfEditDialogRow.dataIdModify//修改id
+      this.$nextTickStatus("isShowDialogEditRow2")//***重新渲染 */
+      // this.isShowDialogEditRow2 = true
+      this.cfEditDialogRow.visible = true;
     },
-    //函数：{单元格编辑表单提交函数}
-    submitFormEditRow() {
-      let { prop } = this.columnEdit;
-      let valNew = this.formDataEditRow[prop]; //变量：{修改后的值}
-      this.rowEdit[prop] = valNew;
-      //强大！！！！！-重用了同一个修改方法-注意组件链条较长！！！！
-      this.$refs.listDialogs.cfEditDialog.dataIdModify = this.rowEdit[
-        this.cf.idKey
-      ]; //需要修改的数据id
-      this.$refs.listDialogs.$refs.dialog_edit.modifyData({ [prop]: valNew }); //执行修改
-      this.isShowDialogEditRow = false;
+    //函数：{修改字段后的回调函数}
+    afterModifyItem: async function (docNew) {
+      if (this.cfEditItem) {//Q1:{当前修改字段的附加配置}存在
+        if (this.cfEditItem.fnAfterModify) {
+          this.cfEditItem.fnAfterModify({ docOld: this.rowEdit, docNew: docNew })
+        }
+      } else { //不存在
+        Object.assign(this.rowEdit, docNew);//合并对象
+      }
     },
     test() { },
     getSigleLinkUrl(item, row) {
@@ -473,7 +493,6 @@ export default {
         selection = this.$refs.table.selection;
         //  有选中的就遍历得到P1，进行批量删除
         if (selection.length == 0) {
-
           return this.$message({ message: "未选中数据", type: "error" });
         }
         if (eventType == "delete") {//批量删除
@@ -490,10 +509,6 @@ export default {
           await util.loadJs({ url: PUB.urlJS.fileSaver })//加载
           let { jQuery } = window;
           if (!jQuery) return console.error("jQuery不存在，请先引用对应的js")
-
-
-
-
           let elHead = `#${this.id} .el-table__header-wrapper table`;
           let elBody = `#${this.id} .el-table__body-wrapper table`;
           $(elBody).find("tbody").prepend($(elHead).find("tr:first").clone())
@@ -501,43 +516,24 @@ export default {
           await this.tableExportExcel({ el: elBody, fileName: "数据表" });
           await util.timeout(500); //延迟
           $(elBody).find("tr:first").remove()
-
-
         }
       }
       return this.$emit("bacth-btn-click", eventType, selection); //抛出自定义事件
     },
     showAdd() {
       //清空初始化数据ajax地址，赋值数据时可能添加了这个，
-
-
-
       this.$refs.listDialogs.cfAddDialog.cfFormAdd.urlInit = null
       this.$refs.listDialogs.cfAddDialog.visible = true
       this.$refs.listDialogs.formAdd = { ...this.cf.formDataAddInit }//还原表单
       this.$emit("after-show-Dialog-Add");
-
-
-
     },
     //函数：{显示复制数据弹窗函数}
     showCopy(row) {
-      console.log("showCopy-row:", row);
-
-
-
       this.$refs.listDialogs.cfAddDialog.cfFormAdd.urlInit = this.cf.url.detail
       let rowNew = lodash.cloneDeep(row);
       this.$refs.listDialogs.formAdd = { ...this.cf.formDataAddInit, ...rowNew }
       this.$refs.listDialogs.cfAddDialog.visible = true
-
-
-
-
       this.$emit("after-show-dialog-copy");
-
-
-
     },
     // 删除选中数据的方法
     deleteSelection() {
@@ -570,8 +566,6 @@ export default {
         [this.cf.idKey == "_id" ? "_id" : "id"]: row[this.cf.idKey]
       };
       Object.assign(ajaxParam, this.cf.paramAddonPublic); //合并公共参数
-
-
       if (this.cf.url.detail) {
         //如果{详情ajax地址}存在
         let { data } = await axios({//请求接口
@@ -597,7 +591,6 @@ export default {
           deleteData = [this.tableData.find(doc => doc[this.cf.idKey] == dataId)];
         }
         deleteData = util.deepCopy(deleteData);
-
         if (this.cf.url.delete) { //Q1:{删除数据接口}存在
           let ajaxParam;
           if (this.cf.idKey == "_id") {
@@ -611,9 +604,6 @@ export default {
             };
           }
           Object.assign(ajaxParam, this.cf.paramAddonPublic); //合并公共参数
-
-
-
           //用户点击了确认
           await axios({//请求接口
             method: "post", url: PUB.domain + this.cf.url.delete,
@@ -626,15 +616,11 @@ export default {
             this.getDataList(); //更新数据列表
           }
         } else {//Q2:{删除数据接口}不存在
-
           let arrId = deleteData.map(doc => doc[this.cf.idKey]); //删除的id数组
           //过滤出剩余数据
           this.tableData = this.tableData.filter(
             doc => !arrId.includes(doc[this.cf.idKey])
           );
-
-
-          // console.log("this.tableData:$$$$$", this.tableData);
           this.$emit("input", this.tableData); //****触发外部value的改变，使用watch的话不太好，会有延迟
         }
         this.$message({ message: "删除成功", duration: 1500, type: "success" });
@@ -653,6 +639,7 @@ export default {
     },
     //-------------ajax获取数据列表函数--------------
     async getDataList() {
+      this.loading=true;//加上loading
       //最终需要提交的参数
       let objParamFinal = util.deepCopy(this.objParam); //深拷贝,后续处理数据避免影响查询表单
       /****************************将空数组处理成null-START****************************/
@@ -671,15 +658,8 @@ export default {
         }
       }
       /****************************将空数组处理成null-END****************************/
-
-
-
-
       let urlList = lodash.get(this.cf, `url.list`);
       // this.tableData = this.value; //提取静态数据
-
-
-
       if (urlList) {
         //Q1:{列表接口地址}存在
         let { data } = await axios({//请求接口
@@ -699,43 +679,55 @@ export default {
         //如果{填充配置数组}存在.
         for await (const populateCFEach of this.cf.dynamicDict) {
           let paramPopulate = lodash.cloneDeep(populateCFEach); //深拷贝
-
-
-
-
           paramPopulate.listData = this.tableData; //补充listData属性
           this.tableData = await util.ajaxPopulate(paramPopulate);
         }
-
         //这个优化可能没那么简单，要有足够的合并数据机制
         // await Promise.all(this.cf.dynamicDict.map(async populateCFEach => {
         //   let paramPopulate = lodash.cloneDeep(populateCFEach); //深拷贝
         //   paramPopulate.listData = this.tableData; //补充listData属性
         //   this.tableData = await util.ajaxPopulate(paramPopulate);
         // }))
-
-
-
       }
       this.$emit("after-search", this.tableData); //触发外部事件
-    }
+      this.loading=false;//取消loading
+    },
+    //函数：{初始化组件cf配置函数}
+    initCF: async function () {
+
+      /****************************分页配置初始化-START****************************/
+      let cfPagination = lodash.get(this.cf, `cfPagination`, {});
+      let cfPaginationDefault = {
+        background: true,
+        layout: "total, sizes, prev, pager, next, jumper",
+        "page-sizes": [2, 10, 20, 50, 100, 200, 500],
+        style: "float:right;margin:10px 0 0 0;",
+      }
+      util.setObjDefault(cfPagination, cfPaginationDefault);
+      /****************************分页配置初始化-END****************************/
+
+      //调用：{给一个对象设置默认属性函数}
+      util.setObjDefault(this.cf, {
+        idKey: "P1", isMultipleSelect: true, isShowCheckedBox: true, isShowSearchForm: true,
+        isShowBreadcrumb: true, isShowPageLink: true, isShowOperateColumn: true,
+        isRefreshAfterCUD: true, isShowToolBar: true,
+        cfElTable: {}, //列表配置对象
+        paramAddonPublic: {}, //公共附加参数
+        cfPagination,//分页组件配置
+      });
+      //调用：{给一个对象设置默认属性函数}-//表头样式
+      util.setObjDefault(this.cf.cfElTable, {
+        "header-row-class-name": "n-table-head",
+        "row-class-name": "n-table-row"
+      });
+    },
   },
   created() {
 
-    //调用：{给一个对象设置默认属性函数}
-    util.setObjDefault(this.cf, {
-      idKey: "P1", isMultipleSelect: true, isShowCheckedBox: true, isShowSearchForm: true,
-      isShowBreadcrumb: true, isShowPageLink: true, isShowOperateColumn: true,
-      isRefreshAfterCUD: true, isShowToolBar: true,
+    this.initCF()//调用：{初始化组件cf配置函数}
 
-      cfElTable: {}, //列表配置对象
-      paramAddonPublic: {} //公共附加参数
-    });
-    //调用：{给一个对象设置默认属性函数}-//表头样式
-    util.setObjDefault(this.cf.cfElTable, {
-      "header-row-class-name": "n-table-head",
-      "row-class-name": "n-table-row"
-    });
+
+
     //变量：{来自附加参数的findJson}
     let findJsonFromAddon = lodash.get(this.cf, `objParamAddon.findJson`);
     //优先使用findJsonFromAddon
@@ -748,14 +740,9 @@ export default {
       //改变列表的初始状态值
       this.$store.commit("setListFindJson", { listIndex: this.cf.listIndex, findJson: {} });
     }
-
     if (PUB._paramAjaxAddon) {//如果需要合并公共变量的基础ajax参数
-
       Object.assign(this.cf.paramAddonPublic, PUB._paramAjaxAddon)//合并公共变量的基础参数
     }
-
-
-
     this.objParam.findJson = findJsonDefault;
     this.objParam.sortJson = lodash.cloneDeep(this.cf.sortJsonDefault); //处理排序参数
     /****************************拼装selectJson参数-START****************************/
@@ -813,31 +800,32 @@ export default {
         this.showDetail(row);
       } else if (eventType == "copy") {
         //Q4：复制按钮点击事件
-
         this.showCopy(row); //调用：{显示复制数据弹窗函数}
       }
     });
   },
   async mounted() {
+     this.$emit("inited", {vm:this}); //将当前对象抛出
     await util.timeout(30); //延迟,处理getDataList中处理空数组字段需要，
     console.warn("神奇！！");
     //不加这一句的话一开始空数组是undefined，但提交时却变成 []，神奇！！
     //等待模板加载后，
     this.getDataList(); //第一次加载此函数，页面才不会空
-
     if (this.cf.dragSort) {//如果{允许拖拽排序}为真
       this.rowDrop();//调用：{行拖拽功能初始化函数}
     }
-
   }
 };
 </script>
 <style scoped>
 .icon-edit {
   position: absolute;
+  border-radius: 20%;
   right: 3px;
-  top: 3px;
+  padding: 2px;
+  top: 8px;
   color: #ccc;
+  background-color: rgba(255, 255, 255, 0.5);
 }
 /* n-table样式-针对element组件 ,但好像对其他项目没有效果！！*/
 .list-data-box >>> .n-table-head .cell {

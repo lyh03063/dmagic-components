@@ -1728,7 +1728,6 @@ export default {
         T.codeResult = "";
       let obj;
       eval(` obj ={${T.codeSrc}}`);
-      console.log("obj:", obj);
       let objRS = util.oldCFListToNew(obj);
 
       let str2 = "";
@@ -1742,11 +1741,8 @@ export default {
 
       //for of循环遍历对象，for of不能直接处理对象，本质上是同个Object.keys拼装一个新数组进行辅助
 
-      console.log("Object.keys结果", Object.keys(objRS));
       for (let key of Object.keys(objRS)) {
-        console.log(key + ": " + objRS[key]);
         let arrIn = objRS[key];
-        console.log("arrIn:", arrIn);
         arrIn = arrIn.map(item => `"${item}"`); //带上引号
 
         str2 += `${mapRemark[key]}\n`;
@@ -1758,7 +1754,6 @@ export default {
       T.codeResult = str2;
       } catch (err) {
         this.$message.error(`${err.toString}`);
-        console.log(`${err.toString}`);
       }
 
     

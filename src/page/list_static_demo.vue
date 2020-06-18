@@ -61,11 +61,9 @@ export default {
 
   methods: {
     saveData() {
-      console.log(`saveData##########`);
 
       this.$message.success("回调saveData");
 
-      console.log("this.tableData:$$$$$", this.tableData);
     }
   },
   created() {

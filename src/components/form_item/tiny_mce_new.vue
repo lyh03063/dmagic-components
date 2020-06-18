@@ -46,7 +46,6 @@ export default {
     }
   },
   async mounted() {
-    console.log(`初始化:${this.id}`);
     // tinymce.init({});
 
 

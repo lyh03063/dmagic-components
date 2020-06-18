@@ -6,7 +6,7 @@
 
     <!-- <el-input v-model="formData1['obj.num2']"></el-input> -->
 
-    <dm_dynamic_form :cf="cfForm" v-model="formData">
+    <dm_dynamic_form :cf="cfForm" v-model="formData" v-if="ready">
       <!--自定义集合数据插槽组件-->
       <template v-slot:slot_collection1="{doc}">doc:{{doc}}</template>
       <!--自定义复选框插槽组件-->
@@ -118,6 +118,7 @@ export default {
 
   data() {
     return {
+      ready:false,
       formData1: { obj: { num: 123 } },
       formData: {
         // complete:0,
@@ -195,6 +196,11 @@ export default {
         labelWidth: "150px",
 
         formItems: [
+          {label:"json编辑器",type:"vueJsonEditor"},
+          F_ITEMS.select_list_common_url,
+          F_ITEMS.predictTime,
+          F_ITEMS.title,
+          //  F_ITEMS.num1_text,
           //  F_ITEMS.complete,
           F_ITEMS.relJsCode,
           // F_ITEMS.relWorkExperience,
@@ -219,8 +225,8 @@ export default {
           // F_ITEMS.projectName_select_lazy,
           // F_ITEMS.predictTime,
           
-          // F_ITEMS.title,
-          // F_ITEMS.select_list_common_url,
+          
+          
 
           // F_ITEMS.prop_select_list_data,
           // F_ITEMS.diycheckbox,
@@ -233,7 +239,7 @@ export default {
           // F_ITEMS.prop_input_find_vague,
           // F_ITEMS.memberId,
 
-          // F_ITEMS.num1_text,
+          
           // F_ITEMS.groupMember,
           // F_ITEMS.prop4,
           // F_ITEMS.num1_component,
@@ -267,10 +273,7 @@ export default {
   watch: {
     cfData: {//配置数据
       handler(newVal, oldVal) {
-        console.log(`cfData##############变动`);
-        console.log(`this.cfData:`, this.cfData);
         var t_json = JSON.stringify(this.cfData); //：{Json对象转换Json字符串函数}
-        console.log(`t_json:`, t_json);
         this.cfForm = util.parseJson(t_json);
       },
       // immediate: true,
@@ -401,6 +404,10 @@ export default {
     var strJson = util.stringify(this.cfForm);
     let json1 = JSON.parse(strJson);
     this.$store.commit("setCfData", json1);//同步配置界面的配置信息
+
+    await util.timeout(500); //延迟
+    this.formData={}
+    this.ready=true
   }
 };
 </script>

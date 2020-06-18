@@ -1,5 +1,5 @@
 
-window.PUB = window.PUB|| {}
+window.PUB = window.PUB || {}
 PUB.domain = "http://localhost:3000"
 //PUB.domain = 'http://test.dmagic.cn'
 //PUB.domain = "https://www.dmagic.cn"
@@ -11,7 +11,7 @@ let _systemId = `sys_${PUB.KeySys}`;
 PUB._systemId = _systemId;
 
 window.FN = window.FN || {}
-
+PUB.ignorePower = true;//忽略权限
 
 
 
@@ -66,11 +66,11 @@ FN.uniqListSpecPrice = function (listSpecPrice) {
     let listSpecPriceNew = [];
     //循环：{规格价格列表}
     listSpecPrice.forEach(itemEach => {
-      let obj = listSpecPriceNew.find(doc => doc.id == itemEach.id);
-      //如果{000}000
-      if (!obj) {
-        listSpecPriceNew.push(itemEach);
-      }
+        let obj = listSpecPriceNew.find(doc => doc.id == itemEach.id);
+        //如果{000}000
+        if (!obj) {
+            listSpecPriceNew.push(itemEach);
+        }
     });
     return listSpecPriceNew
 }
@@ -287,15 +287,15 @@ let list_common_url = { "idKey": "_id", "pageSize": 20, "listIndex": "list_url",
 
 
 F_ITEMS.select_list_common_url = {
-    label: "网址",
+    label: "网址1111",
     prop: "prop_select_list_data",
     type: "select_list_data",
     cfSelectList: {
-        dataName: "网址",
+        showBtnRefresh: true,
+        dataName: "网址111",
         valueKey: "_id",
         labelKey: "title",
-        pageName: "tangball_article",
-        multiple: true, //多选
+        multiple: false, //多选
         //需要保留的集合字段
         selectJson: {
             _id: 1,
@@ -307,8 +307,108 @@ F_ITEMS.select_list_common_url = {
 
 };
 
-F_ITEMS.select_list_common_url = {"prop":"prop_select_list_data","label":"网址","type":"select_list_data","cfSelectList":{ dataName: "网址", valueKey: "_id", labelKey: "title", pageName: "tangball_article", multiple: true, selectJson: { _id: 1, title: 1, link: 1 }, cfList: list_common_url }};
 
 
 
-F_ITEMS.prop_select_list_data = {"prop":"prop_select_list_data","label":"选择列表","type":"select_list_data","rules":[{ required: true, message: "能为空" }],"cfSelectList":cfListSelectActicle};
+//菜单列表
+PUB.menuDemo = [
+
+    {
+        name: "list",
+        title: "列表",
+        menuItem: [
+            { name: "list_demo", title: "list_demo1", route: "/list_demo" },
+            { name: "list_static_demo", title: "list_static_demo", route: "/list_static_demo" },
+            { name: "list_common_demo", title: "list_common_demo", route: "/list_common_demo" },
+            { name: "list_simple_demo", title: "list_simple简单列表" },
+            { name: "list_demo_detail_g_list", title: "detail_g_list详情关联数据列表" },
+            { name: "select_file_template", title: "案管-选择文件模板" },
+            { name: "list_demo_pannel_rel", title: "案管-详情关联列表-涉诉信息" },
+            { name: "list_demo_detail_group", title: "detail_group分组数据列表" },
+            { name: "list_drag_sort_demo", title: "带拖拽排序功能的list_data" },
+            { name: "list_tree_data", title: "带树状数据的list_data" },
+            { name: "list_demo_pagination", title: "自定义分页样式的list_data" },
+            { name: "list_demo_inited", title: "list_data的初始化外传" },
+            { name: "list_demo_diyDetai", title: "list_data：自定义详情" },
+            { name: "select_list_data_demo", title: "select_list_data：弹窗选择数据" },
+            { name: "edit_list_data", title: "edit_list_data：标准列表的编辑弹窗表单" },
+            { name: "add_list_data", title: "add_list_data：标准列表的新增弹窗表单" },
+            { name: "switch_systemId", title: "列表-切换系统systemId" },
+            { name: "el_table_drag", title: "el_table的拖拽" },
+        ]
+    },
+    {
+        name: "form",
+        title: "表单",
+        menuItem: [
+            { name: "form_demo", title: "表单1", route: "/form_demo" },
+            { name: "form_demo2", title: "表单2", route: "/form_demo2" },
+
+
+        ]
+    },
+    {
+        name: "visualization",
+        title: "可视化",
+        menuItem: [
+            { name: "echarts_demo", title: "echarts饼图" },
+            { name: "aplayer_demo", title: "aplayer音频播放器" },
+            { name: "calendar1", title: "日历组件" },
+            { name: "tree_data_normal", title: "树数据组件1" },
+            { name: "tree_data_menu", title: "树数据组件2" },
+        ]
+    },
+    {
+        name: "normal",
+        title: "常用基础",
+        menuItem: [
+
+
+            { name: "test_debug_list", title: "调试列表组件" },
+            { name: "title_bar_demo", title: "标题栏组件" },
+            { name: "pannel", title: "面板组件" },
+            { name: "pannel_new_demo", title: "面板组件（新）" },
+            { name: "form_demo3", title: "form_demo3" },
+        ]
+    },
+    {
+        name: "other",
+        title: "其他",
+        menuItem: [
+            { name: "upload_qiniu", title: "upload_qiniu", route: "/upload_qiniu" },
+            { name: "test", title: "test", route: "/test" },
+            { name: "object_demo", title: "对象demo" },
+            { name: "list_flex_res", title: "弹性列表" },
+            { name: "goods_cart", title: "购物车" },
+            { name: "goods_specs_2", title: "商品规格-后台" },
+            { name: "goods_specs_front_2", title: "商品规格-前台" },
+            { name: "wx_edit", title: "微信排版" },
+            { name: "detail_list_son_note", title: "笔记的子笔记展示" },
+            { name: "auto_layout", title: "自动化布局" },
+        ]
+    },
+    {
+        name: "tool",
+        title: "工具",
+        menuItem: [
+            { name: "tool_replace_space", title: "替换空行" },
+            { name: "tool_old_cf_list", title: "替换旧列表配置" },
+        ]
+    },
+];
+
+
+
+
+
+// F_ITEMS.select_list_common_url = {"prop":"prop_select_list_data","label":"网址","type":"select_list_data","cfSelectList":{ dataName: "网址", valueKey: "_id", labelKey: "title", pageName: "tangball_article", multiple: true, selectJson: { _id: 1, title: 1, link: 1 }, cfList: list_common_url }};
+
+
+
+F_ITEMS.prop_select_list_data = { "prop": "prop_select_list_data", "label": "选择列表", "type": "select_list_data", "rules": [{ required: true, message: "能为空" }], "cfSelectList": cfListSelectActicle };
+
+
+
+
+
+

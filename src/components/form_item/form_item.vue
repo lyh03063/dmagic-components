@@ -1,5 +1,5 @@
 <template>
-  <div class="LH32" ref="formItemBox" v-if="ready">
+  <div class="LH32 DPF" ref="formItemBox" v-if="ready">
     <!--component自定义组件-用于派成的权限树--->
     <component
       :is="item.component"
@@ -221,7 +221,6 @@
       :cf="item.cfItem"
       v-else-if="item.type=='codemirror'"
       :style="item.style"
-      
     ></dm_code>
     <!--ajax_populate-->
     <dm_ajax_populate
@@ -234,19 +233,31 @@
     <!--普通文本框  支持enter触发表单提交-->
 
     <el-input
+      class="FX1"
       v-else
       v-model="formDataNeed[item.prop]"
       @keyup.enter.native="$emit('enterClick')"
       clearable
+     
     ></el-input>
 
     <template class v-if="item.frequency">
+      <!--颜色选择器-->
+      <el-color-picker
+        class="ML5 MT3"
+        v-model="formDataNeed[item.prop]"
+        v-bind="item.frequency.cfColorPicker"
+        v-if="item.frequency.type=='color'"
+      ></el-color-picker>
+      <!--普通候选项-->
       <el-popover
+        class="ML5"
         placement="bottom-start"
         width="200"
         trigger="hover"
         v-model="visibleFrequency[item.prop]"
         :open-delay="0"
+        v-else
       >
         <!--候选值列表-->
         <i
@@ -308,33 +319,39 @@ export default {
         0: "0", 0.1: "10", 0.2: "20", 0.3: "30", 0.4: "40", 0.5: "50",
         0.6: "60", 0.7: "70", 0.8: "80", 0.9: "90", 1: "100"
       },
-      
+
+      predefineColors: [
+        '#ff4500',
+        '#ff8c00',
+        '#ffd700',
+        '#90ee90',
+        '#00ced1',
+        '#1e90ff',
+        '#c71585',
+        'rgba(255, 69, 0, 0.68)',
+        'rgb(255, 120, 0)',
+        'hsv(51, 100, 98)',
+        'hsva(120, 40, 94, 0.5)',
+        'hsl(181, 100%, 37%)',
+        'hsla(209, 100%, 56%, 0.73)',
+        '#c7158577'
+      ]
+
     };
   },
   methods: {
     //函数：{点击候选值后的函数}
     async slectFOption(option) {
       let { dataType } = this.item.frequency
-      console.log(`dataType:${dataType}`);
       if (dataType == "array") {//如果{数据类型}是数组
-        this.formDataNeed[this.item.prop] = [option.value];
-
-        // this.$set(this.formDataNeed, this.item.prop, [option.value]);
-
-
+        // this.formDataNeed[this.item.prop] = [option.value];
+        this.$set(this.formDataNeed, this.item.prop, [option.value]);
       } else {
-        this.formDataNeed[this.item.prop] = option.value;
+        this.$set(this.formDataNeed, this.item.prop, option.value);
+        // this.formDataNeed[this.item.prop] = option.value;
       }
       this.visibleFrequency[this.item.prop] = false
-
-      // this.ready = false;
-      // await this.$nextTick();//延迟到视图更新
-      // this.ready = true;
-
       this.$nextTickStatus("ready")
-
-
-
     }
   },
   created() { }

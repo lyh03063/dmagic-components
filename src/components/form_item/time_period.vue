@@ -33,16 +33,13 @@ export default {
         //变动后的回调
         if (this.valueNeed) {//Q1:{valueNeed}存在
 
-          console.log("this.valueNeed:", this.valueNeed);
           let dataType = util.type(this.valueNeed)//变量：{数据类型}
-          console.log("dataType:", dataType);
           let valueTrue;
           if (dataType == "array") {//Q1:{数据类型}是数组
             valueTrue = { [this.cf.keyStart]: this.valueNeed[0], [this.cf.keyEnd]: this.valueNeed[1] };
           } else { //Q2:否则
             valueTrue = this.valueNeed;
           }
-          console.log("valueTrue:", valueTrue);
           this.$emit("input", valueTrue); //同步valueNeed值到value
         } else {//Q2:{valueNeed}不存在
           this.$emit("input", null); //同步valueNeed值到value

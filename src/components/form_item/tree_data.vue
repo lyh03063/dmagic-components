@@ -157,7 +157,6 @@ export default {
     },
     //函数：{展开指定节点的函数}
     expandNode(id) {
-      console.log(`id:`, id);
       this.$refs.tree.store.nodesMap[id].expanded = true;
     },
     //函数：{添{加一级项目函数}
@@ -182,15 +181,11 @@ export default {
             this.dataParent[this.childrenKey].push(newChild);
             this.expandNode(this.dataParent[this.cf.idKey])//调用：{展开指定节点的函数}
           } else if (this.actionType == "after") {//QKK2:加同级
-            console.log(`this.nodeCurr:`, this.nodeCurr);
             let arrSilin = this.nodeCurr.parent.data
             if (this.nodeCurr.level != 1) {//如果不是一级数据（因为一级数据是跟数组）
               arrSilin = this.nodeCurr.parent.data[this.childrenKey]
             }
-            console.log(`arrSilin:`, arrSilin);
             let index = arrSilin.findIndex(doc => doc[this.cf.idKey] == this.nodeCurr.data[this.cf.idKey])
-            console.log(`index:`, index);
-            console.log(`newChild:`, newChild);
             arrSilin.splice(index + 1, 0, newChild)//在指定位置插入数据
 
           }

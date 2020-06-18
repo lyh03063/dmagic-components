@@ -4,13 +4,13 @@
       <dm_debug_item v-model="cf" />
     </dm_debug_list>
 
-    <div class="boxMain layout " v-bind="cf.boxMain">
+    <div class="boxMain layout" v-bind="cf.boxMain">
       <div class="boxLeft layout" v-bind="cf.boxLeft">
         {{cf.boxLeft.text}}
-        <slot name="boxLeft" :cf="cf"></slot>
+        <slot name="boxLeft" :cf="cf" :vm_title_bar="vm_title_bar" ></slot>
       </div>
-      <div is="strong" class="boxMiddle layout" v-bind="cf.boxMiddle">
-        {{cf.boxMiddle.text||"title"}}
+      <div is="div" class="boxMiddle layout" v-bind="cf.boxMiddle">
+        <div class @click="fnClickTitle">{{cf.boxMiddle.text}}</div>
         <slot name="boxMiddle" :cf="cf"></slot>
       </div>
       <div class="boxRight layout" v-bind="cf.boxRight">
@@ -46,9 +46,17 @@ export default {
   },
   components: {},
   data() {
-    return {};
+    return {
+      vm_title_bar:null,
+
+    };
   },
   methods: {
+    //函数：{标题点击函数}
+    fnClickTitle: async function () {
+      this.$emit("click_title");
+
+    },
     //函数：{初始化组件配置函数}
     initCf() {
       let boxMain = this.cf.boxMain || {}
@@ -75,7 +83,7 @@ export default {
               text: "更多",
               href: this.urlMore,
               target: "_blank",
-              style: {  "font-size": "14px", "line-height": "36px" }
+              style: { "font-size": "14px", "line-height": "36px" }
             });
           }
         }
@@ -100,6 +108,7 @@ export default {
   },
   created() {
     this.initCf()//调用：{初始化组件配置函数}
+    this.vm_title_bar=this;
 
 
 
@@ -122,6 +131,7 @@ export default {
 .boxMiddle {
   flex: 1;
   font-weight: 400;
+  display: flex;
 }
 .boxRight {
   width: 100px;

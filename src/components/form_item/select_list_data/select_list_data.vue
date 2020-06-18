@@ -18,7 +18,7 @@
         style="width:0px;height:0px;overflow:hidden"
       ></el-input>
       <el-button plain @click="showDialog" size="mini">选择{{cf.dataName||"数据"}}</el-button>
-      <i class="el-icon-refresh" title="刷新数据" @click="refresh"></i>
+      <i class="el-icon-refresh" title="刷新数据" @click="refresh" v-if="cf.showBtnRefresh"></i>
       <div class="MT8" v-if="cf.multiple&&!cf.hideCollection">
         <dm_collection
           v-model="valueNeed"
@@ -128,8 +128,6 @@ export default {
   methods: {
     //函数：{添加数据后的回调函数}
     afterAdd: function (doc, formData) {
-      console.log(`doc:`, doc);
-      console.log(`formData:`, formData);
       let { _id, } = doc
       let { title } = doc._data;
       this.valueNeed.unshift({ _id, title })//签名插入数据
@@ -143,7 +141,6 @@ export default {
     //函数：{获取完整的文档函数}
     getDocComplete: function (_id) {
       let docNeed = this.listComplete.find(doc => doc._id == _id)
-      console.log(`docNeed:`, docNeed);
       return docNeed
 
     },
@@ -152,36 +149,40 @@ export default {
       //根据当前已选数据的id数组，ajax查询并更新数据
       if (!(this.valueNeed && this.valueNeed.length)) return;
 
-      //变量：{已选数据的id数组}
-      let arrId = this.valueNeed.map(d => d._id);
-      let ajaxListUrl = lodash.get(this.cf.cfList, `url.list`);
-      let _dataType = lodash.get(this.cf.cfList, `objParamAddon._dataType`);
 
-      let { data: { list } } = await axios({
-        method: "post",
-        url: `${PUB.domain}${ajaxListUrl}`,
-        data: {
-          pageSize: 999, _dataType, _systemId: "$all",
-          findJson: {
-            _id: { $in: arrId }
+      if (this.cf.multiple) {//如果是多选
+        //变量：{已选数据的id数组}
+        let arrId = this.valueNeed.map(d => d._id);
+        let ajaxListUrl = lodash.get(this.cf.cfList, `url.list`);
+        let _dataType = lodash.get(this.cf.cfList, `objParamAddon._dataType`);
+
+        let { data: { list } } = await axios({
+          method: "post",
+          url: `${PUB.domain}${ajaxListUrl}`,
+          data: {
+            pageSize: 999, _dataType, _systemId: "$all",
+            findJson: {
+              _id: { $in: arrId }
+            }
           }
-        }
-      });
-      this.dict = lodash.keyBy(list, '_id')//变量：{临时数据字典}
-      this.listComplete = list;
-      this.valueNeed.forEach(doc => {//循环：{已选数据数组}
-        let docDict = this.dict[doc._id]//在字典中的文档
-        for (var prop in doc) {
-          doc[prop] = docDict[prop]//更新
-        }
-      })
+        });
+        this.dict = lodash.keyBy(list, '_id')//变量：{临时数据字典}
+        this.listComplete = list;
+        this.valueNeed.forEach(doc => {//循环：{已选数据数组}
+          let docDict = this.dict[doc._id]//在字典中的文档
+          for (var prop in doc) {
+            doc[prop] = docDict[prop]//更新
+          }
+        })
+      }
+
+
 
 
 
     },
     //函数：{复制实体函数}
     dialogCopyEntity(doc) {
-      console.log(`doc:`, doc);
       //更新要修改的数据id
       this.cf_IN.cfCopyDialogEntity.copyId = doc._id
       this.cf_IN.cfCopyDialogEntity.visible = true;//显示弹窗
@@ -199,12 +200,12 @@ export default {
 
     showDialog() {
       this.isShowDialog = true; //打开弹窗
-      console.log("this.valueNeed:", this.valueNeed);
 
 
 
       /****************************在列表查询参数中排除已选的数据-START****************************/
-      {
+
+      if (this.cf.multiple) {//如果是多选
         let arrIdWithOut; //变量：{需要排除的id数组}，避免重复显示和添加
         let idKey = this.cf.valueKey; //数据键名
         if (this.valueNeed.length) {//如果已选数据存在
@@ -231,6 +232,7 @@ export default {
       if (!selection.length) return this.$message.error("未选择任何数据");
       this.selectData = util.deepCopy(selection);
 
+      let doc;//当前文档-单选用到
       if (this.cf.multiple) {
         //Q1：多选
         this.valueNeed = this.valueNeed || [];
@@ -254,15 +256,18 @@ export default {
       } else {
         //Q2：单选
         this.valueNeed = lodash.get(this.selectData, `[0].${this.cf.valueKey || "P1"}`);
+        doc=lodash.get(this.selectData, `[0]`);//当前文档-单选用到
         this.label = lodash.get(
           this.selectData,
           `[0].${this.cf.labelKey || "name"}`
         );
       }
 
+
+
       this.isShowDialog = false; //关闭弹窗
 
-      this.$emit("select", this.valueNeed); //抛出事件并传递数据
+      this.$emit("select", this.valueNeed, doc); //抛出事件并传递数据
       this.refresh()//调用：{刷新列表函数}
 
       // this.$forceUpdate()//强制视图更新
@@ -321,7 +326,6 @@ export default {
       }
 
       if (!this.cf.cfCopyDialogEntity) {//如果cf.cfCopyDialogEntity不存在
-        console.log(`_dataType:###11111`, _dataType);
         let cfCopyDialogEntityDefault = {
           copyId: "xxx",
           listType: "common", //通用型列表-影响urlAdd
@@ -354,6 +358,7 @@ export default {
     if (!this.cf.multiple) {//如果不是多选
       this.ajaxGetLabel(); //调用：{ajax获取label函数}
     }
+    this.$emit("inited", { vm: this }); //将当前对象抛出
 
   }
 };

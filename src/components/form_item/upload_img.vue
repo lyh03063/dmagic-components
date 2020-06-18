@@ -36,7 +36,7 @@
       @click="changeOrder=true"
     >排序</el-button>
 
-    <draggable v-model="valueNeed" v-if="changeOrder">
+    <draggable v-model="valueNeed" v-if="changeOrder&&readyJs">
       <div class="photo-box" v-for="(img,index) in valueNeed" :key="index">
         <img :src="img.url" class="photo-img" @mousemove="showtool[index]=true" />
       </div>
@@ -56,8 +56,7 @@
 </template>
 
 <script>
-import draggable from "vuedraggable";
-// action="https://jsonplaceholder.typicode.com/posts/"
+
 export default {
   name: "",
   props: {
@@ -66,9 +65,12 @@ export default {
     }
   },
   mixins: [MIX.form_item], //混入
-  components: { draggable },
+  components: { 
+    // draggable 
+    },
   data() {
     return {
+      readyJs:false,
       downloadDomain: "", //七牛云下载域名
       postData: {},
       uploadConfigNeed: null,
@@ -150,7 +152,6 @@ export default {
     //处理图片上传后的同步
     async uploaded(response) {
       //  response= util.parseJson(response)//转成json
-      console.log(`response:#####`, response);
       let { key, fname } = response;
       let url = `${this.downloadDomain}/${key}`; //图片的绝对路径
       this.valueNeed.push({ url, name: fname }); //
@@ -199,6 +200,12 @@ export default {
         this.uploadConfigNeed = uploadConfigDefault;
       }
     }
+  },
+  async created(){
+    await util.loadJs({ url: PUB.urlJS.sortable })//加载
+    await util.loadJs({ url: PUB.urlJS.vuedraggable })//加载
+
+    this.readyJs = true;
   },
   mounted() { }
 };

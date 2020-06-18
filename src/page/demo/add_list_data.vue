@@ -2,15 +2,25 @@
   <div>
     列表组件抽离弹窗编辑数据，传入数据id，数据类型，定位到对应的列表配置
     <dm_debug_list>
-      <dm_debug_item v-model="cfAddDialog" text="cfAddDialog" />
+      <dm_debug_item v-model="cfAddDialog2" text="cfAddDialog2" />
     </dm_debug_list>
 
     <div class>
       <el-button type="primary" @click="add">复制新增数据(自定义各种配置)</el-button>
-      <el-button type="primary" @click="add2">复制新增数据(通用列表-url)</el-button>
-      <el-button type="primary" @click="add3">新增数据(通用列表-vedio)</el-button>
 
-      <el-button type="primary" @click="add4">新增数据(通用列表-vedio-不提示)</el-button>
+      <dm_pannel_new class="MB20" title="复制和新增共用同一组配置">
+        <dm_space height="10"></dm_space>
+        <el-button type="primary" @click="add2">复制新增数据(通用列表-url)</el-button>
+
+        <el-button type="primary" @click="add2_1">新增数据(通用列表-url)</el-button>
+      </dm_pannel_new>
+
+      <dm_pannel_new class="MB20" title="其他">
+        <dm_space height="10"></dm_space>
+        <el-button type="primary" @click="add3">新增数据(通用列表-vedio)</el-button>
+
+        <el-button type="primary" @click="add4">新增数据(通用列表-vedio-不提示)</el-button>
+      </dm_pannel_new>
     </div>
 
     <dm_dialog_add :cf="cfAddDialog">
@@ -90,6 +100,11 @@ export default {
       this.cfAddDialog.visible = true;
     },
     add2: async function () {
+      this.cfAddDialog2.copyId = "5e78bb5444ba565370025aa5"
+      this.cfAddDialog2.visible = true;
+    },
+    add2_1: async function () {
+      this.cfAddDialog2.copyId = null
       this.cfAddDialog2.visible = true;
     },
     add3: async function () {

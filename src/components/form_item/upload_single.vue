@@ -63,7 +63,6 @@ export default {
       this.valueNeed = null;
     },
     async beforeUpload(file) {
-      console.log(`beforeUpload#####`);
 
       let maxSize = 200
       const isLimit = file.size / 1024 / 1024 < maxSize;
@@ -80,7 +79,6 @@ export default {
     },
     //处理图片上传后的同步
     uploaded(response) {
-      console.log(`uploaded#####`);
       //  response= util.parseJson(response)//转成json
       let { key, fname } = response;
       let url = `${this.downloadDomain}/${key}`; //图片的绝对路径

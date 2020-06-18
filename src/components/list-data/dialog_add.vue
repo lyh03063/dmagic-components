@@ -1,5 +1,7 @@
 <template>
   <div>
+
+    
     <!--新增数据表单弹窗-->
     <el-dialog
       title="新增数据"
@@ -10,12 +12,14 @@
       :close-on-click-modal="false"
       :append-to-body="true"
     >
-      <div class>
-        <dm_debug_list level-up="1">
+     <div class>
+        <dm_debug_list level-up="2">
+           <dm_debug_item v-model="cf" text="配置" />
           <dm_debug_item v-model="formAdd" text="新增表单的绑定数据" />
           <dm_debug_item v-model="cf.formDataAddInit" text="新增表单的初始数据" />
         </dm_debug_list>
       </div>
+     
       <!--表单提示语-->
       <div class v-html="$lodash.get(cf.cfTips, `text`)" v-if="cf.cfTips" :style="getTipsStyle()"></div>
       <dm_dynamic_form
@@ -35,8 +39,9 @@
 </template>
 <script>
 export default {
+  name:"dialog_add",
   components: {},
-  props: ["cf", "formAdd","tableData"],//静态列表的新增数据需要tableData传入
+  props: ["cf", "formAdd", "tableData"],//静态列表的新增数据需要tableData传入
   data() {
     return {
       // cf.visible: null,
@@ -54,7 +59,6 @@ export default {
     formAdd: {
       deep: true,
       handler(newVal, oldVal) {
-        console.log("formAdd changed");
         this.IN_formAdd = this.formAdd || {};
       },
       // immediate: true,
@@ -62,15 +66,14 @@ export default {
     //监听
     "cf.visible": {
       handler(newVal, oldVal) {
-        console.log("cf.visible changed");
         if (newVal) {
           //打开弹窗
         }
       }
     },//监听复制数据的id
     "cf.copyId": {
+      deep: true,
       handler(newVal, oldVal) {
-        console.log("cf.visible changed");
         this.init()//调用：{初始化函数}
       }
     }
@@ -92,7 +95,6 @@ export default {
           Object.assign(ajaxParam, PUB._paramAjaxAddon)//合并公共变量的基础参数
         }
 
-        console.log("ajaxParam:", ajaxParam);
         Object.assign(ajaxParam, this.cf.cfFormAdd.paramAddonInit); //合并公共参数，之前是cf.paramAddonPublic
 
 
@@ -122,7 +124,7 @@ export default {
       this.closeDialogAddFun(); //关闭弹窗
       //如果{增删改操作后是否自动刷新}为真
       if (this.cf.isRefreshAfterAdd) {
-        this.$parent.$parent.getDataList(); //更新数据列表
+        this.vm_list.getDataList(); //更新数据列表
       }
       this.initFormDataAdd(); //调用：{初始化新增数据表单函数}
       // this.formAdd = {};
@@ -163,13 +165,14 @@ export default {
           ]
         };
         let { copyId } = this.cf//复制的数据id
-        if (copyId) {//如果{复制的数据id}存在
+        if (copyId) {//Q1：{复制的数据id}存在
           this.cf.cfFormAdd.paramAddonInit = this.cf.cfFormAdd.paramAddonInit || {}
           this.cf.cfFormAdd.paramAddonInit._id = copyId//加入初始参数
           cfFormAddTemp.urlInit = "/info/commonDetail"
+        } else {//Q2：{复制的数据id}不存在
+          delete this.cf.cfFormAdd.urlInit//清除urlInit，避免出现残留上次复制的数据的问题
         }
         let { _dataType } = this.cf.cfFormAdd.paramAddonInit; //变量：{数据类型}
-        console.log("_dataType:", _dataType);
         let listCF = lodash.get(PUB.listCF, `list_${_dataType}`); //根据数据类型获取对应的列表配置
         let { formItems, cfForm } = listCF; //获取对应的表单项
         cfFormAddTemp.formItems = formItems; //表单字段
@@ -185,6 +188,7 @@ export default {
     }
   },
   created() {
+    this.vm_list = this.$closest({vmT:this,name:"dm_list_data"})
     this.init()//调用：{初始化函数}
   },
   async mounted() { }

@@ -51,7 +51,6 @@ export default {
 
     valueNeed: {
       handler(newVal, oldVal) {
-        console.log(`valueNeed变动##############`);
         // this.$emit("input", this.valueNeed); //同步valueNeed值到value
         this.initValueNeedEdit()//调用：{初始化编辑状态下的对象数据函数}
       },
@@ -69,7 +68,6 @@ export default {
 
       let arrPropInForm = formItems.map(doc => doc.prop)
       arrPropInForm = arrPropInForm.filter(prop => prop != "__extend")
-      console.log(`arrPropInForm:`, arrPropInForm);
       let objMian = { __extend: {} };
 
       for (var prop in this.valueNeed) {

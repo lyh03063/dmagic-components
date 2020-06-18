@@ -14,7 +14,17 @@
       :close-on-click-modal="false"
       :append-to-body="true"
     >
-      <template v-if="!cf.customDetail">
+    <div class="" v-if="readyDetail">
+
+ <template v-if="cf.comDetail">
+        <!-- 动态组件 -->
+        <component :is="cf.comDetail" :docDetail="row"></component>
+      </template>
+      <!-- 自定义详情插槽 -->
+      <template v-else-if="cf.customDetail">
+        <slot name="customDetail" :detailData="row"></slot>
+      </template>
+      <template v-else>
         <table class="table-normal WP100">
           <tr v-for="(item,index) in cf.detailItems" :key="index">
             <td class="W100">{{item.label}}</td>
@@ -45,14 +55,20 @@
           </tr>
         </table>
       </template>
-      <!-- 自定义详情插槽 -->
-      <template v-if="cf.customDetail">
-        <slot name="customDetail" :detailData="row"></slot>
-      </template>
+      <!--查看上一条-->
+      <div class="L10 btn-switch el-icon-arrow-left" @click="showPre"></div>
+      <!--查看下一条-->
+      <div class="R10 btn-switch el-icon-arrow-right" @click="showNext"></div>
+
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeDialogDetailFun">关 闭</el-button>
       </span>
+
+    </div>
+     
     </el-dialog>
+
+    <div class></div>
 
     <!--弹窗新增数据组件-->
     <dm_dialog_add
@@ -83,16 +99,11 @@
 </template>
 
 <script>
-// import dynamicForm from "./dynamic-form";
+
 import tiny_mce_new from "../../components/form_item/tiny_mce_new";
 export default {
   name: "list_dialogs", //组件名，用于递归
   components: {
-    //注册组件
-    // dynamicForm
-    dynamicForm: resolve => {
-      require(["./dynamic-form"], resolve);
-    },
     tiny_mce_new
   },
   props: ["cf", "tableData"],
@@ -100,6 +111,7 @@ export default {
   data: function () {
 
     return {
+      readyDetail:true,
       cfAddDialog: {
         // visible: true,
         cfTips: lodash.get(this.cf, `cfDialogForm.tips`),
@@ -194,6 +206,35 @@ export default {
     }
   },
   methods: {
+//函数：{显示索引对应的详情}
+    showDetailByIndex: async function (index) {
+      let docNext = this.tableData[index]
+      this.$parent.showDetail(docNext);
+      await this.$nextTickStatus("readyDetail")
+    },
+
+    //函数：{显示上一个详情函数}
+    showPre: async function () {
+      let indexCurr = this.tableData.findIndex((d => d[this.cf.idKey] == this.row[this.cf.idKey]))//当前数据的索引
+      indexCurr = indexCurr || 0;
+      let indexPre = indexCurr - 1;//变量：{下一条数据的索引}
+      if (indexPre < 0) {//
+        indexPre = this.tableData.length - 1
+      }
+      this.showDetailByIndex(indexPre)//调用：{显示索引对应的详情}
+
+    },
+    //函数：{显示下一个详情函数}
+    showNext: async function () {
+      let indexCurr = this.tableData.findIndex((d => d[this.cf.idKey] == this.row[this.cf.idKey]))//当前数据的索引
+      indexCurr = indexCurr || 0;
+      let indexNext = indexCurr + 1;//变量：{下一条数据的索引}
+      if (indexNext + 1 > this.tableData.length) {//
+        indexNext = 0
+      }
+      this.showDetailByIndex(indexNext)//调用：{显示索引对应的详情}
+
+    },
     handelItem: util.handelItem,
     //获取提示样式的函数
     getTipsStyle() {
@@ -222,11 +263,9 @@ export default {
       this.$set(this.cfEditDialog, "tableData", this.tableData);
     },
     afterAdd(_data) {
-      console.log(`afterAdd---1`);
       this.$emit("after-add", _data); //触发外部事件
     },
     afterModify(_data) {
-      console.log(`afterModify---1`);
       this.$emit("after-modify", _data, this.beforeModify); //触发外部事件
     }
 
@@ -237,4 +276,18 @@ export default {
   mounted() { }
 };
 </script>
+<style  scoped>
+.btn-switch {
+  position: fixed;
+  width: 24px;
+  height: 60px;
+  padding: 22px 5px;
+  cursor: pointer;
+  top: 30%;
+  background-color: rgba(255, 255, 255, 0.6);
+}
+.btn-switch:hover {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+</style>
 

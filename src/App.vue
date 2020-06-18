@@ -1,7 +1,6 @@
 <template>
   <div id="app">
-    
-<dm_debug_list>
+    <dm_debug_list>
       <dm_debug_item v-model="dataConfig" />
     </dm_debug_list>
 
@@ -13,51 +12,36 @@
       background-color="#545c64"
       text-color="#fff"
       active-text-color="#ffd04b"
+      v-if="arrMenu"
     >
-      <el-menu-item index="form_demo" route="/form_demo">表单</el-menu-item>
-      <el-menu-item index="form_demo2" route="/form_demo2">表单2</el-menu-item>
-      <el-menu-item index="list_demo" route="/list_demo">列表</el-menu-item>
-      <el-menu-item index="list_static_demo" route="/list_static_demo">静态列表</el-menu-item>
-      <el-menu-item index="list_common_demo" route="/list_common_demo">通用列表</el-menu-item>
-      <el-menu-item index="upload_qiniu" route="/upload_qiniu">上传七牛云</el-menu-item>
-      <el-menu-item index="test" route="/test">测试</el-menu-item>
+   
 
-      
+      <template v-for="menuEach in arrMenu">
+        <!--一级菜单带route，表示无子菜单-->
+        <el-menu-item
+          :index="menuEach.name"
+          :route="menuEach.route"
+          v-if="menuEach.route"
+          :key="menuEach.name"
+        >
+          <i :class="menuEach.icon"></i>
+          <span slot="title">{{menuEach.title}}</span>
+        </el-menu-item>
+        <!--一级菜单不带route，表示有子菜单-->
+        <el-submenu :index="menuEach.name" :key="menuEach.name" v-else>
+          <template slot="title">
+            <i :class="menuEach.icon"></i>
+            <span>{{menuEach.title}}</span>
+          </template>
 
-      <el-submenu index="demo_tool">
-        <template slot="title">
-          <span class>小工具</span>
-        </template>
-        <el-menu-item
-          :index="item"
-          :route="`/demo_show?com=${item}`"
-          v-for="item in arrTool"
-          :key="item"
-        >{{item}}</el-menu-item>
-      </el-submenu>
-      <el-submenu index="list_demo_xxxx">
-        <template slot="title">
-          <span class>列表demo</span>
-        </template>
-        <el-menu-item
-          :index="item"
-          :route="`/demo_show?com=${item}`"
-          v-for="item in arrListDemo"
-          :key="item"
-        >{{item}}</el-menu-item>
-      </el-submenu>
-
-      <el-submenu index="demo_more">
-        <template slot="title">
-          <span class>更多demo</span>
-        </template>
-        <el-menu-item
-          :index="item"
-          :route="`/demo_show?com=${item}`"
-          v-for="item in arrDemo"
-          :key="item"
-        >{{item}}</el-menu-item>
-      </el-submenu>
+          <el-menu-item
+            :index="item.name"
+            :route="item.route?item.route:`/demo_show?com=${item.name}`"
+            v-for="item in menuEach.menuItem"
+            :key="item.name"
+          >{{item.title||item.name}}</el-menu-item>
+        </el-submenu>
+      </template>
     </el-menu>
     <div class="main-box">
       <div class="left-box" :style="{'width':showDialog?'60%':'100%'}">
@@ -80,45 +64,14 @@
 
 <script>
 
-let arrListDemo = [
-  "list_drag_sort_demo",
- "list_tree_data",
-];
 
-
-//变量：{demo数组}
-let arrDemo = [
-  "echarts_demo",
-  "el_table_drag",
-  "object_demo",
-  "form_demo3",
-  "title_bar_demo",
-  "tree_data_normal",
-  "tree_data_menu",
-  "pannel",
-  "list_flex_res",
-  "goods_cart",
-  "goods_specs_2",
-  "goods_specs_front_2",
-  "calendar1",
-  "edit_list_data",
-  "add_list_data",
-  "switch_systemId",
-  "test_debug_list","pannel_new_demo"
-];
-let arrTool = [
- 
-  "tool_old_cf_list",
-  "tool_replace_space",
- 
-];
 import dm_dynamic_form from "./components/list-data/dynamic-form.vue";
 export default {
   components: { dm_dynamic_form },
   name: "app",
-   data() {
+  data() {
     return {
-      arrDemo,arrTool,arrListDemo,
+
       dataConfigForCopy: "", //用于拷贝的配置字符串
       dataConfig: {}, //内部组件配置数据
       // activeIndex: "1",
@@ -135,6 +88,9 @@ export default {
     };
   },
   computed: {
+    arrMenu() {
+      return PUB.menuDemo
+    },
     activeMenuIndex() {
       // //
       // return '2'
@@ -167,7 +123,7 @@ export default {
       deep: true
     }
   },
- 
+
   mounted() {
     var clipboard = new Clipboard(".btn-copy");
     clipboard.on("success", e => {

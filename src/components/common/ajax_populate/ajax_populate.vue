@@ -107,9 +107,8 @@ export default {
   created() {
     window.PUB_ajax_populate = window.PUB_ajax_populate || {};
     if (this.page) {
-      //如果{000}000
+      //如果{page}存在
       this.ajax.url = `/crossDetail?page=${this.page}`;
-
       this.ajaxGetData();
     }
   }

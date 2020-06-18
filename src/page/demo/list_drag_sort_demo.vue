@@ -33,14 +33,12 @@ export default {
   methods: {
     //函数：{sort_by_drag事件函数}
     sort_by_drag: async function (param) {
-      console.log(`param:`, param);
 
 
     },
 
     //自定义批量操作按钮点击函数
     bacthBtnClick: function (eventType, selection) {
-      console.log(`eventType:${eventType}`);
     },
 
     async toggleList() {

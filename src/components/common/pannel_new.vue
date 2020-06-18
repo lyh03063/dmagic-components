@@ -3,8 +3,30 @@
     <dm_debug_list>
       <dm_debug_item v-model="cf" />
     </dm_debug_list>
-    <dm_title_bar :cf="cf.cfTitleBar" v-if="cf.cfTitleBar" :title="title||cf.title" :urlMore="urlMore"></dm_title_bar>
-    <div class="content_box" v-if="cf.boxContent" v-bind="cf.boxContent">
+    <dm_title_bar
+      :cf="cf.cfTitleBar"
+      v-if="cf.cfTitleBar"
+      :title="title||cf.title"
+      :urlMore="urlMore"
+      @click_title="toggle"
+    >
+      <!--传递boxMiddle插槽-->
+      <template #boxMiddle>
+        <!--接收titleBar_boxMiddle插槽-->
+        <slot name="titleBar_boxMiddle"></slot>
+      </template>
+      <!--传递boxRight插槽-->
+      <template #boxRight>
+        <!--接收titleBar_boxRight插槽-->
+        <slot name="titleBar_boxRight"></slot>
+      </template>
+      <!--传递boxLeft插槽-->
+      <template #boxLeft={vm_title_bar}>
+        <!--接收titleBar_boxLeft插槽-->
+        <slot name="titleBar_boxLeft" :vm_title_bar="vm_title_bar" :vm_pannel="vm_pannel" ></slot>
+      </template>
+    </dm_title_bar>
+    <div class="content_box" v-if="cf.boxContent&&showContent" v-bind="cf.boxContent">
       <slot></slot>
     </div>
   </div>
@@ -28,9 +50,18 @@ export default {
   },
   components: {},
   data() {
-    return {};
+    return {
+      vm_pannel:null,
+      showContent:true,
+    };
   },
   methods: {
+    //函数：{切换内容显示函数}
+    toggle: async function () {
+      if(!this.cf.toggleByClickTitle)return;//如果未开启“点击标题栏折叠效果”
+      this.showContent=!this.showContent
+
+    },
     //函数：{初始化组件配置函数}
     initCf() {
       let boxMain = this.cf.boxMain || {}
@@ -43,8 +74,7 @@ export default {
       util.setObjDefault(boxMain, {//调用：{给一个对象设置默认属性函数}
         class: `skin_${skinCore} ${skinIndex || ""}`
       });
-      console.log(`skinCore:`, skinCore);
-      console.log(`skinIndex:`, skinIndex);
+
 
       if (skinCore == "pannel_A") {//如果是A皮肤
         util.setObjDefault(boxMain, {
@@ -75,11 +105,12 @@ export default {
 
       Object.assign(this.cf, { boxMain, cfTitleBar, boxContent });//合并对象
 
-     
+
     }
   },
   created() {
     this.initCf()//调用：{初始化组件配置函数}
+    this.vm_pannel=this;//***** */
   }
 };
 </script>

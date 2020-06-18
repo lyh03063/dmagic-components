@@ -9,7 +9,7 @@
     <!-- 这里不能使用MB8样式，会被element自带覆盖 -->
     <el-button @click="addGroup" v-if="ifShow('btn-add')" v-bind="cfElBtnAdd">{{cfElBtnAdd.text}}</el-button>
 
-    <div class v-if="valueNeed && valueNeed.length">
+    <div class v-if="valueNeed && valueNeed.length &&readyJs">
       <ul>
         <draggable v-model="valueNeed" :options="optionsDrag" @start="dragStart" @end="dragEnd">
           <li
@@ -109,13 +109,14 @@
 
 <script>
 import json_editor from "../../../components/form_item/json_editor.vue";
-import draggable from "vuedraggable";
+
 
 export default {
   name: "collection",
   components: {
     //注册组件
-    json_editor, draggable
+    json_editor,
+    // draggable
   },
   mixins: [MIX.form_item_new], //混入
   props: {
@@ -148,6 +149,7 @@ export default {
 
   data() {
     return {
+      readyJs: false,
       dragging: false,
       editIndex: 0, //编辑对象的索引
       showDialog: false,
@@ -265,7 +267,7 @@ export default {
       this.valueNeed.splice(index, 1); //从下标为1的元素开始删除1个元素.
     }
   },
-  created() {
+  async created() {
     //按钮默认配置
     let cfElBtnAddDefault = {
       plain: true,
@@ -275,6 +277,11 @@ export default {
     };
     //调用：{给一个对象设置默认属性函数}
     util.setObjDefault(this.cfElBtnAdd, cfElBtnAddDefault);
+
+     await util.loadJs({ url: PUB.urlJS.sortable })//加载
+    await util.loadJs({ url: PUB.urlJS.vuedraggable })//加载
+
+    this.readyJs = true;
   }
 };
 </script>

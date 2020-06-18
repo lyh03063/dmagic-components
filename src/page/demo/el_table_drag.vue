@@ -14,7 +14,7 @@
       ></el-table-column>
       <el-table-column fixed="right" label="操作" width="120">
         <template slot-scope="scope">
-          <el-button class="btn-drag" type="text" size="small">拖拽</el-button>
+          <el-button class="dm_btn_drag" type="text" size="small">拖拽</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -22,7 +22,7 @@
 </template>
  
 <script>
-import Sortable from 'sortablejs';
+
 
 export default {
   data() {
@@ -62,14 +62,16 @@ export default {
     this.columnDrop();
   },
   methods: {
- 
-    rowDrop() {
+
+    async rowDrop() {
+      await util.loadJs({ url: `//qn-static.dmagic.cn/Sortable.1.10.2.min.js` })//加载
       // 此时找到的元素是要拖拽元素的父容器
       const tbody = document.querySelector('.el-table__body-wrapper tbody');
       const _this = this;
       Sortable.create(tbody, {
+        handle: '.cell',//执行拖拽的元素
         //  指定父元素下可被拖拽的子元素
-        draggable: ".el-table__row",
+        // draggable: ".el-table__row .cell",
         onEnd({ newIndex, oldIndex }) {
           const currRow = _this.tableData.splice(oldIndex, 1)[0];
           _this.tableData.splice(newIndex, 0, currRow);
@@ -77,7 +79,8 @@ export default {
       });
     },
     // 列拖拽
-    columnDrop() {
+    async columnDrop() {
+      await util.loadJs({ url: `//qn-static.dmagic.cn/Sortable.1.10.2.min.js` })//加载
       const wrapperTr = document.querySelector('.el-table__header-wrapper tr');
       this.sortable = Sortable.create(wrapperTr, {
         animation: 180,

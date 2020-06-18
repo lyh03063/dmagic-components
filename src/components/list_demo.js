@@ -176,6 +176,12 @@ PUB.listCF.list_demo = {
   columns: [
     COLUMNS.name_fixed,
     {
+      label: "拖拽",
+      columnKey: "drag",
+      component:"dm_btn_drag",
+      width:40,
+    },
+    {
       label: "案件状态1",
       prop: "status",
       filters: [

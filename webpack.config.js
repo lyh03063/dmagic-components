@@ -4,7 +4,6 @@ var webpack = require('webpack')
 const isDev = process.env.NODE_ENV === "development";//变量：{是否为开发环境的flag}
 
 
-console.log("isDev", isDev);
 
 let entryUrl = './src/lib/index.js'//这地址用于打包
 if (isDev) {//如果是开发环境
@@ -34,10 +33,15 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.scss$/,
+        loader: 'sass',
+      }, 
+      {
         test: /\.css$/,
         use: [
           'vue-style-loader',
-          'css-loader'
+          'css-loader',
+          'sass-loader'
         ],
       }, {
         test: /\.vue$/,

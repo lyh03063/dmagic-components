@@ -57,7 +57,6 @@ export default {
     },
     //函数：{子级数据变动函数}
     son_change: async function (dataSon) {
-      console.log(`dataSon:`, dataSon);
       this.saveData(dataSon)//调用：{保存当前数据函数}
 
     },

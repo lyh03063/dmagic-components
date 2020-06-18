@@ -23,7 +23,8 @@
     // PUB.urlJS.tinymce              
     // PUB.urlJS.xlsxFull              
     // PUB.urlJS.fileSaver
-    
+    // PUB.urlJS.sortable
+    // PUB.urlJS.vuedraggable
     WIN.PUB.urlJS={
         echarts:"//qn-static.dmagic.cn/echarts.min.4.8.0.js",
         wxJsSDK:"//res.wx.qq.com/open/js/jweixin-1.3.2.js",
@@ -33,7 +34,26 @@
         fileSaver:"//qn-static.dmagic.cn/FileSaver.min.js",
         tinymce:"//www.dmagic.cn/tinymce_new/tinymce.min.js",
         jQuery:"//qn-static.dmagic.cn/jquery.min.3.4.0.js",
-        vant:"//cdn.jsdelivr.net/npm/vant@2.6/lib/vant.min.js",
+        vant:"//qn-static.dmagic.cn/vant.min.2.6.js",
+      sortable:"//qn-static.dmagic.cn/Sortable.1.10.2.min.js",
+      vuedraggable:"//qn-static.dmagic.cn/vuedraggable.min.15.0.0.js",
+      aaa:"11111",
+      aaa:"11111",
+      aaa:"11111",
+      
+      
+    }
+                    
+                   
+    
+    
+    WIN.PUB.urlCss={
+        vant:"//qn-static.dmagic.cn/vant.2.6.css",
+        zhihuigeng:"//qn-static.dmagic.cn/public_zhihuigeng.1.0.2.css",
+        aaaaa:"111111",
+        aaaaa:"111111",
+        aaaaa:"111111",
+     
     }
                     
         
@@ -482,6 +502,14 @@
                 
                     
         
+    //#region getSystemId:获取systemId的函数
+    util.getSystemId = function () { //
+        let {_systemId} =PUB._paramAjaxAddon
+          _systemId=_systemId||PUB._systemId;
+      return _systemId
+    }
+    //#endregion
+                
     //#region timeout:基于promise的延迟函数
     util.timeout = function (ms) { //使用promise封装一个延迟方法
         return new Promise((resolve) => { //resolve延迟解决后的回调函数, reject延迟异常的处理函数
@@ -625,15 +653,6 @@
     };
     //#endregion
                 
-    //#region nextTickStatus:强制某个状态值更新
-    util.nextTickStatus = async function (key) {
-        this[key] = false;
-        await this.$nextTick();//延迟到视图更新
-        this[key] = true;
-    };
-    //#endregion
-    
-                
     
     //#region tableExportExcel:确认表格导出excel函数-只支持一页
     util.tableExportExcel = async function ({ el, fileName = "数据表" }) {
@@ -664,37 +683,35 @@
     //#endregion
     
                 
-    //#endregion
-    util.jsStatus = {}
+    util.loadFileStatus = {}
     //函数：{创建js文件函数}
     util.createJS = function (url) {
         var promise = new Promise((resolve, reject) => {
             var _doc = document.getElementsByTagName('head')[0];
-            var script = document.createElement('script');
-            script.setAttribute('type', 'text/javascript');
-            script.setAttribute('src', url);
-            _doc.appendChild(script);
+            var dom = document.createElement('script');
+            dom.setAttribute('type', 'text/javascript');
+            dom.setAttribute('src', url);
+            _doc.appendChild(dom);
             //判断js加载完毕******
-            script.onload = script.onreadystatechange = function () {
+            dom.onload = dom.onreadystatechange = function () {
                 if (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete') {
-                    util.jsStatus[url] = 2
+                    util.loadFileStatus[url] = 2
                     resolve();//解决
                 }
-                script.onload = script.onreadystatechange = null;
+                dom.onload = dom.onreadystatechange = null;
             }
         });
         return promise
-    
     }
-    
+    //函数：{加载JS文件函数}
     util.loadJs = async function (config) {
         let { url } = config
         console.log(`loadJs:`, url);
-        let status = util.jsStatus[url]
+        let status = util.loadFileStatus[url]
         console.log(`status:`, status);
         if (!status) {//如果{status}不存在，表示还未加载过
             console.log(`loadJs-none`);
-            util.jsStatus[url] = 1
+            util.loadFileStatus[url] = 1
             await util.createJS(url)
             // resolve({ msg: "加载完成" })
             await util.timeout(30); //停顿一会再继续请求
@@ -703,12 +720,83 @@
         } else if (status == 2) {
             return { msg: "已加载过" }
         } else if (status == 1) {//表示在其他地方已经请求了该js
-            console.log(`loadJs-1-加载中`);
+            console.log(`loadJs-1-加载中,等待，阻止一次请求`);
             await util.timeout(30); //停顿一会再继续请求
             return util.loadJs({ url })//递归**
         }
     
     }
+                
+    
+    //函数：{创建CSS文件函数}
+    util.createCss = function (url) {
+        var promise = new Promise((resolve, reject) => {
+            var _doc = document.getElementsByTagName('head')[0];
+            var dom = document.createElement('link');
+            dom.setAttribute('type', 'text/css');
+            dom.setAttribute('rel', 'stylesheet');
+            dom.setAttribute('href', url);
+            _doc.appendChild(dom);
+            //判断js加载完毕******
+            dom.onload = dom.onreadystatechange = function () {
+                if (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete') {
+                    util.loadFileStatus[url] = 2
+                    resolve();//解决
+                }
+                dom.onload = dom.onreadystatechange = null;
+            }
+        });
+        return promise
+    }
+    //函数：{加载CSS文件函数}
+    util.loadCss= async function (config) {
+        let { url } = config
+        console.log(`loadCss:`, url);
+        let status = util.loadFileStatus[url]
+        console.log(`status:`, status);
+        if (!status) {//如果{status}不存在，表示还未加载过
+            console.log(`loadCss-none`);
+            util.loadFileStatus[url] = 1
+            await util.createCss(url)
+            // resolve({ msg: "加载完成" })
+            await util.timeout(30); //停顿一会再继续请求
+            return util.loadCss({ url })//递归**
+    
+        } else if (status == 2) {
+            return { msg: "已加载过" }
+        } else if (status == 1) {//表示在其他地方已经请求了该js
+            console.log(`loadCss-1-加载中,等待，阻止一次请求`);
+            await util.timeout(30); //停顿一会再继续请求
+            return util.loadCss({ url })//递归**
+        }
+    
+    }
+                
+                    
+        
+    //函数：{获取指点名称的最近的前辈组件的函数}
+    util.closestCom = function ({vmT,name}) {
+      let parent = vmT.$parent
+      if (!parent) {//Q1：如果父组件不存在
+        return null
+    
+      } else {//Q1：如果父组件存在
+        if (parent.$options._componentTag == name) {//QK1:父组件名称匹配
+          return parent
+        } else { //QK2:否则-递归
+          return util.closestCom({vmT:parent,name})
+    
+        }
+      }
+    }
+                
+    //#region nextTickStatus:强制某个状态值更新
+    util.nextTickStatus = async function (key) {
+        this[key] = false;
+        await this.$nextTick();//延迟到视图更新
+        this[key] = true;
+    };
+    //#endregion
     
                 
                     
@@ -927,7 +1015,7 @@
                         });
     
                         wx.ready(function () {
-                            alert(`wx.ready`);
+                            //alert(`wx.ready`);
     
     
     
@@ -1279,6 +1367,30 @@
         }
     };
     //#endregion
+                
+     //拓展对象的某个属性(链条)的方法，
+          //如果对应的属性路径不存在则创建
+          util.extendObj = function ({ obj, path, objAdd }) {
+            let objprop = lodash.get(obj, path, {});
+            Object.assign(objprop, objAdd);//合并对象
+            lodash.set(obj, path, objprop);
+    
+          }
+                
+    
+    //函数：{创建详情关联数据列表配置的函数}
+    util.creatCfRelList = function ({ cfTemp, cfList }) {
+      cfTemp = cfTemp || PUB.listCF.temp_relList1;
+      cfTemp = lodash.cloneDeep(cfTemp)
+      cfList = lodash.cloneDeep(cfList)
+      //合并对象
+      Object.assign(cfList, cfTemp);
+      return {
+        cfPannel: PUB.cfPannel.gray_bar,//面板配置
+        cfList
+      }
+    
+    }
                 
                     
         
@@ -1691,6 +1803,7 @@
         Vue.prototype.$util = util //让vue实例中可访问$util
     Vue.prototype.$nextTickStatus = util.nextTickStatus //让vue实例中可访问$nextTickStatus
     Vue.prototype.$lodash = lodash //让vue实例中可访问$util
+    Vue.prototype.$closest = util.closestCom //获取指点名称的最近的前辈组件的函数
                     
         //#region console控制台强化
     if (typeof (console) !== "undefined") { //如果window不存在
@@ -1712,6 +1825,12 @@
     //#endregion
                     
         util.zhihuigeng = {}
+    //智慧耕一些公共图片地址
+    util.zhihuigeng.img = {
+      headPlaceholder:"https://ranktop-agriculture.oss-cn-shenzhen.aliyuncs.com/1591414332278.png",//头像占位图
+      imgPlaceholder:"https://ranktop-agriculture.oss-cn-shenzhen.aliyuncs.com/1591416697333.png",//其他占位图
+    }
+                
     //智慧耕公共信息
     util.zhihuigeng.globalData = {
        // urlBase: "http://47.107.49.84:8088/zhy",
@@ -1819,5 +1938,12 @@
       sign = util.zhihuigeng.md5(sign, true);
       return sign;
     }
+                
+                    
+        
+    
+    Vue.component('dm_btn_drag', {
+      template: `<div class="el-icon-rank drag_handel FS20 C_999 ML4 " style="cursor:move" ></div>`,
+    })
                 
                     

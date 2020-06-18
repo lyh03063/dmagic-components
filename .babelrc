@@ -5,5 +5,7 @@
     "stage-3",
     "es2015"
   ],
-  "plugins": []
+  "plugins": [
+    "syntax-dynamic-import"
+  ]
 }

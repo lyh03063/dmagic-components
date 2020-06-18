@@ -9,6 +9,9 @@
       :close-on-click-modal="false"
       :append-to-body="true"
     >
+      <dm_debug_list>
+        <dm_debug_item v-model="cf" />
+      </dm_debug_list>
       <dm_debug_list level-up="1">
         <dm_debug_item v-model="IN_formModify" text="修改表单的绑定数据" />
       </dm_debug_list>
@@ -29,7 +32,11 @@
   </div>
 </template>
 <script>
+
+
+
 export default {
+  name: "dialog_edit",
   components: {},
   props: ["cf", "formModify"],
   data() {
@@ -42,7 +49,6 @@ export default {
     //监听
     formModify: {
       handler(newVal, oldVal) {
-        console.log("formModify changed");
         this.IN_formModify = this.formModify || {};
       },
       // immediate: true,
@@ -51,7 +57,6 @@ export default {
     //监听
     "cf.visible": {
       handler(newVal, oldVal) {
-        console.log("cf.visible changed");
         if (newVal) {
           //打开弹窗
           //***如果{数据id存在}更新一次，因为可能切换到另一条数据
@@ -97,7 +102,6 @@ export default {
         }
         Object.assign(ajaxParam, this.cf.cfFormModify.paramAddonInit); //合并公共参数，之前是cf.paramAddonPublic
 
-
         let response = await axios({
           //请求接口
           method: "post",
@@ -124,9 +128,20 @@ export default {
         type: "success"
       });
       this.cf.visible = false; //关闭弹窗
+
+
+
+
+
+
+
+
+
+
+
       //如果{增删改操作后是否自动刷新}为真
       if (this.cf.isRefreshAfterModify) {
-        this.$parent.$parent.getDataList(); //更新数据列表-暂时去掉
+        this.vm_list.getDataList(); //更新数据列表-暂时去掉
       }
       this.$emit("after-modify", _data); //触发外部事件, this.beforeModify
     },
@@ -135,16 +150,20 @@ export default {
       let styleAdd = lodash.get(this.cf.cfTips, `style`);
       let style = { padding: "10px 10px 10px 100px", color: "#f60" };
       return Object.assign(style, styleAdd); //合并对象
-    }
+    },
   },
   created() {
+
+    this.vm_list = this.$closest({vmT:this,name:"dm_list_data"})
+
+
+
     /****************************处理通用列表编辑的配置-START****************************/
     //这里有点乱！！！！！
     //设置主参数
     this.$set(this.cf, "visible", !!this.cf.visible); //增加到响应系统-有了这一句，visible就可以不预留配置，默认关闭
 
 
-console.log(`this.cf.visible:###################s`, this.cf.visible);
 
 
     //如果是通用列表
@@ -169,7 +188,6 @@ console.log(`this.cf.visible:###################s`, this.cf.visible);
       //调用：{给一个对象设置默认属性函数}
       util.setObjDefault(this.cf.cfFormModify, cfFormModifyTemp);
 
-      // console.log("this.cf.cfFormModify:######", this.cf.cfFormModify);
 
 
 

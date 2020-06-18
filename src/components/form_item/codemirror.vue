@@ -30,7 +30,6 @@ export default {
     if (!this.value) {
       this.valueNeed = ""
     }
-    console.log(`this.cf:`, this.cf);
     let cfCodeMirror = this.cf.cfCodeMirror || {}
     //表单默认配置
     let cfCodeMirrorDefault = {

@@ -6,12 +6,12 @@ import moment from 'moment' //导入moment方法库
 window.moment = moment
 Vue.prototype.$moment = moment //让vue实例中可访问$moment
 
-import "./assets/js/util.js" //改成跟线上版同步
 
-import "./assets/js/config_base_sys_api.1.0.4.js"
-import "./assets/js/config_item.1.3.7.js"
+
+
+
 import "./assets/js/public.js"
-import "./assets/js/config_base.1.5.4.js"
+// import "./assets/js/config_base.1.5.4.js"
 
 import comment from "./lib/index.js"
 comment.install(Vue) //还真可以共用！！！！！！！20200201
@@ -34,6 +34,7 @@ import list_common_demo from './page/list_common_demo.vue'; //导入list_common_
 import upload_qiniu from './page/upload_qiniu.vue'; //导入upload_qiniu
 import test from './page/test.vue'; //导入test
 import demo_show from './page/demo_show.vue'; //导入demo_show
+import detail_audio from './components/detail/detail_audio.vue'; //导入demo_showsrc\components\detail\detail_audio.vue
 // 3. 创建 router 实例，然后传 `routes` 配置
 const router = new VueRouter({
     routes: [
@@ -46,6 +47,7 @@ const router = new VueRouter({
         { path: '/upload_qiniu', component: upload_qiniu },
         { path: '/test', component: test },
         { path: '/demo_show', component: demo_show },
+        { path: '/detail_audio', component: detail_audio },
     ]
 })
 
@@ -54,62 +56,9 @@ const router = new VueRouter({
 import Vuex from 'vuex' //导入vuex模块
 Vue.use(Vuex) //应用组件
 
-const store = new Vuex.Store({ //定义Vuex的存储对象
-    state: {
-        debug: false,
-        activeMenuIndex: "", //当前激活的菜单index
-        listState: { //存放列表的共享状态，
 
-        },
-        defultFindJson: { //存放列表的默认查询参数，
-            // list_article:{articleCategory:3  }
 
-        },
-        cfData: { //组件配置数据
-            isShowSearchForm: false
-        }
-    },
 
-    mutations: { //变更事件
-        setDebug(state, param) { //设置debug模式
-            state.debug = param;
-
-        },
-        setCfData(state, param) { //设置组件配置数据
-            state.cfData = param;
-
-        },
-        setListFindJson(state, param) { //设置列表的初始筛选参数值
-            state.defultFindJson[param.listIndex] = param.findJson;
-            //对listState进行整个对象的变更（深拷贝），因为listState是有注册的，可以触发响应
-            let str = JSON.stringify(state.defultFindJson) //对象转换成字符串
-            state.defultFindJson = JSON.parse(str) //字符串转换成对象
-        },
-
-        initListState(state, param) { //改变列表的初始状态值
-            state.listState[param.listIndex] = param.objState;
-            //对listState进行整个对象的变更（深拷贝），因为listState是有注册的，可以触发响应
-            let str = JSON.stringify(state.listState) //对象转换成字符串
-            state.listState = JSON.parse(str) //字符串转换成对象
-        },
-        changeActiveMenu(state, activeMenuIndex) { //改变聚焦菜单
-            state.activeMenuIndex = activeMenuIndex
-        },
-        
-      
-        openDialogDetail(state, param) { //打开详情弹窗事件
-            state.listState[param.listIndex].isShowDialogDetail = true;
-            state.listState[param.listIndex].row = param.row; //将行数据保存到vuex
-        },
-        closeDialogDetail(state, listIndex) { //关闭详情弹窗事件
-            state.listState[listIndex].isShowDialogDetail = false;
-        },
-    }
-})
-
-Vue.prototype.$store = store //让vue实例中可访问$store
-
-window.$store = store;
 
 
 // 代码高亮插件

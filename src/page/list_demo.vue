@@ -44,18 +44,15 @@ import dm_dynamic_form from "../components/list-data/dynamic-form.vue";
 // 注册一个全局组件-针对某个列
 Vue.component('com_test1', {
   template: `<span class="C_f30 B" @click="fnClick">{{doc.name}}</span>`,
-  props: ["doc","vm_list_data"],//接收属性
+  props: ["doc", "vm_list_data"],//接收属性
   methods: {
     async fnClick() {
 
-      console.log(`this.$parent:`, this.$parent.$parent.$parent);
-      console.log(`fnClick`);
       //往列表内部传递事件
       this.$emit("list-event-in", {
         eventType: "test1-----1",
         callbackInList: (T) => {
           T.showAdd()//打开列表弹窗
-          console.log("this.doc:", this.doc);
         }
       });
 
@@ -84,13 +81,11 @@ Vue.component('com_toolbar1', {
       alert("工具栏子组件的fnTest方法被触发");
     },
     async fnClick() {
-      console.log(`fnClick`);
       //往列表内部传递事件
       this.$emit("list-event-in", {
         eventType: "test1-----1",
         callbackInList: (T) => {
           T.showAdd()//打开列表弹窗
-          console.log("this.doc:", this.doc);
         }
       });
 
@@ -141,21 +136,17 @@ export default {
   },
   methods: {
     setChildComponent() {
-      console.log("$refs.listMain.$refs.toolbar_com1", this.$refs.listMain.$refs.toolbar_com1);
       let comTarget = this.$refs.listMain.$refs.toolbar_com1[0];//目标子组件，注意定位后是一个数组，取第一个元素
       comTarget.fnTest()
 
     },
     handleListEventIn: function (param) {
       alert(`list-event-in被列表外部监听到,eventType为${param.eventType}`);
-      console.log("param.doc:", param.doc);
     },
     //自定义批量操作按钮点击函数
     bacthBtnClick: function (eventType, selection) {
-      console.log(`eventType:${eventType}`);
     },
     exportExcel() {
-      alert("exportExcel");
       this.tableExportExcel({ el: ".n-table", fileName: "表" });
     },
     tableExportExcel: util.tableExportExcel,
@@ -183,87 +174,31 @@ export default {
   },
   created() {
     T = this;
-    T.cfList2 = Object.assign({}, T.cfList, {
-      listIndex: "list_demo2", //vuex对应的字段~
-      focusMenu: true, //进行菜单聚焦
-      twoTitle: "aaa", //面包屑1级菜单
-      threeTitle: "bbb" //面包屑2级菜单
-    });
+    if (!window.addAItem) {//如果已添加过
+      //修改字段的配置
+      COLUMNS._systemId.cfEdit = {
+        // idKey: "name",//数据Id键名
+        listIndex: "list_task",
+        formItems: [F_ITEMS.complete],//指定表单字段
+        paramAddon: {
+          // _id: "5e78bb5444ba565370025aa5",
+          _systemId: "sys_api",
+          _dataType: "url"
+        },
+        fnAfterModify: function ({ docOld, docNew }) {//修改后处理回调函数
+          docOld.name = docNew.title
 
-
-
+        }
+      }
+      T.cfList.columns.push(COLUMNS._systemId)//添加一个列
+      window.addAItem = true;
+    }
+T.cfList.isShowPageLinkHasAPage=true;
 
 
   },
   async mounted() {
-    this.$parent.showCFForm = true;
-    this.$parent.cfForm.formItems = [
-      // {
-      //   label: "普通文本框(input)",
-      //   prop: "prop1",
-      // },
-      {
-        label: "显示查询表单",
-        prop: "isShowSearchForm",
-        type: "radio",
-        default: true,
-        options: [{ value: true, label: "是" }, { value: false, label: "否" }]
-      },
-      {
-        label: "显示操作栏",
-        prop: "isShowToolBar",
-        type: "radio",
-        default: true,
-        options: [{ value: true, label: "是" }, { value: false, label: "否" }]
-      },
-      {
-        label: "显示面包屑",
-        prop: "isShowBreadcrumb",
-        type: "radio",
-        default: true,
-        options: [{ value: true, label: "是" }, { value: false, label: "否" }]
-      },
-      {
-        label: "显示分页",
-        prop: "isShowPageLink",
-        type: "radio",
-        default: true,
-        options: [{ value: true, label: "是" }, { value: false, label: "否" }]
-      },
-      {
-        label: "接口地址",
-        prop: "url",
-        type: "jsonEditor"
-      },
-      {
-        label: "查询表单",
-        prop: "searchFormItems",
-        type: "collection"
-      },
-      {
-        label: "列配置",
-        prop: "columns",
-        type: "collection"
-      },
-      {
-        label: "动态数据字典",
-        prop: "dynamicDict",
-        type: "collection"
-      },
-      {
-        label: "详情弹窗字段",
-        prop: "detailItems",
-        type: "collection"
-      },
-      {
-        label: "新增、修改表单字段",
-        prop: "formItems",
-        type: "collection"
-      }
-    ];
-    var strJson = util.stringify(this.cfList);
-    let json1 = JSON.parse(strJson);
-    this.$store.commit("setCfData", json1);
+
   }
 };
 </script>
