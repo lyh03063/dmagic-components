@@ -5,6 +5,7 @@
     </dm_debug_list>
 
     <el-menu
+    style=""
       :default-active="activeMenuIndex"
       class="el-menu-demo"
       mode="horizontal"
@@ -43,7 +44,7 @@
         </el-submenu>
       </template>
     </el-menu>
-    <div class="main-box">
+    <div class="main-box1111">
       <div class="left-box" :style="{'width':showDialog?'60%':'100%'}">
         <router-view style="padding:10px;"></router-view>
       </div>

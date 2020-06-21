@@ -1,21 +1,24 @@
 <template>
   <div class="LH32 DPF" ref="formItemBox" v-if="ready">
+    <!-- <dm_debug_list>
+        <dm_debug_item v-model="valueNeed" />
+    </dm_debug_list>-->
     <!--component自定义组件-用于派成的权限树--->
     <component
       :is="item.component"
-      v-model="formDataNeed[item.prop]"
-      :formData="formDataNeed"
+      v-model="valueNeed[item.prop]"
+      :formData="valueNeed"
       v-if="item.component"
     ></component>
     <!--slot自定义组件-注意是isReadyFormData为真时才开始渲染-->
-    <slot :name="item.slot" :formData="formDataNeed" v-else-if="item.slot"></slot>
+    <slot :name="item.slot" :formData="valueNeed" v-else-if="item.slot"></slot>
 
     <!--下拉框-->
     <template class v-else-if="item.type=='select'">
       <select_ajax
         ref="select_ajax"
         class
-        v-model="formDataNeed[item.prop]"
+        v-model="valueNeed[item.prop]"
         :multiple="item.multiple"
         :keyLabel="item.ajax.keyLabel"
         :keyValue="item.ajax.keyValue"
@@ -24,7 +27,7 @@
         v-if="item.ajax"
       ></select_ajax>
       <el-select
-        v-model="formDataNeed[item.prop]"
+        v-model="valueNeed[item.prop]"
         v-else
         clearable
         :multiple="item.multiple"
@@ -40,28 +43,28 @@
     </template>
     <!--dm_select_ajax_lazy下来选择框懒加载-->
     <dm_select_ajax_lazy
-      v-model="formDataNeed[item.prop]"
+      v-model="valueNeed[item.prop]"
       :cf="item.cfSelectAjaxLazy"
       v-else-if="item.type=='select_ajax_lazy'"
     ></dm_select_ajax_lazy>
 
     <!--地区选择下拉框-->
     <dm_select_area
-      v-model="formDataNeed[item.prop]"
+      v-model="valueNeed[item.prop]"
       :value-type="item.valueType"
       :cf="item.cfSelectAjaxLazy"
       v-else-if="item.type=='select_area'"
     ></dm_select_area>
 
     <!--弹窗选择列表-->
-    <select_list_data
-      v-model="formDataNeed[item.prop]"
+    <dm_select_list_data class="FX1"
+      v-model="valueNeed[item.prop]"
       :cf="item.cfSelectList"
       v-else-if="item.type=='select_list_data'"
-    ></select_list_data>
+    ></dm_select_list_data>
 
     <!--单选框-->
-    <el-radio-group v-model="formDataNeed[item.prop]" v-else-if="item.type=='radio'">
+    <el-radio-group v-model="valueNeed[item.prop]" v-else-if="item.type=='radio'">
       <el-radio
         :label="option.value"
         v-for="option in item.options"
@@ -69,7 +72,7 @@
       >{{option.label}}</el-radio>
     </el-radio-group>
     <!--复选框-->
-    <el-checkbox-group v-model="formDataNeed[item.prop]" v-else-if="item.type=='checkbox'">
+    <el-checkbox-group v-model="valueNeed[item.prop]" v-else-if="item.type=='checkbox'">
       <el-checkbox
         :label="option.value"
         v-for="option in item.options"
@@ -77,11 +80,11 @@
       >{{option.label}}</el-checkbox>
     </el-checkbox-group>
     <!--文本域-->
-    <el-input type="textarea" v-model="formDataNeed[item.prop]" v-else-if="item.type=='textarea'"></el-input>
+    <el-input type="textarea" v-model="valueNeed[item.prop]" v-else-if="item.type=='textarea'"></el-input>
 
     <!--date日期选择-->
     <el-date-picker
-      v-model="formDataNeed[item.prop]"
+      v-model="valueNeed[item.prop]"
       value-format="yyyy-MM-dd"
       align="right"
       type="date"
@@ -90,7 +93,7 @@
     ></el-date-picker>
     <!--date日期时间选择-->
     <el-date-picker
-      v-model="formDataNeed[item.prop]"
+      v-model="valueNeed[item.prop]"
       format="yyyy-MM-dd HH:mm"
       value-format="yyyy-MM-dd HH:mm"
       align="right"
@@ -100,14 +103,14 @@
     ></el-date-picker>
     <!--如果是时间段-->
     <time_period
-      v-model="formDataNeed[item.prop]"
+      v-model="valueNeed[item.prop]"
       v-else-if="item.type=='time_period'"
       :cf="item.cfItem"
     ></time_period>
     <!--如果是百分比滑块-->
     <el-slider
       class="ML10 WP50 slider"
-      v-model="formDataNeed[item.prop]"
+      v-model="valueNeed[item.prop]"
       :step="0.1"
       :max="1"
       height="30"
@@ -117,59 +120,68 @@
     ></el-slider>
 
     <!--如果是对象编辑器-->
-    <dm_object v-model="formDataNeed[item.prop]" v-else-if="item.type=='object'" :cf="item.cfItem"></dm_object>
+    <dm_object
+      v-model="valueNeed[item.prop]"
+      v-else-if="item.type=='object'"
+      :cf="item.cfItem"
+      class="FX1"
+    ></dm_object>
 
     <!--如果是vue-json编辑器-->
     <vue-json-editor
-      v-model="formDataNeed[item.prop]"
+      v-model="valueNeed[item.prop]"
       v-else-if="item.type=='vueJsonEditor'"
+      class="FX1"
       lang="zh"
     ></vue-json-editor>
     <!--如果是普通json编辑器-->
-    <json_editor v-model="formDataNeed[item.prop]" v-else-if="item.type=='jsonEditor'"></json_editor>
+    <dm_json_editor v-model="valueNeed[item.prop]" v-else-if="item.type=='jsonEditor'" class="FX1"></dm_json_editor>
     <!--如果是collection-->
-    <collection
-      v-model="formDataNeed[item.prop]"
+    <dm_collection
+      v-model="valueNeed[item.prop]"
       v-else-if="item.type=='collection'"
       :list-type="item.collectionlistType"
       :show-toolbar="item.showToolbar"
       :cf-form="item.collectionCfForm"
       :cfElBtnAdd="item.cfElBtnAdd"
       :dataSlot="item.dataSlot"
+      class="FX1"
+     
     >
       <!--递归插槽-->
       <template v-slot:[item.dataSlot]="{doc}">
         <!--输出插槽-->
         <slot :name="item.dataSlot" v-if="item.dataSlot" :doc="doc"></slot>
       </template>
-    </collection>
+    </dm_collection>
     <!--如果是图片上传控件-->
     <upload_img
-      v-model="formDataNeed[item.prop]"
+      v-model="valueNeed[item.prop]"
       :upload-config="item.uploadConfig"
       v-else-if="item.type=='upload'"
     ></upload_img>
 
     <!--如果是单个文件上传控件-->
     <upload_single
-      v-model="formDataNeed[item.prop]"
+      v-model="valueNeed[item.prop]"
       :cf="item.cfItem"
       v-else-if="item.type=='upload_single'"
     ></upload_single>
     <!--富文本编辑器-->
 
     <tiny_mce_new
-      v-model="formDataNeed[item.prop]"
+      class="FX1"
+      v-model="valueNeed[item.prop]"
       v-else-if="item.type=='editorTM'"
       :showToolbar="true"
       :pasteImage="item.pasteImage"
       :cf="item.cfTiny"
     ></tiny_mce_new>
 
-    <quill_editor v-model="formDataNeed[item.prop]" v-else-if="item.type=='editor'"></quill_editor>
+    <quill_editor v-model="valueNeed[item.prop]" v-else-if="item.type=='editor'" class="FX1"></quill_editor>
     <!--模糊查询文本框  支持回车查询-->
     <input_find_vague
-      v-model="formDataNeed[item.prop]"
+      v-model="valueNeed[item.prop]"
       v-else-if="item.type=='input_find_vague'"
       @enterClick="$emit('enterClick')"
     ></input_find_vague>
@@ -177,16 +189,16 @@
     <!--密码框-->
     <el-input
       placeholder="请输入密码"
-      v-model="formDataNeed[item.prop]"
+      v-model="valueNeed[item.prop]"
       v-else-if="item.type=='password'"
       show-password
     ></el-input>
     <!--json字段输入框，根据prop中是否包含点符号来判断-->
-    <json_prop v-model="formDataNeed[item.prop]" :prop="item.path" v-else-if="item.path" />
+    <json_prop v-model="valueNeed[item.prop]" :prop="item.path" v-else-if="item.path" />
 
     <!--数字框-->
     <el-input-number
-      v-model="formDataNeed[item.prop]"
+      v-model="valueNeed[item.prop]"
       :controls-position="item.controlsPosition||'right'"
       :min="item.min"
       :max="item.max"
@@ -198,18 +210,19 @@
 
     <template class v-else-if="item.type=='numberRange'">
       <!--如果prop存在-->
-      <number_range class v-model="formDataNeed[item.prop]" v-bind="item" v-if="item.prop"></number_range>
-      <!--如果prop不存在，传入整个formDataNeed-->
-      <number_range class v-model="formDataNeed" v-bind="item" v-else></number_range>
+      <number_range class v-model="valueNeed[item.prop]" v-bind="item" v-if="item.prop"></number_range>
+      <!--如果prop不存在，传入整个valueNeed-->
+      <number_range class v-model="valueNeed" v-bind="item" v-else></number_range>
     </template>
     <!--标签列表（数组）-->
-    <tag_list v-model="formDataNeed[item.prop]" v-else-if="item.type=='tag_list'"></tag_list>
+    <tag_list v-model="valueNeed[item.prop]" v-else-if="item.type=='tag_list'"></tag_list>
 
     <!--文本-->
-    <span class="PR5" v-else-if="item.type=='text'" :style="item.style">{{formDataNeed[item.prop]}}</span>
+    <span class="PR5" v-else-if="item.type=='text'" :style="item.style">{{valueNeed[item.prop]}}</span>
     <!--树状数据-->
     <dm_tree_data
-      v-model="formDataNeed[item.prop]"
+      class="FX1"
+      v-model="valueNeed[item.prop]"
       :cf="item.cfItem"
       v-else-if="item.type=='tree_data'"
       :style="item.style"
@@ -217,7 +230,8 @@
 
     <!--codemirror代码块-->
     <dm_code
-      v-model="formDataNeed[item.prop]"
+    class="FX1"
+      v-model="valueNeed[item.prop]"
       :cf="item.cfItem"
       v-else-if="item.type=='codemirror'"
       :style="item.style"
@@ -225,7 +239,7 @@
     <!--ajax_populate-->
     <dm_ajax_populate
       v-else-if="item.type=='ajax_populate'"
-      :id="formDataNeed[item.prop]"
+      :id="valueNeed[item.prop]"
       :populateKey="$lodash.get(item, `cfAjaxPopulate.populateKey`)"
       :page="$lodash.get(item, `cfAjaxPopulate.page`)"
     ></dm_ajax_populate>
@@ -235,17 +249,16 @@
     <el-input
       class="FX1"
       v-else
-      v-model="formDataNeed[item.prop]"
+      v-model="valueNeed[item.prop]"
       @keyup.enter.native="$emit('enterClick')"
       clearable
-     
     ></el-input>
 
     <template class v-if="item.frequency">
       <!--颜色选择器-->
       <el-color-picker
         class="ML5 MT3"
-        v-model="formDataNeed[item.prop]"
+        v-model="valueNeed[item.prop]"
         v-bind="item.frequency.cfColorPicker"
         v-if="item.frequency.type=='color'"
       ></el-color-picker>
@@ -261,7 +274,7 @@
       >
         <!--候选值列表-->
         <i
-          :class="['frequency-option',{focus:formDataNeed[item.prop]==option.value}] "
+          :class="['frequency-option',{focus:valueNeed[item.prop]==option.value}] "
           v-for="(option,i) in item.frequency.options"
           :key="i"
           @click="slectFOption(option)"
@@ -273,7 +286,7 @@
         <a
           href="javascript:;"
           class="n-a"
-          @click="formDataNeed[item.prop]=null;visibleFrequency[item.prop]=false"
+          @click="valueNeed[item.prop]=null;visibleFrequency[item.prop]=false"
         >清除</a>
         <el-button slot="reference" icon="el-icon-more"></el-button>
       </el-popover>
@@ -285,25 +298,25 @@
 import vueJsonEditor from "vue-json-editor";
 import select_ajax from "../../components/form_item/select_ajax.vue";
 import input_find_vague from "../../components/form_item/input_find_vague.vue";
-import json_editor from "../../components/form_item/json_editor.vue";
+
 import upload_img from "../../components/form_item/upload_img.vue";
 import upload_single from "../../components/form_item/upload_single.vue";
 import time_period from "../../components/form_item/time_period.vue";
 import json_prop from "../../components/form_item/json_prop.vue";
-import collection from "../../components/form_item/collection/index.vue";
+
 import quill_editor from "../../components/form_item/quill_editor.vue";
 import tiny_mce_new from "../../components/form_item/tiny_mce_new";
-import select_list_data from "../../components/form_item/select_list_data/select_list_data.vue";
+
 import number_range from "../../components/form_item/number_range.vue";
 import tag_list from "../../components/form_item/tag_list.vue";
 
 
 export default {
   name: "form_item", //组件名，用于递归
-  components: {    select_list_data, vueJsonEditor: vueJsonEditor, select_ajax,
-    input_find_vague, json_editor, upload_img, upload_single, time_period, json_prop,
-    collection, quill_editor, tiny_mce_new, tiny_mce_new, number_range, tag_list,  },
-  // mixins: [MIX.form_item], //混入
+  components: {   vueJsonEditor: vueJsonEditor, select_ajax,
+    input_find_vague, upload_img, upload_single, time_period, json_prop,
+     quill_editor, tiny_mce_new,  number_range, tag_list,  },
+  mixins: [MIX.form_item_new], //混入-这个是高风险混入，注意避免双向同步时出现死循环！！！！
   props: {
     cf: [Object],
     value: [Object]
@@ -312,7 +325,7 @@ export default {
     return {
       ready: true,
       item: this.cf,
-      formDataNeed: this.value,
+      valueNeed: this.value,
       visibleFrequency: {}, //候选项可见性
       marks: {
         //百分比刻度
@@ -344,11 +357,11 @@ export default {
     async slectFOption(option) {
       let { dataType } = this.item.frequency
       if (dataType == "array") {//如果{数据类型}是数组
-        // this.formDataNeed[this.item.prop] = [option.value];
-        this.$set(this.formDataNeed, this.item.prop, [option.value]);
+        // this.valueNeed[this.item.prop] = [option.value];
+        this.$set(this.valueNeed, this.item.prop, [option.value]);
       } else {
-        this.$set(this.formDataNeed, this.item.prop, option.value);
-        // this.formDataNeed[this.item.prop] = option.value;
+        this.$set(this.valueNeed, this.item.prop, option.value);
+        // this.valueNeed[this.item.prop] = option.value;
       }
       this.visibleFrequency[this.item.prop] = false
       this.$nextTickStatus("ready")

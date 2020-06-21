@@ -30,7 +30,7 @@ export default {
       cfFormSearch: {
         inline: true,
         size: "mini",
-        formItems: [F_ITEMS.importance],
+        formItems: [F_ITEMS.importance,    F_ITEMS.objAddonItem,],
         btns: [{ text: "查询", event: "submit", type: "primary", size: "mini" }]
       },
     };

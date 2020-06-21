@@ -1,8 +1,17 @@
 <template>
   <div class>
     <div :id="id"></div>
-    <div class="M_0 btn-big-play" @click="fnClick" v-if="cf.showBigBtn">
-      <i :class="iconPlay"></i>
+    <div class></div>
+
+    <div class="foot_bar">
+      <div class="DPF">
+        <div class="M_0 btn_big_pre" @click="pre" v-if="cf.showBigBtn">上一曲</div>
+        <div class="M_0 btn_big_pre" @click="next" v-if="cf.showBigBtn">下一曲</div>
+      </div>
+
+      <div class="M_0 btn_big_play" @click="playOrPause" v-if="cf.showBigBtn">
+        <i :class="iconPlay"></i>
+      </div>
     </div>
   </div>
 </template>
@@ -46,8 +55,40 @@ export default {
         this.play = true;
       });
     },
+    //函数：{上一曲函数}
+    pre: async function () {
+      console.log(`this.ap:`, this.ap);
+      console.log(`this.ap.list:`, this.ap.list);
+      let { index } = this.ap.list
+      let { length } = this.ap.list.audios
+      if (index == 0) {
+        index = length - 1
+      } else {
+        index--;
+      }
+
+      this.ap.list.switch(index);
+      this.ap.play()
+
+
+    },
+    //函数：{下一曲函数}
+    next: async function () {
+      let indexNext = 1;
+      let { index } = this.ap.list
+      let { length } = this.ap.list.audios
+      if (index == length - 1) {
+        index = 0
+      } else {
+        index++;
+      }
+
+      console.log(`index:`, index);
+      this.ap.list.switch(index);
+      this.ap.play()
+    },
     //函数：{点击按钮的函数}
-    fnClick: async function () {
+    playOrPause: async function () {
       this.play = !this.play;
       if (this.play) {//如果{播放状态}为真
         this.ap.play()
@@ -61,13 +102,13 @@ export default {
       let cfAPlayer = lodash.get(this.cf, `cfAPlayer`, {});
       let cfAPlayerDefault = {
         audio: [
-        {
-          name: 'we are the champions',
-          artist: 'queen',
-          url: 'https://www.dmagic.cn/media/article/8064.mp3',
-          cover: 'http://img1.imgtn.bdimg.com/it/u=2201773812,3354531125&fm=26&gp=0.jpg'
-        }
-      ]
+          {
+            name: 'we are the champions',
+            artist: 'queen',
+            url: 'https://www.dmagic.cn/media/article/8064.mp3',
+            cover: 'http://img1.imgtn.bdimg.com/it/u=2201773812,3354531125&fm=26&gp=0.jpg'
+          }
+        ]
       }
       util.setObjDefault(cfAPlayer, cfAPlayerDefault);
       util.setObjDefault(this.cf, {
@@ -92,18 +133,34 @@ export default {
 </script>
 
 <style scoped>
-.btn-big-play {
+.foot_bar {
   width: 100%;
-  font-size: 124px;
-  text-align: center;
-  /* font-weight: 100; */
-
-  height: 160px;
-  background: #f0f0f0;
-  color: #666;
-  cursor: pointer;
   position: fixed;
   bottom: 0;
   left: 0;
+}
+
+.btn_big_pre {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  width: 50%;
+  font-size: 64px;
+  height: 180px;
+  background: #f8f8f8;
+  color: #666;
+  cursor: pointer;
+}
+
+.btn_big_play {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  width: 100%;
+  font-size: 124px;
+  height: 180px;
+  background: #f0f0f0;
+  color: #666;
+  cursor: pointer;
 }
 </style>

@@ -112,13 +112,20 @@ PUB.listCF.list_resume_work_experience.formItems.push(lodash.cloneDeep(F_ITEMS.r
 
 
 
+F_ITEMS.collection3 = { "prop": "collection22", "label": "集合", "type": "collection", 
+
+// default:[],
+
+"collectionlistType1111": "form",  "collectionCfForm": { col_span: 12, formItems: [{ label: "时间", prop: "time", type: "date" }, { label: "金额", prop: "money" }] } };
+
+
 export default {
   name: "form_demo",
   components: { checkbox_diy, },
 
   data() {
     return {
-      ready:false,
+      ready: false,
       formData1: { obj: { num: 123 } },
       formData: {
         // complete:0,
@@ -134,7 +141,7 @@ export default {
           "status": "success"
         }],
         relJsCode: [{ "_id": "5eb3c96a1178991cb84c4a55", "title": "测试嵌套" }],
-        relWorkExperience: [{"_id":"5e9cfaf0faa8f3507cbaa701","companyName":"公司A"},{"_id":"5e9523985d347653d40cd985","companyName":"深圳软通动力1"},{"_id":"5eb3ab6c1178991cb84c4a4f","companyName":"公司333"}],
+        relWorkExperience: [{ "_id": "5e9cfaf0faa8f3507cbaa701", "companyName": "公司A" }, { "_id": "5e9523985d347653d40cd985", "companyName": "深圳软通动力1" }, { "_id": "5eb3ab6c1178991cb84c4a4f", "companyName": "公司333" }],
         uploadAvatar: "http://qn-dmagic.dmagic.cn/202004141713623737_3796_1.png",
         prop_time_period2: { "start": "2020-04-01 00:00:01", "end": "2021-01-01 23:59:59" },
         prop_time_period3: "2020-04-01 00:00:01",
@@ -196,37 +203,40 @@ export default {
         labelWidth: "150px",
 
         formItems: [
-          {label:"json编辑器",type:"vueJsonEditor"},
-          F_ITEMS.select_list_common_url,
-          F_ITEMS.predictTime,
-          F_ITEMS.title,
-          //  F_ITEMS.num1_text,
-          //  F_ITEMS.complete,
-          F_ITEMS.relJsCode,
-          // F_ITEMS.relWorkExperience,
-          F_ITEMS.treeData1,//树
-          F_ITEMS.object_1,
-          F_ITEMS.checkbox1,
-
-          // F_ITEMS.addressObj,
-          // F_ITEMS.prop_upload,
-          // F_ITEMS.treeDataMenu,//树
-
-          // F_ITEMS.upload_single1,//单文件上传
-          // F_ITEMS.uploadAvatar,//单文件上传
-          // F_ITEMS.prop_time_period1,//日范围
-          // F_ITEMS.prop_time_period2,//月范围
-          // F_ITEMS.prop_time_period3,//年范围
-          F_ITEMS.prop_upload,
-          // F_ITEMS.personCharge,
-          // F_ITEMS.prop_editorTMNew,
-          F_ITEMS.prop_editorTM,
-
-          // F_ITEMS.projectName_select_lazy,
+          F_ITEMS.collection3,
+          // F_ITEMS.collection2,
+        
+          // {label:"json编辑器",type:"vueJsonEditor"},
+          // F_ITEMS.select_list_common_url,
           // F_ITEMS.predictTime,
-          
-          
-          
+          // F_ITEMS.title,
+          // //  F_ITEMS.num1_text,
+          // //  F_ITEMS.complete,
+          // F_ITEMS.relJsCode,
+          // // F_ITEMS.relWorkExperience,
+          // F_ITEMS.treeData1,//树
+          // F_ITEMS.object_1,
+          // F_ITEMS.checkbox1,
+
+          // // F_ITEMS.addressObj,
+          // // F_ITEMS.prop_upload,
+          // // F_ITEMS.treeDataMenu,//树
+
+          // // F_ITEMS.upload_single1,//单文件上传
+          // // F_ITEMS.uploadAvatar,//单文件上传
+          // // F_ITEMS.prop_time_period1,//日范围
+          // // F_ITEMS.prop_time_period2,//月范围
+          // // F_ITEMS.prop_time_period3,//年范围
+          // F_ITEMS.prop_upload,
+          // // F_ITEMS.personCharge,
+          // // F_ITEMS.prop_editorTMNew,
+          // F_ITEMS.prop_editorTM,
+
+          // // F_ITEMS.projectName_select_lazy,
+          // // F_ITEMS.predictTime,
+
+
+
 
           // F_ITEMS.prop_select_list_data,
           // F_ITEMS.diycheckbox,
@@ -239,7 +249,7 @@ export default {
           // F_ITEMS.prop_input_find_vague,
           // F_ITEMS.memberId,
 
-          
+
           // F_ITEMS.groupMember,
           // F_ITEMS.prop4,
           // F_ITEMS.num1_component,
@@ -288,7 +298,11 @@ export default {
   },
   async mounted() {
     this.$store.commit("changeActiveMenu", "form_demo");
-    this.$parent.showCFForm = true;
+
+
+    /****************************配置表单-START****************************/
+    /*
+     this.$parent.showCFForm = true;
     this.$parent.cfForm.formItems = [
       {
         label: "标签宽度",
@@ -406,8 +420,11 @@ export default {
     this.$store.commit("setCfData", json1);//同步配置界面的配置信息
 
     await util.timeout(500); //延迟
-    this.formData={}
-    this.ready=true
+    this.formData = {}
+    */
+    /****************************配置表单-END****************************/
+   
+    this.ready = true
   }
 };
 </script>

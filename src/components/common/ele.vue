@@ -1,8 +1,5 @@
 <template>
-  <component :is="tag" v-bind="cf">
-    {{text}}
-    <!--递归-->
-    <dm_ele
+  <component :is="tag" v-bind="cf">{{text}}<dm_ele
       :tag="d.tag"
       v-bind="d.cf"
       :text="d.text"

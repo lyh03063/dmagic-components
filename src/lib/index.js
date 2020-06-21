@@ -1,4 +1,5 @@
 // import Vue from 'vue'
+import dm_test from '../components/common/test'
 import dm_debug_list from '../components/common/debug_list/debug_list'
 import dm_debug_item from '../components/common/debug_item/debug_item'
 import dm_dynamic_form from '../components/list-data/dynamic-form.vue'
@@ -13,12 +14,12 @@ import dm_pannel from '../components/common/pannel/index.vue'
 import dm_list_flex_res from '../components/common/list_flex_res/index.vue'
 import dm_title_bar from '../components/common/title_bar.vue'
 import dm_pannel_new from '../components/common/pannel_new.vue'
-import dm_collection from '../components/form_item/collection/index.vue'
+import dm_collection from '../components/form_item/collection.vue'
 import dm_tree_data from '../components/form_item/tree_data.vue'
 import dm_object from '../components/form_item/object.vue'
 import dm_select_area from '../components/form_item/select_area.vue'
 import dm_form_css from '../components/form_item/form_css.vue'
-
+import dm_json_editor from '../components/form_item/json_editor.vue'
 
 
 import dm_dialog_edit from '../components/list-data/dialog_edit.vue'
@@ -50,7 +51,10 @@ import dm_modify_password from '../components/manage/modify_password.vue'
 
 
 import dm_detail_audio from '../components/detail/detail_audio.vue'
+import dm_group_audio from '../components/detail/group_audio.vue'
 import dm_built_file_from_temp from '../components/bussiness/built_file_from_temp.vue'
+import dm_detail_bankruptcy_case from '../components/bussiness/detail_bankruptcy_case.vue'
+
 
 import dm_c_operate_g_file from '../components/column/operate_g_file.vue'
 
@@ -77,11 +81,13 @@ import "codemirror/addon/fold/brace-fold.js"; //代码折叠-一定要引用
 import dm_code from '../components/form_item/codemirror.vue'
 
 import dm_auto_layout from '../components/tool/auto_layout.vue'
-
+import dm_dialog_select_demo from '../components/tool/dialog_select_demo.vue'
+import dm_single_class_edit from '../components/tool/single_class_edit.vue'
+import dm_row_html_tag from '../components/tool/row_html_tag.vue'
 
 const Components = {
-  dm_pannel,dm_list_flex_res,
-  dm_debug_list, dm_debug_item,
+  dm_pannel,dm_list_flex_res,dm_test,
+  dm_debug_list, dm_debug_item,dm_json_editor,
   dm_loading,dm_ajax_populate,dm_space,
   dm_dynamic_form,dm_list_data,dm_select_ajax_lazy,
   dm_codemirror:codemirror,dm_code,dm_form_css,
@@ -90,10 +96,10 @@ const Components = {
   dm_com_row_js_code,dm_echart,
   dm_detail_group_common,dm_detail_group,dm_detail_g_list,dm_pannel_d_g_list,
   dm_rel_list_data,dm_pannel_rel_list_data,dm_list_common,
-  dm_manage_home,dm_built_file_from_temp,
-  dm_modify_password,dm_aplayer,dm_detail_audio,
+  dm_manage_home,dm_built_file_from_temp,dm_detail_bankruptcy_case,
+  dm_modify_password,dm_aplayer,dm_detail_audio,dm_group_audio,
   dm_c_operate_g_file,dm_list_simple,dm_detail_son_data,
-  dm_ele,dm_auto_layout
+  dm_ele,dm_auto_layout,dm_dialog_select_demo,dm_single_class_edit,dm_row_html_tag
 }
 
 

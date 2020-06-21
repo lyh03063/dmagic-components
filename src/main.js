@@ -35,6 +35,11 @@ import upload_qiniu from './page/upload_qiniu.vue'; //导入upload_qiniu
 import test from './page/test.vue'; //导入test
 import demo_show from './page/demo_show.vue'; //导入demo_show
 import detail_audio from './components/detail/detail_audio.vue'; //导入demo_showsrc\components\detail\detail_audio.vue
+const list_common = { template: '<dm_list_common></dm_list_common>' }
+const detail_bankruptcy_case = { template: '<dm_detail_bankruptcy_case></dm_detail_bankruptcy_case>' }
+
+PUB._paramAjaxAddon={ _systemId: "$all" }
+
 // 3. 创建 router 实例，然后传 `routes` 配置
 const router = new VueRouter({
     routes: [
@@ -48,6 +53,8 @@ const router = new VueRouter({
         { path: '/test', component: test },
         { path: '/demo_show', component: demo_show },
         { path: '/detail_audio', component: detail_audio },
+        { path: '/list_common', component: list_common },
+        { path: '/detail_bankruptcy_case', component: detail_bankruptcy_case },
     ]
 })
 

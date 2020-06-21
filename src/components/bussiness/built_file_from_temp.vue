@@ -5,7 +5,12 @@
       <!-- <div class>idFileModify:{{idFileModify}}</div> -->
 
       <div class v-if="idFileModify">
-        <el-alert :title="`正在修改【${docFileModify.title}】文件`" type="warning" show-icon v-if="docFileModify"></el-alert>
+        <el-alert
+          :title="`正在修改【${docFileModify.title}】文件`"
+          type="warning"
+          show-icon
+          v-if="docFileModify"
+        ></el-alert>
       </div>
       <div class v-else>
         <el-alert :title="`请选择合适的文件模板，并填写对应的表单信息来生成文件`" type="warning" show-icon></el-alert>
@@ -134,6 +139,21 @@ export default {
     //函数：{处理表单配置的函数}
     handelCfForm: async function (cfForm) {
       this.cfForm = cfForm//变量赋值：{表单配置}
+
+      let { formItems } = cfForm;
+      console.log(`formItems:#####`, formItems);
+
+      //变量：{外层的案件详情组件}
+      let vm_detail_bankruptcy_case = this.$closest({ vmT: this, name: "dm_detail_bankruptcy_case" })
+
+      if (vm_detail_bankruptcy_case) {//如果{外层的案件详情组件}存在
+        let { docCase } = vm_detail_bankruptcy_case
+        formItems.forEach(itemEach => {//循环：{表单字段数组}
+          let { prop } = itemEach;
+          itemEach.default=docCase[prop]//默认值赋值***
+        })
+      }
+
       let cfFormDefault = {
         col_span: 12, //控制显示一行多列
         size: "mini",
@@ -142,6 +162,7 @@ export default {
       //调用：{给一个对象设置默认属性函数}
       util.setObjDefault(this.cfForm, cfFormDefault);
     },
+   
   },
   created() {
     //这里先设置好这个参数，避免内部的分组列表出异常！！！！
@@ -153,6 +174,7 @@ export default {
     }
   },
   async mounted() {
+
   }
 };
 </script>

@@ -1,18 +1,21 @@
 <template>
   <div class="out">
+    <dm_debug_list>
+      <dm_debug_item v-model="valueNeed" />
+    </dm_debug_list>
+
     <dm_pannel_new
       :cf="item.cfPannel"
-      class="MB20"
+      class="MB10"
       :title="item.title"
       v-for="(item,i) in arrCf"
       :key="i"
+      :ref="`pannel`"
+     
     >
       <template #titleBar_boxLeft="{vm_title_bar,vm_pannel}">
-        <div
-          class="PT10 PL6 PR6 WP100 HP100 BC_ddd Cur1"
-          @click="vm_pannel.showContent=!vm_pannel.showContent"
-        >
-          <i :class="vm_pannel.showContent?'el-icon-arrow-down':'el-icon-arrow-right'"></i>
+        <div class="PT1 PL6 PR6 WP100 HP100 BC_ddd Cur1" @click="vm_pannel.toggle()">
+          <i :class="vm_pannel.cfIn.showContent?'el-icon-arrow-down':'el-icon-arrow-right'"></i>
         </div>
       </template>
 
@@ -25,8 +28,21 @@
 </template>
 <script>
 
-let cfPannel = lodash.cloneDeep(PUB.cfPannel.gray_bar)
+PUB.cfPannel.gray_bar2 = {//浅灰色栏
+  showContent: false,//内容块折叠
+  cfTitleBar: {
+    boxMiddle: {
+      style: { "font-size": "13px", "padding": "0 0 0 10px", "height": "34px", "line-height": "34px", },
+    },
+    boxMain: {
+      style: { "border-bottom": "none", "background": "#f0f0f0", "height": "34px", "line-height": "34px", },
+    },
+  },
+}
+
+let cfPannel = lodash.cloneDeep(PUB.cfPannel.gray_bar2)
 // cfPannel.toggleByClickTitle = true;//开启“点击标题栏折叠效果”
+
 
 
 export default {
@@ -48,7 +64,7 @@ export default {
           title: "盒子宽高/边距/展示类型",
           cfPannel: lodash.cloneDeep(cfPannel),
           cfForm: {
-            col_span: 8,
+            col_span: 12,
             size: "mini",
             labelWidth: "200px",
             formItems: [
@@ -63,7 +79,7 @@ export default {
           title: "边框/轮廓/圆角/阴影",
           cfPannel: lodash.cloneDeep(cfPannel),
           cfForm: {
-            col_span: 8,
+            col_span: 12,
             size: "mini",
             labelWidth: "200px",
             formItems: [
@@ -95,7 +111,7 @@ export default {
           title: "文本和字体",
           cfPannel: lodash.cloneDeep(cfPannel),
           cfForm: {
-            col_span: 8,
+            col_span: 12,
             size: "mini",
             labelWidth: "200px",
             formItems: [
@@ -116,7 +132,7 @@ export default {
           title: "浮动/定位",
           cfPannel: lodash.cloneDeep(cfPannel),
           cfForm: {
-            col_span: 8,
+            col_span: 12,
             size: "mini",
             labelWidth: "180px",
             formItems: [
@@ -136,6 +152,22 @@ export default {
     };
   },
   methods: {
+    //函数：{全部面板折叠函数}
+    foldAll: async function () {
+      console.log(`this.$refs:`, this.$refs);
+      let { pannel } = this.$refs
+      pannel.forEach(pannelEach => {//循环：{面板组件数组}
+        pannelEach.hideContent()//隐藏内容
+      })
+    },
+    //函数：{全部面板展开函数}
+    unfoldAll: async function () {
+      console.log(`this.$refs:`, this.$refs);
+      let { pannel } = this.$refs
+      pannel.forEach(pannelEach => {//循环：{面板组件数组}
+        pannelEach.showContent()//隐藏内容
+      })
+    },
     //函数：{获取当前面板的css代码函数}
     getPannelCssCode: function (item) {
       let formItems = lodash.get(item, `cfForm.formItems`);

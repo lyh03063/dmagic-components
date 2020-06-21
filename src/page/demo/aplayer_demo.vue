@@ -2,9 +2,7 @@
   <div class>
     <dm_aplayer class :cf="cf1"></dm_aplayer>
 
-
-<dm_detail_audio class :cf="cf1"></dm_detail_audio>
-
+    <!-- <dm_detail_audio class :cf="cf1"></dm_detail_audio> -->
   </div>
 </template>
 
@@ -18,7 +16,7 @@ export default {
     return {
 
       cf1: {
-        // showBigBtn: true,
+        showBigBtn: true,
         cfAPlayer: {
           audio: [
             {
@@ -26,16 +24,21 @@ export default {
               artist: '',
               url: 'http://qn-dmagic.dmagic.cn/202006131516192323_31829_%E7%AB%A5%E5%B9%B4.mp3',
               cover: 'http://img1.imgtn.bdimg.com/it/u=2201773812,3354531125&fm=26&gp=0.jpg'
+            }, {
+              name: '童年2',
+              artist: '',
+              url: 'http://qn-dmagic.dmagic.cn/202006131516192323_31829_%E7%AB%A5%E5%B9%B4.mp3',
+              cover: 'http://img1.imgtn.bdimg.com/it/u=2201773812,3354531125&fm=26&gp=0.jpg'
             }
           ]
         }
       },
-      
+
     };
   },
- 
+
   methods: {
-   
+
 
   },
 

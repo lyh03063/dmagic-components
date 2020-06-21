@@ -1,9 +1,9 @@
 <template>
   <div>
-    <dm_select_ajax_lazy class :cf="cfSelectAjaxLazy"></dm_select_ajax_lazy>######
+    <dm_test class :obj="objTest"></dm_test>
 
-
-    
+    <dm_select_ajax_lazy class :cf="cfSelectAjaxLazy"></dm_select_ajax_lazy>
+######
     <dm_ajax_populate :id="2" populateKey="name" page="tangball_franchisee"></dm_ajax_populate>
 
     <codemirror v-model="code" :options="cmOptions" ref="myCm"></codemirror>
@@ -40,7 +40,6 @@
 </template>
 
 <script>
-import collection from "../components/form_item/collection/index.vue";
 import { codemirror } from "vue-codemirror";
 
 // import uglify from "uglify-js";
@@ -63,16 +62,17 @@ import "codemirror/addon/fold/foldgutter.css"; //代码折叠样式一定要引�
 import "codemirror/addon/fold/brace-fold.js"; //代码折叠-一定要引用
 
 export default {
-  components: { collection, codemirror,  },
+  components: { codemirror, },
 
   data() {
     return {
+      objTest: { name: "张三", age: 17, sex: "男" },
       cfSelectAjaxLazy: {
         url: "/crossList?page=paicheng_project",
         keyLabel: "projectName",
         keyValue: "P1"
       },
- 
+
       cmOptions: {
         // codemirror options
         tabSize: 4,
@@ -242,7 +242,7 @@ export default {
     }
   },
   methods: {
-  
+
     formatCode() {
       let T = this;
       //T.cm.setValue("aaaaa")编辑器设置代码
@@ -251,9 +251,9 @@ export default {
         return { from: T.cm.getCursor(true), to: T.cm.getCursor(false) };
       }
 
-      let code=T.cm.getValue();
+      let code = T.cm.getValue();
 
-      T.cm.setValue(code+"aaaa");
+      T.cm.setValue(code + "aaaa");
 
       // var range = getSelectedRange();
       // T.cm.autoFormatRange(range.from, range.to);

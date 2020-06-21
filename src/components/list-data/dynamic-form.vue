@@ -26,6 +26,7 @@
             :class="{clearall:clearall}"
             :style="getItemStyle(item)"
             v-if="satisfyTerm(item)"
+            v-show="item.show!==false"
           >
             <div
               v-if="item.cfForm"
@@ -56,7 +57,7 @@
                 </template>
               </dm_dynamic_form>
             </div>
-            <el-form-item :prop="item.prop" :rules="item.rules||[]" v-if="!item.cfForm">
+            <el-form-item :prop="item.prop" :rules="item.rules||[]" v-if="!item.cfForm" >
               <!--通过插槽方式实现字段标签-->
               <label slot="label">
                 {{item.label}}

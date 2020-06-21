@@ -10,7 +10,7 @@
 
 <script>
 export default {
-  name: "aplayer_demo",
+  name: "detail_audio",
   components: {},
   data() {
     return {

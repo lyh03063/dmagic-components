@@ -37,24 +37,23 @@
           @blur="isEdit=false"
         />
         <textarea v-model="valueNeed" class="WP100" v-if="editComType=='text'" @blur="isEdit=false"></textarea>
-        <json_editor
+        <dm_json_editor
           v-model="valueNeed"
           class="WP100"
           v-if="editComType=='json'"
           @blur="isEdit=false"
-        ></json_editor>
+        ></dm_json_editor>
       </div>
     </td>
   </tr>
 </template>
 
 <script>
-import json_editor from "../../../components/form_item/json_editor.vue";
 import JsonViewer from 'vue-json-viewer'
 export default {
   components: {
     //注册组件
-    json_editor, JsonViewer
+    JsonViewer
   },
   mixins: [MIX.form_item_new], //混入
   props: ["path", "text", "value"],

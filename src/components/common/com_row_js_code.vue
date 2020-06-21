@@ -5,9 +5,7 @@
         <i class="el-icon-caret-right" :class="{Rotate90:isShowSon}"></i>
         <span class="C_999">[{{countRelJs}}]</span>
       </div>
-      <div class>
-        {{docComplete.title}}
-        <span v-if="docComplete.desc">：{{docComplete.desc}}</span>
+      <div class>{{docComplete.title}}<span v-if="docComplete.desc">：{{docComplete.desc}}</span>
       </div>
     </div>
     <div class v-if="isShowSon&&docComplete.relJsCode">

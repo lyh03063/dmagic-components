@@ -310,8 +310,27 @@ F_ITEMS.select_list_common_url = {
 
 
 
+
 //菜单列表
 PUB.menuDemo = [
+    {
+        name: "sys_case",
+        title: "案管专用",
+        menuItem: [
+            { name: "detail_bankruptcy_case", title: "案件详情", route: "/detail_bankruptcy_case?caseId=5edc65048d6ed44d5cf18aab" },
+
+        ]
+    },
+
+    {
+        name: "list_common",
+        title: "通用列表",
+        menuItem: [
+            { name: "list_common_js_file", title: "JS文件列表", route: "/list_common?type=js_file" },
+            { name: "list_common_js_code", title: "JS代码块列表", route: "/list_common?type=js_code" },
+
+        ]
+    },
 
     {
         name: "list",
@@ -320,7 +339,7 @@ PUB.menuDemo = [
             { name: "list_demo", title: "list_demo1", route: "/list_demo" },
             { name: "list_static_demo", title: "list_static_demo", route: "/list_static_demo" },
             { name: "list_common_demo", title: "list_common_demo", route: "/list_common_demo" },
-            { name: "list_simple_demo", title: "list_simple简单列表" },
+
             { name: "list_demo_detail_g_list", title: "detail_g_list详情关联数据列表" },
             { name: "select_file_template", title: "案管-选择文件模板" },
             { name: "list_demo_pannel_rel", title: "案管-详情关联列表-涉诉信息" },
@@ -353,6 +372,7 @@ PUB.menuDemo = [
         menuItem: [
             { name: "echarts_demo", title: "echarts饼图" },
             { name: "aplayer_demo", title: "aplayer音频播放器" },
+            { name: "aplayer_demo2", title: "aplayer分组音频" },
             { name: "calendar1", title: "日历组件" },
             { name: "tree_data_normal", title: "树数据组件1" },
             { name: "tree_data_menu", title: "树数据组件2" },
@@ -363,7 +383,7 @@ PUB.menuDemo = [
         title: "常用基础",
         menuItem: [
 
-
+            { name: "list_simple_demo", title: "list_simple简单列表" },
             { name: "test_debug_list", title: "调试列表组件" },
             { name: "title_bar_demo", title: "标题栏组件" },
             { name: "pannel", title: "面板组件" },
@@ -375,6 +395,7 @@ PUB.menuDemo = [
         name: "other",
         title: "其他",
         menuItem: [
+            { name: "row_html_tag_demo", title: "html集合组件测试" },
             { name: "upload_qiniu", title: "upload_qiniu", route: "/upload_qiniu" },
             { name: "test", title: "test", route: "/test" },
             { name: "object_demo", title: "对象demo" },
