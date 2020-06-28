@@ -37,24 +37,38 @@ import demo_show from './page/demo_show.vue'; //导入demo_show
 import detail_audio from './components/detail/detail_audio.vue'; //导入demo_showsrc\components\detail\detail_audio.vue
 const list_common = { template: '<dm_list_common></dm_list_common>' }
 const detail_bankruptcy_case = { template: '<dm_detail_bankruptcy_case></dm_detail_bankruptcy_case>' }
-
+const auto_layout = { template: '<dm_auto_layout></dm_auto_layout>' }
+const js_file_edit = { template: '<dm_js_file_edit></dm_js_file_edit>' }
 PUB._paramAjaxAddon={ _systemId: "$all" }
+
+import manage from "./App.vue";
 
 // 3. 创建 router 实例，然后传 `routes` 配置
 const router = new VueRouter({
     routes: [
-        { path: '/', redirect: '/form_demo' },
-        { path: '/form_demo', component: form_demo },
-        { path: '/form_demo2', component: form_demo2 },
-        { path: '/list_demo', component: list_demo },
-        { path: '/list_static_demo', component: list_static_demo },
-        { path: '/list_common_demo', component: list_common_demo },
-        { path: '/upload_qiniu', component: upload_qiniu },
-        { path: '/test', component: test },
-        { path: '/demo_show', component: demo_show },
-        { path: '/detail_audio', component: detail_audio },
-        { path: '/list_common', component: list_common },
-        { path: '/detail_bankruptcy_case', component: detail_bankruptcy_case },
+        { path: '/', redirect: '/manage' },
+        {
+            path: '/manage',
+            component: manage,
+            redirect: 'manage/form_demo', //跳转
+            children: [//子路由
+                // { path: '/', redirect: 'form_demo' },
+                { path: 'form_demo', component: form_demo },
+                { path: 'form_demo2', component: form_demo2 },
+                { path: 'list_demo', component: list_demo },
+                { path: 'list_static_demo', component: list_static_demo },
+                { path: 'list_common_demo', component: list_common_demo },
+                { path: 'upload_qiniu', component: upload_qiniu },
+                { path: 'test', component: test },
+                { path: 'demo_show', component: demo_show },
+                { path: 'detail_audio', component: detail_audio },
+                { path: 'list_common', component: list_common },
+                { path: 'detail_bankruptcy_case', component: detail_bankruptcy_case },
+            ]
+          },
+        
+        { path: '/auto_layout', component: auto_layout },
+        { path: '/js_file_edit', component: js_file_edit },
     ]
 })
 
@@ -82,11 +96,11 @@ Vue.directive('highlight', function(el) {
 })
 
 
-import App from './App.vue'
+import main from './main.vue'
 
 
 new Vue({
     el: '#app',
-    render: h => h(App),
+    render: h => h(main),
     router,
 })

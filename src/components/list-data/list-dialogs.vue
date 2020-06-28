@@ -6,6 +6,7 @@
 
     <!--查看详情弹窗-->
     <el-dialog
+    class="n-el-dialog"
       title="查看详情"
       :visible.sync="isShowDialogDetail"
       v-if="isShowDialogDetail"
@@ -60,9 +61,9 @@
       <!--查看下一条-->
       <div class="R10 btn-switch el-icon-arrow-right" @click="showNext"></div>
 
-      <span slot="footer" class="dialog-footer">
+      <div slot="footer" class="dialog-footer TAR MT10">
         <el-button @click="closeDialogDetailFun">关 闭</el-button>
-      </span>
+      </div>
 
     </div>
      

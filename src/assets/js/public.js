@@ -317,7 +317,7 @@ PUB.menuDemo = [
         name: "sys_case",
         title: "案管专用",
         menuItem: [
-            { name: "detail_bankruptcy_case", title: "案件详情", route: "/detail_bankruptcy_case?caseId=5edc65048d6ed44d5cf18aab" },
+            { name: "detail_bankruptcy_case", title: "案件详情", route: "detail_bankruptcy_case?caseId=5edc65048d6ed44d5cf18aab" },
 
         ]
     },
@@ -326,8 +326,8 @@ PUB.menuDemo = [
         name: "list_common",
         title: "通用列表",
         menuItem: [
-            { name: "list_common_js_file", title: "JS文件列表", route: "/list_common?type=js_file" },
-            { name: "list_common_js_code", title: "JS代码块列表", route: "/list_common?type=js_code" },
+            { name: "list_common_js_file", title: "JS文件列表", route: "list_common?type=js_file" },
+            { name: "list_common_js_code", title: "JS代码块列表", route: "list_common?type=js_code" },
 
         ]
     },
@@ -336,9 +336,9 @@ PUB.menuDemo = [
         name: "list",
         title: "列表",
         menuItem: [
-            { name: "list_demo", title: "list_demo1", route: "/list_demo" },
-            { name: "list_static_demo", title: "list_static_demo", route: "/list_static_demo" },
-            { name: "list_common_demo", title: "list_common_demo", route: "/list_common_demo" },
+            { name: "list_demo", title: "list_demo1", route: "list_demo" },
+            { name: "list_static_demo", title: "list_static_demo", route: "list_static_demo" },
+            { name: "list_common_demo", title: "list_common_demo", route: "list_common_demo" },
 
             { name: "list_demo_detail_g_list", title: "detail_g_list详情关联数据列表" },
             { name: "select_file_template", title: "案管-选择文件模板" },
@@ -396,8 +396,8 @@ PUB.menuDemo = [
         title: "其他",
         menuItem: [
             { name: "row_html_tag_demo", title: "html集合组件测试" },
-            { name: "upload_qiniu", title: "upload_qiniu", route: "/upload_qiniu" },
-            { name: "test", title: "test", route: "/test" },
+            { name: "upload_qiniu", title: "upload_qiniu", route: "upload_qiniu" },
+            { name: "test", title: "test", route: "test" },
             { name: "object_demo", title: "对象demo" },
             { name: "list_flex_res", title: "弹性列表" },
             { name: "goods_cart", title: "购物车" },
@@ -405,7 +405,7 @@ PUB.menuDemo = [
             { name: "goods_specs_front_2", title: "商品规格-前台" },
             { name: "wx_edit", title: "微信排版" },
             { name: "detail_list_son_note", title: "笔记的子笔记展示" },
-            { name: "auto_layout", title: "自动化布局" },
+            // { name: "auto_layout", title: "自动化布局" },
         ]
     },
     {
@@ -414,6 +414,8 @@ PUB.menuDemo = [
         menuItem: [
             { name: "tool_replace_space", title: "替换空行" },
             { name: "tool_old_cf_list", title: "替换旧列表配置" },
+            { name: "auto_layout", title: "自动化布局" , route: "/auto_layout"},
+            { name: "js_file_edit", title: "js文件编辑" , route: "/js_file_edit?jsFileId=5eb272bb298e45553493e821"},
         ]
     },
 ];

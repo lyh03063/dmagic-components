@@ -13,13 +13,13 @@
     >
       <el-tabs v-model="activeDemoG" type="card">
         <el-tab-pane :label="g.targetDoc.title" :name="i+''" v-for="(g,i) in listDemo" :key="i">
-          <dm_list_flex_res class="MB20" :list="g.sonList" #default="{item}" col="10">
+          <dm_list_flex_res class="MB20" :list="g.sonList" #default="{item}" col="8">
             <div class="demo_group Cur1" @click="selectDemo(item)">
-              <div class="W100 H100 M_0 DPF" style="justify-content:center;align-items:center;">
+              <div class=" M_0 DPF" style="justify-content:center;align-items:center;width:140px;height:140px;">
                 <img
                   :src="$lodash.get(item.targetDoc,'album[0]url')"
                   alt
-                  style="max-width:100px;max-height:100px;"
+                  style="max-width:140px;max-height:140px;"
                 />
               </div>
               <div class="TAC">{{item.targetDoc.title}}</div>

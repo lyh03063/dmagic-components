@@ -79,7 +79,8 @@
           </el-col>
         </template>
         <template class v-if="cf.btns&&cf.btns.length">
-          <div class="TAC LH50 clear" v-if="!cf.inline">
+          <dm_space height="1" v-if="!cf.inline" ></dm_space>
+          <div class="TAC LH50 clear " v-if="!cf.inline">
             <el-button
               :type="item.type"
               @click="btnClick(item.event,item.validate)"

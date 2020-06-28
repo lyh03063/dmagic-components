@@ -57,7 +57,7 @@ import dm_detail_bankruptcy_case from '../components/bussiness/detail_bankruptcy
 
 
 import dm_c_operate_g_file from '../components/column/operate_g_file.vue'
-
+import dm_c_operate_normal from '../components/column/operate_normal.vue'
 
 
 import { codemirror } from "vue-codemirror";
@@ -84,7 +84,7 @@ import dm_auto_layout from '../components/tool/auto_layout.vue'
 import dm_dialog_select_demo from '../components/tool/dialog_select_demo.vue'
 import dm_single_class_edit from '../components/tool/single_class_edit.vue'
 import dm_row_html_tag from '../components/tool/row_html_tag.vue'
-
+import dm_js_file_edit from '../components/tool/js_file_edit.vue'
 const Components = {
   dm_pannel,dm_list_flex_res,dm_test,
   dm_debug_list, dm_debug_item,dm_json_editor,
@@ -98,8 +98,10 @@ const Components = {
   dm_rel_list_data,dm_pannel_rel_list_data,dm_list_common,
   dm_manage_home,dm_built_file_from_temp,dm_detail_bankruptcy_case,
   dm_modify_password,dm_aplayer,dm_detail_audio,dm_group_audio,
-  dm_c_operate_g_file,dm_list_simple,dm_detail_son_data,
-  dm_ele,dm_auto_layout,dm_dialog_select_demo,dm_single_class_edit,dm_row_html_tag
+  dm_c_operate_g_file,dm_c_operate_normal,
+  dm_list_simple,dm_detail_son_data,
+  dm_ele,dm_auto_layout,dm_dialog_select_demo,dm_single_class_edit,dm_row_html_tag,
+  dm_js_file_edit
 }
 
 

@@ -2,6 +2,7 @@
   <div>
     <!--修改数据表单弹窗-->
     <el-dialog
+      class="n-el-dialog"
       title="修改数据"
       :visible.sync="cf.visible"
       v-if="cf.visible"

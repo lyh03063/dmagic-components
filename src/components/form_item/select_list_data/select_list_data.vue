@@ -11,14 +11,21 @@
 
     <div class v-if="ready">
       <span :title="valueNeed" v-if="!cf.multiple">{{label||valueNeed}}</span>
+      <span class v-if="!(cf.showToolbar===false)">
+        <el-input
+          placeholder="隐藏辅助文本框，用于更新校验"
+          ref="input_help"
+          style="width:0px;height:0px;overflow:hidden"
+        ></el-input>
+        <el-button
+          plain
+          @click="showDialog"
+          size="mini"
+          v-if="!(cf.showBtnSelect===false)"
+        >选择{{cf.dataName||"数据"}}</el-button>
+        <i class="el-icon-refresh" title="刷新数据" @click="refresh" v-if="cf.showBtnRefresh"></i>
+      </span>
 
-      <el-input
-        placeholder="隐藏辅助文本框，用于更新校验"
-        ref="input_help"
-        style="width:0px;height:0px;overflow:hidden"
-      ></el-input>
-      <el-button plain @click="showDialog" size="mini">选择{{cf.dataName||"数据"}}</el-button>
-      <i class="el-icon-refresh" title="刷新数据" @click="refresh" v-if="cf.showBtnRefresh"></i>
       <div class="MT8" v-if="cf.multiple&&!cf.hideCollection">
         <dm_collection
           v-model="valueNeed"
@@ -81,7 +88,7 @@
       </el-dialog>
 
       <!--编辑实体数据弹窗-->
-      <dm_dialog_edit :cf="cf_IN.cfEditDialogEntity"></dm_dialog_edit>
+      <dm_dialog_edit :cf="cf_IN.cfEditDialogEntity" @after-modify="afterModify"></dm_dialog_edit>
       <!--新增实体数据弹窗-->
       <dm_dialog_add :cf="cf_IN.cfCopyDialogEntity" @after-add="afterAdd"></dm_dialog_add>
     </div>
@@ -126,15 +133,18 @@ export default {
     }
   },
   methods: {
+    //函数：{修改实体数据后的回调函数}
+    afterModify: function (doc, ) {
+      let docNeed = this.listComplete.find(d => d._id == doc._id)
+      Object.assign(docNeed, doc);//合并对象
+
+    },
     //函数：{添加数据后的回调函数}
     afterAdd: function (doc, formData) {
       let { _id, } = doc
       let { title } = doc._data;
       this.valueNeed.unshift({ _id, title })//签名插入数据
       this.refresh()//调用：{刷新列表函数}
-
-
-
     },
 
 
@@ -256,7 +266,7 @@ export default {
       } else {
         //Q2：单选
         this.valueNeed = lodash.get(this.selectData, `[0].${this.cf.valueKey || "P1"}`);
-        doc=lodash.get(this.selectData, `[0]`);//当前文档-单选用到
+        doc = lodash.get(this.selectData, `[0]`);//当前文档-单选用到
         this.label = lodash.get(
           this.selectData,
           `[0].${this.cf.labelKey || "name"}`
@@ -277,26 +287,27 @@ export default {
       await this.$nextTick(); //延迟到视图更新
       this.$refs.input_help.blur();
     },
-    /**
-     * @name ajax获取label函数
-     */
 
+    //函数：{ajax获取label函数}
     ajaxGetLabel: async function () {
-      if (!this.value) return;
-      if (!this.cf.pageName) return;
-      let {
-        data: { Doc: docNeed }
-      } = await axios({
-        //请求接口
-        method: "post",
-        url: `${PUB.domain}/crossDetail?page=${this.cf.pageName}`,
-        data: {
-          id: this.value
-        } //传递参数
-      });
-
+      if (!(this.value && this.value.length)) return;
+      let docNeed
+      if (this.cf.pageName) {//Q1：旧版列表
+        let { data: { Doc } } = await axios({ //请求接口
+          method: "post", url: `${PUB.domain}/crossDetail?page=${this.cf.pageName}`,
+          data: { id: this.value }
+        });
+        docNeed = Doc
+      } else {//Q2：通用列表
+        let { data: { doc } } = await axios({//请求接口
+          method: "post", url: `${PUB.domain}/info/commonDetail`,
+          data: { _id: this.value, _systemId: "$all" }
+        });
+        docNeed = doc
+      }
       if (!docNeed) return;
       this.label = docNeed[this.cf.labelKey];
+
     }
   },
   created() {
@@ -307,6 +318,11 @@ export default {
     this.cfList.isShowBreadcrumb = false; //隐藏面包屑导航
     this.cfList.pageSize = 10; //隐藏面包屑导航
     this.cfList.focusMenu = false; //不聚焦菜单
+
+    if (!this.cf.multiple) {//如果不是多选
+      this.cf.cfList.isMultipleSelect = false;//列表变成单选
+      this.ajaxGetLabel(); //调用：{ajax获取label函数}
+    }
 
 
     let _dataType = lodash.get(this.cf.cfList, `objParamAddon._dataType`);
@@ -355,9 +371,7 @@ export default {
     this.refresh()//调用：{刷新列表函数}
   },
   async mounted() {
-    if (!this.cf.multiple) {//如果不是多选
-      this.ajaxGetLabel(); //调用：{ajax获取label函数}
-    }
+
     this.$emit("inited", { vm: this }); //将当前对象抛出
 
   }

@@ -1,21 +1,40 @@
 <template>
   <div class="out">
     <dm_collection
+      ref="collectionTag"
       v-model="valueNeed"
       :show-toolbar="true"
       :cf-form="cf.cfForm"
-      :hidePart="{}"
+      :cfElBtnAdd="cfElBtnAdd"
+      :hidePart="{'btn-add':true}"
       data-slot="dataSlot1"
     >
       <!--插槽内容-->
       <template v-slot:dataSlot1="{doc,docEntity}">
-        <span class>
-          {{doc[cf.labelKey]}}
-          <span class="C_999">{{getSelector(doc)}}</span>
+        <!-- {{docEntity.__id}} -->
+        <span class="DPF">
+          <div class="Cur1 MR4" @click="fold(docEntity)" v-if="doc.children.length">
+            <i class="el-icon-caret-right" :class="{Rotate90:showChildren[docEntity.__id]}"></i>
+            <span class="C_999">[{{doc.children.length}}]</span>
+          </div>
+          <span class="C_3a0 FS14">{{doc[cf.labelKey]}}</span>
+
+          <span class="C_999 MR10 FS14">{{getSelector(doc)}}</span>
+
+          <span class="C_999 MR20 FS14" v-if="doc.desc">({{doc.desc}})</span>
+
+          <el-link class="MR10" v-if="doc.children" @click="addChild(docEntity)">+子元素</el-link>
+      
+          <!-- {{showChildren[docEntity.__id]}} -->
         </span>
-        <!-- ---{{doc.children}}--{{arr}} -->
-        <div class v-if="doc.children">
-          <dm_row_html_tag class v-model="docEntity.children" v-if="docEntity.children"></dm_row_html_tag>
+        <div class="BC_fff PT8 PL8 PR8 PB1" v-if="doc.children" v-show="showChildren[docEntity.__id]">
+          <dm_row_html_tag
+            :ref="`children_${docEntity.__id}`"
+            class
+            v-model="docEntity.children"
+            v-if="docEntity.children"
+            
+          ></dm_row_html_tag>
         </div>
       </template>
     </dm_collection>
@@ -34,6 +53,8 @@ export default {
   },
   data() {
     return {
+      showChildren: {},//显示子元素，必须是一个对象
+      cfElBtnAdd: { text: "+子元素", type: "info", size: "mini", },
       children: null,
     };
   },
@@ -59,7 +80,24 @@ export default {
 
   },
   methods: {
-   
+
+    //函数：{添加子元素函数}
+    addChild: async function (docEntity) {
+
+      let key = `children_${docEntity.__id}`;
+      this.$refs[key].$refs.collectionTag.addGroup()
+
+    },
+
+
+    //函数：{展开/收起函数}
+    fold: function (docEntity) {
+
+      let flag = !this.showChildren[docEntity.__id]
+      this.$set(this.showChildren, docEntity.__id, flag);
+
+    },
+
 
     //函数：{初始化组件配置函数}
     initCF: async function () {
@@ -75,17 +113,19 @@ export default {
           size: "mini",
           formItems: [
             { prop: "tag", label: "标签", type: "input", default: "div" },
+            { prop: "desc", label: "描述", type: "input", default: "" },
             { prop: "text", label: "内部文本", type: "input", default: "新的盒子" },
             {
               prop: "cf", label: "节点配置", default: {}, cfForm: {
                 col_span: 12,
                 formItems: [
+                  { prop: "class", label: "class", type: "input", default: "box_layout" },
                   { prop: "id", label: "id", type: "input" },
-                  { prop: "class", label: "class", type: "input" },
+
                 ]
               }
             },
-            // { prop: "children", label: "children", type: "jsonEditor", default: [] },
+            { prop: "children", show: false, label: "children", type: "jsonEditor", default: [] },
 
           ],
 

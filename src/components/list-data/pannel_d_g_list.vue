@@ -5,10 +5,10 @@
         <div class="DPIB">
           <span class="MR10 FL">{{title}}</span>
           <div class="DPIB" v-if="doc[cf.column]">
-            <el-button class="FL MT6" plain size="mini" @click="fnAddEntity">新增文件</el-button>
+            <el-button class="FL MT6" plain size="mini" @click="fnAddEntity">本地上传</el-button>
             <el-button class="FL MT6" plain size="mini" @click="fnSelect">从文件库选择</el-button>
-            <el-button class="FL MT6" plain size="mini" @click="fnDelete">移出选中文件</el-button>
-            <el-button class="FL MT6" plain size="mini" @click="dialogFileTemp">从模板创建</el-button>
+            <el-button class="FL MT6" plain size="mini" @click="dialogFileTemp">从文件模板创建</el-button>
+             <el-button class="FL MT6" plain size="mini" @click="fnDelete">移出选中文件</el-button>
           </div>
         </div>
       </template>

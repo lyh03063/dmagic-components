@@ -7,7 +7,7 @@
     <div class="boxMain layout" v-bind="cf.boxMain">
       <div class="boxLeft layout" v-bind="cf.boxLeft">
         {{cf.boxLeft.text}}
-        <slot name="boxLeft" :cf="cf" :vm_title_bar="vm_title_bar" ></slot>
+        <slot name="boxLeft" :cf="cf" :vm_title_bar="vm_title_bar"></slot>
       </div>
       <div is="div" class="boxMiddle layout" v-bind="cf.boxMiddle">
         <div class @click="fnClickTitle">{{cf.boxMiddle.text}}</div>
@@ -47,9 +47,18 @@ export default {
   components: {},
   data() {
     return {
-      vm_title_bar:null,
+      vm_title_bar: null,
 
     };
+  },
+  watch: {
+    title: {
+      handler(newVal, oldVal) {
+        console.log('title changed');
+        this.cf.boxMiddle.text = this.title//更新标题
+      },
+      immediate: true,
+    }
   },
   methods: {
     //函数：{标题点击函数}
@@ -108,7 +117,7 @@ export default {
   },
   created() {
     this.initCf()//调用：{初始化组件配置函数}
-    this.vm_title_bar=this;
+    this.vm_title_bar = this;
 
 
 

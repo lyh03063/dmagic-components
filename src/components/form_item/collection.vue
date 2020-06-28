@@ -14,96 +14,99 @@
     </div>
     <div class v-if="valueNeed && valueNeed.length &&readyJs">
       <ul>
-        <li
-          v-for="(doc,i) in valueNeed"
-          :key="doc.__id"
-          :class="{'data-group':true,'edit':editItem==i,'active':focusItem==i,'data-form-group':listType=='form'}"
-          @mouseenter="mouseenterG(i)"
-          @mouseleave="focusItem=999"
-          @dblclick.ctrl="editItem=i"
-        >
-          <!--序号-->
-          <i class="sort-num" v-if="listType!='form'&&showSortNum">{{i+1}}</i>
-          <div class="FX1">
-            <div v-if="editItem==i">
-              <!--注意这里v-model要直接绑定valueNeed才行-->
-              <dm_json_editor v-model="valueNeed[i]" @blur="afterBlur"></dm_json_editor>
-            </div>
-            <template class v-else>
-              <!--如果是表单形式-->
-              <dm_dynamic_form
-                ref="dynamicForm"
-                :cf="cfForm"
-                v-model="valueNeed[i]"
-                v-if="listType=='form'"
-              ></dm_dynamic_form>
-              <!--有插槽，传递副本和实体数据！！！！！-->
-              <slot
-                v-else-if="dataSlot"
-                :name="dataSlot"
-                :doc="handelShowDoc(doc)"
-                :docEntity="doc"
-              ></slot>
-              <span v-else>{{handelShowDoc(doc)}}</span>
-              <div class="tool-bar" v-if="focusItem==i&&showToolbar">
-                <i
-                  class="el-icon-download btn-op Rotate180"
-                  title="置顶"
-                  @click="move(i, 'top')"
-                  v-if="i>0"
-                ></i>
-                <i class="el-icon-top btn-op" title="上移" @click="move(i, 'up')" v-if="i>0"></i>
-                <i
-                  class="el-icon-bottom btn-op"
-                  title="下移"
-                  @click="move(i, 'down')"
-                  v-if="i<valueNeed.length-1"
-                ></i>
-                <i
-                  class="el-icon-download btn-op"
-                  title="置底"
-                  @click="move(i, 'bottom')"
-                  v-if="i<valueNeed.length-1"
-                ></i>
-                <i
-                  class="el-icon-edit btn-op"
-                  title="编辑"
-                  @click="showEditDataDialog(i)"
-                  v-if="ifShow('btn-edit')"
-                ></i>
-
-                <i
-                  class="el-icon-copy-document btn-op"
-                  title="复制"
-                  @click="copyData(i)"
-                  v-if="ifShow('btn-copy')"
-                ></i>
-                <!--插槽-自定义工具栏按钮-->
-                <slot name="btn_toolbar" :doc="handelShowDoc(doc)"></slot>
-
-                <i
-                  class="el-icon-delete btn-op"
-                  title="删除"
-                  @click="deleteData(i)"
-                  v-if="ifShow('btn-delete')"
-                ></i>
+        <draggable :options="{handle:'.sort-num'}" v-model="valueNeed" v-if="readyJs">
+          <li
+            v-for="(doc,i) in valueNeed"
+            :key="doc.__id"
+            :class="{'data-group':true,'edit':editItem==i,'active':focusItem==i,'data-form-group':listType=='form'}"
+            @mouseenter="mouseenterG(i)"
+            @mouseleave="focusItem=999"
+            @dblclick.ctrl.shift="editItem=i"
+          >
+            <!--序号-->
+            <i class="sort-num" v-if="listType!='form'&&showSortNum">{{i+1}}</i>
+            <div class="FX1 ">
+              <div v-if="editItem==i">
+                <!--注意这里v-model要直接绑定valueNeed才行-->
+                <dm_json_editor v-model="valueNeed[i]" @blur="afterBlur"></dm_json_editor>
               </div>
-            </template>
-          </div>
-        </li>
+              <template class v-else>
+                <!--如果是表单形式-->
+                <dm_dynamic_form
+                  ref="dynamicForm"
+                  :cf="cfForm"
+                  v-model="valueNeed[i]"
+                  v-if="listType=='form'"
+                ></dm_dynamic_form>
+                <!--有插槽，传递副本和实体数据！！！！！-->
+                <slot
+                  v-else-if="dataSlot"
+                  :name="dataSlot"
+                  :doc="handelShowDoc(doc)"
+                  :docEntity="doc"
+                ></slot>
+                <span v-else class="ML5">{{handelShowDoc(doc)}}</span>
+                <div class="tool-bar" v-if="focusItem==i&&showToolbar">
+                  <i
+                    class="el-icon-download btn-op Rotate180"
+                    title="置顶"
+                    @click="move(i, 'top')"
+                    v-if="i>0"
+                  ></i>
+                  <i class="el-icon-top btn-op" title="上移" @click="move(i, 'up')" v-if="i>0"></i>
+                  <i
+                    class="el-icon-bottom btn-op"
+                    title="下移"
+                    @click="move(i, 'down')"
+                    v-if="i<valueNeed.length-1"
+                  ></i>
+                  <i
+                    class="el-icon-download btn-op"
+                    title="置底"
+                    @click="move(i, 'bottom')"
+                    v-if="i<valueNeed.length-1"
+                  ></i>
+                  <i
+                    class="el-icon-edit btn-op"
+                    title="编辑"
+                    @click="showEditDialog(i)"
+                    v-if="ifShow('btn-edit')"
+                  ></i>
+
+                  <i
+                    class="el-icon-copy-document btn-op"
+                    title="复制"
+                    @click="copyData(i)"
+                    v-if="ifShow('btn-copy')"
+                  ></i>
+                  <!--插槽-自定义工具栏按钮-->
+                  <slot name="btn_toolbar" :doc="handelShowDoc(doc)"></slot>
+
+                  <i
+                    class="el-icon-delete btn-op"
+                    title="删除"
+                    @click="deleteData(i)"
+                    v-if="ifShow('btn-delete')"
+                  ></i>
+                </div>
+              </template>
+            </div>
+          </li>
+        </draggable>
       </ul>
     </div>
 
     <!--修改对象弹窗-->
+    <!--用v-show="showDialog"，可避免日期控出错-->
     <el-dialog
       custom-class="n-el-dialog"
       width="75%"
-      title="编辑一个对象"
+      title="编辑数据"
       :close-on-press-escape="false"
       :close-on-click-modal="false"
       :append-to-body="true"
       v-bind:visible.sync="showDialog"
-      v-show="showDialog"
+      v-if="showDialog"
     >
       <div class>
         <!--注意这里v-model要直接绑定valueNeed才行-->
@@ -179,11 +182,17 @@ export default {
   watch: {
     value: {
       handler(newVal, oldVal) {
-        console.log(`collection-value:#################`);
         if (!this.value) {
           //
           this.valueNeed = [];
           this.$emit("input", this.valueNeed);//触发外部数据变更
+        } else {
+
+          this.valueNeed.forEach(itemEach => {//循环：{valueNeed数组}
+            if (!itemEach.__id) {//如果没有__id，补上，因为很多地方要用到
+              itemEach.__id = util.getTimeRandom()
+            }
+          })
         }
       },
       immediate: true,
@@ -193,16 +202,11 @@ export default {
   methods: {
     //函数：{提交函数}
     submit: async function () {
-      console.log(`submit-1`);
       if (this.action == "add") {
-          console.log(`submit-2`);
-          console.log(`this.formDataEdit:`, this.formDataEdit);
-          console.log(`this.valueNeed:`, this.valueNeed);
 
 
         this.valueNeed.unshift(this.formDataEdit) //修改原来的数据值，替换成表单数据
 
-          console.log(`submit-3`);
       } else if (this.action == "modify") {
         this.$set(this.valueNeed, this.editIndex, this.formDataEdit);
         // this.valueNeed[this.editIndex] = this.formDataEdit//修改原来的数据值，替换成表单数据
@@ -212,7 +216,6 @@ export default {
     },
     //函数：{开始拖拽排序函数}
     mouseenterG: async function (i) {
-      console.log(`mouseenterG`);
       if (this.dragging) return
       this.focusItem = i
     },
@@ -260,7 +263,10 @@ export default {
 
       //__id为了防止新增一组时出现残留值,防止出现空对象
       let obj = { __id: util.getTimeRandom() }; //
-      this.cfForm.formItems.forEach(itemEach => {
+
+      let { formItems } = this.cfForm;//表单字段
+      formItems = lodash.cloneDeep(formItems); //深拷贝，避免子对象产生耦合
+      formItems.forEach(itemEach => {//默认值处理***
         if (itemEach.default !== null && itemEach.default !== undefined) {
           //如果默认值存在
           obj[itemEach.prop] = itemEach.default;
@@ -269,9 +275,9 @@ export default {
 
       if (this.listType == "form") {
         //如果不是表单类型
-        // this.showEditDataDialog(0); //编辑第1条
-        this.valueNeed.unshift(obj);//前方追加一组新珠江
-        // this.valueNeed = util.deepCopy(this.valueNeed);
+
+        this.valueNeed.unshift(obj);//前方追加一组新数据
+
       } else {
         this.formDataEdit = obj//表单数据切换
         this.showDialog = true;
@@ -285,7 +291,7 @@ export default {
      * @name 显示修改对象弹窗的函数
      */
 
-    showEditDataDialog(i) {
+    showEditDialog(i) {
       this.action = "modify";
       this.editIndex = i;
       //深拷贝
@@ -397,7 +403,6 @@ export default {
   color: #fff;
   font-style: normal;
   cursor: move;
-  margin-right: 8px;
 }
 
 .sortable-drag {

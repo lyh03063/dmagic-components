@@ -11,7 +11,6 @@
       v-for="(item,i) in arrCf"
       :key="i"
       :ref="`pannel`"
-     
     >
       <template #titleBar_boxLeft="{vm_title_bar,vm_pannel}">
         <div class="PT1 PL6 PR6 WP100 HP100 BC_ddd Cur1" @click="vm_pannel.toggle()">
@@ -129,6 +128,19 @@ export default {
           },
         },
         {
+          title: "过渡/2D转换",
+          cfPannel: lodash.cloneDeep(cfPannel),
+          cfForm: {
+            col_span: 12,
+            size: "mini",
+            labelWidth: "180px",
+            formItems: [
+              F_ITEMS["transition"],
+
+            ],
+          },
+        },
+        {
           title: "浮动/定位",
           cfPannel: lodash.cloneDeep(cfPannel),
           cfForm: {
@@ -137,12 +149,125 @@ export default {
             labelWidth: "180px",
             formItems: [
               F_ITEMS["float"],
+              {
+                label: "clear(清除浮动)",
+                prop: "clear",
+                type: "select",
+                options: [
+                  { value: "both", label: "both" },
+                  { value: "none", label: "none" },
+
+                ]
+              },
               F_ITEMS["position"],
               F_ITEMS["z-index"],
               F_ITEMS["top"],
               F_ITEMS["right"],
               F_ITEMS["bottom"],
               F_ITEMS["left"],
+            ],
+          },
+        },
+
+        {
+          title: "flex布局",
+          cfPannel: lodash.cloneDeep(cfPannel),
+          cfForm: {
+            col_span: 24,
+            size: "mini",
+            labelWidth: "240px",
+            formItems: [
+              {
+                label: "flex-direction(主轴方向)",
+                prop: "flex-direction",
+                type: "radio",
+                options: [
+                  { value: "row", label: "row" },
+                  { value: "row-reverse", label: "row-reverse" },
+                  { value: "column", label: "column" },
+                  { value: "column-reverse", label: "column-reverse" },
+                ]
+              },
+              {
+                label: "flex-wrap(单轴线排不下如何换行)",
+                prop: "flex-wrap",
+                type: "radio",
+                options: [
+                  { value: "nowrap", label: "nowrap" },
+                  { value: "wrap", label: "wrap" },
+
+                ]
+              },
+              {
+                label: "justify-content(主轴对齐方式)",
+                prop: "justify-content",
+                type: "radio",
+                options: [
+                  { value: "flex-start", label: "flex-start" },
+                  { value: "flex-end", label: "flex-end" },
+                  { value: "center", label: "center" },
+                  { value: "space-between", label: "space-between" },
+                  { value: "space-around", label: "space-around" },
+
+
+                ]
+              },
+              {
+                label: "align-items(交叉轴对齐方式)",
+                prop: "align-items",
+                type: "radio",
+                options: [
+                  { value: "stretch", label: "stretch" },
+                  { value: "flex-start", label: "flex-start" },
+                  { value: "flex-end", label: "flex-end" },
+                  { value: "center", label: "center" },
+                  { value: "baseline", label: "baseline" },
+
+                ]
+              },
+              {
+                label: "align-content(多根轴线对齐方式)",
+                prop: "align-content",
+                type: "radio",
+                options: [
+                  { value: "stretch", label: "stretch" },
+                  { value: "flex-start", label: "flex-start" },
+                  { value: "flex-end", label: "flex-end" },
+                  { value: "center", label: "center" },
+                  { value: "space-between", label: "space-between" },
+                  { value: "space-around", label: "space-around" },
+                ]
+              },
+
+            ],
+          },
+        },
+
+        {
+          title: "其他",
+          cfPannel: lodash.cloneDeep(cfPannel),
+          cfForm: {
+            col_span: 12,
+            size: "mini",
+            labelWidth: "180px",
+            formItems: [
+
+              {
+                label: "content(内容)",
+                prop: "content",
+              },
+              F_ITEMS["overflow"],
+              F_ITEMS["overflow-x"],
+              /*
+              overflow-y
+              这个样式会影响到overflow，它存在时会产生很奇怪的效果
+              任何一个字段调整都会影响到overflow
+              */
+              F_ITEMS["overflow-y"],
+              F_ITEMS["text-overflow"],
+              F_ITEMS["white-space"]
+
+
             ],
           },
         },

@@ -4,7 +4,12 @@
     <dm_debug_list>
       <dm_debug_item v-model="docCase" />
     </dm_debug_list>
-    <div class="TAC LH32 FWB FS18 MB10">{{docCase.title}}</div>
+    <div class="TAC LH32 FWB FS18 MB10">
+      {{docCase.title}}
+      <el-link class="el-icon-edit" @click="cfEditDialog.visible = true;">编辑基础信息</el-link>
+
+      <dm_dialog_edit :cf="cfEditDialog" @after-modify="afterModify"></dm_dialog_edit>
+    </div>
     <el-tabs v-model="activeName" type="card" v-if="ready">
       <el-tab-pane label="案件/管理团队" name="tab1" lazy>
         <dm_pannel_new class="MB20" title="基本信息" :cf="cfPannel1">
@@ -50,6 +55,7 @@
         <dm_pannel_d_g_list :cf="cfG9" class :doc="docCase" title="现场照片"></dm_pannel_d_g_list>
       </el-tab-pane>
       <el-tab-pane label="债权人信息" name="tab3" lazy>
+        <dm_pannel_rel_list_data class="MB20" title="债权表" :doc="docCase" :cf="cfRel_creditorRights"></dm_pannel_rel_list_data>
         <dm_pannel_d_g_list :cf="cfG10" class :doc="docCase" title="债权申报文书"></dm_pannel_d_g_list>
 
         <dm_pannel_d_g_list :cf="cfG11" class :doc="docCase" title="国家机关"></dm_pannel_d_g_list>
@@ -113,7 +119,7 @@
 
 
 export default {
-  name:"detail_bankruptcy_case",
+  name: "detail_bankruptcy_case",
   mixins: [MIX.base],
   components: {
   },
@@ -144,6 +150,17 @@ export default {
 
 
     return {
+      //第2组配置
+      cfEditDialog: {
+        listType: "common", //通用型列表-影响urlModify
+        cfFormModify: {
+          paramAddonInit: {
+            _id: null,
+            _systemId: "sys_lawyer_case",
+            _dataType: "bankruptcy_case"
+          }
+        }
+      },
       cfListPerson: {//管理人-简单列表组件配置
         idKey: "userName", labelKey: "nickName",
         ajax: {
@@ -156,12 +173,14 @@ export default {
       styleListFile: {
         padding: "10px 0  0 0"
       },
-      activeName: 'tab1',
+      activeName: 'tab3',
       docCase: {},
 
       cfPannel1: lodash.cloneDeep(PUB.cfPannel.gray_bar),
       cfRel_sealRecord: util.creatCfRelList({ cfList: PUB.listCF.list_seal_use_record, }),//公章使用记录
       cfRel_involvedCase: util.creatCfRelList({ cfList: PUB.listCF.list_involved_case, }),//涉案信息
+
+      cfRel_creditorRights: util.creatCfRelList({ cfList: PUB.listCF.list_creditor_rights_case, }),//债权表
       cfG1: {
         ...cfGFile, dataTypeName: "管理团队资料",
         column: "g_bankruptcy_file_1", columnCount: "count_bankruptcy_file_1",
@@ -295,6 +314,12 @@ export default {
     };
   },
   methods: {
+    //函数：{修改基础信息后的回调函数}
+    afterModify: async function (docModify) {
+      console.log(`docModify:####`, docModify);
+      this.docCase = docModify;
+
+    },
     //函数：{获取案件详情函数}
     async getCaseDoc() {
       let { data } = await axios({  //请求接口
@@ -318,7 +343,10 @@ export default {
       }
 
 
-
+      {//处理债权列表配置
+        util.extendObj({ obj: this.cfRel_creditorRights, path: "cfList.formDataAddInit", objAdd: params })
+        util.extendObj({ obj: this.cfRel_creditorRights, path: "cfList.objParamAddon.findJson", objAdd: params })
+      }
 
       this.ready = true;
 
@@ -334,6 +362,8 @@ export default {
     if (this.docDetail) {//
       this.caseId = this.docDetail._id
     }
+    this.cfEditDialog.cfFormModify.paramAddonInit._id = this.caseId
+
     this.getCaseDoc(); //调用：{获取案件详情函数}
   }
 

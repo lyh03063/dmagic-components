@@ -2,14 +2,25 @@
   <div>
     <dm_debug_list>
       <dm_debug_item v-model="arrCss" />
+      <dm_debug_item v-model="docDemo" />
     </dm_debug_list>
-    <div class="H50 DPF BC_000 PL15 MB15" style="background:rgb(84, 92, 100)">
-      <div class="LH50 C_fff FS24">码邦科技- CSS在线编辑器</div>
+    <div class="H50 DPF BC_000 PL15 MB5" style="background:rgb(84, 92, 100);">
+      <div class="LH50 C_fff FS24 MR20 FX1">码邦科技-CSS在线编辑器</div>
+      <div class="PT8 PR15" v-if="demoId">
+        <span class="C_fff FS16">{{docDemo.title}}</span>
+        <el-button
+          plain
+          @click="saveDemo"
+          size="mini"
+          v-if="$power('groupDataList.all.modify')"
+        >保存demo</el-button>
+      </div>
     </div>
-    <div class="DPF PL8 PR8">
+    <div class="DPF PL8 PR8" style="height: calc(100vh - 55px);">
       <div
+        id="id_html_box"
         class="MR5"
-        style="width:180px;background-image:url('http://tool.alixixi.com/csseditor/images/grid.gif');"
+        style="width:260px;background-image:url('http://tool.alixixi.com/csseditor/images/grid.gif');"
       >
         <!--html元素-->
         <dm_ele
@@ -28,32 +39,42 @@
               <el-button plain @click="dialogSelectDemo" size="mini">demo库</el-button>
             </div>
           </div>
-
           <el-tabs v-model="activeName" type="card">
-            <el-tab-pane label="Css配置" name="tab1">
+            <el-tab-pane label="Html配置" name="tab1">
+              <div class="PB8">
+                <el-button
+                  plain
+                  @click="$refs.rowhtml.$refs.collectionTag.addGroup()"
+                  size="mini"
+                >+ 一级元素</el-button>
+              </div>
+              <div class="box_scroll">
+                <dm_row_html_tag class v-model="arrHtml" ref="rowhtml"></dm_row_html_tag>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="Css配置" name="tab2">
+              <div class="PB8">
+                <el-button plain @click="$refs.collectionCss.addGroup()" size="mini">添加一组样式</el-button>
+              </div>
               <!-- {{arrCss}} -->
               <div class="box_scroll">
                 <!--集合组件-->
                 <dm_collection
+                  ref="collectionCss"
                   v-model="arrCss"
                   :show-toolbar="true"
                   :cf-form="cfFormClass"
-                  :hidePart="{}"
+                  :cfElBtnAdd="cfElBtnAdd"
+                  :hidePart="{'btn-add':true}"
                   :showSortNum="false"
                   data-slot="dataSlot1"
                 >
                   <!--插槽内容-->
                   <template v-slot:dataSlot1="{doc,docEntity}">
-                    <!-- docEntity: {{docEntity}} -->
-                    <!-- <div class="FWB FS16 PT4 PB4">{{docEntity.className}}的样式配置</div> -->
-                    <!--单类样式编辑组件-->
-                    <!-- <dm_single_class_edit v-model="docEntity.css"></dm_single_class_edit> -->
-
-                    <dm_pannel_new
-                      :cf="cfPannel"
-                      :title="`${docEntity.className}样式配置`"
-                      :key="docEntity.className"
-                    >
+                    <dm_pannel_new :cf="cfPannel" :title="`${docEntity.selector}`">
+                      <template #titleBar_boxMiddle>
+                        <span class="C_999 ML10">{{docEntity.desc?' '+docEntity.desc:''}}</span>
+                      </template>
                       <template #titleBar_boxLeft="{vm_title_bar,vm_pannel}">
                         <div
                           class="PT1 PL6 PR6 WP100 HP100 BC_999 C_fff Cur1"
@@ -65,16 +86,13 @@
                         </div>
                       </template>
                       <div class="PT10 PL15">
+                        <!--单类样式编辑组件-->
                         <dm_single_class_edit v-model="docEntity.css"></dm_single_class_edit>
                       </div>
                     </dm_pannel_new>
                   </template>
                 </dm_collection>
               </div>
-            </el-tab-pane>
-
-            <el-tab-pane label="Html配置" name="tab2">
-              <dm_row_html_tag class v-model="arrHtml"></dm_row_html_tag>
             </el-tab-pane>
             <el-tab-pane label="代码生成" name="tab3">
               <div class>html：</div>
@@ -93,14 +111,12 @@
     ></dm_dialog_select_demo>
   </div>
 </template>
-
 <script>
 
 PUB.cfPannel.gray_bar3 = {//浅灰色栏
   showContent: false,//内容块折叠
   cfTitleBar: {
     boxMiddle: {
-
       style: { "font-size": "15px", "padding": "0 0 0 10px", "height": "34px", "line-height": "34px", },
     },
     boxMain: {
@@ -113,80 +129,59 @@ let cfPannel = lodash.cloneDeep(PUB.cfPannel.gray_bar3)
 
 
 export default {
+  mixins: [MIX.base],
   components: {},
   data() {
     return {
+      demoId: null,
+      docDemo: null,
+      cfElBtnAdd: { text: "+添加一组样式", type: "info", size: "mini", },
       cfPannel: lodash.cloneDeep(cfPannel),
       formDataAddCss: {},
       cfFormClass: {//集合-样式新增，修改的表单
         size: "mini",
         formItems: [
-          { prop: "className", label: "类名", type: "input" },
+          {
+            prop: "selector", label: "选择器", type: "input", default: ".xxxx",
+            frequency: {
+              sytle: { width: '148px' },
+              dataType: "array",
+              options: [{ value: ".box_1", label: ".box_1类" }, { value: ".box_1:hover", label: ".box_1:hover鼠标悬停" },]
+            }
+          },
           { prop: "desc", label: "描述", type: "input", },
           {
-            show: false,//字段隐藏，主要是活动默认值！！！
-            prop: "css", label: "描述", default: { normal: {}, hover: {} }, type: "jsonEditor",
+            show: false,//字段隐藏，主要是为了设置默认值！！！
+            prop: "css", label: "描述", default: { "transition": "0.5s", }, type: "jsonEditor",
           },
         ],
       },
-
-      focusClass: "box_1",
-      arrCss: [
-        {
-          className: "box_1",
-          css: {
-            normal: { "transition": "0.5s", "width": "180px", "border-width": "3px", "border-style": "solid", "border-color": "#000", },
-            hover: {},//这个不能去掉
-          }
-
-        },
-        {
-          className: "box_2",
-          css: {
-            normal: { "transition": "0.5s", "border-width": "3px", "border-style": "solid", "border-color": "#f90", },
-            hover: {},
-          },
-        },
-        {
-          className: "box_3",
-          css: {
-            normal: { "transition": "0.5s", "width": "60px", "height": "60px", "border-width": "3px", "border-style": "solid", "border-color": "#f90", },
-            hover: {},
-
-          },
-
-        },
-      ],
-
-      vm_dialog_select_demo: null,//选择demo组件对象
-      vm_form_css1: null,
-      vm_form_css2: null,
-
-
-
-
-      activeName: "tab1",
-
-
-      htmlCode: "",
-      cssCode: "",
-
       arrHtml: [
         {
+          __id111: "202006231111",//这个要加，否则影响集合的
           tag: "div",
-          text: "演示盒子",
+          text: "",
           cf: {
-            id: "id_box1",
             style: {},
-            class: "box_1 MB8",
+            class: "box_out",
           },
           children: [
             {
+              __id: "202006231112",
               tag: "div",
-              text: "盒子1-1",
+              text: "内盒子",
+              children: [],
               cf: {
-                style: { "padding": "10px" },
-                class: "box_2",
+                class: "box_in",
+              }
+            },
+            {
+              __id: "202006231113",
+              tag: "div",
+              text: "内盒子",
+              children: [],
+              cf: {
+                class: "box_in",
               }
             },
           ]
@@ -199,125 +194,144 @@ export default {
         //     class: "box_3",
         //   }
         // },
-      ]
-
+      ],
+      arrCss: [
+        // {
+        //   selector: ".box_layout",
+        //   desc:"通用布局",
+        //   css: { "transition": "0.5s", "padding": "10px", "border-width": "1px", "border-style": "solid", "border-color": "#666", }
+        // },
+        {
+          selector: ".box_out",
+          desc: "外盒子样式",
+          css: { "transition": "0.5s", "width": "100%", "height": "", "border-width": "3px", "border-style": "solid", "border-color": "#666", }
+        },
+        {
+          selector: ".box_in",
+          desc: "内盒子样式",
+          css: { "transition": "0.5s", "border-width": "3px", "border-style": "solid", "border-color": "#f60", }
+        },
+        // {
+        //   selector: ".box_2",
+        //   css: { "transition": "0.5s", "border-width": "3px", "border-style": "solid", "border-color": "#f90", },
+        // },
+      ],
+      vm_dialog_select_demo: null,//选择demo组件对象
+      vm_form_css1: null,
+      vm_form_css2: null,
+      activeName: "tab1",
+      htmlCode: "",
+      cssCode: "",
     };
   },
-
   watch: {
     arrCss: {//监听到arrClass变化，立马更新样式
       handler(newVal, oldVal) {
         console.log('arrCss changed');
         this.updatePageCss()//调用：{更新页面样式函数}
-
-
       },
       immediate: true,
       deep: true
     },
-
+    arrHtml: {//监听到arrClass变化，立马更新样式
+      async handler(newVal, oldVal) {
+        console.log('arrHtml changed');
+        await util.timeout(500); //延迟
+        this.htmlCode = $("#id_html_box").html()//调用：{返回某节点的html代码的函数}
+      },
+      immediate: true,
+      deep: true
+    },
   },
   methods: {
-
-
-
     //函数：{更新页面样式函数}
     updatePageCss: async function () {
-
       let cssCode = ""
-
-
       this.arrCss.forEach(itemEach => {//循环：{000数组}
-        let { className, css } = itemEach
-        let { normal, hover } = css
-        let cssNormal = util.objToCss(normal)//函数：{将Css对象转成css代码函数}
-        let cssHover = util.objToCss(hover)//函数：{将Css对象转成css代码函数}
-
+        let { selector, css } = itemEach
+        let cssNormal = util.objToCss(css)//函数：{将Css对象转成css代码函数}
         cssCode += `
-
 /*盒子样式*/
-.${className}{${cssNormal}}`
-        cssCode += `
-/*鼠标悬停样式*/
-.${className}:hover{${cssHover}}`
-
-
+${selector}{${cssNormal}}`
       })
-
-
       this.cssCode = cssCode
       console.log(`cssCode:############`, cssCode);
-
-
-
-
       util.addCssToPage({ css: this.cssCode })//调用：{输出css代码到当前页面的函数}
     },
-
-
-
     //函数：{选择demo后的回调函数}
     afterSelectDemo: async function ({ doc }) {
-
       doc = lodash.cloneDeep(doc);//深拷贝，避免影响数据源
       let { arrCss, arrHtml } = doc
       let { vm_dialog_select_demo } = this;
       vm_dialog_select_demo.hide()
       this.arrHtml = arrHtml//Css代码更新
       this.arrCss = arrCss//Css代码更新
-      // this.updatePageCss()//调用：{更新页面样式函数}
       this.$message.success('切换demo成功');
-
     },
-
-
-
     //函数：{打开选择demo弹窗函数}
     dialogSelectDemo: async function () {
       let { vm_dialog_select_demo } = this;
       if (!vm_dialog_select_demo) return;
       vm_dialog_select_demo.show()
-
+    },
+    //函数：{保存demo函数}
+    saveDemo: async function () {
+      let clickStatus = await this.$confirm("确定修改？").catch(() => { });
+      if (clickStatus != "confirm") return
+      let { arrCss, arrHtml } = this
+      await axios({//修改接口-当前父任务
+        method: "post", url: `${PUB.domain}/info/commonModify`,
+        data: {
+          _id: this.demoId, _systemId: "$all", _dataType: "front_demo",
+          _data: { arrCss, arrHtml }
+        }
+      });
+      this.$message.success('修改成功');
+    },
+    //函数：{获取demo详情函数}
+    getDemoDoc: async function () {
+      let { data } = await axios({  //请求接口
+        method: "post", url: `${PUB.domain}/info/commonDetail`,
+        data: { _id: this.demoId, _systemId: "$all" } //传递参数
+      });
+      this.docDemo = data.doc;
+      let { arrCss, arrHtml } = data.doc
+      this.arrHtml = arrHtml//Css代码更新
+      this.arrCss = arrCss//Css代码更新
     },
   },
   created() {
-
-
-
+    this.demoId = this.$route.query.demoId;//
+    if (this.demoId) {//
+      this.getDemoDoc(); //调用：{获取demo详情函数}
+    }
   },
   async mounted() {
-
-    this.htmlCode = util.getDomHtml($("#id_box1"))//调用：{返回某节点的html代码的函数}
 
   }
 };
 </script>
-
-<style >
+<style scoped>
 .panel_config {
   border-left: 1px solid #999;
   padding: 0 0 0 10px;
 }
-
 .box_scroll {
-  height: calc(100vh - 185px);
+  height: calc(100vh - 155px);
   overflow-y: auto;
   padding: 0 5px 0 0;
 }
-.el-input__inner {
+.out >>> .el-input__inner {
   color: #000;
   /* font-weight: 700; */
   font-family: Arial, Helvetica, sans-serif;
 }
-
 .btn_class {
   border: 1px #ddd solid;
   border-radius: 5px;
   padding: 5px;
-
   cursor: pointer;
 }
-
 .btn_class.focus {
   border: 1px #f60 solid;
 }

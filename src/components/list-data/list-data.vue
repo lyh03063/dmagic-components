@@ -129,6 +129,22 @@
           :show-overflow-tooltip="column.showOverflowTooltip"
           :key="column.__id"
         >
+          <!-- <el-table-column
+          prop="province"
+          label="省份"
+          width="120">
+        </el-table-column> -->
+     
+
+          <!--如果是多级表头-->
+
+          <el-table-column
+            class
+            v-for="(columnSon,i) in column.columnChildren"
+             v-bind="columnSon"
+            :key="i"
+          ></el-table-column>
+
           <!-- slot-scope="scope" -->
           <template v-slot="scope">
             <div class="DPI">
@@ -192,15 +208,11 @@
     </el-table>
     <div class="OFH" v-if="isShowPageLink">
       <el-pagination
-  
-      
         @current-change="handleCurrentChange"
         :current-page.sync="objParam.pageIndex"
         :total="allCount"
         :pageSize="objParam.pageSize"
-    
         @size-change="handleSizeChange"
-  
         v-bind="cf.cfPagination"
       ></el-pagination>
     </div>
@@ -245,7 +257,7 @@ import listDialogs from "./list-dialogs";
 // import { log } from "util";
 export default {
   name: "dm_list_data", //组件名，用于递归
-  components: {    listDialogs, 
+  components: {    listDialogs,
   }, //注册组件
   props: {
     value: Array, //绑定的静态数据
@@ -260,7 +272,7 @@ export default {
   data() {
     return {
       id: `id_${util.getTimeRandom()}`,//随机Id，导出excel表格时需用到
-      loading:false,//加载中
+      loading: false,//加载中
       formModifyRow: {},//字段修改弹窗表单数据
       cfEditDialogRow: {},//字段修改弹窗配置
       cfEditItem: null,//当前修改字段的附加配置
@@ -334,13 +346,13 @@ export default {
     //函数：{行拖拽功能初始化函数}
     async rowDrop() {
 
-       await util.loadJs({ url: `//qn-static.dmagic.cn/Sortable.1.10.2.min.js` })//加载
+      await util.loadJs({ url: `//qn-static.dmagic.cn/Sortable.1.10.2.min.js` })//加载
       // 此时找到的元素是要拖拽元素的父容器-
       //***注意id的使用，这样才能支持但跟页面内多组拖拽排序
       const tbody = document.querySelector(`#${this.id} .el-table__body-wrapper tbody`);
       const _this = this;
       Sortable.create(tbody, {
-         handle: '.drag_handel',//执行拖拽的元素
+        handle: '.drag_handel',//执行拖拽的元素
         //  指定父元素下可被拖拽的子元素
         draggable: ".el-table__row",
         onEnd({ newIndex, oldIndex }) {
@@ -639,7 +651,7 @@ export default {
     },
     //-------------ajax获取数据列表函数--------------
     async getDataList() {
-      this.loading=true;//加上loading
+      this.loading = true;//加上loading
       //最终需要提交的参数
       let objParamFinal = util.deepCopy(this.objParam); //深拷贝,后续处理数据避免影响查询表单
       /****************************将空数组处理成null-START****************************/
@@ -690,7 +702,7 @@ export default {
         // }))
       }
       this.$emit("after-search", this.tableData); //触发外部事件
-      this.loading=false;//取消loading
+      this.loading = false;//取消loading
     },
     //函数：{初始化组件cf配置函数}
     initCF: async function () {
@@ -805,7 +817,7 @@ export default {
     });
   },
   async mounted() {
-     this.$emit("inited", {vm:this}); //将当前对象抛出
+    this.$emit("inited", { vm: this }); //将当前对象抛出
     await util.timeout(30); //延迟,处理getDataList中处理空数组字段需要，
     console.warn("神奇！！");
     //不加这一句的话一开始空数组是undefined，但提交时却变成 []，神奇！！
