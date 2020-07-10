@@ -324,11 +324,40 @@ PUB.menuDemo = [
 
     {
         name: "list_common",
-        title: "通用列表",
+        title: "sys_api",
         menuItem: [
-            { name: "list_common_js_file", title: "JS文件列表", route: "list_common?type=js_file" },
-            { name: "list_common_js_code", title: "JS代码块列表", route: "list_common?type=js_code" },
-
+            {
+                name: "list_front_demo", title: "前端demo总表",
+                route: "/manage/system/sys_api/list_common?type=front_demo"
+            },
+            {
+                name: "detail_group_demo", title: "在线编程demo仓库",
+                route: "/manage/system/sys_api/detail_group?groupId=5eeae46a8ef1562cfc29ecc3"
+            },
+            {
+                name: "list_html_api", title: "html元素列表",
+                route: "/manage/system/sys_api/list_common?type=html_api"
+            },
+            {
+                name: "list_html_prop", title: "html属性列表",
+                route: "/manage/system/sys_api/list_common?type=html_prop"
+            },
+            {
+                name: "list_common_js_file", title: "JS文件列表",
+                route: "/manage/system/sys_api/list_common?type=js_file"
+            },
+            {
+                name: "list_common_js_code", title: "JS代码块列表",
+                route: "/manage/system/sys_api/list_common?type=js_code"
+            },
+            {
+                name: "list_note", title: "笔记列表",
+                route: "/manage/system/sys_api/list_common?type=note"
+            },
+            {
+                name: "detail_html_api", title: "html详情界面",
+                route: "/manage/system/sys_api/detail_html_api?dataId=5dee0e22b944155320f4199d"
+            },
         ]
     },
 
@@ -336,9 +365,11 @@ PUB.menuDemo = [
         name: "list",
         title: "列表",
         menuItem: [
-            { name: "list_demo", title: "list_demo1", route: "list_demo" },
-            { name: "list_static_demo", title: "list_static_demo", route: "list_static_demo" },
-            { name: "list_common_demo", title: "list_common_demo", route: "list_common_demo" },
+            { name: "list_visit_history_demo", title: "列表-历史记录", },
+            { name: "list_demo_hide_table", title: "列表-隐藏表格", },
+            { name: "list_demo", title: "list_demo1", route: "/manage/list_demo" },
+            { name: "list_static_demo", title: "list_static_demo", route: "/manage/list_static_demo" },
+            { name: "list_common_demo", title: "list_common_demo", route: "/manage/list_common_demo" },
 
             { name: "list_demo_detail_g_list", title: "detail_g_list详情关联数据列表" },
             { name: "select_file_template", title: "案管-选择文件模板" },
@@ -360,8 +391,8 @@ PUB.menuDemo = [
         name: "form",
         title: "表单",
         menuItem: [
-            { name: "form_demo", title: "表单1", route: "/form_demo" },
-            { name: "form_demo2", title: "表单2", route: "/form_demo2" },
+            { name: "form_demo", title: "表单1", route: "/manage/form_demo" },
+            { name: "form_demo2", title: "表单2", route: "/manage/form_demo2" },
 
 
         ]
@@ -396,8 +427,8 @@ PUB.menuDemo = [
         title: "其他",
         menuItem: [
             { name: "row_html_tag_demo", title: "html集合组件测试" },
-            { name: "upload_qiniu", title: "upload_qiniu", route: "upload_qiniu" },
-            { name: "test", title: "test", route: "test" },
+            { name: "upload_qiniu", title: "upload_qiniu", route: "/manage/upload_qiniu" },
+            { name: "test", title: "test", route: "/manage/test" },
             { name: "object_demo", title: "对象demo" },
             { name: "list_flex_res", title: "弹性列表" },
             { name: "goods_cart", title: "购物车" },
@@ -405,7 +436,7 @@ PUB.menuDemo = [
             { name: "goods_specs_front_2", title: "商品规格-前台" },
             { name: "wx_edit", title: "微信排版" },
             { name: "detail_list_son_note", title: "笔记的子笔记展示" },
-            // { name: "auto_layout", title: "自动化布局" },
+            { name: "drag_change_width", title: "拖拽改变盒子宽度" },
         ]
     },
     {
@@ -414,8 +445,8 @@ PUB.menuDemo = [
         menuItem: [
             { name: "tool_replace_space", title: "替换空行" },
             { name: "tool_old_cf_list", title: "替换旧列表配置" },
-            { name: "auto_layout", title: "自动化布局" , route: "/auto_layout"},
-            { name: "js_file_edit", title: "js文件编辑" , route: "/js_file_edit?jsFileId=5eb272bb298e45553493e821"},
+            { name: "auto_layout", title: "自动化布局", route: "/auto_layout" },
+            { name: "js_file_edit", title: "js文件编辑", route: "/js_file_edit?jsFileId=5eb272bb298e45553493e821" },
         ]
     },
 ];
@@ -431,7 +462,48 @@ PUB.menuDemo = [
 F_ITEMS.prop_select_list_data = { "prop": "prop_select_list_data", "label": "选择列表", "type": "select_list_data", "rules": [{ required: true, message: "能为空" }], "cfSelectList": cfListSelectActicle };
 
 
+//变量：{html标签库数组}
+PUB.arrHtmlTag = PUB.arrHtmlTag
 
+
+
+
+
+
+//函数：{根据html标签获取对应的属性表单项函数}
+util.getFormItemsBytag = function (tag) {
+    let formItems = [];
+    let doc = PUB.arrHtmlTag.find(d => d.tag == tag)//变量：{当前标签文档}
+    if (!doc) return
+    let { arrProp } = doc//变量：{当前标签的属性数组}
+    if (!(arrProp && arrProp.length)) return
+
+
+    arrProp.forEach(pEach => {//循环：{当前标签的属性数组}
+        let { prop, label, desc, arrVal, arrPropFrequency } = pEach
+        label = label || desc
+        label = `${prop}(${label})`
+        let formItem = { prop, label, tips: desc, type: "input", };
+
+        if (arrVal && arrVal.length) {
+            formItem.type = "select"
+            formItem.options = arrVal
+
+        }
+
+        if (arrPropFrequency) {//如果候选值存在
+            formItem.frequency = {
+                sytle: { width: '148px' },
+                options: arrPropFrequency
+            }
+        }
+
+        formItems.push(formItem)
+
+    })
+    return formItems
+
+}
 
 
 

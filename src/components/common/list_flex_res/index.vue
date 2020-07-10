@@ -1,16 +1,26 @@
 <template>
-  <ul class="clearfix n-flex-main" :class="arrClass">
-    <li v-for="(item, index) in list" :key="index" class="n-flex-group" :style="style_g">
-      <slot name="default" :item="item"></slot>
-    </li>
-    <!--循环5个空盒子-配合flex列表-->
-    <li class="n-flex-group" v-for="item in 10" :key="'item'+item"></li>
-  </ul>
+  <div class>
+    <ul class="clearfix n-flex-main" :class="arrClass" v-if="list&&list.length">
+      <li v-for="(item, index) in list" :key="index" class="n-flex-group" :style="style_g">
+        <slot name="default" :item="item" :index="index"></slot>
+      </li>
+      <!--循环5个空盒子-配合flex列表-->
+      <li class="n-flex-group" v-for="item in 10" :key="'item'+item"></li>
+    </ul>
+    <slot class="" v-else name="noData">
+      <div class="LH50 C_999 TAC" >{{tipsNoData}}</div>
+    </slot>
+    
+  </div>
 </template>
 
 <script>
 export default {
+  name:"list_flex_res",
   props: {
+    tipsNoData: {
+      default: "暂无数据"
+    },
     col: {
       default: 4
     },

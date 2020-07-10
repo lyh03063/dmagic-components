@@ -141,6 +141,7 @@ export default {
   },
 
   mounted() {
+    PUB._paramAjaxAddon={ _systemId: "sys_api" }
     this.$emit("inited", { vm: this }); //将当前对象抛出
   }
 };

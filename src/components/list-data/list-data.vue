@@ -73,6 +73,26 @@
         :style="getTipsStyle(cf)"
       ></span>
     </el-row>
+
+    <dm_list_flex_res
+      class
+      :list="tableData"
+      v-bind="cf.cfListFlex"
+      v-if="!cf.isShowTable"
+    >
+      <template #noData>
+        <slot class name="noData"></slot>
+      </template>
+
+      <template #default="{item,index}">
+        <!--如果有配置卡片-->
+        <component :item="item" :index="index" :is="cf.comCard" v-if="cf.comCard"></component>
+        <!--否则--使用插槽-->
+        <slot class v-else name="card" :item="item" :index="index">
+          <div class>{{item}}</div>
+        </slot>
+      </template>
+    </dm_list_flex_res>
     <!--主列表-->
     <el-table
       class="table-need-export"
@@ -90,6 +110,7 @@
       @selection-change="selectionChange"
       @filter-change="filterHandler"
       :row-key="cf.idKey"
+      v-if="cf.isShowTable"
     >
       <el-table-column
         fixed
@@ -129,19 +150,12 @@
           :show-overflow-tooltip="column.showOverflowTooltip"
           :key="column.__id"
         >
-          <!-- <el-table-column
-          prop="province"
-          label="省份"
-          width="120">
-        </el-table-column> -->
-     
-
           <!--如果是多级表头-->
 
           <el-table-column
             class
             v-for="(columnSon,i) in column.columnChildren"
-             v-bind="columnSon"
+            v-bind="columnSon"
             :key="i"
           ></el-table-column>
 
@@ -444,11 +458,21 @@ export default {
     },
     test() { },
     getSigleLinkUrl(item, row) {
+
+      /****************************获取当前页面的路径-START****************************/
+      let { path } = this.$route
+      let arrPath = path.split("/")
+      arrPath.length--//去掉最后一个目录
+      let pathNew = arrPath.join("/")
+      /****************************获取当前页面的路径-END****************************/
+
+
+
       //注意，这个方法会调用很多次
       let linkNeed = item.url ? item.url + row[this.cf.idKey] : "javascript:;";
       //如果地址格式函数存在
       if (item.urlFormatter) {
-        linkNeed = item.urlFormatter(row);
+        linkNeed = item.urlFormatter(row, pathNew);
       }
       return linkNeed;
     },
@@ -720,7 +744,7 @@ export default {
 
       //调用：{给一个对象设置默认属性函数}
       util.setObjDefault(this.cf, {
-        idKey: "P1", isMultipleSelect: true, isShowCheckedBox: true, isShowSearchForm: true,
+        idKey: "P1", isMultipleSelect: true, isShowTable: true, isShowCheckedBox: true, isShowSearchForm: true,
         isShowBreadcrumb: true, isShowPageLink: true, isShowOperateColumn: true,
         isRefreshAfterCUD: true, isShowToolBar: true,
         cfElTable: {}, //列表配置对象
@@ -764,11 +788,18 @@ export default {
       selectJson[columnEach.prop] = 1;
       //设置默认值
       util.setObjDefault(columnEach, { showOverflowTooltip: true });
-      //如果依赖字段存在**
+      //如果依赖字段[字段级]存在**
       if (columnEach.requireProp && columnEach.requireProp.length) {
         columnEach.requireProp.forEach(rPropEach => { selectJson[rPropEach] = 1; });
       }
     });
+
+    if (this.cf.requireProp) {//如果依赖字段数组[列表级]存在
+      this.cf.requireProp.forEach(rPropEach => { selectJson[rPropEach] = 1; });
+    }
+
+
+
     this.objParam.selectJson = selectJson;
     /****************************拼装selectJson参数-END****************************/
     // 如果当前页面需要自定义查询接口数据

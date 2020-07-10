@@ -2,11 +2,10 @@
   <div>
     <dm_test class :obj="objTest"></dm_test>
 
-    <dm_select_ajax_lazy class :cf="cfSelectAjaxLazy"></dm_select_ajax_lazy>
-######
+    <dm_select_ajax_lazy class :cf="cfSelectAjaxLazy"></dm_select_ajax_lazy>######
     <dm_ajax_populate :id="2" populateKey="name" page="tangball_franchisee"></dm_ajax_populate>
 
-    <codemirror v-model="code" :options="cmOptions" ref="myCm"></codemirror>
+    <dm_codemirror v-model="code" :options="cmOptions" ref="myCm"></dm_codemirror>
     {{selectData}}
     <el-button plain @click="formatCode" size="mini" class="MT10">格式化(不成功)</el-button>
 
@@ -40,33 +39,15 @@
 </template>
 
 <script>
-import { codemirror } from "vue-codemirror";
 
-// import uglify from "uglify-js";
-import "codemirror/lib/codemirror.css";
-// 引入主题后还需要在 options 中指定主题才会生效
 
-import "codemirror/theme/lucario.css"; //黑背景主题
-/**
- * 
-eclipse.css,base16-light.css
-更多主题查看https://codemirror.net/theme/
- */
-
-import "codemirror/mode/javascript/javascript";
-// import "aaaaa";
-
-import "codemirror/addon/selection/active-line"; //高亮当前行
-import "codemirror/addon/fold/foldgutter"; //代码折叠-一定要引用
-import "codemirror/addon/fold/foldgutter.css"; //代码折叠样式一定要引用
-import "codemirror/addon/fold/brace-fold.js"; //代码折叠-一定要引用
 
 export default {
-  components: { codemirror, },
+  components: { },
 
   data() {
     return {
-      objTest: { name: "张三", age: 17, sex: "男" },
+      objTest: { name: "张三", age: 17, sex: "男", family: { father: { name: "张三丰" } } },
       cfSelectAjaxLazy: {
         url: "/crossList?page=paicheng_project",
         keyLabel: "projectName",

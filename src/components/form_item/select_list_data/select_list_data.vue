@@ -11,12 +11,16 @@
 
     <div class v-if="ready">
       <span :title="valueNeed" v-if="!cf.multiple">{{label||valueNeed}}</span>
-      <span class v-if="!(cf.showToolbar===false)">
-        <el-input
+      <div class="" v-show="false">
+         <el-input
           placeholder="隐藏辅助文本框，用于更新校验"
           ref="input_help"
           style="width:0px;height:0px;overflow:hidden"
         ></el-input>
+      </div>
+     
+      <span class v-if="!(cf.showToolbar===false)">
+        
         <el-button
           plain
           @click="showDialog"
@@ -156,6 +160,7 @@ export default {
     },
     //函数：{刷新列表函数}
     refresh: async function () {
+      let _systemId = util.getSystemId();//
       //根据当前已选数据的id数组，ajax查询并更新数据
       if (!(this.valueNeed && this.valueNeed.length)) return;
 
@@ -170,7 +175,7 @@ export default {
           method: "post",
           url: `${PUB.domain}${ajaxListUrl}`,
           data: {
-            pageSize: 999, _dataType, _systemId: "$all",
+            pageSize: 999, _dataType, _systemId,
             findJson: {
               _id: { $in: arrId }
             }
@@ -214,25 +219,25 @@ export default {
 
 
       /****************************在列表查询参数中排除已选的数据-START****************************/
-
-      if (this.cf.multiple) {//如果是多选
-        let arrIdWithOut; //变量：{需要排除的id数组}，避免重复显示和添加
-        let idKey = this.cf.valueKey; //数据键名
-        if (this.valueNeed.length) {//如果已选数据存在
-          arrIdWithOut = this.valueNeed.map(doc => doc[idKey]);
-        }
-        if (!arrIdWithOut) return;
-
-        this.cfList.objParamAddon = this.cfList.objParamAddon || {};
-        this.cfList.objParamAddon.findJson =
-          this.cfList.objParamAddon.findJson || {};
-        let findjsonAdd = { [idKey]: { $nin: arrIdWithOut } }; //补充排除id的查询条件
-        this.cfList.objParamAddon.findJson = {
-          ...this.cfList.objParamAddon.findJson,
-          ...findjsonAdd
-        };
-      }
-
+      /*
+            if (this.cf.multiple) {//如果是多选
+              let arrIdWithOut; //变量：{需要排除的id数组}，避免重复显示和添加
+              let idKey = this.cf.valueKey; //数据键名
+              if (this.valueNeed.length) {//如果已选数据存在
+                arrIdWithOut = this.valueNeed.map(doc => doc[idKey]);
+              }
+              if (!arrIdWithOut) return;
+      
+              this.cfList.objParamAddon = this.cfList.objParamAddon || {};
+              this.cfList.objParamAddon.findJson =
+                this.cfList.objParamAddon.findJson || {};
+              let findjsonAdd = { [idKey]: { $nin: arrIdWithOut } }; //补充排除id的查询条件
+              this.cfList.objParamAddon.findJson = {
+                ...this.cfList.objParamAddon.findJson,
+                ...findjsonAdd
+              };
+            }
+      */
       /****************************在列表查询参数中排除已选的数据-END****************************/
     },
     //函数：{确认选择数据函数}
@@ -290,6 +295,7 @@ export default {
 
     //函数：{ajax获取label函数}
     ajaxGetLabel: async function () {
+      let _systemId = util.getSystemId();//
       if (!(this.value && this.value.length)) return;
       let docNeed
       if (this.cf.pageName) {//Q1：旧版列表
@@ -301,7 +307,7 @@ export default {
       } else {//Q2：通用列表
         let { data: { doc } } = await axios({//请求接口
           method: "post", url: `${PUB.domain}/info/commonDetail`,
-          data: { _id: this.value, _systemId: "$all" }
+          data: { _id: this.value, _systemId }
         });
         docNeed = doc
       }
@@ -325,6 +331,9 @@ export default {
     }
 
 
+    let _systemId = util.getSystemId();//
+
+
     let _dataType = lodash.get(this.cf.cfList, `objParamAddon._dataType`);
 
     if (_dataType) {//如果{_dataType}存在，即通用数据列表
@@ -334,7 +343,7 @@ export default {
           visible: false,
           cfFormModify: {
             paramAddonInit: {
-              _id: "xxx", _systemId: "$all", _dataType
+              _id: "xxx", _systemId, _dataType
             }
           }
         }
@@ -348,7 +357,7 @@ export default {
           visible: false,
           cfFormAdd: {
             paramAddonInit: {
-              _id: "xxx", _systemId: "$all", _dataType
+              _id: "xxx", _systemId, _dataType
             }
           }
         }

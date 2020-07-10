@@ -238,6 +238,11 @@ export default {
                   { value: "space-around", label: "space-around" },
                 ]
               },
+              {
+                label: "flex",
+                prop: "flex",
+                
+              },
 
             ],
           },
@@ -279,7 +284,6 @@ export default {
   methods: {
     //函数：{全部面板折叠函数}
     foldAll: async function () {
-      console.log(`this.$refs:`, this.$refs);
       let { pannel } = this.$refs
       pannel.forEach(pannelEach => {//循环：{面板组件数组}
         pannelEach.hideContent()//隐藏内容
@@ -287,7 +291,6 @@ export default {
     },
     //函数：{全部面板展开函数}
     unfoldAll: async function () {
-      console.log(`this.$refs:`, this.$refs);
       let { pannel } = this.$refs
       pannel.forEach(pannelEach => {//循环：{面板组件数组}
         pannelEach.showContent()//隐藏内容
@@ -296,7 +299,6 @@ export default {
     //函数：{获取当前面板的css代码函数}
     getPannelCssCode: function (item) {
       let formItems = lodash.get(item, `cfForm.formItems`);
-      console.log(`formItems:#####`, formItems);
       let objCss = {}
       formItems.forEach(itemEach => {//循环：{000数组}
         let { prop } = itemEach

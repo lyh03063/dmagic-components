@@ -111,12 +111,8 @@ F_ITEMS.checkbox1 = {
 PUB.listCF.list_resume_work_experience.formItems.push(lodash.cloneDeep(F_ITEMS.relWorkExperience))
 
 
-
-F_ITEMS.collection3 = { "prop": "collection22", "label": "集合", "type": "collection", 
-
-// default:[],
-
-"collectionlistType1111": "form",  "collectionCfForm": { col_span: 12, formItems: [{ label: "时间", prop: "time", type: "date" }, { label: "金额", prop: "money" }] } };
+// default:[],"collectionlistType1111": "form",
+F_ITEMS.collection3 = { "prop": "collection22", "label": "集合", "type": "collection", "collectionCfForm": { col_span: 12, formItems: [{ label: "时间", prop: "time", type: "date" }, { label: "金额", prop: "money" }] } };
 
 
 export default {
@@ -203,20 +199,21 @@ export default {
         labelWidth: "150px",
 
         formItems: [
+          F_ITEMS.title,
           F_ITEMS.collection3,
           // F_ITEMS.collection2,
-        
+
           // {label:"json编辑器",type:"vueJsonEditor"},
           // F_ITEMS.select_list_common_url,
-          // F_ITEMS.predictTime,
-          // F_ITEMS.title,
+         F_ITEMS.predictTime,
+          
           // //  F_ITEMS.num1_text,
           // //  F_ITEMS.complete,
           // F_ITEMS.relJsCode,
           // // F_ITEMS.relWorkExperience,
           // F_ITEMS.treeData1,//树
           // F_ITEMS.object_1,
-          // F_ITEMS.checkbox1,
+          F_ITEMS.checkbox1,
 
           // // F_ITEMS.addressObj,
           // // F_ITEMS.prop_upload,
@@ -256,7 +253,7 @@ export default {
           // F_ITEMS.complete1,
           // F_ITEMS.select1,
 
-          // F_ITEMS.extend,
+          F_ITEMS.extend,
           // F_ITEMS.prop_upload2,
 
           // F_ITEMS.prop_vueJsonEditor
@@ -423,7 +420,7 @@ export default {
     this.formData = {}
     */
     /****************************配置表单-END****************************/
-   
+
     this.ready = true
   }
 };

@@ -7,14 +7,15 @@
       </div>
       <div class>
         <span class="C_666 FS13">{{docComplete.title}}</span>
-        
-        <span v-if="docComplete.desc"  class="C_666 FS13">：{{docComplete.desc}}</span>
+        <span v-if="docComplete.desc" class="C_666 FS13">：{{docComplete.desc}}</span>
         <span v-if="isShowEditJs" class="ML10">
           <el-link type="primary" @click="isShowEditJs=false">关闭</el-link>
           <el-link type="primary" @click="saveACode">保存</el-link>
         </span>
 
         <el-link type="primary" @click="isShowEditJs=true" v-else class="ML10">编辑</el-link>
+
+        <el-link type="primary" target="_blank" :href="`#/js_code_edit?jsCodeId=${docComplete._id}`"  class="ML10">新窗口编辑</el-link>
 
         <el-link @click="fnSelect" class="ML10 FS13">选择子代码</el-link>
       </div>
@@ -74,7 +75,7 @@ export default {
 
   },
   methods: {
-    
+
     //函数：{选择函数}
     fnSelect: async function () {
       this.vm_select_list_data.showDialog()//打开选择列表弹窗

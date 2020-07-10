@@ -37,7 +37,7 @@
 
           <el-menu-item
             :index="item.name"
-            :route="item.route?item.route:`demo_show?com=${item.name}`"
+            :route="item.route?item.route:`/manage/demo_show?com=${item.name}`"
             v-for="item in menuEach.menuItem"
             :key="item.name"
           >{{item.title||item.name}}</el-menu-item>

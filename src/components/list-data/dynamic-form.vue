@@ -8,6 +8,8 @@
       <dm_debug_item v-model="value" text="value" />
       <dm_debug_item v-model="cf" text="配置" />
     </dm_debug_list>
+    <!-- {{formDataNeed}} -->
+    <!-- <div class="" >cf:{{cf}}</div> -->
     <el-form
       ref="form"
       :model="value"
@@ -19,7 +21,6 @@
       <el-row>
         <template v-for="(item,index) in cf.formItems">
           <!--这里搞了个特殊的key，其实可以去掉，但编辑器代码会显示红色错误。-->
-          <!--而只使用prop或index则代码会报key重复的错误，很奇怪index也会报key重复-->
           <el-col
             :span="item.col_span||cf.col_span"
             :key="item.prop+'_'+index"
@@ -64,7 +65,7 @@
                 <!--提示-->
                 <i class="el-icon-question" :title="item.tips" style="color:#999" v-if="item.tips"></i>
               </label>
-              <form_item :cf="item" v-model="formDataNeed" @enterClick="enterClick">
+              <dm_form_item :cf="item" v-model="formDataNeed" @enterClick="enterClick">
                 <!--递归普通表单字段的插槽-->
                 <template v-slot:[item.slot]="{formData}">
                   <slot :name="item.slot" :formData="formDataNeed" v-if="item.slot"></slot>
@@ -74,7 +75,7 @@
                   <!--输出插槽-->
                   <slot :name="item.dataSlot" v-if="item.dataSlot" :doc="doc"></slot>
                 </template>
-              </form_item>
+              </dm_form_item>
             </el-form-item>
           </el-col>
         </template>
@@ -105,12 +106,9 @@
   </div>
 </template>
 <script>
-import form_item from "../../components/form_item/form_item.vue";
 export default {
   name: "dm_dynamic_form", //组件名，用于递归
-  components: {
-    form_item
-  },
+ 
   props: {
     cf: {
       type: Object,

@@ -6,8 +6,7 @@
 
     <!-- <el-input v-model="formData1['obj.num2']"></el-input> -->
 
-  <dm_dynamic_form :cf="cfFormSearch" v-model="formData" @submit="searchList"></dm_dynamic_form>
-    
+    <dm_dynamic_form :cf="cfFormSearch" v-model="formData" @submit="searchList"></dm_dynamic_form>
   </div>
 </template>
 
@@ -20,8 +19,8 @@ let T;
 
 export default {
   name: "form_demo2",
-  components: { 
-      checkbox_diy },
+  components: {
+    checkbox_diy  },
 
   data() {
     return {
@@ -30,13 +29,18 @@ export default {
       cfFormSearch: {
         inline: true,
         size: "mini",
-        formItems: [F_ITEMS.importance,    F_ITEMS.objAddonItem,],
+        formItems: [F_ITEMS.title, 
+        F_ITEMS.collection3,
+        // F_ITEMS.extend,
+        // F_ITEMS.importance,
+        //    F_ITEMS.objAddonItem,
+        ],
         btns: [{ text: "查询", event: "submit", type: "primary", size: "mini" }]
       },
     };
   },
-  methods:{
-      //函数：{查询表单提交的回调函数}
+  methods: {
+    //函数：{查询表单提交的回调函数}
     async searchList() {
       alert("searchList");
     },
@@ -46,7 +50,7 @@ export default {
   },
   async mounted() {
     this.$store.commit("changeActiveMenu", "form_demo2");
-    
+
   }
 };
 </script>

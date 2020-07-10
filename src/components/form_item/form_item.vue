@@ -57,14 +57,15 @@
     ></dm_select_area>
 
     <!--弹窗选择列表-->
-    <dm_select_list_data class="FX1"
+    <dm_select_list_data
+      class="FX1"
       v-model="valueNeed[item.prop]"
       :cf="item.cfSelectList"
       v-else-if="item.type=='select_list_data'"
     ></dm_select_list_data>
 
     <!--单选框-->
-    <el-radio-group v-model="valueNeed[item.prop]" v-else-if="item.type=='radio'">
+    <el-radio-group class="MT8" v-model="valueNeed[item.prop]" v-else-if="item.type=='radio'">
       <el-radio
         :label="option.value"
         v-for="option in item.options"
@@ -72,7 +73,7 @@
       >{{option.label}}</el-radio>
     </el-radio-group>
     <!--复选框-->
-    <el-checkbox-group v-model="valueNeed[item.prop]" v-else-if="item.type=='checkbox'">
+    <el-checkbox-group class="MT8" v-model="valueNeed[item.prop]" v-else-if="item.type=='checkbox'">
       <el-checkbox
         :label="option.value"
         v-for="option in item.options"
@@ -146,7 +147,6 @@
       :cfElBtnAdd="item.cfElBtnAdd"
       :dataSlot="item.dataSlot"
       class="FX1"
-     
     >
       <!--递归插槽-->
       <template v-slot:[item.dataSlot]="{doc}">
@@ -230,7 +230,7 @@
 
     <!--codemirror代码块-->
     <dm_code
-    class="FX1"
+      class="FX1"
       v-model="valueNeed[item.prop]"
       :cf="item.cfItem"
       v-else-if="item.type=='codemirror'"
@@ -249,7 +249,7 @@
     <el-input
       class="FX1"
       v-else
-      v-model="valueNeed[item.prop]"
+      v-model.lazy="valueNeed[item.prop]"
       @keyup.enter.native="$emit('enterClick')"
       clearable
     ></el-input>
@@ -272,13 +272,16 @@
         :open-delay="0"
         v-else
       >
+        <!-- <div class="" > cf:{{cf}}</div>
+        <div class="" > item:{{item}}</div>-->
+        <!-- <div class="" > cf===item:{{cf===item}}</div> -->
         <!--候选值列表-->
         <i
-          :class="['frequency-option',{focus:valueNeed[item.prop]==option.value}] "
-          v-for="(option,i) in item.frequency.options"
-          :key="i"
+          :class="['frequency-option',{focus:valueNeed[cf.prop]==option.value}] "
+          v-for="(option,i) in cf.frequency.options"
+          :key="option.value||i"
           @click="slectFOption(option)"
-          :style="item.frequency.sytle||{'width':'48px'}"
+          :style="cf.frequency.sytle||{'width':'48px'}"
         >
           {{option.label
           ||option.value}}
@@ -286,7 +289,7 @@
         <a
           href="javascript:;"
           class="n-a"
-          @click="valueNeed[item.prop]=null;visibleFrequency[item.prop]=false"
+          @click="valueNeed[cf.prop]=null;visibleFrequency[cf.prop]=false"
         >清除</a>
         <el-button slot="reference" icon="el-icon-more"></el-button>
       </el-popover>
@@ -313,10 +316,11 @@ import tag_list from "../../components/form_item/tag_list.vue";
 
 export default {
   name: "form_item", //组件名，用于递归
-  components: {   vueJsonEditor: vueJsonEditor, select_ajax,
+  components: {    vueJsonEditor: vueJsonEditor, select_ajax,
     input_find_vague, upload_img, upload_single, time_period, json_prop,
-     quill_editor, tiny_mce_new,  number_range, tag_list,  },
+    quill_editor, tiny_mce_new, number_range, tag_list,  },
   mixins: [MIX.form_item_new], //混入-这个是高风险混入，注意避免双向同步时出现死循环！！！！
+  // mixins: [MIX.form_item_2], //新的混入项，优化性能
   props: {
     cf: [Object],
     value: [Object]

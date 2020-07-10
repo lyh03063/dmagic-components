@@ -54,7 +54,7 @@ export default {
   watch: {
     title: {
       handler(newVal, oldVal) {
-        console.log('title changed');
+        if(!this.cf.boxMiddle)return
         this.cf.boxMiddle.text = this.title//更新标题
       },
       immediate: true,

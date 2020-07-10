@@ -25,7 +25,7 @@
       :allow-drop="allowDrop"
       :allow-drag="allowDrag"
       v-if="ready"
-      style=""
+      style
     >
       <span class="custom-tree-node" slot-scope="{ node, data }">
         <span>{{ node.label }}</span>
@@ -35,6 +35,11 @@
             size="mini"
             @click="() => showDialogAdd({data,node,actionType:'modify'})"
           >修改</el-button>
+          <el-button
+            type="text"
+            size="mini"
+            @click="() => showDialogAdd({data,node,actionType:'copy'})"
+          >复制</el-button>
           <el-button
             type="text"
             size="mini"
@@ -54,7 +59,7 @@
     <!--新增项弹窗-->
     <el-dialog
       custom-class="n-el-dialog"
-      width="55%"
+      width="75%"
       :title="mapDialogTitle[actionType]"
       :close-on-press-escape="false"
       :close-on-click-modal="false"
@@ -74,6 +79,7 @@
 
 <script>
 export default {
+  name:"tree_data",
   mixins: [MIX.form_item_new],
   //用于列表模糊查询的组件
   props: {
@@ -125,21 +131,27 @@ export default {
       this.$nextTickStatus("ready")
 
     },
+
+
+
+
     //函数：{显示新增弹窗函数}
     showDialogAdd(param) {
       let { data: dataParent, node, actionType } = param
       this.actionType = actionType;
       this.nodeCurr = node;
-      if (actionType == "modify") {//Q1：如果是修改
+      if (actionType == "modify" || actionType == "copy") {//Q1：如果是修改
         this.formData = lodash.cloneDeep(node.data)
-
-
-      } else {//Q2：否则
-        if (dataParent) {//QK1：如果父级数据存在
-          this.dataParent = dataParent;
-        } else {//QK2：父级数据不存在
-          this.dataParent = null
+        if(actionType == "copy"){
+          this.formData[this.cf.idKey] +="__copy"//调整key避免冲突
         }
+
+      }
+
+      if (dataParent) {//QK1：如果父级数据存在
+        this.dataParent = dataParent;
+      } else {//QK2：父级数据不存在
+        this.dataParent = null
       }
 
 
@@ -180,9 +192,13 @@ export default {
             }
             this.dataParent[this.childrenKey].push(newChild);
             this.expandNode(this.dataParent[this.cf.idKey])//调用：{展开指定节点的函数}
-          } else if (this.actionType == "after") {//QKK2:加同级
+          } else if (this.actionType == "xxxxxxxxxxx") {//QKK2:复制
+            // Object.assign(this.nodeCurr.data, this.formData);//合并对象
+
+          } else if (this.actionType == "after" || this.actionType == "copy") {//QKK3:加同级
+
             let arrSilin = this.nodeCurr.parent.data
-            if (this.nodeCurr.level != 1) {//如果不是一级数据（因为一级数据是跟数组）
+            if (this.nodeCurr.level != 1) {//如果不是一级数据（因为一级数据是根数组）
               arrSilin = this.nodeCurr.parent.data[this.childrenKey]
             }
             let index = arrSilin.findIndex(doc => doc[this.cf.idKey] == this.nodeCurr.data[this.cf.idKey])
@@ -304,7 +320,7 @@ export default {
   padding-right: 8px;
 }
 .item-box {
-  max-width:600px;
+  max-width: 600px;
   border: 1px #ddd dashed;
   border-radius: 5px;
   padding: 5px 10px;

@@ -3,19 +3,26 @@
     <dm_debug_list>
       <dm_debug_item v-model="showToolbar" text="showToolbar" />
       <dm_debug_item v-model="valueNeed" text="valueNeed" />
-      <dm_debug_item v-model="hidePart" text="隐藏部件" />
+      <dm_debug_item v-model="cfForm" />
       <dm_debug_item v-model="dragging" />
     </dm_debug_list>
     <!-- 这里不能使用MB8样式，会被element自带覆盖 -->
     <el-button @click="addGroup" v-if="ifShow('btn-add')" v-bind="cfElBtnAdd">{{cfElBtnAdd.text}}</el-button>
 
+    <!-- <div class>valueNeed:{{valueNeed}}</div> -->
     <div class v-if="valueNeed && valueNeed.length &&readyJs">
       <!--很奇怪，现在要加上这一行，新增数据时才能显示,跟下一个div的条件是一样的-->
     </div>
     <div class v-if="valueNeed && valueNeed.length &&readyJs">
-      <ul>
-        <draggable :options="{handle:'.sort-num'}" v-model="valueNeed" v-if="readyJs">
-          <li
+      <div>
+        <!--这里加一个像素的padding，是为了鼠标悬停时轮廓不被遮挡-->
+        <draggable
+          class="PT1 PL1"
+          :options="{handle:'.sort-num'}"
+          v-model="valueNeed"
+          v-if="readyJs"
+        >
+          <div
             v-for="(doc,i) in valueNeed"
             :key="doc.__id"
             :class="{'data-group':true,'edit':editItem==i,'active':focusItem==i,'data-form-group':listType=='form'}"
@@ -25,7 +32,7 @@
           >
             <!--序号-->
             <i class="sort-num" v-if="listType!='form'&&showSortNum">{{i+1}}</i>
-            <div class="FX1 ">
+            <div class="FX1">
               <div v-if="editItem==i">
                 <!--注意这里v-model要直接绑定valueNeed才行-->
                 <dm_json_editor v-model="valueNeed[i]" @blur="afterBlur"></dm_json_editor>
@@ -91,16 +98,17 @@
                 </div>
               </template>
             </div>
-          </li>
+          </div>
         </draggable>
-      </ul>
+      </div>
     </div>
 
     <!--修改对象弹窗-->
+    <!--用v-show="showDialog"，可避免日期控出错,但有副作用！！！-->
     <!--用v-show="showDialog"，可避免日期控出错-->
     <el-dialog
       custom-class="n-el-dialog"
-      width="75%"
+      width="95%"
       title="编辑数据"
       :close-on-press-escape="false"
       :close-on-click-modal="false"
@@ -129,7 +137,7 @@ export default {
   components: {
 
   },
-  mixins: [MIX.form_item_new], //混入
+  mixins: [MIX.form_item_2], //混入
   props: {
     dataSlot: String,
     //新增按钮配置
@@ -183,11 +191,13 @@ export default {
     value: {
       handler(newVal, oldVal) {
         if (!this.value) {
+          console.log(`collection-value-change-1`);
           //
           this.valueNeed = [];
           this.$emit("input", this.valueNeed);//触发外部数据变更
         } else {
-
+          console.log(`collection-value-change-2`,this.value);
+           this.valueNeed = this.value;
           this.valueNeed.forEach(itemEach => {//循环：{valueNeed数组}
             if (!itemEach.__id) {//如果没有__id，补上，因为很多地方要用到
               itemEach.__id = util.getTimeRandom()
@@ -203,16 +213,15 @@ export default {
     //函数：{提交函数}
     submit: async function () {
       if (this.action == "add") {
-
-
         this.valueNeed.unshift(this.formDataEdit) //修改原来的数据值，替换成表单数据
-
       } else if (this.action == "modify") {
+        console.log(`collection-submit-editIndex`,this.editIndex);
+        //对于this.valueNeed[this.editIndex]这个数组元素对象，是整个替换！！！！
         this.$set(this.valueNeed, this.editIndex, this.formDataEdit);
-        // this.valueNeed[this.editIndex] = this.formDataEdit//修改原来的数据值，替换成表单数据
-
+        // this.value[this.editIndex] = this.formDataEdit//修改原来的数据值，替换成表单数据
       }
-      this.showDialog = false
+      await this.$nextTick();//延迟到视图更新,这句很重要，不加的话，会遇到【神坑1号】问题
+      this.showDialog = false//关闭弹窗
     },
     //函数：{开始拖拽排序函数}
     mouseenterG: async function (i) {
@@ -317,6 +326,9 @@ export default {
     }
   },
   async created() {
+
+   
+
     //按钮默认配置
     let cfElBtnAddDefault = {
       plain: true,
@@ -329,6 +341,8 @@ export default {
 
     await util.loadJs({ url: PUB.urlJS.sortable })//加载
     await util.loadJs({ url: PUB.urlJS.vuedraggable })//加载
+
+
 
     this.readyJs = true;
   }

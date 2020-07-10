@@ -66,7 +66,7 @@ export default {
         await axios({//修改接口
           method: "post", url: `${PUB.domain}/info/commonModify`,
           data: {
-            _id: idParentData, _systemId: "$all", _dataType: dataTypeParent, _data
+            _id: idParentData, _systemId, _dataType: dataTypeParent, _data
           }
         });
         // this.doc[this.cf.column] = _id//修改当前数据

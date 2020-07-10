@@ -78,7 +78,6 @@ export default {
   methods: {
     //函数：{选择债权人后的回调函数函数}
     async afterSelectCreditor(id, doc) {
-      console.log(`doc:`, doc);
       let { _id } = doc;
 
 
@@ -141,7 +140,6 @@ export default {
         }
       });
 
-      console.log(`listInvolvedCase:###`, listInvolvedCase);
       if (!(listInvolvedCase && listInvolvedCase.length)) return;
 
       this.formDataBuilt.listInvolvedCase_1 = listInvolvedCase.filter(d => d.relCaseType == 1)//变量：{案件数组-普通民事程序}
@@ -285,7 +283,6 @@ export default {
       this.cfForm = cfForm//变量赋值：{表单配置}
 
       let { formItems } = cfForm;
-      console.log(`formItems:#####`, formItems);
 
 
 

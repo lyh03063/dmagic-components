@@ -5,8 +5,11 @@
       <dm_debug_item v-model="docDemo" />
     </dm_debug_list>
     <div class="H50 DPF BC_000 PL15 MB5" style="background:rgb(84, 92, 100);">
-      <div class="LH50 C_fff FS24 MR20 FX1">码邦科技-CSS在线编辑器</div>
-      <div class="PT8 PR15" v-if="demoId">
+      <div class="LH50 C_fff FS24 MR20 FX1">
+        码邦科技-网页在线布局工具
+        <!-- <el-button plain @click="test" size="mini">移除data</el-button> -->
+      </div>
+      <div class="PT8 PR15" v-if="demoId&&docDemo">
         <span class="C_fff FS16">{{docDemo.title}}</span>
         <el-button
           plain
@@ -16,93 +19,96 @@
         >保存demo</el-button>
       </div>
     </div>
-    <div class="DPF PL8 PR8" style="height: calc(100vh - 55px);">
-      <div
-        id="id_html_box"
-        class="MR5"
-        style="width:260px;background-image:url('http://tool.alixixi.com/csseditor/images/grid.gif');"
-      >
-        <!--html元素-->
-        <dm_ele
-          :tag="doc.tag"
-          v-bind="doc.cf"
-          :text="doc.text"
-          :children="doc.children"
-          v-for="(doc,i) in arrHtml"
-          :key="i"
-        ></dm_ele>
-      </div>
-      <div class="FX1 panel_config">
-        <div class>
-          <div class="PSR">
-            <div class="PSA R10 T6" style="z-index:888;">
-              <el-button plain @click="dialogSelectDemo" size="mini">demo库</el-button>
+    <div class="PL8 PR8" style="height: calc(100vh - 55px);">
+      <dm_drag_box_width class :cf="cfDragBox">
+        <template #left>
+          <div id="id_html_box" class="MR5" style>
+            <!--html元素-->
+            <dm_ele
+              :tag="doc.tag"
+              v-bind="doc.cf"
+              :text="doc.text"
+              :children="doc.children"
+              v-for="(doc,i) in arrHtml"
+              :key="i"
+            ></dm_ele>
+          </div>
+        </template>
+        <template #right>
+          <div class="panel_config">
+            <div class>
+              <div class="PSR">
+                <div class="PSA R10 T6" style="z-index:888;">
+                  <el-button plain @click="dialogSelectDemo" size="mini">demo库</el-button>
+                </div>
+              </div>
+              <el-tabs v-model="activeName" type="card">
+                <el-tab-pane label="Html配置" name="tab1">
+                  <div class="PB8">
+                    <el-button
+                      plain
+                      @click="$refs.rowhtml.$refs.collectionTag.addGroup()"
+                      size="mini"
+                    >+ 一级元素</el-button>
+                  </div>
+                  <div class="box_scroll">
+                    <dm_row_html_tag class v-model="arrHtml" ref="rowhtml"></dm_row_html_tag>
+                  </div>
+                </el-tab-pane>
+                <el-tab-pane label="Css配置" name="tab2">
+                  <div class="PB8">
+                    <el-button plain @click="$refs.collectionCss.addGroup()" size="mini">添加一组样式</el-button>
+                  </div>
+                  <!-- {{arrCss}} -->
+                  <div class="box_scroll">
+                    <!--集合组件-->
+                    <dm_collection
+                      ref="collectionCss"
+                      v-model="arrCss"
+                      :show-toolbar="true"
+                      :cf-form="cfFormClass"
+                      :cfElBtnAdd="cfElBtnAdd"
+                      :hidePart="{'btn-add':true}"
+                      :showSortNum="false"
+                      data-slot="dataSlot1"
+                    >
+                      <!--插槽内容-->
+                      <template v-slot:dataSlot1="{doc,docEntity}">
+                        <dm_pannel_new :cf="cfPannel" :title="`${docEntity.selector}`">
+                          <template #titleBar_boxMiddle>
+                            <span class="C_999 ML10">{{docEntity.desc?' '+docEntity.desc:''}}</span>
+                          </template>
+                          <template #titleBar_boxLeft="{vm_title_bar,vm_pannel}">
+                            <div
+                              class="PT1 PL6 PR6 WP100 HP100 BC_999 C_fff Cur1"
+                              @click="vm_pannel.toggle()"
+                            >
+                              <i
+                                :class="vm_pannel.cfIn.showContent?'el-icon-arrow-down':'el-icon-arrow-right'"
+                              ></i>
+                            </div>
+                          </template>
+                          <div class="PT10 PL15">
+                            <!--单类样式编辑组件-->
+                            <div class="" >docEntity.css:{{docEntity.css}}</div>
+                            <dm_single_class_edit v-model="docEntity.css"></dm_single_class_edit>
+                          </div>
+                        </dm_pannel_new>
+                      </template>
+                    </dm_collection>
+                  </div>
+                </el-tab-pane>
+                <el-tab-pane label="代码生成" name="tab3">
+                  <div class>html：</div>
+                  <el-input type="textarea" :rows="8" v-model="htmlCode"></el-input>
+                  <div class>Css：</div>
+                  <el-input type="textarea" :rows="8" v-model="cssCode"></el-input>
+                </el-tab-pane>
+              </el-tabs>
             </div>
           </div>
-          <el-tabs v-model="activeName" type="card">
-            <el-tab-pane label="Html配置" name="tab1">
-              <div class="PB8">
-                <el-button
-                  plain
-                  @click="$refs.rowhtml.$refs.collectionTag.addGroup()"
-                  size="mini"
-                >+ 一级元素</el-button>
-              </div>
-              <div class="box_scroll">
-                <dm_row_html_tag class v-model="arrHtml" ref="rowhtml"></dm_row_html_tag>
-              </div>
-            </el-tab-pane>
-            <el-tab-pane label="Css配置" name="tab2">
-              <div class="PB8">
-                <el-button plain @click="$refs.collectionCss.addGroup()" size="mini">添加一组样式</el-button>
-              </div>
-              <!-- {{arrCss}} -->
-              <div class="box_scroll">
-                <!--集合组件-->
-                <dm_collection
-                  ref="collectionCss"
-                  v-model="arrCss"
-                  :show-toolbar="true"
-                  :cf-form="cfFormClass"
-                  :cfElBtnAdd="cfElBtnAdd"
-                  :hidePart="{'btn-add':true}"
-                  :showSortNum="false"
-                  data-slot="dataSlot1"
-                >
-                  <!--插槽内容-->
-                  <template v-slot:dataSlot1="{doc,docEntity}">
-                    <dm_pannel_new :cf="cfPannel" :title="`${docEntity.selector}`">
-                      <template #titleBar_boxMiddle>
-                        <span class="C_999 ML10">{{docEntity.desc?' '+docEntity.desc:''}}</span>
-                      </template>
-                      <template #titleBar_boxLeft="{vm_title_bar,vm_pannel}">
-                        <div
-                          class="PT1 PL6 PR6 WP100 HP100 BC_999 C_fff Cur1"
-                          @click="vm_pannel.toggle()"
-                        >
-                          <i
-                            :class="vm_pannel.cfIn.showContent?'el-icon-arrow-down':'el-icon-arrow-right'"
-                          ></i>
-                        </div>
-                      </template>
-                      <div class="PT10 PL15">
-                        <!--单类样式编辑组件-->
-                        <dm_single_class_edit v-model="docEntity.css"></dm_single_class_edit>
-                      </div>
-                    </dm_pannel_new>
-                  </template>
-                </dm_collection>
-              </div>
-            </el-tab-pane>
-            <el-tab-pane label="代码生成" name="tab3">
-              <div class>html：</div>
-              <el-input type="textarea" :rows="8" v-model="htmlCode"></el-input>
-              <div class>Css：</div>
-              <el-input type="textarea" :rows="8" v-model="cssCode"></el-input>
-            </el-tab-pane>
-          </el-tabs>
-        </div>
-      </div>
+        </template>
+      </dm_drag_box_width>
     </div>
     <!--选择demo弹窗组件-->
     <dm_dialog_select_demo
@@ -133,6 +139,11 @@ export default {
   components: {},
   data() {
     return {
+      cfDragBox: {
+        nWidthLeft: 320,
+        cfBoxLeft: { class: " ", style: { 'background-image': "url('http://tool.alixixi.com/csseditor/images/grid.gif')" } },
+
+      },
       demoId: null,
       docDemo: null,
       cfElBtnAdd: { text: "+添加一组样式", type: "info", size: "mini", },
@@ -227,7 +238,6 @@ export default {
   watch: {
     arrCss: {//监听到arrClass变化，立马更新样式
       handler(newVal, oldVal) {
-        console.log('arrCss changed');
         this.updatePageCss()//调用：{更新页面样式函数}
       },
       immediate: true,
@@ -235,7 +245,6 @@ export default {
     },
     arrHtml: {//监听到arrClass变化，立马更新样式
       async handler(newVal, oldVal) {
-        console.log('arrHtml changed');
         await util.timeout(500); //延迟
         this.htmlCode = $("#id_html_box").html()//调用：{返回某节点的html代码的函数}
       },
@@ -244,18 +253,41 @@ export default {
     },
   },
   methods: {
+    //函数：{000函数}
+    test: async function () {
+      alert(`test`);
+      $("#id_html_box").removeAttr("data-v-9e28b8ec")//调用：{返回某节点的html代码的函数}
+
+    },
     //函数：{更新页面样式函数}
     updatePageCss: async function () {
+
+      //css属性数据字典
+      let dictCssProp = { width: "宽度", transition: "过渡动画", }
+
+      //函数：{将Css对象转成css代码函数-每行带注释}
+      util.objToCssWithRemark = function (objCss) {
+        let cssCode = ""
+        for (var prop in objCss) {
+          if (!objCss[prop]) continue;//如果代码无效，跳过
+          cssCode += `
+    ${prop}:${objCss[prop]}; /*${dictCssProp[prop] || ''}*/`
+        }
+        return cssCode
+      }
+
+
+
       let cssCode = ""
-      this.arrCss.forEach(itemEach => {//循环：{000数组}
-        let { selector, css } = itemEach
-        let cssNormal = util.objToCss(css)//函数：{将Css对象转成css代码函数}
+      this.arrCss.forEach(itemEach => {//循环：{css配置数组}
+        let { selector, css, desc } = itemEach
+        let cssNormal = util.objToCssWithRemark(css)//函数：{将Css对象转成css代码函数}
         cssCode += `
-/*盒子样式*/
-${selector}{${cssNormal}}`
+/*${desc}*/
+${selector}{${cssNormal}
+}`
       })
       this.cssCode = cssCode
-      console.log(`cssCode:############`, cssCode);
       util.addCssToPage({ css: this.cssCode })//调用：{输出css代码到当前页面的函数}
     },
     //函数：{选择demo后的回调函数}
@@ -299,6 +331,8 @@ ${selector}{${cssNormal}}`
       this.arrHtml = arrHtml//Css代码更新
       this.arrCss = arrCss//Css代码更新
     },
+
+
   },
   created() {
     this.demoId = this.$route.query.demoId;//
@@ -307,6 +341,12 @@ ${selector}{${cssNormal}}`
     }
   },
   async mounted() {
+
+
+    util.ajaxAddVisitRecord({  tagPage: "auto_layout", })//变量：{ajax添加访客记录函数}
+
+
+
 
   }
 };

@@ -39,9 +39,14 @@ const list_common = { template: '<dm_list_common></dm_list_common>' }
 const detail_bankruptcy_case = { template: '<dm_detail_bankruptcy_case></dm_detail_bankruptcy_case>' }
 const auto_layout = { template: '<dm_auto_layout></dm_auto_layout>' }
 const js_file_edit = { template: '<dm_js_file_edit></dm_js_file_edit>' }
-PUB._paramAjaxAddon={ _systemId: "$all" }
+const js_code_edit = { template: '<dm_js_code_edit></dm_js_code_edit>' }
+const detail_html_api = { template: '<dm_detail_html_api></dm_detail_html_api>' }
+const detail_data = { template: '<dm_detail_data></dm_detail_data>' }
+const detail_group = { template: '<dm_detail_group></dm_detail_group>' }
+PUB._paramAjaxAddon = { _systemId: "$all" }
 
 import manage from "./App.vue";
+import system from "./system.vue";
 
 // 3. 创建 router 实例，然后传 `routes` 配置
 const router = new VueRouter({
@@ -50,7 +55,7 @@ const router = new VueRouter({
         {
             path: '/manage',
             component: manage,
-            redirect: 'manage/form_demo', //跳转
+            // redirect: 'manage/form_demo', //跳转
             children: [//子路由
                 // { path: '/', redirect: 'form_demo' },
                 { path: 'form_demo', component: form_demo },
@@ -64,11 +69,26 @@ const router = new VueRouter({
                 { path: 'detail_audio', component: detail_audio },
                 { path: 'list_common', component: list_common },
                 { path: 'detail_bankruptcy_case', component: detail_bankruptcy_case },
-            ]
-          },
+                { path: 'detail_html_api', component: detail_html_api },
+                { path: 'detail_group', component: detail_group },
+                {
+                    path: 'system/:sysId/', component: system, 
+                    children: [//子路由
+                        {path: 'detail_group', component: detail_group,},
+                        {path: 'list_common', component: list_common,},
+                        {path: 'detail_html_api', component: detail_html_api,},
+                        {path: 'js_file_edit', component: js_file_edit,},
         
+                    ]
+                },
+            ]
+        },
+        {path: '/detail_group', component: detail_group,},
+        { path: '/detail_data', component: detail_data },
         { path: '/auto_layout', component: auto_layout },
         { path: '/js_file_edit', component: js_file_edit },
+        { path: '/js_code_edit', component: js_code_edit },
+       
     ]
 })
 
@@ -88,7 +108,7 @@ import javascript from 'highlight.js/lib/languages/javascript';
 hljs.registerLanguage('javascript', javascript);
 import 'highlight.js/styles/github.css' //样式文件
 
-Vue.directive('highlight', function(el) {
+Vue.directive('highlight', function (el) {
     let highlight = el.querySelectorAll('pre code');
     highlight.forEach((block) => {
         hljs.highlightBlock(block)

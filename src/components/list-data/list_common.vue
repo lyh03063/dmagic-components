@@ -101,14 +101,15 @@ PUB.listCFAddon.js_file = {
   methods: {
     //批量操作栏按钮事件
     async singleBtnClick(eventType, doc) {
-      let { _id, fileName } = doc
+      let { _id, fileName,fnNameHandle } = doc
       if (eventType == "buildDebugJs") {//如果{事件类型}生成调试版本Js文件
         const loading = this.$loading({
           lock: true, text: "执行中，请勿关闭", spinner: "el-icon-loading", background: "rgba(0, 0, 0, 0.7)"
         });
+
         let { data } = await axios({//请求接口
           method: "post", url: `${PUB.domain}/info/builtJSFile`,
-          data: { _id, "uplloadQiNiu": false }
+          data: { _id, "uplloadQiNiu": false,fnNameHandle }
         });
         loading.close(); //关闭loding
         if (data.code == 0) {//如果ok
@@ -127,7 +128,7 @@ PUB.listCFAddon.js_file = {
 
         let { data } = await axios({//请求接口
           method: "post", url: `${PUB.domain}/info/builtJSFile`,
-          data: { _id, "uplloadQiNiu": true, "transES5": true }
+          data: { _id, "uplloadQiNiu": true, "transES5": true,fnNameHandle }
         });
         loading.close(); //关闭loding
         if (data.code == 0) {//如果ok
