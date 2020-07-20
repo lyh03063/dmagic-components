@@ -11,16 +11,15 @@
 
     <div class v-if="ready">
       <span :title="valueNeed" v-if="!cf.multiple">{{label||valueNeed}}</span>
-      <div class="" v-show="false">
-         <el-input
+      <div class v-show="false">
+        <el-input
           placeholder="隐藏辅助文本框，用于更新校验"
           ref="input_help"
           style="width:0px;height:0px;overflow:hidden"
         ></el-input>
       </div>
-     
+
       <span class v-if="!(cf.showToolbar===false)">
-        
         <el-button
           plain
           @click="showDialog"
@@ -147,7 +146,12 @@ export default {
     afterAdd: function (doc, formData) {
       let { _id, } = doc
       let { title } = doc._data;
-      this.valueNeed.unshift({ _id, title })//签名插入数据
+      let index = 0//插入位置索引值
+      let { copyId } = this.cf_IN.cfCopyDialogEntity
+      if (copyId) {//如果是复制
+        index = this.valueNeed.findIndex(d => d._id == copyId)
+      }
+      this.valueNeed.splice(index+1, 0, { _id, title })//插入数据
       this.refresh()//调用：{刷新列表函数}
     },
 

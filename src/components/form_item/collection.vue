@@ -15,6 +15,7 @@
     </div>
     <div class v-if="valueNeed && valueNeed.length &&readyJs">
       <div>
+        <!-- <div class="" > valueNeed：{{valueNeed}}</div> -->
         <!--这里加一个像素的padding，是为了鼠标悬停时轮廓不被遮挡-->
         <draggable
           class="PT1 PL1"
@@ -27,7 +28,7 @@
             :key="doc.__id"
             :class="{'data-group':true,'edit':editItem==i,'active':focusItem==i,'data-form-group':listType=='form'}"
             @mouseenter="mouseenterG(i)"
-            @mouseleave="focusItem=999"
+            @mouseleave="mouseleaveG"
             @dblclick.ctrl.shift="editItem=i"
           >
             <!--序号-->
@@ -109,7 +110,7 @@
     <el-dialog
       custom-class="n-el-dialog"
       width="95%"
-      title="编辑数据"
+      :title="titleDialog"
       :close-on-press-escape="false"
       :close-on-click-modal="false"
       :append-to-body="true"
@@ -137,8 +138,14 @@ export default {
   components: {
 
   },
-  mixins: [MIX.form_item_2], //混入
+  mixins: [MIX.form_item_new], //混入
   props: {
+    titleDialogAdd: {
+      default: "添加数据"
+    },
+    titleDialogEdit: {
+      default: "修改数据"
+    },
     dataSlot: String,
     //新增按钮配置
     cfElBtnAdd: {
@@ -187,6 +194,17 @@ export default {
       }
     };
   },
+  computed: {
+    titleDialog: function () {
+      if (this.action == "add") {
+        return this.titleDialogAdd
+      } else if (this.action == "modify") {
+        return this.titleDialogEdit
+      }
+
+    }
+
+  },
   watch: {
     value: {
       handler(newVal, oldVal) {
@@ -196,8 +214,8 @@ export default {
           this.valueNeed = [];
           this.$emit("input", this.valueNeed);//触发外部数据变更
         } else {
-          console.log(`collection-value-change-2`,this.value);
-           this.valueNeed = this.value;
+          console.log(`collection-value-change-2`, this.value);
+          this.valueNeed = this.value;
           this.valueNeed.forEach(itemEach => {//循环：{valueNeed数组}
             if (!itemEach.__id) {//如果没有__id，补上，因为很多地方要用到
               itemEach.__id = util.getTimeRandom()
@@ -214,8 +232,10 @@ export default {
     submit: async function () {
       if (this.action == "add") {
         this.valueNeed.unshift(this.formDataEdit) //修改原来的数据值，替换成表单数据
+
+        this.$emit("after_add", this.formDataEdit);//触发外部数据变更
       } else if (this.action == "modify") {
-        console.log(`collection-submit-editIndex`,this.editIndex);
+        console.log(`collection-submit-editIndex`, this.editIndex);
         //对于this.valueNeed[this.editIndex]这个数组元素对象，是整个替换！！！！
         this.$set(this.valueNeed, this.editIndex, this.formDataEdit);
         // this.value[this.editIndex] = this.formDataEdit//修改原来的数据值，替换成表单数据
@@ -223,10 +243,17 @@ export default {
       await this.$nextTick();//延迟到视图更新,这句很重要，不加的话，会遇到【神坑1号】问题
       this.showDialog = false//关闭弹窗
     },
-    //函数：{开始拖拽排序函数}
+    //函数：{鼠标移入的回调函数}
     mouseenterG: async function (i) {
       if (this.dragging) return
       this.focusItem = i
+
+      this.$emit("after_mouseenter", { focusIndex: i, list: this.valueNeed });//触发外部数据变更
+    },
+    //函数：{鼠标移出的回调函数}
+    mouseleaveG: async function (i) {
+      this.focusItem = 99999
+      this.$emit("after_mouseleave", { list: this.valueNeed });//触发外部数据变更
     },
     //函数：{开始拖拽排序函数}
     dragStart: async function () {
@@ -267,11 +294,11 @@ export default {
      * @name 添加一组对象
      */
 
-    addGroup() {
+    addGroup(formDataAddon = {}) {
       this.action = "add";
 
       //__id为了防止新增一组时出现残留值,防止出现空对象
-      let obj = { __id: util.getTimeRandom() }; //
+      let obj = { __id: util.getTimeRandom(), ...formDataAddon }; //
 
       let { formItems } = this.cfForm;//表单字段
       formItems = lodash.cloneDeep(formItems); //深拷贝，避免子对象产生耦合
@@ -300,12 +327,14 @@ export default {
      * @name 显示修改对象弹窗的函数
      */
 
-    showEditDialog(i) {
+    async showEditDialog(i) {
       this.action = "modify";
       this.editIndex = i;
+      this.showDialog = true;//先显示弹窗
+      await util.timeout(100); //延迟-这里是为了等待外部的mouseleave动作完成,数据稳定后再进行深拷贝
       //深拷贝
       this.formDataEdit = lodash.cloneDeep(this.valueNeed[this.editIndex])//表单数据切换
-      this.showDialog = true;
+
       // this.editItem = "999";
     },
     afterBlur() {
@@ -327,7 +356,7 @@ export default {
   },
   async created() {
 
-   
+
 
     //按钮默认配置
     let cfElBtnAddDefault = {

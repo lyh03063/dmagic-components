@@ -3,7 +3,7 @@
     @mouseenter.stop="showDialogFamiliarity()"
     @click.stop
     @mouseleave.stop="focusId=null"
-    class="PSR DPIB"
+    class="PSR DPIB out"
   >
     <el-popover placement="right-start" width="240" trigger="hover">
       <!--候选值列表-->
@@ -28,7 +28,7 @@
         @click="changeFamiliarity(4)"
       >精通</i>
 
-      <el-button slot="reference" size="mini">
+      <el-button slot="reference" size="mini" >
         <span
           :style="{color:dictFColor[valueNeed.familiarity]}"
         >{{dictFamiliarity[valueNeed.familiarity]||"未学"}}</span>
@@ -99,10 +99,10 @@ export default {
         this.dataIdFamiliarity || lodash.get(this.valueNeed, `_id`);
 
 
-      let _systemId = lodash.get(PUB, `_paramAjaxAddon._systemId`, PUB._systemId);
 
 
 
+      let _systemId = util.getSystemId();//
 
 
       //Q1:熟悉度uuid存在
@@ -190,4 +190,9 @@ export default {
 }
 
 /****************************熟悉度切换-END****************************/
+
+/* 控制按钮的高度-居然还要穿透 */
+.out >>> *{
+  line-height: 12px;
+}
 </style>

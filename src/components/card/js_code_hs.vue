@@ -1,6 +1,6 @@
 <template>
   <div class="item-box TAC DPF">
-    <a class="FX1" target="_blank" :href="`/#/js_code_edit?jsCodeId=${item.dataId}`">
+    <a class="FX1"  :href="`/#/js_code_edit?jsCodeId=${item.dataId}`">
      <span v-if="item.objNote" >{{item.objNote.title}}</span>
     </a>
     <span class="C_999">{{moment(item.timeVisited).format("YYYY-MM-DD HH:mm:ss")}}</span>

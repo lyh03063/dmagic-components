@@ -276,12 +276,13 @@
         <div class="" > item:{{item}}</div>-->
         <!-- <div class="" > cf===item:{{cf===item}}</div> -->
         <!--候选值列表-->
+         <!--兼容style和sytle，这个是之前写错了，做补丁修正-->
         <i
           :class="['frequency-option',{focus:valueNeed[cf.prop]==option.value}] "
           v-for="(option,i) in cf.frequency.options"
           :key="option.value||i"
           @click="slectFOption(option)"
-          :style="cf.frequency.sytle||{'width':'48px'}"
+          :style="cf.frequency.style||cf.frequency.sytle||{'width':'48px'}"
         >
           {{option.label
           ||option.value}}

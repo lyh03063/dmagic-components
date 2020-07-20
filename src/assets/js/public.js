@@ -328,35 +328,35 @@ PUB.menuDemo = [
         menuItem: [
             {
                 name: "list_front_demo", title: "前端demo总表",
-                route: "/manage/system/sys_api/list_common?type=front_demo"
+                route: "/system/sys_api/manage/list_common?type=front_demo"
             },
             {
                 name: "detail_group_demo", title: "在线编程demo仓库",
-                route: "/manage/system/sys_api/detail_group?groupId=5eeae46a8ef1562cfc29ecc3"
+                route: "/system/sys_api/manage/detail_group?groupId=5eeae46a8ef1562cfc29ecc3"
             },
             {
                 name: "list_html_api", title: "html元素列表",
-                route: "/manage/system/sys_api/list_common?type=html_api"
+                route: "/system/sys_api/manage/list_common?type=html_api"
             },
             {
                 name: "list_html_prop", title: "html属性列表",
-                route: "/manage/system/sys_api/list_common?type=html_prop"
+                route: "/system/sys_api/manage/list_common?type=html_prop"
             },
             {
                 name: "list_common_js_file", title: "JS文件列表",
-                route: "/manage/system/sys_api/list_common?type=js_file"
+                route: "/system/sys_api/manage/list_common?type=js_file"
             },
             {
                 name: "list_common_js_code", title: "JS代码块列表",
-                route: "/manage/system/sys_api/list_common?type=js_code"
+                route: "/system/sys_api/manage/list_common?type=js_code"
             },
             {
                 name: "list_note", title: "笔记列表",
-                route: "/manage/system/sys_api/list_common?type=note"
+                route: "/system/sys_api/manage/list_common?type=note"
             },
             {
                 name: "detail_html_api", title: "html详情界面",
-                route: "/manage/system/sys_api/detail_html_api?dataId=5dee0e22b944155320f4199d"
+                route: "/system/sys_api/manage/detail_html_api?dataId=5dee0e22b944155320f4199d"
             },
         ]
     },
@@ -370,7 +370,6 @@ PUB.menuDemo = [
             { name: "list_demo", title: "list_demo1", route: "/manage/list_demo" },
             { name: "list_static_demo", title: "list_static_demo", route: "/manage/list_static_demo" },
             { name: "list_common_demo", title: "list_common_demo", route: "/manage/list_common_demo" },
-
             { name: "list_demo_detail_g_list", title: "detail_g_list详情关联数据列表" },
             { name: "select_file_template", title: "案管-选择文件模板" },
             { name: "list_demo_pannel_rel", title: "案管-详情关联列表-涉诉信息" },
@@ -413,7 +412,7 @@ PUB.menuDemo = [
         name: "normal",
         title: "常用基础",
         menuItem: [
-
+            { name: "ajax_token", title: "ajax_token测试" },
             { name: "list_simple_demo", title: "list_simple简单列表" },
             { name: "test_debug_list", title: "调试列表组件" },
             { name: "title_bar_demo", title: "标题栏组件" },
@@ -443,6 +442,7 @@ PUB.menuDemo = [
         name: "tool",
         title: "工具",
         menuItem: [
+            { name: "tool_json_to_str", title: "json转字符串" },
             { name: "tool_replace_space", title: "替换空行" },
             { name: "tool_old_cf_list", title: "替换旧列表配置" },
             { name: "auto_layout", title: "自动化布局", route: "/auto_layout" },
@@ -465,6 +465,50 @@ F_ITEMS.prop_select_list_data = { "prop": "prop_select_list_data", "label": "选
 //变量：{html标签库数组}
 PUB.arrHtmlTag = PUB.arrHtmlTag
 
+
+// PUB.arrCssProp = [
+//     {
+//         "prop": "float",
+//         arrPropVal: [
+//             { "label": "右浮动", "value": "right", "desc": "向右浮动", },
+//             { "label": "左浮动", "value": "left", "desc": "向左浮动", },
+//         ],
+//         arrPropFrequency: [
+//             { "label": "xxx", "value": "right", "desc": "xxxx", },
+//         ]
+//     },
+//     {
+//         "prop": "fl",
+//         arrPropVal: [
+//             { "label": "F右浮动", "value": "right", },
+//             { "label": "R左浮动", "value": "left", "desc": "向左浮动", },
+//         ],
+//         arrPropFrequency: [
+//             { "label": "xxx", "value": "right", "desc": "xxxx", },
+//         ]
+//     },
+// ]
+// PUB.arrCssProp =PUB.arrCssProp
+
+
+//函数：{根据Css属性名获取对应的value函数}
+util.getValItemByCssProp = function (prop) {
+    let formItem = { prop: "value", label: "value(属性值)", type: "input", };
+    let doc = PUB.arrCssProp.find(d => d.prop == prop)//变量：{当前标签文档}
+    if (!doc) return formItem
+
+    let { arrPropVal, objFrequency } = doc
+
+    if (arrPropVal && arrPropVal.length) {
+        formItem.options = arrPropVal;
+        formItem.type = "select"
+    }
+    if (objFrequency) {
+        formItem.frequency = objFrequency;
+    }
+    return formItem
+
+}
 
 
 

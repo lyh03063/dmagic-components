@@ -15,14 +15,23 @@
         <el-tab-pane :label="g.targetDoc.title" :name="i+''" v-for="(g,i) in listDemo" :key="i">
           <dm_list_flex_res class="MB20" :list="g.sonList" #default="{item}" col="8">
             <div class="demo_group Cur1" @click="selectDemo(item)">
-              <div class=" M_0 DPF" style="justify-content:center;align-items:center;width:140px;height:140px;">
+              <div
+                class="M_0 DPF"
+                style="justify-content:center;align-items:center;width:140px;height:140px;"
+              >
                 <img
                   :src="$lodash.get(item.targetDoc,'album[0]url')"
                   alt
                   style="max-width:140px;max-height:140px;"
                 />
               </div>
-              <div class="TAC">{{item.targetDoc.title}}</div>
+              <div class="TAC">
+                {{item.targetDoc.title}}
+                <a
+                  target="_blank"
+                  :href="`#/auto_layout?demoId=${item.targetDoc._id}`"
+                >编辑</a>
+              </div>
             </div>
           </dm_list_flex_res>
         </el-tab-pane>
@@ -90,7 +99,7 @@ export default {
         method: "post", url: `${PUB.domain}/info/getCommonGroupList`,
         data: {
           _systemId: "$all", groupId: "5eeae46a8ef1562cfc29ecc3", arrType: ["group", "front_demo"],
-          $projectTgAddon: { arrCss: "$targetDoc._data.arrCss", arrHtml: "$targetDoc._data.arrHtml",}
+          $projectTgAddon: { arrCss: "$targetDoc._data.arrCss", arrHtml: "$targetDoc._data.arrHtml", }
         }
       });
       this.listDemo = list

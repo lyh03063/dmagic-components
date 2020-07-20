@@ -143,6 +143,8 @@ export default {
   mounted() {
     PUB._paramAjaxAddon={ _systemId: "sys_api" }
     this.$emit("inited", { vm: this }); //将当前对象抛出
+    util.changeFavicon(`//qn-dmagic.dmagic.cn/202007171036012222_9387_js_file.png`)//函数：{改变网页标题图标的函数}
+
   }
 };
 </script>

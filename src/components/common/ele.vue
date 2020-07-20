@@ -1,5 +1,7 @@
 <template>
-  <component :is="tag" v-bind="cf">{{text}}<dm_ele
+  <component :is="tag" v-bind="cf">
+    {{text}}
+    <dm_ele
       :tag="d.tag"
       v-bind="d.cf"
       :text="d.text"
@@ -24,6 +26,21 @@ export default {
       }
     }
   },
+  watch: {
+    cf: {
+      handler(newVal, oldVal) {
+
+        console.log(`cf-change:`,this.cf);
+        util.clearObj(this.cf); //调用：{清除对象中的空属性（null,undefined,空格等）}
+        // this.children.forEach(itemEach => {//循环：{000数组}
+        //   let { cf } = itemEach;
+        //   console.log(`cf-change:cf`, cf);
+        // })
+      },
+      deep: true
+    }
+  },
+
   data() {
     return {
 

@@ -124,13 +124,18 @@ export default {
       deep: true
     }
   },
+  created(){
+console.log(`created-1################`);
+ util.changeFavicon(`//qn-dmagic.dmagic.cn/images/icon_dm.png`)//函数：{改变网页标题图标的函数}
+  },
 
   mounted() {
     var clipboard = new Clipboard(".btn-copy");
     clipboard.on("success", e => {
       this.$message.success("复制成功");
     });
-    util.changeFavicon(`http://qn-dmagic.dmagic.cn/images/icon_dm.png`)//函数：{改变网页标题图标的函数}
+    console.log(`mounted-1################`);
+   
   }
 };
 </script>

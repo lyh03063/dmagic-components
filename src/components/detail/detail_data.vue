@@ -135,7 +135,7 @@
 
 <script>
 export default {
-name: "dm_detail_data",
+  name: "dm_detail_data",
   props: {
     propDataId: null,
     docDetail: {},//***属性过来的caseId
@@ -284,16 +284,17 @@ name: "dm_detail_data",
 
     //函数：{ajax获取当前数据的熟悉度}
     async ajaxGetFamiliarity() {
+      let _systemId = util.getSystemId();//
       let { data } = await axios({
         //请求接口
         method: "post",
         url: `${PUB.domain}/info/commonDetail`,
         data: {
-          _systemId: PUB._systemId,
+          _systemId,//
           _dataType: "familiarity",
           findJson: {
             _idRel: this.dataId,
-            dataType: this.doc._dataType,
+
             userId: PUB.$sys.userId
           } //获取列表的数据总量
         } //传递参数
@@ -303,6 +304,7 @@ name: "dm_detail_data",
 
     //函数：{ajax获取关联笔记详情函数}-多篇按顺序拼接
     async ajaxGetRelNoteDetail() {
+          let _systemId = util.getSystemId();//
       if (!this.doc.relNoteList) return;
 
       let htmlDetail = "";
@@ -317,7 +319,7 @@ name: "dm_detail_data",
 
           url: `${PUB.domain}/info/commonDetail`,
           data: {
-            _systemId: PUB._systemId,
+            _systemId,
             _id
           } //传递参数
         });
@@ -335,6 +337,7 @@ name: "dm_detail_data",
     //函数：{初始化函数}
 
     async init() {
+      let _systemId = util.getSystemId();//
       let { data } = await axios({
         //请求接口
         method: "post",
@@ -348,7 +351,7 @@ name: "dm_detail_data",
       this.doc = data.doc;
 
       //变量：{ajax添加访客记录函数}
-     util.ajaxAddVisitRecord({  tagPage: "detail_data",dataId: this.dataId,dataType:this.doc._dataType })
+      util.ajaxAddVisitRecord({ tagPage: "detail_data", dataId: this.dataId, dataType: this.doc._dataType })
 
       this.ajaxGetFamiliarity(); //调用：{ajax获取当前数据的熟悉度}
 
@@ -376,7 +379,7 @@ name: "dm_detail_data",
 
       //根据关键词请求关联数据的ajax固定参数
       this.paramByKeyword = {
-        _systemId: PUB._systemId,
+        _systemId,
         _id: this.dataId,
         selectJson: {
           _id: 1,
@@ -400,11 +403,11 @@ name: "dm_detail_data",
   },
   async created() {
     //如果地址没有(非页面级组件)，从属性中获取数据id
-    this.dataId = this.$route.query.dataId ||this.docDetail._idRel2 ||  this.propDataId;
+    this.dataId = this.$route.query.dataId || this.docDetail._idRel2 || this.propDataId;
 
 
     this.init(); //函数：{初始化函数}
-  },mounted(){
+  }, mounted() {
 
   }
 };

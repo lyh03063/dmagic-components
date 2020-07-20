@@ -16,7 +16,10 @@
         <img v-if="valueNeed" :src="valueNeed" class="avatar" />
         <i v-if="!valueNeed" class="el-icon-plus avatar-uploader-icon"></i>
       </div>
-      <el-button v-else-if="!valueNeed" plain size="mini">点击上传</el-button>
+      <div class v-else>
+        <img v-if="valueNeed" :src="valueNeed" style="max-width:160px;max-height:160px" />
+        <el-button v-else plain size="mini">点击上传</el-button>
+      </div>
     </el-upload>
   </div>
 </template>

@@ -8,20 +8,26 @@
       <div class>
         <span class="C_666 FS13">{{docComplete.title}}</span>
         <span v-if="docComplete.desc" class="C_666 FS13">：{{docComplete.desc}}</span>
-        <span v-if="isShowEditJs" class="ML10">
-          <el-link type="primary" @click="isShowEditJs=false">关闭</el-link>
-          <el-link type="primary" @click="saveACode">保存</el-link>
-        </span>
 
-        <el-link type="primary" @click="isShowEditJs=true" v-else class="ML10">编辑</el-link>
+        <el-link type="primary" @click="isShowEditJs=true" v-if="!isShowEditJs" class="ML10">编辑</el-link>
 
-        <el-link type="primary" target="_blank" :href="`#/js_code_edit?jsCodeId=${docComplete._id}`"  class="ML10">新窗口编辑</el-link>
+        <el-link
+          type="primary"
+          target="_blank"
+          :href="`#/js_code_edit?jsCodeId=${docComplete._id}`"
+          class="ML10"
+        >新窗口编辑</el-link>
 
         <el-link @click="fnSelect" class="ML10 FS13">选择子代码</el-link>
       </div>
     </div>
-    <div class v-if="isShowEditJs">
-      <dm_code v-model="docComplete.jsCode" :cf="cfCode"></dm_code>
+    <div class="PL8 PR8 PB8" v-if="isShowEditJs">
+      <dm_js_code_curr class v-model="docComplete.jsCode">
+        <template #toobar_addon>
+          <el-button plain @click="isShowEditJs=false" size="mini">关闭</el-button>
+          <el-button plain @click="saveACode" size="mini">保存</el-button>
+        </template>
+      </dm_js_code_curr>
     </div>
     <!-- v-if="isShowSon&&docComplete.relJsCode" -->
     <div class="BC_fff PT1 PL8 PR8 PB1" v-show="isShowSon">

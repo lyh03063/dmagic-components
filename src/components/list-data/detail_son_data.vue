@@ -1,14 +1,6 @@
 <template>
   <div class="out">
-    <!-- <el-button plain @click="ajaxGetSonNote" size="mini">ajax刷新</el-button>
-    <div class>{{doc.title}}</div> -->
-    <section class v-for="(d,i) in list" :key="i">
-      <h2 class="section_title">
-        <span class="section_title_icon">{{i+1}}</span>
-        {{d.targetDoc.title}}
-      </h2>
-      <section v-html="d.targetDoc._detail" class="section_content"></section>
-    </section>
+    <dm_pannel_son_note class :index="i" :indexText="i+1" :doc="d" v-for="(d,i) in list" :key="i"></dm_pannel_son_note>
   </div>
 </template>
 <script>
@@ -42,9 +34,13 @@ export default {
         url: `${PUB.domain}/info/getCommonGroupList`,
         data: {
           _systemId: "$all",
+          "recursionGId": "sonNoteGId",//指定递归的分组ID**
           groupId: this.doc.sonNoteGId,
           arrType: ["group", "note"],
-          $projectTgAddon: { _detail: "$targetDoc._detail", }
+          $projectTgAddon: {
+            _detail: "$targetDoc._detail",
+            "sonNoteGId": "$targetDoc._data.sonNoteGId" //子数据分组ID返回来**
+          }
         }
       });
       this.list = list
@@ -74,27 +70,4 @@ export default {
 };
 </script>
 <style scoped>
-.section_title {
-  font-size: 18px;
-  padding: 5px 10px;
-  line-height: 1;
-}
-
-.section_title_icon {
-  background-color: seagreen;
-  display: inline-block;
-  width: 30px;
-  height: 30px;
-  line-height: 30px;
-  text-align: center;
-  border-radius: 50%;
-  color: #ffffff;
-  margin-right: 5px;
-  font-family: Arial;
-}
-
-.section_content {
-  padding: 8px 0;
-  font-size: 15px;
-}
 </style>

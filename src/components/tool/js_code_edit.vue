@@ -1,5 +1,5 @@
 <template>
-  <div class="out" v-if="docJsCode">
+  <div class="out" v-if="docJsCode&&ready">
     <dm_debug_list>
       <dm_debug_item v-model="docJsCode" />
     </dm_debug_list>
@@ -13,6 +13,20 @@
           </div>
           <el-button slot="reference" icon="el-icon-more" size="mini">历史记录</el-button>
         </el-popover>
+        <el-popover placement="top-start" width="460" trigger="hover">
+          <div class style="min-height:100px">
+            <!-- listJSFile:{{listJSFile}} -->
+            <dm_list_flex_res class="MB20" :list="listJSFile" #default="{item}" col="1">
+              <div class="DPF">
+                <span class="C_f30 FX1">{{item.fileName}}</span>
+                
+                <el-button plain @click="buildDebugJs(item)" size="mini">生成测试文件</el-button>
+                <el-button plain @click="buildProductionJs(item)" size="mini">生成生产文件</el-button>
+              </div>
+            </dm_list_flex_res>
+          </div>
+          <el-button slot="reference" icon="el-icon-more" size="mini">生成JS</el-button>
+        </el-popover>
         <!-- <el-button plain @click="buildDebugJs" size="mini">生成测试文件</el-button>
         <el-button plain @click="buildProductionJs" size="mini">生成生产文件</el-button>-->
       </div>
@@ -21,15 +35,11 @@
     <div class="PL10 PR10 PT10">
       <el-tabs v-model="activeName" type="card">
         <el-tab-pane label="当前代码" name="first">
-          <!-- <button class="n-button plain" @click="test">测试按钮</button> -->
-          <div class="MB8">
-            <el-button plain @click="formatJs" size="mini">格式化</el-button>
-          </div>
           <!-- <div class="" >docJsCode:{{docJsCode}}</div> -->
 
-          <dm_code class="FX1" v-model="docJsCode.jsCode" ref="codeMCurr" v-if="docJsCode.jsCode"></dm_code>
+          <dm_js_code_curr class v-model="docJsCode.jsCode"></dm_js_code_curr>
         </el-tab-pane>
-        <el-tab-pane label="子代码" name="second">
+        <el-tab-pane :label="titleRelJs" name="second">
           <div class="PB8">
             <el-button plain @click="$refs.codeSelectList.showDialog()" size="mini">选择子代码</el-button>
           </div>
@@ -65,6 +75,9 @@ export default {
   },
   data() {
     return {
+      listJSFile: null,//关联js文件列表
+      ready: true,
+      HtmlErrMessage: null,//语法错误提示代码
       cfListHistory: {
         dataTypeDict: "js_code",
         findJsonAddon: { tagPage: "js_code_edit" },
@@ -85,42 +98,29 @@ export default {
       }
     };
   },
+  computed: {
+    titleRelJs() {
+      let count = lodash.get(this.docJsCode, `relJsCode.length`, 0);
+      return `子代码(${count})`
+    }
+  },
+  watch: {
+    //监听jsCodeId变化（切换历史代码）
+    "$route.query.jsCodeId": function (newUrl, oldUrl) {
+      window.location.reload();//函数调用：{重载页面}
+    },
+    deep: true
+  },
   methods: {
-    //函数：{格式化JS函数}
-    formatJs: async function () {
-      let CM = this.$refs.codeMCurr.$refs.codeM.codemirror//获取到codemirror对象
-      let code = CM.getValue()
-
-      let { data } = await axios({//请求接口
-        method: "post", url: `${PUB.domain}/ServiceItem38?type=js`,
-        data: { HtmlCode: this.docJsCode.jsCode }
-      });
-
-      let { HtmlCode } = data
-      CM.setValue(HtmlCode)
-      console.log(`data:`, data);
 
 
-
-
-    },
-    //函数：{test函数}
-    test: async function () {
-      let CM = this.$refs.codeMCurr.$refs.codeM.codemirror//获取到codemirror对象
-      let code = CM.getValue()
-      alert(code);
-
-      CM.setSize(300, "auto")//配置尺寸
-
-
-    },
 
     //函数：{生成生产js文件函数}
-    buildProductionJs: async function () {
+    buildProductionJs: async function (doc) {
 
       let clickStatus = await this.$confirm("将生成新版本Js文件并上传七牛云，确定操作？").catch(() => { });
       if (clickStatus != "confirm") return
-      let { _id, fileName } = this.docJsCode
+      let { _id, fileName } = doc
       const loading = this.$loading({
         lock: true, text: "执行中，请勿关闭", spinner: "el-icon-loading", background: "rgba(0, 0, 0, 0.7)"
       });
@@ -141,8 +141,9 @@ export default {
 
     },
     //函数：{生成测试js文件函数}
-    buildDebugJs: async function () {
-      let { _id, fileName } = this.docJsCode
+    buildDebugJs: async function (doc) {
+
+      let { _id, fileName } = doc
       const loading = this.$loading({
         lock: true, text: "执行中，请勿关闭", spinner: "el-icon-loading", background: "rgba(0, 0, 0, 0.7)"
       });
@@ -192,8 +193,11 @@ export default {
       });
 
     },
-    //函数：{获取js文件详情函数}
+    //函数：{获取js代码块详情函数}
     getDoc: async function () {
+
+      this.jsCodeId = this.$route.query.jsCodeId;//
+      if (!this.jsCodeId) return
 
       let { data } = await axios({  //请求接口
         method: "post", url: `${PUB.domain}/info/commonDetail`,
@@ -203,21 +207,34 @@ export default {
 
       //变量：{ajax添加访客记录函数}***
       util.ajaxAddVisitRecord({ tagPage: "js_code_edit", dataId: this.jsCodeId, })
+      this.ready = true;
+
+    },
+    //函数：{获取关联js文件列表}
+    getCodeForJsFile: async function () {
+
+      this.jsCodeId = this.$route.query.jsCodeId;//
+      if (!this.jsCodeId) return
+
+      let { data } = await axios({  //请求接口
+        method: "post", url: `${PUB.domain}/info/getCodeForJsFile`,
+        data: { jsCodeId: this.jsCodeId, } //传递参数
+      });
+      this.listJSFile = data.listFile;
+
 
     },
   },
   created() {
     this.initCF()//调用：{初始化组件配置函数}
-    this.jsCodeId = this.$route.query.jsCodeId;//
-    if (this.jsCodeId) {//
-      this.getDoc(); //调用：{获取demo详情函数}
-    }
-
+    this.getDoc(); //调用：{获取demo详情函数}
+    this.getCodeForJsFile(); //调用：{获取关联js文件列表}
   },
 
   mounted() {
     PUB._paramAjaxAddon = { _systemId: "sys_api" }
     this.$emit("inited", { vm: this }); //将当前对象抛出
+    util.changeFavicon(`//qn-dmagic.dmagic.cn/202007171036123030_68484_js_code.png`)//函数：{改变网页标题图标的函数}
   }
 };
 </script>
@@ -230,5 +247,16 @@ export default {
 .out >>> .CodeMirror {
   font-size: 15px;
   height: calc(100vh - 160px);
+}
+
+.box_scroll >>> .CodeMirror {
+  height: 200px;
+}
+
+.error_box {
+  margin: 6px 0;
+  padding: 5px 6px;
+  color: #f56c6c;
+  border: 1px #f56c6c solid;
 }
 </style>

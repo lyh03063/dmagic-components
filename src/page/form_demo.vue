@@ -199,20 +199,21 @@ export default {
         labelWidth: "150px",
 
         formItems: [
+          F_ITEMS.object_1,
           F_ITEMS.title,
           F_ITEMS.collection3,
           // F_ITEMS.collection2,
 
           // {label:"json编辑器",type:"vueJsonEditor"},
           // F_ITEMS.select_list_common_url,
-         F_ITEMS.predictTime,
-          
+          F_ITEMS.predictTime,
+
           // //  F_ITEMS.num1_text,
           // //  F_ITEMS.complete,
           // F_ITEMS.relJsCode,
           // // F_ITEMS.relWorkExperience,
           // F_ITEMS.treeData1,//树
-          // F_ITEMS.object_1,
+
           F_ITEMS.checkbox1,
 
           // // F_ITEMS.addressObj,

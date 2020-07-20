@@ -1,22 +1,42 @@
 <template>
-  <div>
+  <div v-if="readyResource">
     <dm_debug_list>
+      <dm_debug_item v-model="arrHtml" />
       <dm_debug_item v-model="arrCss" />
       <dm_debug_item v-model="docDemo" />
     </dm_debug_list>
     <div class="H50 DPF BC_000 PL15 MB5" style="background:rgb(84, 92, 100);">
       <div class="LH50 C_fff FS24 MR20 FX1">
         码邦科技-网页在线布局工具
-        <!-- <el-button plain @click="test" size="mini">移除data</el-button> -->
+        <!-- <el-button plain @click="test" size="mini">test</el-button> -->
       </div>
       <div class="PT8 PR15" v-if="demoId&&docDemo">
-        <span class="C_fff FS16">{{docDemo.title}}</span>
+        <span class="C_fff FS16 MR10">{{docDemo.title}}</span>
         <el-button
           plain
           @click="saveDemo"
           size="mini"
           v-if="$power('groupDataList.all.modify')"
-        >保存demo</el-button>
+        >保存当前demo</el-button>
+
+        <el-button
+          plain
+          @click="showDialogSaveMyDemo"
+          size="mini"
+          v-if="$power('groupDataList.all.modify')"
+        >拷贝demo</el-button>
+
+        <a class="ML10" target="_blank" href="#/auto_layout">
+          <el-button plain size="mini">新建demo</el-button>
+        </a>
+      </div>
+      <div class="PT8 PR15" v-else>
+        <el-button
+          plain
+          @click="showDialogSaveMyDemo"
+          size="mini"
+          v-if="$power('groupDataList.all.modify')"
+        >保存为我的demo</el-button>
       </div>
     </div>
     <div class="PL8 PR8" style="height: calc(100vh - 55px);">
@@ -50,6 +70,8 @@
                       @click="$refs.rowhtml.$refs.collectionTag.addGroup()"
                       size="mini"
                     >+ 一级元素</el-button>
+
+                    <el-checkbox class="ML20" v-model="isHighLightLayout">悬停代码时高亮区块</el-checkbox>
                   </div>
                   <div class="box_scroll">
                     <dm_row_html_tag class v-model="arrHtml" ref="rowhtml"></dm_row_html_tag>
@@ -57,7 +79,7 @@
                 </el-tab-pane>
                 <el-tab-pane label="Css配置" name="tab2">
                   <div class="PB8">
-                    <el-button plain @click="$refs.collectionCss.addGroup()" size="mini">添加一组样式</el-button>
+                    <el-button plain @click="$refs.collectionCss.addGroup()" size="mini">添加Css代码块</el-button>
                   </div>
                   <!-- {{arrCss}} -->
                   <div class="box_scroll">
@@ -74,6 +96,7 @@
                     >
                       <!--插槽内容-->
                       <template v-slot:dataSlot1="{doc,docEntity}">
+                        <!-- <div class="" >docEntity: {{docEntity}}</div> -->
                         <dm_pannel_new :cf="cfPannel" :title="`${docEntity.selector}`">
                           <template #titleBar_boxMiddle>
                             <span class="C_999 ML10">{{docEntity.desc?' '+docEntity.desc:''}}</span>
@@ -90,8 +113,19 @@
                           </template>
                           <div class="PT10 PL15">
                             <!--单类样式编辑组件-->
-                            <div class="" >docEntity.css:{{docEntity.css}}</div>
-                            <dm_single_class_edit v-model="docEntity.css"></dm_single_class_edit>
+                            <!-- @click="showDialog" -->
+
+                            <!-- <el-button
+                              plain
+                              size="mini"
+                              @click="collectionCssAdd(docEntity)"
+                            >打开css集合添加弹窗</el-button>-->
+
+                            <dm_row_css_code
+                              :ref="`rowCssCode_${docEntity.__id}`"
+                              v-model="docEntity.arrProp"
+                            ></dm_row_css_code>
+                            <!-- <dm_single_class_edit v-model="docEntity.css"></dm_single_class_edit> -->
                           </div>
                         </dm_pannel_new>
                       </template>
@@ -115,9 +149,45 @@
       @inited="({vm})=>vm_dialog_select_demo=vm"
       @select_demo="afterSelectDemo"
     ></dm_dialog_select_demo>
+
+    <!--选择Css属性弹窗组件 -->
+    <dm_dialog_css_prop @inited="({vm})=>vm_dialog_css_prop=vm"></dm_dialog_css_prop>
+
+    <!--填写新建我的demo信息表单弹窗-->
+    <el-dialog
+      custom-class="n-el-dialog"
+      width="65%"
+      title="将当前demo保存为我的demo"
+      :close-on-press-escape="false"
+      :close-on-click-modal="false"
+      :append-to-body="true"
+      v-bind:visible.sync="isShowDialogSaveMy"
+      v-if="isShowDialogSaveMy"
+    >
+      <div class>
+        <dm_dynamic_form :cf="cfFormAddDemo" v-model="formDataAddDemo" @submit="ajaxAddMyDemo"></dm_dynamic_form>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
+
+//函数：{处理一组html属性显示字符的函数}
+util.handleAHtmlPropStr = function ({ prop, value }) {
+  if (!value) return ""
+  if (prop == "class") { //对于特殊类名的处理
+    value = value.replace(" focus_ele", "")
+  }
+  if (!value) return ""
+  let strShow = value;
+  if (value.length > 21) { //如果字符长度超过20
+    strShow = value.slice(0, 17)
+    strShow += `...`
+  }
+  return ` <span class="code_html_prop">${prop}</span>="<span class="code_html_val" title="${value}">${strShow}</span>"`
+}
+
+
 
 PUB.cfPannel.gray_bar3 = {//浅灰色栏
   showContent: false,//内容块折叠
@@ -134,11 +204,26 @@ PUB.cfPannel.gray_bar3 = {//浅灰色栏
 let cfPannel = lodash.cloneDeep(PUB.cfPannel.gray_bar3)
 
 
+
+//防抖函数
+let clearHtmlPropDebounce = lodash.debounce(util.clearInvalidHtmlProp, 500)
+
 export default {
+  name: "auto_layout",
   mixins: [MIX.base],
   components: {},
   data() {
     return {
+      readyResource: false,
+      isHighLightLayout: true,//悬停代码时高亮区块
+      isShowDialogSaveMy: false,//显示填写新建我的demo信息表单弹窗
+      formDataAddDemo: { title: "新建demo" },
+      //查询表单配置
+      cfFormAddDemo: {
+        size: "mini",
+        formItems: [F_ITEMS.title,],
+        btns: [{ text: "保存", event: "submit", type: "primary", size: "mini" }]
+      },
       cfDragBox: {
         nWidthLeft: 320,
         cfBoxLeft: { class: " ", style: { 'background-image': "url('http://tool.alixixi.com/csseditor/images/grid.gif')" } },
@@ -146,7 +231,7 @@ export default {
       },
       demoId: null,
       docDemo: null,
-      cfElBtnAdd: { text: "+添加一组样式", type: "info", size: "mini", },
+      cfElBtnAdd: { text: "+添加样式代码块", type: "info", size: "mini", },
       cfPannel: lodash.cloneDeep(cfPannel),
       formDataAddCss: {},
       cfFormClass: {//集合-样式新增，修改的表单
@@ -169,63 +254,51 @@ export default {
       },
       arrHtml: [
         {
-          __id111: "202006231111",//这个要加，否则影响集合的
-          tag: "div",
-          text: "",
-          cf: {
-            style: {},
-            class: "box_out",
+          "tag": "div",
+          "children": [
+            {
+              "tag": "span",
+              "children": [
+              ],
+              "cf": {},
+              "text": "性别",
+              "desc": "",
+              "__id": "202007191719693131_64518"
+            },
+            {
+              "tag": "label",
+              "children": [
+                {
+                  "tag": "input",
+                  "children": [
+                  ],
+                  "cf": {
+                    "value": "1",
+                    "name": "sex",
+                    "type": "radio"
+                  },
+                  "text": "新的盒子",
+                  "desc": "",
+                  "__id": "202007191720683434_19247"
+                }],
+              "cf": {},
+
+              "text": "男",
+              "desc": "",
+              "__id": "202007191721411010_30309"
+            },
+          ],
+          "cf": {
+            "style": "background-color:#FFFFFF;padding:10px;"
           },
-          children: [
-            {
-              __id: "202006231112",
-              tag: "div",
-              text: "内盒子",
-              children: [],
-              cf: {
-                class: "box_in",
-              }
-            },
-            {
-              __id: "202006231113",
-              tag: "div",
-              text: "内盒子",
-              children: [],
-              cf: {
-                class: "box_in",
-              }
-            },
-          ]
-        },
-        // {
-        //   tag: "div",
-        //   text: "盒子3",
-        //   cf: {
-        //     style: { "padding": "10px" },
-        //     class: "box_3",
-        //   }
-        // },
-      ],
+          "text": "",
+          "desc": "",
+          "__id": "202007191718455252_59142"
+        }]
+      ,
       arrCss: [
-        // {
-        //   selector: ".box_layout",
-        //   desc:"通用布局",
-        //   css: { "transition": "0.5s", "padding": "10px", "border-width": "1px", "border-style": "solid", "border-color": "#666", }
-        // },
-        {
-          selector: ".box_out",
-          desc: "外盒子样式",
-          css: { "transition": "0.5s", "width": "100%", "height": "", "border-width": "3px", "border-style": "solid", "border-color": "#666", }
-        },
-        {
-          selector: ".box_in",
-          desc: "内盒子样式",
-          css: { "transition": "0.5s", "border-width": "3px", "border-style": "solid", "border-color": "#f60", }
-        },
-        // {
-        //   selector: ".box_2",
-        //   css: { "transition": "0.5s", "border-width": "3px", "border-style": "solid", "border-color": "#f90", },
-        // },
+        { "selector": ".box_out", "desc": "外盒子样式", "css": { "transition": "0.5s", "width": "100%", "height": "", "border-width": "3px", "border-style": "solid", "border-color": "#666" }, "__id": "202007142210242424_37706", "arrProp": [{ "prop": "transition", "value": "0.5s" }, { "prop": "width", "value": "100%" }, { "prop": "height", "value": "" }, { "prop": "border-width", "value": "3px" }, { "prop": "border-style", "value": "solid" }, { "prop": "border-color", "value": "#666" }] },
+        { "selector": ".box_in", "desc": "内盒子样式", "css": { "transition": "0.5s", "border-width": "3px", "border-style": "solid", "border-color": "#f60" }, "__id": "202007142210242424_85553", "arrProp": [{ "prop": "transition", "value": "0.5s" }, { "prop": "border-width", "value": "3px" }, { "prop": "border-style", "value": "solid" }, { "prop": "border-color", "value": "#f60" }] }
       ],
       vm_dialog_select_demo: null,//选择demo组件对象
       vm_form_css1: null,
@@ -235,7 +308,14 @@ export default {
       cssCode: "",
     };
   },
+
   watch: {
+    "$route.query.demoId": {//监听demoId变化（切换demo）
+      handler(newVal, oldVal) {
+        window.location.reload();//函数调用：{重载页面}
+      },
+      deep: true
+    },
     arrCss: {//监听到arrClass变化，立马更新样式
       handler(newVal, oldVal) {
         this.updatePageCss()//调用：{更新页面样式函数}
@@ -243,8 +323,19 @@ export default {
       immediate: true,
       deep: true
     },
-    arrHtml: {//监听到arrClass变化，立马更新样式
+    arrHtml: {//监听到arrHtml变化，更新Html
       async handler(newVal, oldVal) {
+        console.log(`arrHtml-change############`);
+
+
+
+        clearHtmlPropDebounce(this.arrHtml)
+
+
+
+
+
+
         await util.timeout(500); //延迟
         this.htmlCode = $("#id_html_box").html()//调用：{返回某节点的html代码的函数}
       },
@@ -253,35 +344,26 @@ export default {
     },
   },
   methods: {
+
+
+
     //函数：{000函数}
     test: async function () {
-      alert(`test`);
-      $("#id_html_box").removeAttr("data-v-9e28b8ec")//调用：{返回某节点的html代码的函数}
+      this.$router.push({ path: 'auto_layout', query: { demoId: 1111 } });//跳转登录页-不产生历史记录
 
     },
     //函数：{更新页面样式函数}
     updatePageCss: async function () {
 
       //css属性数据字典
-      let dictCssProp = { width: "宽度", transition: "过渡动画", }
-
-      //函数：{将Css对象转成css代码函数-每行带注释}
-      util.objToCssWithRemark = function (objCss) {
-        let cssCode = ""
-        for (var prop in objCss) {
-          if (!objCss[prop]) continue;//如果代码无效，跳过
-          cssCode += `
-    ${prop}:${objCss[prop]}; /*${dictCssProp[prop] || ''}*/`
-        }
-        return cssCode
-      }
+      PUB.dictCssProp = { width: "宽度", transition: "过渡动画", }
 
 
 
       let cssCode = ""
       this.arrCss.forEach(itemEach => {//循环：{css配置数组}
-        let { selector, css, desc } = itemEach
-        let cssNormal = util.objToCssWithRemark(css)//函数：{将Css对象转成css代码函数}
+        let { selector, css, arrProp, desc } = itemEach
+        let cssNormal = util.objToCssWithRemark(arrProp)//函数：{将Css对象转成css代码函数}
         cssCode += `
 /*${desc}*/
 ${selector}{${cssNormal}
@@ -290,6 +372,14 @@ ${selector}{${cssNormal}
       this.cssCode = cssCode
       util.addCssToPage({ css: this.cssCode })//调用：{输出css代码到当前页面的函数}
     },
+
+    //函数：{打开css集合添加数据弹窗函数}
+    collectionCssAdd: async function (formData = {}) {
+      // let ref = `rowCssCode_${docEntity.__id}`//ref定位标记，因为是集合组件，所以内部要进行定位
+      this.$refs[this.refRowCssCode].$refs.collection.addGroup(formData)//打开添加数据弹窗
+    },
+
+
     //函数：{选择demo后的回调函数}
     afterSelectDemo: async function ({ doc }) {
       doc = lodash.cloneDeep(doc);//深拷贝，避免影响数据源
@@ -320,6 +410,31 @@ ${selector}{${cssNormal}
       });
       this.$message.success('修改成功');
     },
+    //函数：{保存为我的demo函数}
+    showDialogSaveMyDemo: async function () {
+      this.isShowDialogSaveMy = true;
+      //弹出窗口（填写demo名称），自动创建一个demo数据并跳转页面
+
+    },
+    //函数：{ajax保存我的函数}
+    ajaxAddMyDemo: async function () {
+      let { arrCss, arrHtml } = this
+      let dataAdd = { ...this.formDataAddDemo, arrCss, arrHtml }
+      let rsp = await axios({
+        method: "post", url: `${PUB.domain}/info/commonAdd`,
+        data: { "_data": dataAdd, "_systemId": "sys_api", "_dataType": "front_demo" }
+      });
+      this.$message.success('操作成功');
+      console.log(`rsp:####`, rsp);
+
+      let demoId = lodash.get(rsp, `data.addData._id`);
+
+      this.isShowDialogSaveMy = false;
+      this.$router.push({ path: 'auto_layout', query: { demoId: demoId } });//跳转登录页-不产生历史记录
+
+
+    },
+
     //函数：{获取demo详情函数}
     getDemoDoc: async function () {
       let { data } = await axios({  //请求接口
@@ -334,18 +449,24 @@ ${selector}{${cssNormal}
 
 
   },
-  created() {
+  async created() {
+
+
     this.demoId = this.$route.query.demoId;//
     if (this.demoId) {//
       this.getDemoDoc(); //调用：{获取demo详情函数}
     }
+
+    await util.loadJs({ url: PUB.urlJS.html_tag })//加载html相关JS
+    await util.loadJs({ url: PUB.urlJS.css_prop })//加载css相关JS
+    this.readyResource = true
   },
   async mounted() {
 
 
-    util.ajaxAddVisitRecord({  tagPage: "auto_layout", })//变量：{ajax添加访客记录函数}
+    util.ajaxAddVisitRecord({ tagPage: "auto_layout", })//变量：{ajax添加访客记录函数}
 
-
+    util.changeFavicon(`//qn-dmagic.dmagic.cn/202007171024372424_67675_layout.png`)//函数：{改变网页标题图标的函数}
 
 
   }
@@ -374,5 +495,29 @@ ${selector}{${cssNormal}
 }
 .btn_class.focus {
   border: 1px #f60 solid;
+}
+</style>
+
+<!--全局样式-->
+<style >
+.code_html_tag {
+  color: #800303;
+}
+
+.code_html_prop {
+  color: #f00;
+}
+.code_css_prop {
+  color: #666;
+}
+.code_html_val {
+  color: #1313f5;
+}
+.code_css_val {
+  color: #1313f5;
+}
+
+.focus_ele {
+  outline: 2px #f00 solid;
 }
 </style>
