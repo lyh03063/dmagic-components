@@ -9,6 +9,7 @@
       :hidePart="{'btn-add111':true}"
       data-slot="dataSlot1"
       @after_add="afterAdd"
+      @after_modify="afterModify"
       titleDialogEdit="修改Css属性/属性值"
       titleDialogAdd="添加Css属性/属性值"
     >
@@ -16,7 +17,52 @@
       <template v-slot:dataSlot1="{doc,docEntity}">
         <!-- {{docEntity.__id}} -->
         <span class="DPF PL5" v-if="doc">
-          <span class=" FS14" v-html="cssCodeText(doc)"></span>
+          <!-- <textarea class="" v-focus v-if="docEntity.isEditProp"></textarea> -->
+          <!-- <el-input
+            style="width:150px;"
+            v-focus
+            autosize
+            type="textarea"
+            :rows="1"
+            v-model="docEntity.prop"
+            v-if="docEntity.isEditProp"
+            @blur="docEntity.isEditProp=false"
+          ></el-input>-->
+          <!-- @select="docEntity.isEditProp=false" -->
+          <dm_auto_css_prop v-model="docEntity.prop" v-if="docEntity.isEditProp"></dm_auto_css_prop>
+
+          <span
+            class="code_css_prop"
+            slot="reference"
+            @click.stop="goEditProp(docEntity)"
+            v-else
+          >{{docEntity.prop}}</span>
+          :
+          <!-- @blur="docEntity.isEditPVal=false" -->
+          <div class="DPIB" @click.stop>
+            <el-input
+              style="width:250px;"
+              v-focus
+              autosize
+              type="textarea"
+              :rows="1"
+              v-model="docEntity.value"
+              v-if="docEntity.isEditPVal"
+            ></el-input>
+            <span
+              class="code_css_prop"
+              slot="reference"
+              @click.stop="goEditPropVal(docEntity)"
+              v-else
+            >{{docEntity.value}}</span>
+          </div>
+
+          <!-- <el-popover placement="bottom-start" width="220" trigger="hover">
+            <div class>
+              <el-input style="width:200px;" type="textarea" :rows="1" v-model="docEntity.value"></el-input>
+            </div>
+            <span class="code_css_val" slot="reference">{{docEntity.value}}</span>
+          </el-popover>-->
         </span>
       </template>
     </dm_collection>
@@ -45,21 +91,47 @@ export default {
 
   },
   methods: {
+
+    //函数：{切换到编辑属性名称状态}
+    goEditPropVal: async function (docEntity) {
+      this.$set(docEntity, 'isEditPVal', true)
+      let evTag = "click.click_cancel_edit_css_prop_val"//变量：{事件名称-带命名空间}
+      $("html").off(evTag).on(evTag, function () {//给html绑定取消编辑状态的事件
+        docEntity.isEditPVal = false;
+        delete docEntity.isEditPVal;
+        $("html").off(evTag)
+      })
+
+    },
+
+
+
+    //函数：{切换到编辑属性名称状态}
+    goEditProp: async function (docEntity) {
+      this.$set(docEntity, 'isEditProp', true)
+
+      let evTag = "click.click_cancel_edit_css_prop"//变量：{事件名称-带命名空间}
+      $("html").off(evTag).on(evTag, function () {//给html绑定取消编辑状态的事件
+        docEntity.isEditProp = false;
+        delete docEntity.isEditProp;
+        $("html").off(evTag)
+      })
+
+    },
     //函数：{添加数据后的回调函数}
     afterAdd: async function (data) {
-      /****************************保存历史记录到LocalStorage-START****************************/
-      let { prop } = data
-      let listHsCssProp = util.getLocalStorageObj("listHsCssProp") || []//调用：{从LocalStorage获取一个对象的函数}
-      listHsCssProp = listHsCssProp.filter(d => d.prop != prop)//将同名属性过滤掉
 
-      listHsCssProp.unshift({ prop })//前面添加属性
-      if (listHsCssProp.length > 10) listHsCssProp.length = 10;//限制长度
-      util.setLocalStorageObj("listHsCssProp", listHsCssProp)//调用：{设置一个对象到LocalStorage}
-      /****************************保存历史记录到LocalStorage-END****************************/
+      let { prop } = data
+      util.addCssUseHistory({ prop })//调用：{添加Css使用的LocalStorage历史记录}
+
+
     },
-    //函数：{根据css对象返回css代码函数}
-    cssCodeText: function (doc) {
-      return `<span class="code_css_prop">${doc.prop}</span>:<span class="code_css_val">${doc.value}</span>;`
+    //函数：{修改数据后的回调函数}
+    afterModify: async function (data) {
+      let { prop } = data
+      util.addCssUseHistory({ prop })//调用：{添加Css使用的LocalStorage历史记录}
+
+
     },
 
 
@@ -86,17 +158,14 @@ export default {
           labelWidth: "150px",
           watch: { //传入监听器
             async prop(newVal, oldVal) {
-              console.log("prop变动###");
               //要改造value字段，如果有值项，变成下拉框，否则是文本框
               let valItemCurr = util.getValItemByCssProp(newVal)//调用：{根据Css属性获取到的value字段配置}
-              console.log(`valItemCurr:`, valItemCurr);
               if (!valItemCurr) return
               let index = formItems.findIndex(d => d.prop == newVal);//value字段的索引
               formItems.splice(index, 1);//删除一个字段
               await this.$forceUpdate()//强制视图更新*****
               // await this.$nextTick();//延迟到视图更新
               formItems.push(valItemCurr);//加入一个字段
-              console.log(`formItems:`, formItems);
               this.$forceUpdate()//强制视图更新*****第二次
             },
           },
@@ -109,6 +178,8 @@ export default {
   },
   async created() {
     this.initCF()//调用：{初始化组件配置函数}
+
+
 
   },
   mounted() {

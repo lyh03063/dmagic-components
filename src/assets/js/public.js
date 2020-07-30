@@ -15,7 +15,9 @@ PUB.ignorePower = true;//忽略权限
 
 
 
+PUB.urlJS.css_prop="//localhost:3000/built_js/css_prop.js"
 
+PUB.urlJS.html_tag="//localhost:3000/built_js/html_tag.js"
 
 //函数：{获取规格链id函数}
 FN.getIdSpecChian = function (arrSpecSelected) {
@@ -47,9 +49,7 @@ FN.handelCombResult = function ({ listSpecs, arrResult }) {
         }
         //循环：{组合结果数组}
         arrResult.forEach(itemEach => {
-            console.log("itemEach[indexTerm].name:", itemEach[indexTerm].name);
             let flag = itemEach[indexTerm].name != valTerm;
-            console.log("flag:", flag);
             if (flag) {
                 itemEach[index] = { name: "——" };
             }
@@ -317,7 +317,7 @@ PUB.menuDemo = [
         name: "sys_case",
         title: "案管专用",
         menuItem: [
-            { name: "detail_bankruptcy_case", title: "案件详情", route: "detail_bankruptcy_case?caseId=5edc65048d6ed44d5cf18aab" },
+            { name: "detail_bankruptcy_case", title: "案件详情", route: "/manage/detail_bankruptcy_case?caseId=5edc65048d6ed44d5cf18aab" },
 
         ]
     },
@@ -425,6 +425,7 @@ PUB.menuDemo = [
         name: "other",
         title: "其他",
         menuItem: [
+            { name: "draggable_demo", title: "draggable_demo" },
             { name: "row_html_tag_demo", title: "html集合组件测试" },
             { name: "upload_qiniu", title: "upload_qiniu", route: "/manage/upload_qiniu" },
             { name: "test", title: "test", route: "/manage/test" },
@@ -445,7 +446,7 @@ PUB.menuDemo = [
             { name: "tool_json_to_str", title: "json转字符串" },
             { name: "tool_replace_space", title: "替换空行" },
             { name: "tool_old_cf_list", title: "替换旧列表配置" },
-            { name: "auto_layout", title: "自动化布局", route: "/auto_layout" },
+            { name: "auto_layout", title: "自动化布局", route: "/open/auto_layout" },
             { name: "js_file_edit", title: "js文件编辑", route: "/js_file_edit?jsFileId=5eb272bb298e45553493e821" },
         ]
     },
@@ -491,63 +492,6 @@ PUB.arrHtmlTag = PUB.arrHtmlTag
 // PUB.arrCssProp =PUB.arrCssProp
 
 
-//函数：{根据Css属性名获取对应的value函数}
-util.getValItemByCssProp = function (prop) {
-    let formItem = { prop: "value", label: "value(属性值)", type: "input", };
-    let doc = PUB.arrCssProp.find(d => d.prop == prop)//变量：{当前标签文档}
-    if (!doc) return formItem
-
-    let { arrPropVal, objFrequency } = doc
-
-    if (arrPropVal && arrPropVal.length) {
-        formItem.options = arrPropVal;
-        formItem.type = "select"
-    }
-    if (objFrequency) {
-        formItem.frequency = objFrequency;
-    }
-    return formItem
-
-}
-
-
-
-
-
-//函数：{根据html标签获取对应的属性表单项函数}
-util.getFormItemsBytag = function (tag) {
-    let formItems = [];
-    let doc = PUB.arrHtmlTag.find(d => d.tag == tag)//变量：{当前标签文档}
-    if (!doc) return
-    let { arrProp } = doc//变量：{当前标签的属性数组}
-    if (!(arrProp && arrProp.length)) return
-
-
-    arrProp.forEach(pEach => {//循环：{当前标签的属性数组}
-        let { prop, label, desc, arrVal, arrPropFrequency } = pEach
-        label = label || desc
-        label = `${prop}(${label})`
-        let formItem = { prop, label, tips: desc, type: "input", };
-
-        if (arrVal && arrVal.length) {
-            formItem.type = "select"
-            formItem.options = arrVal
-
-        }
-
-        if (arrPropFrequency) {//如果候选值存在
-            formItem.frequency = {
-                sytle: { width: '148px' },
-                options: arrPropFrequency
-            }
-        }
-
-        formItems.push(formItem)
-
-    })
-    return formItems
-
-}
 
 
 

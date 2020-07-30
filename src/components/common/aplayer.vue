@@ -48,7 +48,6 @@ export default {
   methods: {
     //函数：{添加秒数函数}
     addTime: async function (time) {
-      console.log(`this.ap:##`, this.ap);
 
       let { currentTime } = this.ap.audio//变量：{当前播放的时间}
 
@@ -72,8 +71,6 @@ export default {
     },
     //函数：{上一曲函数}
     pre: async function () {
-      console.log(`this.ap:`, this.ap);
-      console.log(`this.ap.list:`, this.ap.list);
       let { index } = this.ap.list
       let { length } = this.ap.list.audios
       if (index == 0) {
@@ -98,7 +95,6 @@ export default {
         index++;
       }
 
-      console.log(`index:`, index);
       this.ap.list.switch(index);
       this.ap.play()
     },

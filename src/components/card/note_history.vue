@@ -1,6 +1,6 @@
 <template>
   <div class="item-box TAC DPF">
-    <a class="FX1" target="_blank" :href="`/#/detail_data?dataId=${item.dataId}`">
+    <a class="FX1" target="_blank" :href="linkDetail(item)">
      <span v-if="item.objNote" >{{item.objNote.title}}</span>
     </a>
     <span class="C_999">{{moment(item.timeVisited).format("YYYY-MM-DD HH:mm:ss")}}</span>
@@ -15,6 +15,15 @@ export default {
   data() {
     return {
     };
+  },
+  computed: {
+   
+    linkDetail() {//笔记详情连接
+      return function (item) {
+        let {sysId="sys_api"}=this.$route.params//获取sysId，如果没有的话就跳转sys_api，因为学习主页就是跳sys_api
+        return `#/system/${sysId}/detail_data?dataId=${item.dataId}`
+      }
+    },
   },
 
   methods: {

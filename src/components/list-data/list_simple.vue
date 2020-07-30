@@ -37,7 +37,6 @@ export default {
   watch: {
     value: {
       handler(newVal, oldVal) {
-        console.log('value changed');
 
         if (this.cf.ajax) {//如果{ajax}配置存在
           this.ajaxGetList()//调用：{ajax获取列表数据函数}

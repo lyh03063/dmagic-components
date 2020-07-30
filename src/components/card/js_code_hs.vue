@@ -1,5 +1,5 @@
 <template>
-  <div class="item-box TAC DPF">
+  <div class="item-box TAC DPFC">
     <a class="FX1"  :href="`/#/js_code_edit?jsCodeId=${item.dataId}`">
      <span v-if="item.objNote" >{{item.objNote.title}}</span>
     </a>
@@ -30,9 +30,8 @@ export default {
 <style scoped>
 .item-box {
   border-bottom: 1px #ddd solid;
-  border-radius: 5px;
   background: #fff;
-  padding: 5px 0;
+  padding: 2px 0;
   text-align: left;
 }
 </style>

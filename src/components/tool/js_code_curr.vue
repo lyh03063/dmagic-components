@@ -62,7 +62,6 @@ export default {
       }
 
 
-      console.log(`data:`, data);
 
     },
     //函数：{格式化JS函数}
@@ -77,7 +76,6 @@ export default {
 
       let { HtmlCode } = data
       CM.setValue(HtmlCode)
-      console.log(`data:`, data);
 
     },
 

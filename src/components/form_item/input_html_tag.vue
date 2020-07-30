@@ -1,7 +1,8 @@
 <template>
   <div class>
     <div class="item-box DPF">
-      <el-input class="MR10 W200" placeholder="输入或选择Html元素" v-model="valueNeed"></el-input>
+      <dm_auto_html_tag class v-model="valueNeed"></dm_auto_html_tag>
+      <!-- <el-input class="MR10 W200" placeholder="输入或选择Html元素" v-model="valueNeed"></el-input> -->
       <el-button plain @click="showDialog" size="mini">选择html元素</el-button>
       <div class=" ML20">
         最近使用：

@@ -17,9 +17,10 @@
       <div>
         <!-- <div class="" > valueNeed：{{valueNeed}}</div> -->
         <!--这里加一个像素的padding，是为了鼠标悬停时轮廓不被遮挡-->
+        <!--group实现互拖！！！！-->
         <draggable
           class="PT1 PL1"
-          :options="{handle:'.sort-num'}"
+          :options="{handle:'.sort-num',group:'group1'}"
           v-model="valueNeed"
           v-if="readyJs"
         >
@@ -209,12 +210,10 @@ export default {
     value: {
       handler(newVal, oldVal) {
         if (!this.value) {
-          console.log(`collection-value-change-1`);
           //
           this.valueNeed = [];
           this.$emit("input", this.valueNeed);//触发外部数据变更
         } else {
-          console.log(`collection-value-change-2`, this.value);
           this.valueNeed = this.value;
           this.valueNeed.forEach(itemEach => {//循环：{valueNeed数组}
             if (!itemEach.__id) {//如果没有__id，补上，因为很多地方要用到
@@ -235,9 +234,9 @@ export default {
 
         this.$emit("after_add", this.formDataEdit);//触发外部数据变更
       } else if (this.action == "modify") {
-        console.log(`collection-submit-editIndex`, this.editIndex);
         //对于this.valueNeed[this.editIndex]这个数组元素对象，是整个替换！！！！
         this.$set(this.valueNeed, this.editIndex, this.formDataEdit);
+        this.$emit("after_modify", this.formDataEdit);//触发外部数据变更
         // this.value[this.editIndex] = this.formDataEdit//修改原来的数据值，替换成表单数据
       }
       await this.$nextTick();//延迟到视图更新,这句很重要，不加的话，会遇到【神坑1号】问题

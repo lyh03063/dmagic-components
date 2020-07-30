@@ -30,7 +30,9 @@
         v-model="valueNeed[item.prop]"
         v-else
         clearable
+        filterable
         :multiple="item.multiple"
+        v-bind="item.cfElSelect"
         collapse-tags
       >
         <el-option

@@ -11,9 +11,9 @@
       @click_title="clickTitle"
     >
       <!--传递boxMiddle插槽-->
-      <template #boxMiddle>
+      <template #boxMiddle="{vm_title_bar}">
         <!--接收titleBar_boxMiddle插槽-->
-        <slot name="titleBar_boxMiddle"></slot>
+        <slot name="titleBar_boxMiddle" :vm_title_bar="vm_title_bar" :vm_pannel="vm_pannel"></slot>
       </template>
       <!--传递boxRight插槽-->
       <template #boxRight>
@@ -72,7 +72,6 @@ export default {
     },
     //函数：{隐藏内容函数}
     hideContent: async function () {
-      console.log(`hideContent:${111}`);
       this.cfIn.showContent = false;
 
     },

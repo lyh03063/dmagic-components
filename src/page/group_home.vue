@@ -35,7 +35,7 @@
       </div>
     </div>
 
-    <div class="PSF B0 L0 BC_fff W200 H20 LH_20 C_999 FS12 PL10  " >系统编号：{{systemId}}</div>
+    <div class="PSF B0 L0 BC_fff W200 H20 LH_20 C_999 FS12 PL10">系统编号：{{systemId}}</div>
   </div>
 </template>
 
@@ -43,12 +43,12 @@
 export default {
   mixins: [MIX.base],
   components: {
-   
+
   },
   props: {},
   data() {
     return {
-      systemId:null,//系统Id
+      systemId: null,//系统Id
       routerKey: "key1",
       listMenu: null,
       groupDoc: {},
@@ -116,12 +116,10 @@ export default {
       });
       this.groupDoc = data.doc;
       document.title = this.groupDoc.title; //修改浏览器标题栏文字
-      this.systemId=this.groupDoc._systemId;
+      this.systemId = this.groupDoc._systemId;
 
-
-
-
-
+      //修改PUB._paramAjaxAddon***
+      PUB._paramAjaxAddon = { _systemId: this.systemId || "sys_apiaaaa" }
       if (this.groupDoc.iconSrc) {//如果{icon地址}存在
         util.changeFavicon(this.groupDoc.iconSrc)//函数：{改变网页标题图标的函数}
       }
@@ -129,7 +127,7 @@ export default {
   },
   async created() {
     this.groupId = this.$route.params.gid;
-   await this.getGroupDoc(); //调用：{获取分组详情函数}
+    await this.getGroupDoc(); //调用：{获取分组详情函数}
     await this.getDataList(); //调用：{ajax获取列表函数}
     this.setActiveMenu(); //调用：{设置聚焦菜单函数}-要等菜单加载完
   }
@@ -151,14 +149,10 @@ export default {
   flex: 1;
 }
 
-
 .home-head-box {
   background-color: rgb(84, 92, 100);
 }
 .el-header {
   background-color: rgb(84, 92, 100) !important;
 }
-
-
-
 </style>

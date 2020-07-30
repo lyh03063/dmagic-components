@@ -63,7 +63,6 @@ export default {
       let objAudio = { name: title, url, }
       return objAudio
     })
-  console.log(`listAudio:`, listAudio);
 
     // let { data } = await axios({      //请求接口
     //   method: "post", url: `${PUB.domain}/info/commonDetail`,

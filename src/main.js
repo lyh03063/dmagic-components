@@ -103,7 +103,6 @@ const router = new VueRouter({
             path: '/study_home', component: study_home,
             children: [//子路由
                 { path: 'detail_group', component: detail_group },
-                { path: 'auto_layout', component: auto_layout },
                 { path: 'study_user', component: study_user },
                 { path: 'search_result', component: search_result },
                 { path: 'detail_group_g_card', component: detail_group_g_card },
@@ -112,7 +111,17 @@ const router = new VueRouter({
             ]
         },
 
-
+        {
+            path: '/group_home/:gid', component: group_home,
+            children: [//子路由
+              { path: 'detail_group', component: detail_group },
+              { path: 'study_user', component: study_user },
+              { path: 'search_result', component: search_result },
+              { path: 'detail_group_g_card', component: detail_group_g_card },
+              { path: 'detail_g_card_link', component: detail_g_card_link },
+              ...PUB.arrRouteManage
+            ]
+          },
         {
             path: '/manage',
             component: manage,
@@ -137,10 +146,11 @@ const router = new VueRouter({
         },
         { path: '/detail_group', component: detail_group, },
         { path: '/detail_data', component: detail_data },
-        { path: '/auto_layout', component: auto_layout },
+     
+        { path: '/open/auto_layout', component: auto_layout },
         { path: '/js_file_edit', component: js_file_edit },
         { path: '/js_code_edit', component: js_code_edit },
-
+        { path: '/group_home', component: group_home },
     ]
 })
 

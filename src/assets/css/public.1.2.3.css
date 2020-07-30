@@ -236,6 +236,11 @@ li {
 .OFH {
     overflow: hidden;
 }
+/* 省略号 */
+.OFHE {
+    overflow: hidden; text-overflow:ellipsis;white-space:nowrap;
+}
+
 
 .PSA {
     position: absolute
@@ -2559,7 +2564,9 @@ li {
 .C_f60 {
     color: #f60;
 }
-
+.C_f90 {
+    color: #f90;
+}
 .C_999 {
     color: #999;
 }

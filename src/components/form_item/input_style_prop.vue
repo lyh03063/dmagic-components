@@ -31,17 +31,38 @@ export default {
   watch: {
     arrProp: {
       handler(newVal, oldVal) {
-        console.log('arrProp changed');
+        // if (newVal && oldVal && newVal.length != oldVal.length) {
+        //   console.log(`oldVal.length:${oldVal.length}----newVal.length:${newVal.length}`);
+
+        // }
         this.valueNeed = util.arrToCssStr(newVal)
       },
       immediate: true,
       deep: true
     },
+    "arrProp.length": {
+      handler(newVal, oldVal) {
+        console.log(`arrProp.length变化`);
+
+      },
+
+    },
     valueNeed: {
       handler(newVal, oldVal) {
-        console.log('valueNeed changed');
-        if(!newVal)return
-        this.arrProp = util.cssStrToArr(newVal)
+        if (!newVal) return
+        let arrPropBackup = lodash.cloneDeep(this.arrProp)
+        console.log(`valueNeed-arrPropBackup:#######`, arrPropBackup);
+        let arrPropNew = util.cssStrToArr(newVal)
+        //如果数量没有变化
+        if (this.arrProp && arrPropNew && (this.arrProp.length == arrPropNew.length)) {
+          this.arrProp.forEach((itemEach, i) => {//循环：{000数组}
+            Object.assign(itemEach, arrPropNew[i]);//合并对象
+          })
+        } else {
+          this.arrProp = arrPropNew
+        }
+        console.log(`valueNeed-this.arrProp:#######`, this.arrProp);
+
 
       },
       immediate: true,

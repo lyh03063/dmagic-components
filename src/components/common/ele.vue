@@ -1,6 +1,6 @@
 <template>
-  <component :is="tag" v-bind="cf">
-    {{text}}
+  <component :is="tag" v-bind="cf" v-if="ready">
+  {{text}}
     <dm_ele
       :tag="d.tag"
       v-bind="d.cf"
@@ -29,13 +29,15 @@ export default {
   watch: {
     cf: {
       handler(newVal, oldVal) {
-
-        console.log(`cf-change:`,this.cf);
         util.clearObj(this.cf); //调用：{清除对象中的空属性（null,undefined,空格等）}
-        // this.children.forEach(itemEach => {//循环：{000数组}
-        //   let { cf } = itemEach;
-        //   console.log(`cf-change:cf`, cf);
-        // })
+      },
+      deep: true
+    },
+    children: {
+      handler(newVal, oldVal) {
+        //监听到children变化时，重新渲染当前节点
+        //解决style进行排序时不响应的问题
+        this.$nextTickStatus("ready")
       },
       deep: true
     }
@@ -43,6 +45,7 @@ export default {
 
   data() {
     return {
+      ready:true,
 
     };
   },

@@ -33,28 +33,11 @@
 </template>
 
 <script>
-//变量：{模块导入对象}
-// let objDetailGroupMoudles = {};
 
-// PUB.arrGroupMoudlesSpe.forEach(itemEach => {
-//   //循环：{分组数据列表的模块名称数组}
-//   objDetailGroupMoudles[`detail_group_${itemEach}`] = () =>
-//     import(`@/page/detail_group_${itemEach}`);
-// });
-
-//这个不能动态import，晕死！！！！！！！！！！！！！！！
-//可能是显式地使用detail_group_common标签
-//而component标签动态组件却可以！！！还需待确认
-// import detail_group_common from "@/page/detail_group_common.vue";
 
 export default {
   name: "detail_group",
-  // components: {
-  // ...objDetailGroupMoudles, //展开{模块导入对象}
-  // detail_group_group: import(`@/page/detail_group_group.vue`),
-  // detail_group_note: import(`@/page/detail_group_note.vue`),
-  // detail_group_common: detail_group_common
-  // },
+
   data() {
     return {
       systemId: null,
@@ -105,7 +88,7 @@ export default {
       let { _systemId } = this.groupDoc
       this.systemId = _systemId;
 
-
+      // alert(this.systemId);
 
 
       if (!PUB._paramAjaxAddon) {//如果{PUB._paramAjaxAddon}不存在

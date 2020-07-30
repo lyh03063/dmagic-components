@@ -28,7 +28,6 @@ export default {
       });
 
       let { data } = resp
-      console.log(`data:`, data);
       Object.assign(this.doc, data.data);//合并对象
 
 

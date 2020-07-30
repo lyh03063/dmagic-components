@@ -37,7 +37,7 @@ export default {
 
     // await util.loadCss({ url: `https://cdn.bootcdn.net/ajax/libs/codemirror/2.33.0/codemirror.css` })//加载
     //await要加，否则代码可能显示不正常！！！
-    await util.loadCss({ url: `//qn-static.dmagic.cn/codemirror.5.41.0/lib/codemirror.css` })//加载
+    // await util.loadCss({ url: `//qn-static.dmagic.cn/codemirror.5.41.0/lib/codemirror.css` })//加载
     await util.loadCss({ url: `//qn-static.dmagic.cn/codemirror.5.41.0/theme/lucario.css` })//加载
 
 
@@ -61,7 +61,17 @@ export default {
       // line: true,
       // autoCloseBrackets: true,
       foldGutter: true,
-      gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+      gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+      extraKeys: {
+        "F11": function (cm) {
+          // alert(`F11`);
+
+          cm.setOption("fullScreen", !cm.getOption("fullScreen"));
+        },
+        "Esc": function (cm) {
+          if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
+        }
+      }
       // more codemirror options, 更多 codemirror 的高级配置...
     }
     util.setObjDefault(cfCodeMirror, cfCodeMirrorDefault);
@@ -89,5 +99,14 @@ export default {
 /*匹配选中单词的所有单词样式 */
 .item-box >>> .cm-matchhighlight {
   background: #666;
+}
+
+/*html标签颜色 */
+.item-box >>> .cm-tag {
+  color: #f90;
+}
+/*html标签-出错时颜色 */
+.item-box >>> .cm-error {
+  color: #f00;
 }
 </style>

@@ -8,7 +8,7 @@
       <div class="PT8 PR15">
         <el-button plain @click="save" size="mini">保存</el-button>
         <el-popover placement="top-start" width="400" trigger="hover">
-          <div class style="min-height:400px">
+          <div class style="min-height:700px">
             <dm_list_visit_history :cf="cfListHistory" class="PT10"></dm_list_visit_history>
           </div>
           <el-button slot="reference" icon="el-icon-more" size="mini">历史记录</el-button>
@@ -83,6 +83,7 @@ export default {
         findJsonAddon: { tagPage: "js_code_edit" },
         cfListAddon: {
           comCard: "dm_card_js_code_hs",//卡片组件
+          pageSize:20,
         }
 
       },

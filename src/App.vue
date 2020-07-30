@@ -116,7 +116,6 @@ export default {
       handler(newVal, oldVal) {
         //来自vuex的当前行数据
         // this.$store.state.listState[this.cf.listIndex].row;
-        console.log(`dataConfig变动###`);
 
         this.$store.commit("setCfData", this.dataConfig);
       },
@@ -125,7 +124,6 @@ export default {
     }
   },
   created(){
-console.log(`created-1################`);
  util.changeFavicon(`//qn-dmagic.dmagic.cn/images/icon_dm.png`)//函数：{改变网页标题图标的函数}
   },
 
@@ -134,7 +132,6 @@ console.log(`created-1################`);
     clipboard.on("success", e => {
       this.$message.success("复制成功");
     });
-    console.log(`mounted-1################`);
    
   }
 };

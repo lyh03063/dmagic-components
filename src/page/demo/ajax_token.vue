@@ -61,7 +61,6 @@ export default {
   },
   methods: {
     changeTextarea() {
-      console.log(`changeTextarea:#####`);
       localStorage.tokenCurr = this.token
     },
     async getToken() {

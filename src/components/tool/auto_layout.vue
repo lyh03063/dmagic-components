@@ -12,34 +12,21 @@
       </div>
       <div class="PT8 PR15" v-if="demoId&&docDemo">
         <span class="C_fff FS16 MR10">{{docDemo.title}}</span>
-        <el-button
-          plain
-          @click="saveDemo"
-          size="mini"
-          v-if="$power('groupDataList.all.modify')"
-        >保存当前demo</el-button>
+        <!-- v-if="$power('groupDataList.all.modify')" -->
 
-        <el-button
-          plain
-          @click="showDialogSaveMyDemo"
-          size="mini"
-          v-if="$power('groupDataList.all.modify')"
-        >拷贝demo</el-button>
+        <el-button plain @click="saveDemo" size="mini">保存当前demo</el-button>
 
-        <a class="ML10" target="_blank" href="#/auto_layout">
+        <el-button plain @click="showDialogSaveMyDemo" size="mini">拷贝demo</el-button>
+
+        <a class="ML10" target="_blank" href="#/open/auto_layout">
           <el-button plain size="mini">新建demo</el-button>
         </a>
       </div>
       <div class="PT8 PR15" v-else>
-        <el-button
-          plain
-          @click="showDialogSaveMyDemo"
-          size="mini"
-          v-if="$power('groupDataList.all.modify')"
-        >保存为我的demo</el-button>
+        <el-button plain @click="showDialogSaveMyDemo" size="mini">保存为我的demo</el-button>
       </div>
     </div>
-    <div class="PL8 PR8" style="height: calc(100vh - 55px);">
+    <div class="PL8 PR8" style="height: 1000px">
       <dm_drag_box_width class :cf="cfDragBox">
         <template #left>
           <div id="id_html_box" class="MR5" style>
@@ -63,7 +50,7 @@
                 </div>
               </div>
               <el-tabs v-model="activeName" type="card">
-                <el-tab-pane label="Html配置" name="tab1">
+                <el-tab-pane :label="`Html配置(${arrHtml.length})`" name="tab1">
                   <div class="PB8">
                     <el-button
                       plain
@@ -72,12 +59,14 @@
                     >+ 一级元素</el-button>
 
                     <el-checkbox class="ML20" v-model="isHighLightLayout">悬停代码时高亮区块</el-checkbox>
+
+                  
                   </div>
                   <div class="box_scroll">
                     <dm_row_html_tag class v-model="arrHtml" ref="rowhtml"></dm_row_html_tag>
                   </div>
                 </el-tab-pane>
-                <el-tab-pane label="Css配置" name="tab2">
+                <el-tab-pane :label="`Css配置(${arrCss.length})`" name="tab2" lazy>
                   <div class="PB8">
                     <el-button plain @click="$refs.collectionCss.addGroup()" size="mini">添加Css代码块</el-button>
                   </div>
@@ -98,8 +87,17 @@
                       <template v-slot:dataSlot1="{doc,docEntity}">
                         <!-- <div class="" >docEntity: {{docEntity}}</div> -->
                         <dm_pannel_new :cf="cfPannel" :title="`${docEntity.selector}`">
-                          <template #titleBar_boxMiddle>
-                            <span class="C_999 ML10">{{docEntity.desc?' '+docEntity.desc:''}}</span>
+                          <template #titleBar_boxMiddle="{vm_title_bar,vm_pannel}">
+                            <div class="DPF">
+                              <span
+                                class="C_999"
+                              >({{docEntity.arrProp.length}}) {{docEntity.desc?' '+docEntity.desc:''}}</span>
+                              <span
+                                class="FS12 PL5 FX1 OFH"
+                                v-if="!vm_pannel.cfIn.showContent"
+                                v-html="cssCodeShort(docEntity)"
+                              ></span>
+                            </div>
                           </template>
                           <template #titleBar_boxLeft="{vm_title_bar,vm_pannel}">
                             <div
@@ -132,11 +130,29 @@
                     </dm_collection>
                   </div>
                 </el-tab-pane>
-                <el-tab-pane label="代码生成" name="tab3">
+                <el-tab-pane label="代码生成" name="tab3" lazy>
                   <div class>html：</div>
-                  <el-input type="textarea" :rows="8" v-model="htmlCode"></el-input>
+                  <!-- <el-input type="textarea" :rows="8" v-model="htmlCode"></el-input> -->
+                  <dm_code class="FX1" v-model="htmlCode" ref="codeMHtml" :cf="cfCodeMHtml"></dm_code>
                   <div class>Css：</div>
-                  <el-input type="textarea" :rows="8" v-model="cssCode"></el-input>
+                  <!-- <el-input type="textarea" :rows="8" v-model="cssCode"></el-input> -->
+                  <dm_code class="FX1" v-model="cssCode" ref="codeMCss" :cf="cfCodeMCss"></dm_code>
+                </el-tab-pane>
+                <el-tab-pane :label="`相关笔记(${noteListByKeyword.length})`" name="tab4" lazy>
+                  <dm_list_flex_res
+                    class="MB20"
+                    :list="noteListByKeyword"
+                    #default="{item}"
+                    col="1"
+                  >
+                    <div class="group">
+                      <a
+                        class="n-a"
+                        target="_blank"
+                        :href="`#/detail_data?dataId=${item._id}`"
+                      >{{item.title}}</a>
+                    </div>
+                  </dm_list_flex_res>
                 </el-tab-pane>
               </el-tabs>
             </div>
@@ -172,20 +188,7 @@
 </template>
 <script>
 
-//函数：{处理一组html属性显示字符的函数}
-util.handleAHtmlPropStr = function ({ prop, value }) {
-  if (!value) return ""
-  if (prop == "class") { //对于特殊类名的处理
-    value = value.replace(" focus_ele", "")
-  }
-  if (!value) return ""
-  let strShow = value;
-  if (value.length > 21) { //如果字符长度超过20
-    strShow = value.slice(0, 17)
-    strShow += `...`
-  }
-  return ` <span class="code_html_prop">${prop}</span>="<span class="code_html_val" title="${value}">${strShow}</span>"`
-}
+
 
 
 
@@ -214,6 +217,17 @@ export default {
   components: {},
   data() {
     return {
+      noteListByKeyword: [],//关联笔记列表
+      cfCodeMHtml: {
+        cfCodeMirror: {
+          mode: "text/html",
+        }
+      },
+      cfCodeMCss: {
+        cfCodeMirror: {
+          mode: "text/css",
+        }
+      },
       readyResource: false,
       isHighLightLayout: true,//悬停代码时高亮区块
       isShowDialogSaveMy: false,//显示填写新建我的demo信息表单弹窗
@@ -252,53 +266,10 @@ export default {
           },
         ],
       },
-      arrHtml: [
-        {
-          "tag": "div",
-          "children": [
-            {
-              "tag": "span",
-              "children": [
-              ],
-              "cf": {},
-              "text": "性别",
-              "desc": "",
-              "__id": "202007191719693131_64518"
-            },
-            {
-              "tag": "label",
-              "children": [
-                {
-                  "tag": "input",
-                  "children": [
-                  ],
-                  "cf": {
-                    "value": "1",
-                    "name": "sex",
-                    "type": "radio"
-                  },
-                  "text": "新的盒子",
-                  "desc": "",
-                  "__id": "202007191720683434_19247"
-                }],
-              "cf": {},
-
-              "text": "男",
-              "desc": "",
-              "__id": "202007191721411010_30309"
-            },
-          ],
-          "cf": {
-            "style": "background-color:#FFFFFF;padding:10px;"
-          },
-          "text": "",
-          "desc": "",
-          "__id": "202007191718455252_59142"
-        }]
+      arrHtml: [{ "text": " 欢迎使用码帮网页在线布局工具，这里是演示区域，下方是一个介绍本工具使用的视频(建议全屏观看)", "tag": "div", "children": [], "cf": { "style": "margin-bottom:10px;color:#FF9900;background-color:#FFFFFF;padding:10px;" }, "__id": "202007201440332020_42202" }, { "tag": "video", "children": [], "cf": { "controls": "controls", "width": "300", "src": "http://qn-dmagic.dmagic.cn/%E7%A0%81%E5%B8%AE%E7%BD%91%E9%A1%B5%E5%B8%83%E5%B1%80%E7%A5%9E%E5%99%A8%E6%96%B0%E7%89%88%E5%8A%9F%E8%83%BD%E4%BB%8B%E7%BB%8D.mp4" }, "__id": "202007201158242222_11518" }]
       ,
       arrCss: [
-        { "selector": ".box_out", "desc": "外盒子样式", "css": { "transition": "0.5s", "width": "100%", "height": "", "border-width": "3px", "border-style": "solid", "border-color": "#666" }, "__id": "202007142210242424_37706", "arrProp": [{ "prop": "transition", "value": "0.5s" }, { "prop": "width", "value": "100%" }, { "prop": "height", "value": "" }, { "prop": "border-width", "value": "3px" }, { "prop": "border-style", "value": "solid" }, { "prop": "border-color", "value": "#666" }] },
-        { "selector": ".box_in", "desc": "内盒子样式", "css": { "transition": "0.5s", "border-width": "3px", "border-style": "solid", "border-color": "#f60" }, "__id": "202007142210242424_85553", "arrProp": [{ "prop": "transition", "value": "0.5s" }, { "prop": "border-width", "value": "3px" }, { "prop": "border-style", "value": "solid" }, { "prop": "border-color", "value": "#f60" }] }
+
       ],
       vm_dialog_select_demo: null,//选择demo组件对象
       vm_form_css1: null,
@@ -308,6 +279,22 @@ export default {
       cssCode: "",
     };
   },
+
+  computed: {
+
+    cssCodeShort() {//样式代码概要
+      return function (doc) {
+        let { arrProp } = doc;
+        let css = util.arrToCssHtml(arrProp)//函数：{将Css对象转成一整行css代码函数}
+        // if (css.length > 80) { //如果字符长度超过20
+        //   css = css.slice(0, 77)
+        //   css += `...`
+        // }
+        return css
+      }
+    },
+  },
+
 
   watch: {
     "$route.query.demoId": {//监听demoId变化（切换demo）
@@ -325,7 +312,6 @@ export default {
     },
     arrHtml: {//监听到arrHtml变化，更新Html
       async handler(newVal, oldVal) {
-        console.log(`arrHtml-change############`);
 
 
 
@@ -337,7 +323,20 @@ export default {
 
 
         await util.timeout(500); //延迟
-        this.htmlCode = $("#id_html_box").html()//调用：{返回某节点的html代码的函数}
+
+
+        let htmlCode = $("#id_html_box").html()//调用：{返回某节点的html代码的函数}
+        if (!htmlCode) return
+
+        var reg1 = /data-(\S)*=""/g;
+        htmlCode = htmlCode.replace(reg1, " ")//正则替换vue组件属性
+
+        var reg2 = /\s{2,}/g;
+        htmlCode = htmlCode.replace(reg2, " ")//将多个空格替换成一个空格
+
+        this.htmlCode = htmlCode
+
+
       },
       immediate: true,
       deep: true
@@ -362,7 +361,7 @@ export default {
 
       let cssCode = ""
       this.arrCss.forEach(itemEach => {//循环：{css配置数组}
-        let { selector, css, arrProp, desc } = itemEach
+        let { selector, css, arrProp, desc = "" } = itemEach
         let cssNormal = util.objToCssWithRemark(arrProp)//函数：{将Css对象转成css代码函数}
         cssCode += `
 /*${desc}*/
@@ -418,14 +417,19 @@ ${selector}{${cssNormal}
     },
     //函数：{ajax保存我的函数}
     ajaxAddMyDemo: async function () {
+
+      let _userId = this.$sys.userId
+      if (!_userId) {
+        return this.$message.error('未登录，无法保存demo');
+
+      }
       let { arrCss, arrHtml } = this
       let dataAdd = { ...this.formDataAddDemo, arrCss, arrHtml }
       let rsp = await axios({
         method: "post", url: `${PUB.domain}/info/commonAdd`,
-        data: { "_data": dataAdd, "_systemId": "sys_api", "_dataType": "front_demo" }
+        data: { "_data": dataAdd, "_systemId": "sys_api", "_dataType": "front_demo", _userId }
       });
       this.$message.success('操作成功');
-      console.log(`rsp:####`, rsp);
 
       let demoId = lodash.get(rsp, `data.addData._id`);
 
@@ -445,6 +449,34 @@ ${selector}{${cssNormal}
       let { arrCss, arrHtml } = data.doc
       this.arrHtml = arrHtml//Css代码更新
       this.arrCss = arrCss//Css代码更新
+
+
+
+
+      //根据关键词请求关联数据的ajax固定参数
+      this.paramByKeyword = {
+        _systemId,
+        _id: this.demoId,
+        selectJson: {
+          _id: 1,
+          title: 1,
+          desc: 1,
+          keyword: 1,
+          link: 1,
+          vedio: 1
+        }
+      };
+      if (this.docDemo.keyword) {//如果有关键词
+        this.ajaxGetNoteList(); //调用：{ajax获取关联笔记列表}
+      }
+    },
+    //函数：{获取关联笔记列表函数}
+    ajaxGetNoteList: async function () {
+      let param = { ...this.paramByKeyword, _dataType: "note" };
+      this.noteListByKeyword = await FN.ajaxlistBykeyword({ param }); //ajax获取关联列表
+
+
+
     },
 
 
@@ -460,6 +492,13 @@ ${selector}{${cssNormal}
     await util.loadJs({ url: PUB.urlJS.html_tag })//加载html相关JS
     await util.loadJs({ url: PUB.urlJS.css_prop })//加载css相关JS
     this.readyResource = true
+
+
+
+
+
+
+
   },
   async mounted() {
 
@@ -517,7 +556,7 @@ ${selector}{${cssNormal}
   color: #1313f5;
 }
 
-.focus_ele {
+[focus_ele='1'] {
   outline: 2px #f00 solid;
 }
 </style>

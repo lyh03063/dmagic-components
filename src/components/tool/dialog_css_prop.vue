@@ -14,10 +14,22 @@
       <el-tabs v-model="activeDemoG" type="card">
         <el-tab-pane :label="g.targetDoc.title" :name="i+''" v-for="(g,i) in listDemo" :key="i">
           <dm_list_flex_res class="MB20" :list="g.sonList" #default="{item}" col="6">
-            <div class="data_group Cur1" @click="select(item)">
-              
-              <div class="TAC FWB C_3a0">{{item.targetDoc.title}}</div>
-              <div class="TAC C_999">{{item.targetDoc.desc}}</div>
+            <div class="data_group">
+              <div class="TAC P8">
+                <span class="FWB C_3a0">{{item.targetDoc.title}}</span>
+                <span class="C_999">{{item.targetDoc.label||item.targetDoc.desc}}</span>
+              </div>
+
+              <div class="DPFC">
+                <a class="FX1 TAC btn_card" href="javascript:;" @click="select(item)">选择</a>
+
+                <a
+                  class="FX1 TAC btn_card"
+                  target="_blank"
+                  :href="item.targetDoc.link"
+                  v-if="item.targetDoc.link"
+                >查看手册</a>
+              </div>
             </div>
           </dm_list_flex_res>
         </el-tab-pane>
@@ -78,8 +90,9 @@ export default {
         method: "post", url: `${PUB.domain}/info/getCommonGroupList`,
         data: {
           _systemId: "$all", groupId: "5f0ff4327d1e2972100df700", arrType: ["group", "css_api"],
-          $projectTgAddon: { arrPropVal: "$targetDoc._data.arrPropVal",arrPropFrequency: "$targetDoc._data.arrPropFrequency", }
+          $projectTgAddon: { label: "$targetDoc._data.label", arrPropVal: "$targetDoc._data.arrPropVal", arrPropFrequency: "$targetDoc._data.arrPropFrequency", }
         }
+
       });
       this.listDemo = list
     },
@@ -112,6 +125,17 @@ export default {
 .data_group {
   border: 1px #ddd solid;
   border-radius: 5px;
-  padding: 10px 10px;
+}
+.btn_card {
+  height: 30px;
+  line-height: 30px;
+  border-top: 1px solid #f0f0f0;
+  color: #666;
+}
+.btn_card:nth-child(2) {
+  border-left: 1px solid #f0f0f0;
+}
+.btn_card:hover {
+  color: #f90;
 }
 </style>

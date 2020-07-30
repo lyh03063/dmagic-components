@@ -60,7 +60,7 @@
             </div>
             <el-form-item :prop="item.prop" :rules="item.rules||[]" v-if="!item.cfForm" >
               <!--通过插槽方式实现字段标签-->
-              <label slot="label">
+              <label slot="label" v-if="item.label">
                 {{item.label}}
                 <!--提示-->
                 <i class="el-icon-question" :title="item.tips" style="color:#999" v-if="item.tips"></i>

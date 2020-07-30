@@ -38,14 +38,11 @@ export default {
       let nWidthLeftOld = this.cfIN.nWidthLeft;//变量：{开始拖拽时的初始宽度}
       var startX = e.clientX;
 
-      console.log(`startX:`, startX);
       // 鼠标拖动事件
       document.onmousemove = (e) => {
         var endX = e.clientX;
         var moveLen = (endX - startX); // （endx-startx）=移动的距离。
-        console.log(`moveLen:`, moveLen);
         this.cfIN.nWidthLeft = nWidthLeftOld + moveLen//新的距离设置
-        console.log(`this.cfIN.nWidthLeft:`, this.cfIN.nWidthLeft);
 
         this.$set(this.cfIN, "nWidthLeft", nWidthLeftOld + moveLen);
 

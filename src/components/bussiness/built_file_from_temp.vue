@@ -32,7 +32,12 @@
       </div>
 
       <div class v-if="docTemp._id == '5ef7446ecd60c84ff07d37b0'">
-        <el-alert class="MT8" :title="`请先在债权表录入对应的债权人信息，选择债权人后文档会自动提取债权人相关信息进行文档生成。 `" type="warning" show-icon></el-alert>
+        <el-alert
+          class="MT8"
+          :title="`请先在债权表录入对应的债权人信息，选择债权人后文档会自动提取债权人相关信息进行文档生成。 `"
+          type="warning"
+          show-icon
+        ></el-alert>
 
         <!--债权人选择，只有在模板为“债权审查结论通知书”时显示-->
         <div class="DPF MT8">
@@ -236,7 +241,7 @@ export default {
         this.$emit("after_built", { doc: this.docFileModify });
       } else {//Q2：{修改的文件id}不存在
         let dataAdd = {
-          title: fileNameBuilt, dataBuilt: this.formDataBuilt,
+          title: fileNameBuilt, dataBuilt: this.formDataBuilt||{},
           file: [{ "url": `${downloadDomain}/${key}` }],
           originType: 2,//来源类型
           _idRel: this.docTemp._id//文件模板id
@@ -259,7 +264,7 @@ export default {
         }
       });
       this.docFileModify = data.doc;
-      let { dataBuilt, _idRel } = data.doc;
+      let { dataBuilt = {}, _idRel } = data.doc;
       this.formDataBuilt = dataBuilt
       this.getDocFileTemplate(_idRel)//调用：{ajax获取已选的文件模板详情}
     },
@@ -310,7 +315,7 @@ export default {
       _systemId: "sys_lawyer_case"
     }
     //向外寻找前辈组件，找到案件详情组件！！！
-    let vm_detail_bankruptcy_case = this.$closest({ vmT: this, name: "dm_detail_bankruptcy_case" })
+    let vm_detail_bankruptcy_case = this.$closest({ vmT: this, name: "detail_bankruptcy_case" })
     if (vm_detail_bankruptcy_case) {//如果{外层的案件详情组件}存在
       this.docCase = lodash.cloneDeep(vm_detail_bankruptcy_case.docCase)
       lodash.set(this.cfSelectListCreditor, `cfList.objParamAddon.findJson`, { _idRel: this.docCase._id });

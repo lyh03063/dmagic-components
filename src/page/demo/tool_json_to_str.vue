@@ -48,11 +48,8 @@ export default {
       let str = ""
       try {
         T.codeSrc = T.codeSrc.trim()
-        console.log(`T.codeSrc:###`, T.codeSrc);
         let obj = eval(T.codeSrc);//转换Json对象
-        console.log(`obj:###`, obj);
         str = JSON.stringify(obj);//Json对象转换Json字符串
-        console.log(`str:###`, str);
       } catch (err) {
         return this.$message.error('格式错误');
       }

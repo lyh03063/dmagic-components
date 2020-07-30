@@ -89,9 +89,7 @@ export default {
     },
     //函数：{显示js代码块编辑表单函数}
     saveACode: async function () {
-      console.log(`this.docComplete:`, this.docComplete);
       let { jsCode } = this.docComplete
-      console.log(`jsCode:`, jsCode);
       await axios({//修改接口-当前父任务
         method: "post", url: `${PUB.domain}/info/commonModify`,
         data: {
@@ -110,7 +108,6 @@ export default {
     },
     //函数：{子级数据变动函数}
     son_change: async function (dataSon) {
-      console.log(`son_change:##########`);
       this.saveDataFromSon(dataSon)//调用：{保存当前数据函数}
 
     },

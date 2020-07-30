@@ -124,7 +124,19 @@
 
           <ul class="list-link">
             <li v-for="doc in item.list" :key="doc._id">
-              <a target="_blank" :href="`#/detail_data?dataId=${doc._id}`">{{doc.title}}</a>
+              <div class v-if="item.type=='front_demo'">
+                <a target="_blank" :href="doc.link" v-if="doc.link">{{doc.title}}</a>
+                
+                <a
+                  target="_blank"
+                  :href="`#/open/auto_layout?demoId=${doc._id}`"
+                  v-else
+                >
+               
+                {{doc.title}} <el-tag type="danger" size="mini">新型demo</el-tag></a>
+              </div>
+
+              <a target="_blank" :href="`#/detail_data?dataId=${doc._id}`" v-else>{{doc.title}}</a>
             </li>
           </ul>
         </el-collapse-item>
@@ -304,7 +316,7 @@ export default {
 
     //函数：{ajax获取关联笔记详情函数}-多篇按顺序拼接
     async ajaxGetRelNoteDetail() {
-          let _systemId = util.getSystemId();//
+      let _systemId = util.getSystemId();//
       if (!this.doc.relNoteList) return;
 
       let htmlDetail = "";

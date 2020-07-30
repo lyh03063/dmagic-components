@@ -1,9 +1,10 @@
 <template>
   <div class>
     <div class="item-box DPF">
-      <el-input class="MR10 W200" placeholder="输入或选择CSS属性" v-model="valueNeed"></el-input>
+      <dm_auto_css_prop class v-model="valueNeed"></dm_auto_css_prop>
+      <!-- <el-input class="MR10 W200" placeholder="输入或选择CSS属性" v-model="valueNeed"></el-input> -->
       <el-button plain @click="showDialog" size="mini">选择属性</el-button>
-      <div class=" ML20">
+      <div class="ML20">
         最近使用：
         <span
           class="C_999 MR5 Cur1"
@@ -35,6 +36,7 @@ export default {
 
   data() {
     return {
+
       vm_dialog_css_prop: null,
       ready: false,
     };
@@ -46,6 +48,7 @@ export default {
     }
   },
   methods: {
+
     setValue(val) {
       this.valueNeed = val;
 
@@ -75,6 +78,7 @@ export default {
 
   },
   mounted() {
+
 
 
 

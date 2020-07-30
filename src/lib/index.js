@@ -24,6 +24,8 @@ import dm_json_editor from '../components/form_item/json_editor.vue'
 import dm_input_css_prop from '../components/form_item/input_css_prop.vue'
 import dm_input_html_tag from '../components/form_item/input_html_tag.vue'
 import dm_input_style_prop from '../components/form_item/input_style_prop.vue'
+import dm_auto_css_prop from '../components/form_item/auto_css_prop.vue'
+import dm_auto_html_tag from '../components/form_item/auto_html_tag.vue'
 
 import dm_dialog_edit from '../components/list-data/dialog_edit.vue'
 
@@ -74,7 +76,7 @@ import dm_c_operate_normal from '../components/column/operate_normal.vue'
 
 
 import { codemirror } from "vue-codemirror";
-// import "codemirror/lib/codemirror.css";
+import "codemirror/lib/codemirror.css";//暂时不做懒加载，因为会影响到全屏css
 // 引入主题后还需要在 options 中指定主题才会生效
 
 // import "codemirror/theme/lucario.css"; //黑背景主题
@@ -84,8 +86,15 @@ eclipse.css,base16-light.css
 更多主题查看https://codemirror.net/theme/
  */
 
+
+
+
 import "codemirror/mode/javascript/javascript";//16k左右
 // import "aaaaa";
+
+
+
+
 
 import "codemirror/addon/selection/active-line"; //高亮当前行
 import "codemirror/addon/fold/foldgutter"; //代码折叠-一定要引用
@@ -94,9 +103,26 @@ import "codemirror/addon/fold/brace-fold.js"; //代码折叠-一定要引用
 
 
 
+
 // highlightSelectionMatches
 import 'codemirror/addon/search/match-highlighter.js'//匹配选中单词高亮
 
+
+ /****************************hint-暂时无用-START****************************/
+ import "codemirror/addon/hint/show-hint.css"; //hint
+import "codemirror/addon/hint/show-hint.js"; //
+import "codemirror/addon/hint/xml-hint.js"; //
+import "codemirror/addon/hint/html-hint.js"; //
+ /****************************hint-暂时无用-END****************************/
+
+
+ import "codemirror/mode/css/css.js"; //Css高亮
+
+import "codemirror/mode/xml/xml.js"; //html高亮
+
+
+import "codemirror/addon/display/fullscreen.css"; //全屏Css,要放在codemirror.css后面
+import "codemirror/addon/display/fullscreen.js"; //全屏Js
 
 
 
@@ -233,7 +259,7 @@ import dm_manage_base from '@/manage.vue'
 const Components = {
   dm_pannel,dm_list_flex_res,dm_test,
   dm_debug_list, dm_debug_item,dm_json_editor,dm_input_css_prop,dm_input_html_tag,
-  dm_loading,dm_ajax_populate,dm_space,dm_input_style_prop,
+  dm_loading,dm_ajax_populate,dm_space,dm_input_style_prop,dm_auto_css_prop,dm_auto_html_tag,
   dm_dynamic_form,dm_list_data,dm_select_ajax_lazy,
   dm_codemirror:codemirror,dm_code,dm_form_css,
   dm_select_list_data,dm_collection,dm_dialog_edit,dm_dialog_add,dm_form_item,

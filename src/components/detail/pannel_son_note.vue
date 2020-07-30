@@ -95,7 +95,6 @@ export default {
   methods: {
     //函数：{编辑完成的回调函数}
     afterModify: async function (doc) {
-      console.log(`doc:####`, doc);
       Object.assign(this.doc.targetDoc, doc)//合并对象
 
     },

@@ -316,7 +316,6 @@ export default {
   methods: {
     //函数：{修改基础信息后的回调函数}
     afterModify: async function (docModify) {
-      console.log(`docModify:####`, docModify);
       this.docCase = docModify;
 
     },

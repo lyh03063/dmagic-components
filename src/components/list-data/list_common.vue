@@ -260,7 +260,6 @@ export default {
 
   created() {
 
-    console.log(`created-2################`);
 
     let { sysId } = this.$route.params;
 
@@ -271,11 +270,9 @@ export default {
 
 
   }, mounted() {
-    console.log(`mounted-2################`);
 
 
 
-    console.log(`this.$route:`, this.$route);
 
 
 

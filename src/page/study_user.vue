@@ -31,19 +31,23 @@
             class="PT10"
           ></dm_list_visit_history>
         </el-tab-pane>
+
         <el-tab-pane label="最近访问视频" name="second" :lazy="true">
-           <dm_list_visit_history
+          <dm_list_visit_history
             :cf="{'dataTypeDict':'vedio','findJsonAddon':{_userId: $sys.userId,'dataType':'vedio',}}"
             class="PT10"
           ></dm_list_visit_history>
-         
+        </el-tab-pane>
+        <el-tab-pane label="我的demo" name="my_demo" :lazy="true">
+          <dm_list_data :cf="cfListMyDemo" class></dm_list_data>
         </el-tab-pane>
         <el-tab-pane label="我的任务" name="third" :lazy="true">
-          <dm_list_data :cf="cfListMyTask" class="MT15"></dm_list_data>
+          <dm_list_data :cf="cfListMyTask" class></dm_list_data>
         </el-tab-pane>
       </el-tabs>
 
-      <collect></collect>
+      <!--我的收藏-->
+      <!-- <collect></collect> -->
     </div>
   </div>
 </template>
@@ -57,6 +61,7 @@ export default {
     return {
       activeName: 'first',
       cfListMyTask: null,
+      cfListMyDemo: null,
       cfListMyHisNote: null,
       ready: false,
       customColors: "#67C23A",
@@ -169,6 +174,14 @@ export default {
     let cfListMyTask = lodash.cloneDeep(PUB.listCF.list_task_my);
     cfListMyTask.objParamAddon.findJson = { personCharge: this.$sys.userId };
     this.cfListMyTask = { ...cfListMyTask };
+
+
+    let cfListMyDemo = lodash.cloneDeep(PUB.listCF.list_front_demo);
+    cfListMyDemo.objParamAddon.findJson = { _userId: this.$sys.userId };
+    cfListMyDemo.isShowBreadcrumb = false;
+    cfListMyDemo.isShowToolBar = false;
+    this.cfListMyDemo = { ...cfListMyDemo };
+
 
 
     // let cfListMyHisNote = lodash.cloneDeep(PUB.listCF.list_visit_record);

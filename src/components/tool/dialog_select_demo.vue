@@ -29,7 +29,7 @@
                 {{item.targetDoc.title}}
                 <a
                   target="_blank"
-                  :href="`#/auto_layout?demoId=${item.targetDoc._id}`"
+                  :href="`#/open/auto_layout?demoId=${item.targetDoc._id}`"
                 >编辑</a>
               </div>
             </div>
