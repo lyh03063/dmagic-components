@@ -2,11 +2,12 @@
   <div class="out">
     <dm_pannel_new class title=" " :cf="cf.cfPannel">
       <template #titleBar_boxMiddle>
-        <div class="DPIB">
-          <span class="MR10 FL">{{title}}</span>
-          <div class="DPIB">
-            <el-button class="FL MT6" plain size="mini" @click="fnAddEntity">新增</el-button>
-            <el-button class="FL MT6" plain size="mini" @click="fnDelete">删除</el-button>
+        <div class="DPF">
+          <span class="MR10 ">{{title}}</span>
+          <div class="DPIB DPFC">
+            <el-button class=" " plain size="mini" @click="fnAddEntity">新增</el-button>
+            <el-button class=" " plain size="mini" @click="fnDelete">删除</el-button>
+            <slot name="toolbar_right" ></slot>
           </div>
         </div>
       </template>

@@ -16,7 +16,7 @@
       <!--插槽内容-->
       <template v-slot:dataSlot1="{doc,docEntity}">
         <!-- {{docEntity.__id}} -->
-        <span class="DPF PL5" v-if="doc">
+        <span class="DPF PL5 PT5 PB5" v-if="doc">
           <!-- <textarea class="" v-focus v-if="docEntity.isEditProp"></textarea> -->
           <!-- <el-input
             style="width:150px;"
@@ -29,32 +29,54 @@
             @blur="docEntity.isEditProp=false"
           ></el-input>-->
           <!-- @select="docEntity.isEditProp=false" -->
-          <dm_auto_css_prop v-model="docEntity.prop" v-if="docEntity.isEditProp"></dm_auto_css_prop>
+          <dm_auto_css_prop v-model="docEntity.prop" v-if="idEditProp==docEntity.__id"></dm_auto_css_prop>
 
           <span
-            class="code_css_prop"
+            class="code_css_prop FS14"
             slot="reference"
             @click.stop="goEditProp(docEntity)"
             v-else
           >{{docEntity.prop}}</span>
-          :
+          <span class="PL3 PR3">:</span>
+
           <!-- @blur="docEntity.isEditPVal=false" -->
-          <div class="DPIB" @click.stop>
-            <el-input
-              style="width:250px;"
-              v-focus
-              autosize
-              type="textarea"
-              :rows="1"
-              v-model="docEntity.value"
-              v-if="docEntity.isEditPVal"
-            ></el-input>
+          <div class="DPF" @click.stop>
+            <template class v-if="idEditVal==docEntity.__id">
+              <el-input
+                style="width:150px;"
+                v-focus
+                autosize
+                type1="textarea"
+                size="mini"
+                :rows="1"
+                v-model="docEntity.value"
+              ></el-input>
+            </template>
+
             <span
-              class="code_css_prop"
+              class="code_css_val FS14"
               slot="reference"
               @click.stop="goEditPropVal(docEntity)"
               v-else
             >{{docEntity.value}}</span>
+
+            <!--颜色选择器-->
+            <el-color-picker
+              class="ML5"
+              size="mini"
+              v-model="docEntity.value"
+              v-bind="optionsPropVal(docEntity).cfColorPicker"
+              v-if="optionsPropVal(docEntity).type=='color'"
+            ></el-color-picker>
+            <!-- {{cfOptionInput(docEntity)}} -->
+            <!--普通候选项组件-->
+            <dm_option_input
+              class="ML5"
+              v-model="docEntity.value"
+              :options="optionsPropVal(docEntity).options"
+              :cf="cfOptionInput(docEntity)"
+              v-if="optionsPropVal(docEntity).options&&cfOptionInput(docEntity)"
+            ></dm_option_input>
           </div>
 
           <!-- <el-popover placement="bottom-start" width="220" trigger="hover">
@@ -81,24 +103,59 @@ export default {
   },
   data() {
     return {
-      showChildren: {},//显示子元素，必须是一个对象
+      idEditVal: null,//处于编辑状态的属性值id
+      idEditProp: null,//处于编辑状态的属性id
       cfElBtnAdd: { text: "+Css属性", type: "info", size: "mini", },
       children: null,
+      // cfOptionInput: { cfListFlex: {} },
     };
   },
   computed: {
+    //候选项组件配置*
+    cfOptionInput: function () {
+      let fn = function (docEntity) {
+        let { prop } = docEntity
+        let docCss = PUB.arrCssProp.find(d => d.prop == prop)
+        if (!docCss) return {};
+        let { objFrequency } = docCss
+        if (!objFrequency) return {};
+        let { style, } = objFrequency
+        let cfNeed = { cfListFlex: {} }
+        if (style && style.width) {//如果style存在
+          cfNeed.cfListFlex.widthG = style.width
+        }
+        return cfNeed
+      }
+      return fn
+    },
 
+    //属性值候选项*
+    optionsPropVal: function () {
+      let fn = function (docEntity) {
+        let { prop } = docEntity
+        let docCss = PUB.arrCssProp.find(d => d.prop == prop)
+        if (!docCss) return {};
+        let { objFrequency } = docCss
+        console.log(`objFrequency:###`, objFrequency);
+        if (!objFrequency) return {};
+        let { options, style, type, cfColorPicker } = objFrequency
+        return { options, type, cfColorPicker }
+      }
+      return fn
 
+    }
   },
   methods: {
 
     //函数：{切换到编辑属性名称状态}
     goEditPropVal: async function (docEntity) {
-      this.$set(docEntity, 'isEditPVal', true)
+      console.log(`docEntity:####`, docEntity);
+      this.idEditProp = null;
+      let { __id } = docEntity;
+      this.idEditVal = __id
       let evTag = "click.click_cancel_edit_css_prop_val"//变量：{事件名称-带命名空间}
-      $("html").off(evTag).on(evTag, function () {//给html绑定取消编辑状态的事件
-        docEntity.isEditPVal = false;
-        delete docEntity.isEditPVal;
+      $("html").off(evTag).on(evTag, () => {//给html绑定取消编辑状态的事件
+        this.idEditVal = null
         $("html").off(evTag)
       })
 
@@ -108,14 +165,25 @@ export default {
 
     //函数：{切换到编辑属性名称状态}
     goEditProp: async function (docEntity) {
-      this.$set(docEntity, 'isEditProp', true)
-
+      console.log(`docEntity:####`, docEntity);
+      let { __id } = docEntity;
+      this.idEditVal = null;
+      this.idEditProp = __id
       let evTag = "click.click_cancel_edit_css_prop"//变量：{事件名称-带命名空间}
-      $("html").off(evTag).on(evTag, function () {//给html绑定取消编辑状态的事件
-        docEntity.isEditProp = false;
-        delete docEntity.isEditProp;
+      $("html").off(evTag).on(evTag, () => {//给html绑定取消编辑状态的事件
+        this.idEditProp = null
         $("html").off(evTag)
       })
+
+
+
+      // this.$set(docEntity, 'isEditProp', true)
+      // let evTag = "click.click_cancel_edit_css_prop"//变量：{事件名称-带命名空间}
+      // $("html").off(evTag).on(evTag, function () {//给html绑定取消编辑状态的事件
+      //   docEntity.isEditProp = false;
+      //   delete docEntity.isEditProp;
+      //   $("html").off(evTag)
+      // })
 
     },
     //函数：{添加数据后的回调函数}
@@ -141,13 +209,13 @@ export default {
     //函数：{初始化组件配置函数}
     initCF: async function () {
 
-      let valItem = { prop: "value", label: "value(属性值)", type: "input", }
+      let valItem = { prop: "value", label: "value(属性值)", type: "input", col_span: 12 }
       let T = this;
       let formItems = [
         {
           prop: "prop", label: "prop(属性名)", type: "input", component: "dm_input_css_prop",
         },
-        { prop: "value", label: "value(属性值)", type: "input", }
+        { prop: "value", label: "value(属性值)", type: "input", col_span: 12, }
       ]
 
 

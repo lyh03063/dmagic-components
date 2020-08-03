@@ -327,6 +327,10 @@ PUB.menuDemo = [
         title: "sys_api",
         menuItem: [
             {
+                name: "study_home", title: "学习主页-知识点",
+                route: "/study_home/detail_group_g_card?groupId=5e19d9fff3c94a3971f45595"
+            },
+            {
                 name: "list_front_demo", title: "前端demo总表",
                 route: "/system/sys_api/manage/list_common?type=front_demo"
             },
@@ -418,6 +422,7 @@ PUB.menuDemo = [
             { name: "title_bar_demo", title: "标题栏组件" },
             { name: "pannel", title: "面板组件" },
             { name: "pannel_new_demo", title: "面板组件（新）" },
+            { name: "list_flex_res", title: "list_flex_res弹性列表" },
             { name: "form_demo3", title: "form_demo3" },
         ]
     },
@@ -430,7 +435,7 @@ PUB.menuDemo = [
             { name: "upload_qiniu", title: "upload_qiniu", route: "/manage/upload_qiniu" },
             { name: "test", title: "test", route: "/manage/test" },
             { name: "object_demo", title: "对象demo" },
-            { name: "list_flex_res", title: "弹性列表" },
+           
             { name: "goods_cart", title: "购物车" },
             { name: "goods_specs_2", title: "商品规格-后台" },
             { name: "goods_specs_front_2", title: "商品规格-前台" },

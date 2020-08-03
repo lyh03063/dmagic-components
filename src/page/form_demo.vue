@@ -199,14 +199,15 @@ export default {
         labelWidth: "150px",
 
         formItems: [
-          F_ITEMS.object_1,
-          F_ITEMS.title,
-          F_ITEMS.collection3,
+           F_ITEMS.predictTime,
+          // F_ITEMS.object_1,
+          // F_ITEMS.title,
+          // F_ITEMS.collection3,
           // F_ITEMS.collection2,
 
           // {label:"json编辑器",type:"vueJsonEditor"},
           // F_ITEMS.select_list_common_url,
-          F_ITEMS.predictTime,
+         
 
           // //  F_ITEMS.num1_text,
           // //  F_ITEMS.complete,
@@ -214,7 +215,7 @@ export default {
           // // F_ITEMS.relWorkExperience,
           // F_ITEMS.treeData1,//树
 
-          F_ITEMS.checkbox1,
+          // F_ITEMS.checkbox1,
 
           // // F_ITEMS.addressObj,
           // // F_ITEMS.prop_upload,
@@ -254,7 +255,7 @@ export default {
           // F_ITEMS.complete1,
           // F_ITEMS.select1,
 
-          F_ITEMS.extend,
+          // F_ITEMS.extend,
           // F_ITEMS.prop_upload2,
 
           // F_ITEMS.prop_vueJsonEditor

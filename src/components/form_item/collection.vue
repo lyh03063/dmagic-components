@@ -396,7 +396,7 @@ export default {
 
 .data-group.active {
   /* background: #e4f5e2; */
-  outline: 1px #3a0 solid;
+  outline: 1px #67C23A solid;
 }
 
 .tool-bar {

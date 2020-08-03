@@ -3,11 +3,11 @@
     <div class="MB8">
       <el-button plain @click="formatJs" size="mini">格式化</el-button>
       <el-button plain @click="checkSyntax" size="mini">语法检测</el-button>
-      <slot name="toobar_addon" ></slot>
+      <slot name="toobar_addon"></slot>
       <!--语法错误提示-->
       <div class="error_box" v-if="HtmlErrMessage" v-html="HtmlErrMessage"></div>
     </div>
-    
+
     <dm_code class="FX1" v-model="valueNeed" ref="codeMCurr"></dm_code>
   </div>
 </template>
@@ -18,10 +18,10 @@
 </template>
 <script>
 export default {
-  mixins: [MIX.base,MIX.form_item_new],
+  mixins: [MIX.base, MIX.form_item_new],
   name: "js_code_curr",//
   props: {
-  
+
     cf: {
       default: function () {
         return {};
@@ -32,14 +32,14 @@ export default {
     return {
       ready: true,
       HtmlErrMessage: null,//语法错误提示代码
-   
+
       jsCodeId: null,
 
-     
+
     };
   },
 
- 
+
   methods: {
     //函数：{代码语法检测函数}
     checkSyntax: async function () {
@@ -55,10 +55,12 @@ export default {
       let { HtmlErrMessage } = data
       if (HtmlErrMessage) {//Q1:{000}
         this.HtmlErrMessage = HtmlErrMessage
+        return false;
 
       } else { //Q2:{000}
-        this.$message.success('代码正确');
 
+        this.$message.success('代码正确');
+        return true;
       }
 
 

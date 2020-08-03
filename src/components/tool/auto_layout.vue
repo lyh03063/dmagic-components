@@ -274,7 +274,7 @@ export default {
       vm_dialog_select_demo: null,//选择demo组件对象
       vm_form_css1: null,
       vm_form_css2: null,
-      activeName: "tab1",
+      activeName: "tab2",
       htmlCode: "",
       cssCode: "",
     };
@@ -316,11 +316,6 @@ export default {
 
 
         clearHtmlPropDebounce(this.arrHtml)
-
-
-
-
-
 
         await util.timeout(500); //延迟
 

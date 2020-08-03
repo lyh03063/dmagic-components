@@ -36,8 +36,8 @@ export default {
     children: {
       handler(newVal, oldVal) {
         //监听到children变化时，重新渲染当前节点
-        //解决style进行排序时不响应的问题
-        this.$nextTickStatus("ready")
+        //解决style进行排序时不响应的问题【但这个会导致transition失效，降低了演示的效果】
+        // this.$nextTickStatus("ready")
       },
       deep: true
     }

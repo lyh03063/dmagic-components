@@ -42,7 +42,39 @@
         <dm_pannel_d_g_list :cf="cfG3" class :doc="docCase" title="工商信息"></dm_pannel_d_g_list>
 
         <!--这个要有标准列表-->
-        <dm_pannel_rel_list_data class="MB20" title="涉诉信息" :doc="docCase" :cf="cfRel_involvedCase"></dm_pannel_rel_list_data>
+        <dm_pannel_rel_list_data
+          class="MB20"
+          title="涉诉信息"
+          :doc="docCase"
+          :cf="cfRel_involvedCase"
+          ref="relCaseList"
+        >
+          <template v-slot:toolbar_right>
+            <el-button
+              class
+              plain
+              @click="$refs.relCaseList.vm_rel_list_data.vm_list_data.batchBtnClick('export_excel')"
+              size="mini"
+            >导出Excel表</el-button>
+
+            <!--替身按钮-->
+            <el-button class plain @click="$refs.btn_file.click()" size="mini">导入企查查案件Excel表</el-button>
+            <!--实体文本域-->
+            <input
+              ref="btn_file"
+              type="file"
+              value="导入企查查案件Excel表"
+              class="DPN"
+              @change="uploadQccExcel"
+            />
+
+            <a
+              class="ML10 LH22 FS12 n-a"
+              target="_blank"
+              :href="`https://www.qcc.com/search?key=${docCase.debtCompName}`"
+            >前往企查查查询&gt;&gt;</a>
+          </template>
+        </dm_pannel_rel_list_data>
 
         <!-- <dm_pannel_d_g_list :cf="cfG5" class :doc="docCase" title="涉诉信息222"></dm_pannel_d_g_list> -->
 
@@ -173,7 +205,7 @@ export default {
       styleListFile: {
         padding: "10px 0  0 0"
       },
-      activeName: 'tab3',
+      activeName: 'tab2',
       docCase: {},
 
       cfPannel1: lodash.cloneDeep(PUB.cfPannel.gray_bar),
@@ -314,6 +346,35 @@ export default {
     };
   },
   methods: {
+
+
+    async uploadQccExcel() {
+      var objInputFile = this.$refs.btn_file;//**定位原生dom节点
+      let formData = new FormData(); //**FormData*--在Ie下不兼容
+      let files = objInputFile.files; //变量定义：{文件列表}
+      if (files && files[0]) { //如果文件存在
+        let fileName = files[0].name//获取文件名
+        if (!(fileName.endsWith(".xls") || fileName.endsWith(".xlsx"))) { //如果文件名错误
+          objInputFile.value = "";//清空文件域
+          return this.$message.error('文件名错误，请选择excel文件！！！');
+
+        }
+        formData.append("file", files[0]); //formData参数添加**
+      } else {
+        return this.$message.error('请选择文件！');
+      }
+      let clickStatus = await this.$confirm("确认导入数据").catch(() => { });
+      if (clickStatus != "confirm") return objInputFile.value = "";//清空文件域
+      let { data } = await axios({//**上传文件，正常的post请求,data传递formData对象
+        method: "post", url: `${PUB.domain}/lawyer/uploadAndimportQCC?_idRel=${this.docCase._id}`,
+        data: formData
+      });
+      this.$message({ type: 'success', message: '导入数据成功!' });
+      this.$refs.relCaseList.vm_rel_list_data.vm_list_data.getDataList()//刷新列表
+      objInputFile.value = "";//清空文件域
+    },
+
+
     //函数：{修改基础信息后的回调函数}
     afterModify: async function (docModify) {
       this.docCase = docModify;

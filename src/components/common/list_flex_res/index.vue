@@ -7,17 +7,23 @@
       <!--循环5个空盒子-配合flex列表-->
       <li class="n-flex-group" v-for="item in 10" :key="'item'+item"></li>
     </ul>
-    <slot class="" v-else name="noData">
-      <div class="LH50 C_999 TAC" >{{tipsNoData}}</div>
+    <slot class v-else name="noData">
+      <div class="LH50 C_999 TAC">{{tipsNoData}}</div>
     </slot>
-    
   </div>
 </template>
 
 <script>
 export default {
-  name:"list_flex_res",
+  name: "list_flex_res",
   props: {
+    spaceY: {
+      default: "10px"
+    },
+    //每组宽度
+    widthG: {
+      default: null
+    },
     tipsNoData: {
       default: "暂无数据"
     },
@@ -42,6 +48,18 @@ export default {
   created() {
     let classCol = `n-col-${this.col}`;
     this.arrClass.push(classCol);
+
+    //优先使用style_g
+    this.style_g["margin-bottom"] = this.style_g["margin-bottom"] || this.spaceY
+
+    if (this.widthG) {//如果有强制宽度，这个时候col就失效
+      this.style_g["width"] = this.widthG
+    }
+
+
+
+
+
   }
 };
 </script>
@@ -55,10 +73,6 @@ export default {
   flex-wrap: wrap;
   justify-content: space-between;
   /* border: 1px solid #f00; */
-}
-
-.n-flex-main .n-flex-group {
-  margin: 0 0 10px 0;
 }
 
 /* 在3栏以上布局时，会出现中间空缺商品的情况，需要通过补充这种空元素来解决 */

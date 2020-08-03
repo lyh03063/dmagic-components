@@ -1,7 +1,13 @@
 <template>
   <div>
+      <dm_pannel class="MB20" title="默认的列表(快速设置固定宽度和上下间距)">
+      <dm_list_flex_res class="MB20" :list="productList" #default="{item}" widthG="300px" spaceY="0">
+        <div class="group">{{item.title}}</div>
+      </dm_list_flex_res>
+    </dm_pannel>
+
     <dm_pannel class="MB20" title="默认的列表(4列)">
-      <dm_list_flex_res class="MB20" :list="productList"  #default="{item}">
+      <dm_list_flex_res class="MB20" :list="productList" #default="{item}">
         <div class="group">{{item.title}}</div>
       </dm_list_flex_res>
     </dm_pannel>
@@ -11,7 +17,6 @@
         class="MB20"
         :style_g="{width:'49.5%'}"
         :list="productList"
-       
         #default="{item}"
       >
         <div class="group">{{item.title}}</div>
@@ -19,98 +24,44 @@
     </dm_pannel>
 
     <dm_pannel class="MB20" title="1到10列">
-       <dm_list_flex_res
-        class="MB20"
-        :list="productList"
-        
-        #default="{item}"
-        col="1"
-      >
+      <dm_list_flex_res class="MB20" :list="productList" #default="{item}" col="1">
         <div class="group">{{item.title}}</div>
       </dm_list_flex_res>
 
       <dm_title_bar class="MB20" title="2列"></dm_title_bar>
-      <dm_list_flex_res
-        class="MB20"
-        :list="productList"
-        
-        #default="{item}"
-        col="2"
-      >
+      <dm_list_flex_res class="MB20" :list="productList" #default="{item}" col="2">
         <div class="group">{{item.title}}</div>
       </dm_list_flex_res>
-      <dm_list_flex_res
-        class="MB20"
-        :list="productList"
-       
-        #default="{item}"
-        col="3"
-      >
+      <dm_list_flex_res class="MB20" :list="productList" #default="{item}" col="3">
         <div class="group">{{item.title}}</div>
       </dm_list_flex_res>
 
-      <dm_list_flex_res
-        class="MB20"
-        :list="productList"
-       
-        #default="{item}"
-        col="5"
-      >
+      <dm_list_flex_res class="MB20" :list="productList" #default="{item}" col="5">
         <div class="group">{{item.title}}</div>
       </dm_list_flex_res>
 
-      <dm_list_flex_res
-        class="MB20"
-        :list="productList"
-      
-        #default="{item}"
-        col="6"
-      >
+      <dm_list_flex_res class="MB20" :list="productList" #default="{item}" col="6">
         <div class="group">{{item.title}}</div>
       </dm_list_flex_res>
 
-      <dm_list_flex_res
-        class="MB20"
-        :list="productList"
-      
-        #default="{item}"
-        col="7"
-      >
+      <dm_list_flex_res class="MB20" :list="productList" #default="{item}" col="7">
         <div class="group">{{item.title}}</div>
       </dm_list_flex_res>
 
-      <dm_list_flex_res
-        class="MB20"
-        :list="productList"
-      
-        #default="{item}"
-        col="8"
-      >
+      <dm_list_flex_res class="MB20" :list="productList" #default="{item}" col="8">
         <div class="group">{{item.title}}</div>
       </dm_list_flex_res>
 
-      <dm_list_flex_res
-        class="MB20"
-        :list="productList"
-
-        #default="{item}"
-        col="9"
-      >
+      <dm_list_flex_res class="MB20" :list="productList" #default="{item}" col="9">
         <div class="group">{{item.title}}</div>
       </dm_list_flex_res>
 
-      <dm_list_flex_res
-        class="MB20"
-        :list="productList"
-    
-        #default="{item}"
-        col="10"
-      >
+      <dm_list_flex_res class="MB20" :list="productList" #default="{item}" col="10">
         <div class="group">{{item.title}}</div>
       </dm_list_flex_res>
     </dm_pannel>
 
-    <dm_list_flex_res class="MB20" :list="productList"  #default="{item}">
+    <dm_list_flex_res class="MB20" :list="productList" #default="{item}">
       <el-button type="primary">{{item.title}}</el-button>
     </dm_list_flex_res>
   </div>
@@ -140,8 +91,8 @@ export default {
     };
   },
   methods: {},
-  created() {},
-  async mounted() {}
+  created() { },
+  async mounted() { }
 };
 </script>
 

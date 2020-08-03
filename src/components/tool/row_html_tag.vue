@@ -56,10 +56,12 @@
                 trigger="click"
                 @show="fnShowPover({docEntity,prop})"
               >
+              {{docEntity}}
                 <div class="TAR">
                   <!-- <i class="el-icon-close FS16 Cur1 P5" @click="docEntity.showPover=false"></i> -->
                 </div>
                 <div v-if="docEntity.showPover">
+                  <!-- <dm_object class="" v-model="docEntity.cf" ></dm_object> -->
                   <dm_dynamic_form :cf="cfFormPropVal" v-model="docEntity.cf"></dm_dynamic_form>
                 </div>
 
@@ -95,7 +97,7 @@
           <el-link
             class="ML20 MR10"
             v-if="doc.children && !isCloseSelf(doc)"
-            @click="addChild(docEntity)"
+            @click="showDialogAddChild(docEntity)"
           >+子元素</el-link>
           <!-- {{showChildren[docEntity.__id]}} -->
         </span>
@@ -129,6 +131,7 @@ export default {
 
   data() {
     return {
+      docHtmlFocus: null,
       cfFormPropVal: {
         size: "mini",
         labelWidth: "0px",
@@ -268,6 +271,7 @@ export default {
       util.addHtmlUseHistory({ tag })//调用：{添加html元素使用的LocalStorage历史记录}
 
 
+
     },
     //函数：{修改数据后的回调函数}
     afterModify: async function (data) {
@@ -276,10 +280,11 @@ export default {
 
 
     },
-    //函数：{添加子元素函数}
-    addChild: async function (docEntity) {
+    //函数：{显示添加子元素弹窗函数}
+    showDialogAddChild: async function (docEntity) {
       let key = `children_${docEntity.__id}`;//ref变量
       this.$refs[key].$refs.collectionTag.addGroup()
+      this.$set(this.showChildren, docEntity.__id, true);//强行展开
 
     },
 

@@ -7,7 +7,7 @@
       @select="$emit('select')"
       v-focus
       clearable
-      class="MR10 W400"
+      class="MR10 W200"
       :debounce="300"
       v-model="valueNeed"
       :fetch-suggestions="querySearch"

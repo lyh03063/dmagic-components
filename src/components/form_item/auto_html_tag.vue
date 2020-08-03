@@ -1,9 +1,10 @@
 <template>
   <div class="item-box DPIB">
+     <!-- v-focus -->
     <el-autocomplete
       size="mini"
       @blur="$emit('blur')"
-      v-focus
+     
       clearable
       class="MR10 W400"
       :debounce="300"

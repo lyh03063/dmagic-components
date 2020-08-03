@@ -26,7 +26,7 @@
         <slot name="titleBar_boxLeft" :vm_title_bar="vm_title_bar" :vm_pannel="vm_pannel"></slot>
       </template>
     </dm_title_bar>
-    <div class="content_box" v-show="cfIn.boxContent&&cfIn.showContent" v-bind="cfIn.boxContent">
+    <div class="content_box PB1 PR8" v-show="cfIn.boxContent&&cfIn.showContent" v-bind="cfIn.boxContent">
       <!-- cfIn.showContent: {{cfIn.showContent}}
       <div class>cfIn:{{cfIn}}</div>-->
 

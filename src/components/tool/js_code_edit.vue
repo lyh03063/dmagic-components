@@ -241,7 +241,7 @@ export default {
 </script>
 <style scoped>
 .box_scroll {
-  height: calc(100vh - 55px);
+  height: calc(100vh - 160px);
   overflow-y: auto;
 }
 

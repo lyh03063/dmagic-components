@@ -264,38 +264,15 @@
         v-bind="item.frequency.cfColorPicker"
         v-if="item.frequency.type=='color'"
       ></el-color-picker>
-      <!--普通候选项-->
-      <el-popover
+      
+      <!--普通候选项组件-->
+      <dm_option_input
         class="ML5"
-        placement="bottom-start"
-        width="200"
-        trigger="hover"
-        v-model="visibleFrequency[item.prop]"
-        :open-delay="0"
         v-else
-      >
-        <!-- <div class="" > cf:{{cf}}</div>
-        <div class="" > item:{{item}}</div>-->
-        <!-- <div class="" > cf===item:{{cf===item}}</div> -->
-        <!--候选值列表-->
-         <!--兼容style和sytle，这个是之前写错了，做补丁修正-->
-        <i
-          :class="['frequency-option',{focus:valueNeed[cf.prop]==option.value}] "
-          v-for="(option,i) in cf.frequency.options"
-          :key="option.value||i"
-          @click="slectFOption(option)"
-          :style="cf.frequency.style||cf.frequency.sytle||{'width':'48px'}"
-        >
-          {{option.label
-          ||option.value}}
-        </i>
-        <a
-          href="javascript:;"
-          class="n-a"
-          @click="valueNeed[cf.prop]=null;visibleFrequency[cf.prop]=false"
-        >清除</a>
-        <el-button slot="reference" icon="el-icon-more"></el-button>
-      </el-popover>
+        :cf="cfOptionInput(cf)"
+        v-model="valueNeed[item.prop]"
+        :options="cf.frequency.options"
+      ></dm_option_input>
     </template>
   </div>
 </template>
@@ -319,9 +296,11 @@ import tag_list from "../../components/form_item/tag_list.vue";
 
 export default {
   name: "form_item", //组件名，用于递归
-  components: {    vueJsonEditor: vueJsonEditor, select_ajax,
+  components: {
+    vueJsonEditor: vueJsonEditor, select_ajax,
     input_find_vague, upload_img, upload_single, time_period, json_prop,
-    quill_editor, tiny_mce_new, number_range, tag_list,  },
+    quill_editor, tiny_mce_new, number_range, tag_list,
+  },
   mixins: [MIX.form_item_new], //混入-这个是高风险混入，注意避免双向同步时出现死循环！！！！
   // mixins: [MIX.form_item_2], //新的混入项，优化性能
   props: {
@@ -359,6 +338,24 @@ export default {
 
     };
   },
+  computed: {
+    //候选项弹性列表配置***
+    cfOptionInput: function () {
+      let fn = function (cf) {
+        let cfNeed = {}
+        let style = cf.frequency.style || cf.frequency.sytle || {}
+        let widthG = lodash.get(style, `width`);
+        let cfListFlex = {}
+        if (widthG) {
+          cfListFlex.widthG = widthG
+        }
+        return { cfListFlex }
+      }
+      return fn
+
+    }
+  },
+
   methods: {
     //函数：{点击候选值后的函数}
     async slectFOption(option) {
@@ -401,28 +398,7 @@ export default {
   margin: 15px 0 0 0;
 }
 /****************************进度条补丁-END****************************/
-/****************************常用值选项-START****************************/
-.frequency-option {
-  display: inline-block;
-  border: 1px #ddd solid;
-  border-radius: 5px;
-  line-height: 1;
-  padding: 5px 8px;
-  background-color: #f0f0f0;
-  margin: 0 5px 5px;
-  cursor: pointer;
-  color: #999;
-  font-style: normal;
-  text-align: center;
-}
-.frequency-option:hover {
-  border: 1px #f60 solid;
-}
 
-.frequency-option.focus {
-  border: 1px #3a0 solid;
-}
-/****************************常用值选项-END****************************/
 
 /* 让进度条的文字不掉下来 */
 .slider >>> .el-slider__marks-text {

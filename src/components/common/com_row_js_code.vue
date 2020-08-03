@@ -6,8 +6,8 @@
         <span class="C_999">[{{countRelJs}}]</span>
       </div>
       <div class>
-        <span class="C_666 FS13">{{docComplete.title}}</span>
-        <span v-if="docComplete.desc" class="C_666 FS13">：{{docComplete.desc}}</span>
+        <span class="C_3a0 FS14 ">{{docComplete.title}}</span>
+        <span v-if="docComplete.desc" class="C_333 FS14">：{{docComplete.desc}}</span>
 
         <el-link type="primary" @click="isShowEditJs=true" v-if="!isShowEditJs" class="ML10">编辑</el-link>
 
@@ -22,7 +22,7 @@
       </div>
     </div>
     <div class="PL8 PR8 PB8" v-if="isShowEditJs">
-      <dm_js_code_curr class v-model="docComplete.jsCode">
+      <dm_js_code_curr class v-model="docComplete.jsCode" ref="jsCodeCurr">
         <template #toobar_addon>
           <el-button plain @click="isShowEditJs=false" size="mini">关闭</el-button>
           <el-button plain @click="saveACode" size="mini">保存</el-button>
@@ -89,6 +89,15 @@ export default {
     },
     //函数：{显示js代码块编辑表单函数}
     saveACode: async function () {
+      let flag = await this.$refs.jsCodeCurr.checkSyntax();
+      if (!flag) {
+        let clickStatus = await this.$confirm("代码语法校验错误，确定保存？").catch(() => { });
+        if (clickStatus != "confirm") return
+
+      }
+
+
+
       let { jsCode } = this.docComplete
       await axios({//修改接口-当前父任务
         method: "post", url: `${PUB.domain}/info/commonModify`,

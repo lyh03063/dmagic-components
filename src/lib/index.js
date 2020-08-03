@@ -26,6 +26,7 @@ import dm_input_html_tag from '../components/form_item/input_html_tag.vue'
 import dm_input_style_prop from '../components/form_item/input_style_prop.vue'
 import dm_auto_css_prop from '../components/form_item/auto_css_prop.vue'
 import dm_auto_html_tag from '../components/form_item/auto_html_tag.vue'
+import dm_option_input from '../components/form_item/option_input.vue'
 
 import dm_dialog_edit from '../components/list-data/dialog_edit.vue'
 
@@ -73,7 +74,7 @@ import dm_detail_bankruptcy_case from '../components/bussiness/detail_bankruptcy
 import dm_c_operate_g_file from '../components/column/operate_g_file.vue'
 import dm_c_operate_g from '../components/column/operate_g.vue'
 import dm_c_operate_normal from '../components/column/operate_normal.vue'
-
+import dm_c_party_case from '../components/column/party_case.vue'
 
 import { codemirror } from "vue-codemirror";
 import "codemirror/lib/codemirror.css";//暂时不做懒加载，因为会影响到全屏css
@@ -262,7 +263,7 @@ const Components = {
   dm_loading,dm_ajax_populate,dm_space,dm_input_style_prop,dm_auto_css_prop,dm_auto_html_tag,
   dm_dynamic_form,dm_list_data,dm_select_ajax_lazy,
   dm_codemirror:codemirror,dm_code,dm_form_css,
-  dm_select_list_data,dm_collection,dm_dialog_edit,dm_dialog_add,dm_form_item,
+  dm_select_list_data,dm_collection,dm_dialog_edit,dm_dialog_add,dm_form_item,dm_option_input,
   dm_tree_data,dm_title_bar,dm_pannel_new,dm_select_area,dm_object,
   dm_com_row_js_code,dm_echart,
   dm_detail_group_common,dm_detail_group,dm_detail_g_list,
@@ -271,7 +272,7 @@ const Components = {
   dm_manage_home,dm_built_file_from_temp,dm_detail_bankruptcy_case,
   dm_modify_password,dm_aplayer,dm_detail_audio,dm_detail_data,dm_drag_box_width,
   dm_group_audio,dm_detail_html_api,
-  dm_c_operate_g,dm_c_operate_g_file,dm_c_operate_normal,
+  dm_c_operate_g,dm_c_operate_g_file,dm_c_operate_normal,dm_c_party_case,
   dm_list_simple,dm_detail_son_data,dm_pannel_son_note,
   dm_ele,dm_auto_layout,dm_dialog_select_demo,dm_single_class_edit,dm_row_html_tag,
   dm_dialog_css_prop,dm_dialog_html_tag,
