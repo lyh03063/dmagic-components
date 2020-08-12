@@ -14,20 +14,20 @@
       <el-tabs v-model="activeDemoG" type="card">
         <el-tab-pane :label="g.targetDoc.title" :name="i+''" v-for="(g,i) in listDemo" :key="i">
           <dm_list_flex_res class="MB20" :list="g.sonList" #default="{item}" col="8">
-            <div class="demo_group Cur1" @click="selectDemo(item)">
-              <div
-                class="M_0 DPF"
-                style="justify-content:center;align-items:center;width:140px;height:140px;"
+            <div class="data_group">
+              <a
+                class="link_img"
+                target="_blank"
+                :href="`#/open/auto_layout?demoId=${item.targetDoc._id}`"
               >
-                <img
-                  :src="$lodash.get(item.targetDoc,'album[0]url')"
-                  alt
-                  style="max-width:140px;max-height:140px;"
-                />
-              </div>
-              <div class="TAC">
-                {{item.targetDoc.title}}
+                <img class="WP100 HP100" :src="$lodash.get(item.targetDoc,'album[0]url')" alt />
+              </a>
+              <div class=" H40  PL5 PR5 OFH">{{item.targetDoc.title}}</div>
+              <div class="DPFC">
+                <a class="FX1 TAC btn_card " href="javascript:;" @click="selectDemo(item)" style="color:#06c">选择使用</a>
+
                 <a
+                  class="FX1 TAC btn_card"
                   target="_blank"
                   :href="`#/open/auto_layout?demoId=${item.targetDoc._id}`"
                 >编辑</a>
@@ -130,4 +130,31 @@ export default {
 };
 </script>
 <style scoped>
+.data_group {
+  border: 1px #ddd solid;
+  border-radius: 5px;
+}
+.btn_card {
+  height: 30px;
+  line-height: 30px;
+  border-top: 1px solid #f0f0f0;
+  color: #666;
+}
+.btn_card:nth-child(2) {
+  border-left: 1px solid #f0f0f0;
+}
+.btn_card:hover {
+  color: #f90;
+}
+
+.link_img {
+  display: block;
+  width: 150px;
+  height: 120px;
+  margin: 0 auto;
+}
+
+.link_img img {
+  object-fit: scale-down;
+}
 </style>

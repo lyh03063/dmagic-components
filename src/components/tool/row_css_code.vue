@@ -46,7 +46,7 @@
                 style="width:150px;"
                 v-focus
                 autosize
-                type1="textarea"
+                type="textarea"
                 size="mini"
                 :rows="1"
                 v-model="docEntity.value"

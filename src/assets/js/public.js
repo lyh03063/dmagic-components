@@ -405,6 +405,7 @@ PUB.menuDemo = [
         title: "可视化",
         menuItem: [
             { name: "echarts_demo", title: "echarts饼图" },
+            { name: "echarts_demo2", title: "echarts折线图" },
             { name: "aplayer_demo", title: "aplayer音频播放器" },
             { name: "aplayer_demo2", title: "aplayer分组音频" },
             { name: "calendar1", title: "日历组件" },

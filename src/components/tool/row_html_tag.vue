@@ -56,7 +56,7 @@
                 trigger="click"
                 @show="fnShowPover({docEntity,prop})"
               >
-              {{docEntity}}
+                <!-- {{docEntity}} -->
                 <div class="TAR">
                   <!-- <i class="el-icon-close FS16 Cur1 P5" @click="docEntity.showPover=false"></i> -->
                 </div>
@@ -81,10 +81,12 @@
 
           <el-popover placement="bottom-start" width="520" trigger="click" v-if="!isCloseSelf(doc)">
             <div class>
+              <dm_js_code_curr v-model="docEntity.text" v-if="doc[cf.labelKey]=='script'"></dm_js_code_curr>
               <el-input
+                v-else
                 style="width:500px;"
                 type="textarea"
-                :rows="2"
+                autosize
                 placeholder="请输入内部文本"
                 v-model="docEntity.text"
               ></el-input>
@@ -96,9 +98,16 @@
           <!-- <span class="C_999 MR20 FS14" v-if="doc.desc">({{doc.desc}})</span> -->
           <el-link
             class="ML20 MR10"
-            v-if="doc.children && !isCloseSelf(doc)"
+            v-if="doc.children && !isNoChildren(doc)"
             @click="showDialogAddChild(docEntity)"
           >+子元素</el-link>
+
+          <!-- END:Html:子组件按钮 -->
+          <el-link
+            class="MR10"
+            v-if="doc.children && !isNoChildren(doc)"
+            @click="showDialogAddCom(docEntity)"
+          >+子组件</el-link>
           <!-- {{showChildren[docEntity.__id]}} -->
         </span>
         <div
@@ -106,8 +115,10 @@
           v-if="doc.children"
           v-show="showChildren[docEntity.__id]"
         >
+          <!--END:Html:递归-->
           <dm_row_html_tag
             :ref="`children_${docEntity.__id}`"
+            @add_son_com="addSonComFromChildren"
             class
             v-model="docEntity.children"
             v-if="docEntity.children"
@@ -131,6 +142,7 @@ export default {
 
   data() {
     return {
+
       docHtmlFocus: null,
       cfFormPropVal: {
         size: "mini",
@@ -150,7 +162,19 @@ export default {
   computed: {
     //是否为自闭合元素
     isCloseSelf: function () {
-      let arr = ["img", "input", "br", "hr", "meta", "aaaaa",]
+      let arr = ["img", "input", "br", "hr", "meta",]
+
+      let fn = function (doc) {
+        let { tag } = doc
+        return arr.includes(tag)
+
+      }
+      return fn
+
+    },
+    //没有子元素
+    isNoChildren: function () {
+      let arr = ["img", "input", "br", "hr", "meta", "script", "link", "title",]
 
       let fn = function (doc) {
         let { tag } = doc
@@ -237,6 +261,7 @@ export default {
 
     //函数：{集合鼠标移出的回调函数}
     afterMouseleave: async function (param) {
+      if (this.vm_auto_layout.modeShowHtml == 'actual') return;//如果是真实模式，退出
       if (PUB.focusEle && PUB.focusEle.cf && PUB.focusEle.cf.focus_ele) {//如果聚焦元素存在,去掉聚焦样式
         this.$set(PUB.focusEle.cf, "focus_ele", "");//使用set方法添加一个空类
         delete PUB.focusEle.cf.focus_ele
@@ -244,6 +269,7 @@ export default {
     },
     //函数：{集合鼠标移入的回调函数}
     afterMouseenter: async function (param) {
+      if (this.vm_auto_layout.modeShowHtml == 'actual') return;//如果是真实模式，退出
       if (!this.vm_auto_layout.isHighLightLayout) return;//如果未启用高亮区块模式，退出
       let { list, focusIndex } = param
 
@@ -283,8 +309,23 @@ export default {
     //函数：{显示添加子元素弹窗函数}
     showDialogAddChild: async function (docEntity) {
       let key = `children_${docEntity.__id}`;//ref变量
-      this.$refs[key].$refs.collectionTag.addGroup()
+      this.$refs[key].$refs.collectionTag.addGroup()//弹窗打开
       this.$set(this.showChildren, docEntity.__id, true);//强行展开
+
+    },
+    //END:JS:添加子组件弹窗
+    //函数：{显示添加子组件弹窗函数}
+    showDialogAddCom: async function (docEntity) {
+      console.log(`showDialogAddCom####`, docEntity);
+      this.$emit("add_son_com", docEntity);
+
+    },
+    //END:JS:子元素添加子组件函数
+    //函数：{当前元素的子元素添加子组件函数}-注意这里有点绕的****
+    addSonComFromChildren: async function (docEntity) {
+      //居然能拿到docEntity，有点困惑
+      this.$emit("add_son_com", docEntity);
+
 
     },
 
@@ -363,6 +404,18 @@ export default {
                 labelWidth: "190px",
                 col_span: 12,
                 formItems: formItemsAddon
+              }
+            },
+            {
+              prop: "cf", label: "事件属性", default: {}, cfForm: {
+                size: "mini",
+                labelWidth: "190px",
+                col_span: 12,
+                formItems: [
+                  { prop: "onclick", label: "onclick（鼠标点击）", type: "onclick", },
+                  { prop: "ondblclick", label: "ondblclick（鼠标双击）", type: "ondblclick", },
+                  { prop: "onmouseenter", label: "onmouseenter（鼠标进入）", type: "onmouseenter", },
+                ]
               }
             },
             { prop: "children", show: false, label: "children", type: "jsonEditor", default: [] },

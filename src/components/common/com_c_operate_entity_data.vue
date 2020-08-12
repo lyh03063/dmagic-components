@@ -41,7 +41,7 @@
     <a
       class="MR8"
       target="_blank"
-      :href="`#/detail_group?groupId=${doc._idRel2}`"
+      :href="`#${path}/detail_group?groupId=${doc._idRel2}`"
       v-if="groupDoc.dataType=='group'"
     >
       <el-button size="mini">查看分组</el-button>
@@ -88,6 +88,16 @@ export default {
     };
   },
   computed: {
+    //系统路径****
+    path: function () {
+      let { params } = this.$route
+      let { sysId } = params//获取参数里的系统ID
+      let path = ""
+      if (sysId) {//如果{系统ID}存在
+        path = `/system/${sysId}/manage`
+      }
+      return path
+    },
     linkDemo: function () {
       let fn = function (row) {
         let { link, _idRel2, _id } = row

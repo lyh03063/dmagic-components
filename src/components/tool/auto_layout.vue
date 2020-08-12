@@ -5,12 +5,26 @@
       <dm_debug_item v-model="arrCss" />
       <dm_debug_item v-model="docDemo" />
     </dm_debug_list>
-    <div class="H50 DPF BC_000 PL15 MB5" style="background:rgb(84, 92, 100);">
-      <div class="LH50 C_fff FS24 MR20 FX1">
+    <div class="H50 DPFC BC_000 PL15 MB5" style="background:rgb(84, 92, 100);">
+      <div class="LH50 C_fff FS24 MR20">
         码邦科技-网页在线布局工具
         <!-- <el-button plain @click="test" size="mini">test</el-button> -->
       </div>
-      <div class="PT8 PR15" v-if="demoId&&docDemo">
+      <div class="FX1">
+        <div class="C_fff DPIB MR8">宽{{cfDragBox.nWidthLeft}}px</div>
+        <el-select class="W100 MR5" v-model="modeShowHtml" placeholder="请选择" size="mini">
+          <el-option
+            v-for="item in optionsMode"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+
+        <el-button plain @click="updateIframe" size="mini" v-if="modeShowHtml=='actual'">运行</el-button>
+        <el-checkbox class="ML20 C_fff" v-model="isHighLightLayout" v-else>悬停Html时高亮区块</el-checkbox>
+      </div>
+      <div class="PR15" v-if="demoId&&docDemo">
         <span class="C_fff FS16 MR10">{{docDemo.title}}</span>
         <!-- v-if="$power('groupDataList.all.modify')" -->
 
@@ -29,7 +43,9 @@
     <div class="PL8 PR8" style="height: 1000px">
       <dm_drag_box_width class :cf="cfDragBox">
         <template #left>
-          <div id="id_html_box" class="MR5" style>
+          <!--iframe视窗-->
+          <iframe id="id_iframe" class="WP100" style="height:760px;" v-if="modeShowHtml=='actual'"></iframe>
+          <div id="id_html_box" class="MR5" v-show="modeShowHtml!='actual'">
             <!--html元素-->
             <dm_ele
               :tag="doc.tag"
@@ -57,13 +73,10 @@
                       @click="$refs.rowhtml.$refs.collectionTag.addGroup()"
                       size="mini"
                     >+ 一级元素</el-button>
-
-                    <el-checkbox class="ML20" v-model="isHighLightLayout">悬停代码时高亮区块</el-checkbox>
-
-                  
                   </div>
                   <div class="box_scroll">
-                    <dm_row_html_tag class v-model="arrHtml" ref="rowhtml"></dm_row_html_tag>
+                    <!-- END:Html:row_html_tag组件 -->
+                    <dm_row_html_tag class v-model="arrHtml" ref="rowhtml" @add_son_com="addSonCom"></dm_row_html_tag>
                   </div>
                 </el-tab-pane>
                 <el-tab-pane :label="`Css配置(${arrCss.length})`" name="tab2" lazy>
@@ -130,6 +143,13 @@
                     </dm_collection>
                   </div>
                 </el-tab-pane>
+                <el-tab-pane label="页头JS" name="tab5" lazy>
+                  <dm_js_code_curr class v-model="jsCodeTop" ref="jsCodeCurr">
+                    <template #toobar_addon>
+                      <!-- <el-button plain @click="updateIframe" size="mini">保存并运行</el-button> -->
+                    </template>
+                  </dm_js_code_curr>
+                </el-tab-pane>
                 <el-tab-pane label="代码生成" name="tab3" lazy>
                   <div class>html：</div>
                   <!-- <el-input type="textarea" :rows="8" v-model="htmlCode"></el-input> -->
@@ -160,7 +180,7 @@
         </template>
       </dm_drag_box_width>
     </div>
-    <!--选择demo弹窗组件-->
+    <!--END:Html-选择demo弹窗组件-->
     <dm_dialog_select_demo
       @inited="({vm})=>vm_dialog_select_demo=vm"
       @select_demo="afterSelectDemo"
@@ -217,7 +237,16 @@ export default {
   components: {},
   data() {
     return {
+      objEleParent: null,//当前父元素对象
+      modeShowHtml: "actual",
+      optionsMode: [{ value: "test", label: "测试模式" }, { value: "actual", label: "真实模式" },],
+      jsCodeTop: `
+      function test(){
+        alert("test函数被调用")
+      }
+      `,
       noteListByKeyword: [],//关联笔记列表
+
       cfCodeMHtml: {
         cfCodeMirror: {
           mode: "text/html",
@@ -229,6 +258,7 @@ export default {
         }
       },
       readyResource: false,
+
       isHighLightLayout: true,//悬停代码时高亮区块
       isShowDialogSaveMy: false,//显示填写新建我的demo信息表单弹窗
       formDataAddDemo: { title: "新建demo" },
@@ -238,6 +268,7 @@ export default {
         formItems: [F_ITEMS.title,],
         btns: [{ text: "保存", event: "submit", type: "primary", size: "mini" }]
       },
+
       cfDragBox: {
         nWidthLeft: 320,
         cfBoxLeft: { class: " ", style: { 'background-image': "url('http://tool.alixixi.com/csseditor/images/grid.gif')" } },
@@ -274,7 +305,7 @@ export default {
       vm_dialog_select_demo: null,//选择demo组件对象
       vm_form_css1: null,
       vm_form_css2: null,
-      activeName: "tab2",
+      activeName: "tab1",
       htmlCode: "",
       cssCode: "",
     };
@@ -310,10 +341,20 @@ export default {
       immediate: true,
       deep: true
     },
+    modeShowHtml: {//监听到arrClass变化，立马更新样式
+      async handler(newVal, oldVal) {
+        if (this.modeShowHtml == 'actual') {
+          await this.$nextTick();//延迟到视图更新
+          this.updateIframe()//调用：{更新iframe函数}
+        }
+
+      },
+      immediate: true,
+    },
     arrHtml: {//监听到arrHtml变化，更新Html
       async handler(newVal, oldVal) {
 
-
+        console.log(`arrHtml:change#############`);
 
         clearHtmlPropDebounce(this.arrHtml)
 
@@ -328,8 +369,13 @@ export default {
 
         var reg2 = /\s{2,}/g;
         htmlCode = htmlCode.replace(reg2, " ")//将多个空格替换成一个空格
-
         this.htmlCode = htmlCode
+
+        if (this.modeShowHtml == 'actual') {
+
+          this.updateIframe()//调用：{更新iframe函数}
+        }
+
 
 
       },
@@ -338,7 +384,35 @@ export default {
     },
   },
   methods: {
+    //函数：{更新iframe函数}
+    updateIframe: async function () {
 
+      if (this.modeShowHtml == 'actual') {//如果是真实模式
+        let styleInIframe = `
+        <link rel="stylesheet" href="http://qn-static.dmagic.cn/public.1.2.4.css" />
+        <style>
+        ${this.cssCode}
+        </style>
+    
+       
+       
+        `
+        let htmlInIframe = `
+${styleInIframe}
+   <body style="margin:0">
+     ${"<"}script type="text/javascript">  
+     ${this.jsCodeTop}
+     ${"<"}/script${">"}
+
+${this.htmlCode}
+   </body>
+        `
+
+        $("#id_iframe").attr("srcdoc", htmlInIframe)
+
+      }
+
+    },
 
 
     //函数：{000函数}
@@ -376,14 +450,70 @@ ${selector}{${cssNormal}
 
     //函数：{选择demo后的回调函数}
     afterSelectDemo: async function ({ doc }) {
+
       doc = lodash.cloneDeep(doc);//深拷贝，避免影响数据源
       let { arrCss, arrHtml } = doc
       let { vm_dialog_select_demo } = this;
       vm_dialog_select_demo.hide()
-      this.arrHtml = arrHtml//Css代码更新
-      this.arrCss = arrCss//Css代码更新
+
+
+      let arrCssNeed = [];//变量：{不重复的Css定义数组}
+      let arrCssRepeat = [];//变量：{重复的Css定义数组}
+      arrCss.forEach(d1 => {
+        let { selector } = d1;
+        let docRepeat = this.arrCss.find(d2 => d2.selector == selector)
+        console.log(`docRepeat:`, docRepeat);
+        if (docRepeat) {
+          arrCssRepeat.push(d1)
+        } else {
+          arrCssNeed.push(d1)
+        }
+
+      })
+
+
+      let countRepeat = arrCss.length - arrCssNeed.length//变量：{重复的css定义数量}
+      if (countRepeat) {
+        let arrSelectorR = arrCssRepeat.map(d => d.selector)
+        let strSelectorR = arrSelectorR.join("/")
+        let clickStatus = await this.$confirm(`${strSelectorR}出现样式定义重复，这部分样式将不引用，如果是样式冲突问题，请取消操作并先处理好！`).catch(() => { });
+        if (clickStatus != "confirm") return
+
+      }
+
+
+      //END:JS-适应子组件插入位置
+      if (this.objEleParent) {//Q1:{当前父元素对象}存在
+        this.objEleParent.children.push(...arrHtml)
+        this.objEleParent =null;//将{当前父元素对象}设置为null
+      } else { //Q2:{否则}
+        this.arrHtml.push(...arrHtml)//html代码更新
+      }
+
+
+
+
+      this.arrCss.push(...arrCssNeed)//Css代码更新
+
+
+
+
+
+
+
+      // this.arrHtml = arrHtml//html代码更新
+      // this.arrCss = arrCss//Css代码更新
       this.$message.success('切换demo成功');
     },
+
+    //END:JS:添加子组件回调
+    //函数：{添加子组件按钮点击后的回调函数}
+    addSonCom: async function (docEntity) {
+      this.objEleParent = docEntity//当前父元素对象赋值
+      this.dialogSelectDemo()//调用：{打开选择demo弹窗函数}
+
+    },
+
     //函数：{打开选择demo弹窗函数}
     dialogSelectDemo: async function () {
       let { vm_dialog_select_demo } = this;
@@ -394,12 +524,13 @@ ${selector}{${cssNormal}
     saveDemo: async function () {
       let clickStatus = await this.$confirm("确定修改？").catch(() => { });
       if (clickStatus != "confirm") return
-      let { arrCss, arrHtml } = this
+      let { arrCss, arrHtml, modeShowHtml, jsCodeTop, cfDragBox } = this
+      let { nWidthLeft } = cfDragBox
       await axios({//修改接口-当前父任务
         method: "post", url: `${PUB.domain}/info/commonModify`,
         data: {
           _id: this.demoId, _systemId: "$all", _dataType: "front_demo",
-          _data: { arrCss, arrHtml }
+          _data: { arrCss, arrHtml, modeShowHtml, jsCodeTop, nWidthLeft }
         }
       });
       this.$message.success('修改成功');
@@ -441,10 +572,12 @@ ${selector}{${cssNormal}
         data: { _id: this.demoId, _systemId: "$all" } //传递参数
       });
       this.docDemo = data.doc;
-      let { arrCss, arrHtml } = data.doc
+      let { arrCss, arrHtml, modeShowHtml, jsCodeTop, nWidthLeft = 320 } = data.doc
       this.arrHtml = arrHtml//Css代码更新
       this.arrCss = arrCss//Css代码更新
-
+      this.modeShowHtml = modeShowHtml || "test"
+      this.jsCodeTop = jsCodeTop//Js代码更新
+      this.cfDragBox.nWidthLeft = nWidthLeft;//演示区域宽度
 
 
 
@@ -461,9 +594,11 @@ ${selector}{${cssNormal}
           vedio: 1
         }
       };
+
       if (this.docDemo.keyword) {//如果有关键词
         this.ajaxGetNoteList(); //调用：{ajax获取关联笔记列表}
       }
+
     },
     //函数：{获取关联笔记列表函数}
     ajaxGetNoteList: async function () {
@@ -478,15 +613,18 @@ ${selector}{${cssNormal}
   },
   async created() {
 
-
-    this.demoId = this.$route.query.demoId;//
-    if (this.demoId) {//
-      this.getDemoDoc(); //调用：{获取demo详情函数}
-    }
-
     await util.loadJs({ url: PUB.urlJS.html_tag })//加载html相关JS
     await util.loadJs({ url: PUB.urlJS.css_prop })//加载css相关JS
     this.readyResource = true
+    this.demoId = this.$route.query.demoId;//
+    if (this.demoId) {//
+      await this.getDemoDoc(); //调用：{获取demo详情函数}
+    }
+
+    if (this.modeShowHtml == 'actual') {//如果是真实模式
+      await util.timeout(500); //延迟
+      this.updateIframe()//调用：{更新iframe函数}
+    }
 
 
 
@@ -501,6 +639,7 @@ ${selector}{${cssNormal}
     util.ajaxAddVisitRecord({ tagPage: "auto_layout", })//变量：{ajax添加访客记录函数}
 
     util.changeFavicon(`//qn-dmagic.dmagic.cn/202007171024372424_67675_layout.png`)//函数：{改变网页标题图标的函数}
+
 
 
   }
@@ -551,7 +690,7 @@ ${selector}{${cssNormal}
   color: #1313f5;
 }
 
-[focus_ele='1'] {
+[focus_ele="1"] {
   outline: 2px #f00 solid;
 }
 </style>

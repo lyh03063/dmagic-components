@@ -28,6 +28,17 @@ export default {
       cfIN: {}
     };
   },
+  watch: {
+    "cf.nWidthLeft": {
+      handler(newVal, oldVal) {
+        this.cfIN.nWidthLeft=newVal;
+        this.cfIN.cfBoxLeft.style.width = `${this.cfIN.nWidthLeft}px`
+      },
+      immediate: true,
+      deep: true
+    }
+  },
+
   computed: {
 
   },
@@ -49,6 +60,7 @@ export default {
         this.$set(this.cfIN, "nWidthLeft", nWidthLeftOld + moveLen);
 
         this.cfIN.cfBoxLeft.style.width = `${this.cfIN.nWidthLeft}px`
+        this.cf.nWidthLeft = this.cfIN.nWidthLeft
 
       }
       // 鼠标松开事件

@@ -64,7 +64,7 @@ export default {
   methods: {
     async updateGroupAndCount() {
       let clickStatus = await this.$confirm(
-        "确定操作,将需要10到30秒时间？"
+        "确定操作,将需要一定时间（根据当前系统的数据量）？"
       ).catch(() => { });
       if (clickStatus != "confirm") return;
       //开始loding
@@ -74,10 +74,11 @@ export default {
         spinner: "el-icon-loading",
         background: "rgba(0, 0, 0, 0.7)"
       });
+      let _systemId = util.getSystemId();//
       let { data } = await axios({
         method: "post",
         url: `${PUB.domain}/info/updateGroupAndCount`,
-        data: {}
+        data: {_systemId}
       });
 
       loading.close(); //关闭loding
