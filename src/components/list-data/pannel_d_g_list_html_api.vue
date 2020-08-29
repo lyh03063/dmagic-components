@@ -5,7 +5,7 @@
     </dm_debug_list>
 
     <dm_pannel_new class="MB20" title=" " :cf="cf.cfPannel">
-      <template #titleBar_boxMiddle>
+      <template #title_bar_box_middle>
         <div class="DPIB">
           <span class="MR10 FL">{{title}}</span>
           <div class="DPIB" v-if="doc[cf.column]">

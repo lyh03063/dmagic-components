@@ -12,8 +12,9 @@
     >
       <!--传递boxMiddle插槽-->
       <template #boxMiddle="{vm_title_bar}">
-        <!--接收titleBar_boxMiddle插槽-->
-        <slot name="titleBar_boxMiddle" :vm_title_bar="vm_title_bar" :vm_pannel="vm_pannel"></slot>
+      
+        <!--接收title_bar_box_middle插槽-->
+        <slot name="title_bar_box_middle" :vm_title_bar="vm_title_bar" :vm_pannel="vm_pannel"></slot>
       </template>
       <!--传递boxRight插槽-->
       <template #boxRight>

@@ -199,6 +199,7 @@ export default {
         labelWidth: "150px",
 
         formItems: [
+           F_ITEMS.personCharge,
            F_ITEMS.predictTime,
           // F_ITEMS.object_1,
           // F_ITEMS.title,
@@ -227,7 +228,7 @@ export default {
           // // F_ITEMS.prop_time_period2,//月范围
           // // F_ITEMS.prop_time_period3,//年范围
           // F_ITEMS.prop_upload,
-          // // F_ITEMS.personCharge,
+         
           // // F_ITEMS.prop_editorTMNew,
           // F_ITEMS.prop_editorTM,
 

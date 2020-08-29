@@ -85,8 +85,8 @@
       </template>
 
       <template #default="{item,index}">
-        <!--如果有配置卡片-->
-        <component :item="item" :index="index" :is="cf.comCard" v-if="cf.comCard"></component>
+        <!--如果有配置卡片,通过cfComCard传递附近配置-->
+        <component :item="item" :index="index" :is="cf.comCard" v-if="cf.comCard" v-bind="cf.cfComCard"></component>
         <!--否则--使用插槽-->
         <slot class v-else name="card" :item="item" :index="index">
           <div class>{{item}}</div>

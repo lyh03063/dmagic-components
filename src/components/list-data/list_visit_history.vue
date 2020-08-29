@@ -21,13 +21,13 @@ export default {
   },
   data() {
 
-    let { dataTypeDict, tipsNoData,findJsonAddon,cfListAddon={} } = this.cf
+    let { dataTypeDict, tipsNoData, findJsonAddon, cfListAddon = {} } = this.cf
 
     let cfList = lodash.cloneDeep(PUB.listCF.list_visit_record);
 
-    let ajaxParam={}
-    if(dataTypeDict){
-      ajaxParam._dataType=dataTypeDict
+    let ajaxParam = {}
+    if (dataTypeDict) {
+      ajaxParam._dataType = dataTypeDict
     }
 
     Object.assign(cfList, {//合并对象
@@ -37,9 +37,11 @@ export default {
       isShowToolBar: false,//批量操作栏
       requireProp: ["timeVisited", "dataId"],//特殊数据对象返回
       comCard: "dm_card_note_history",//卡片组件
+      //卡片组件附加配置
+      
       cfListFlex: { col: 1, tipsNoData, },
       dynamicDict: [
-        { "ajax": { "url": "/info/getCommonList", "param": ajaxParam }, "idColumn2": "_id", "idColumn": "dataId", "populateColumn": "objNote" }
+        { "ajax": { "url": "/info/getCommonList", "param": ajaxParam }, "idColumn2": "_id", "idColumn": "dataId", "populateColumn": "dataTarget" }
       ],
       sortJsonDefault: { "timeVisited": 1 },//第二次排序
       pageSize: 10,
@@ -50,9 +52,9 @@ export default {
       ...cfListAddon//附加的列表配置
     });
     // _userId: this.$sys.userId,
-    cfList.objParamAddon.findJson = { tagPage: "detail_data",...findJsonAddon };
+    cfList.objParamAddon.findJson = { tagPage: "detail_data", ...findJsonAddon };
 
-    
+
     cfList.objParamAddon.forbidSelectJson = true;//** */
     cfList.objParamAddon.arrLookup = [
       {

@@ -1,7 +1,7 @@
 <template>
   <div class="out">
     <dm_pannel_new class title=" " :cf="cf.cfPannel">
-      <template #titleBar_boxMiddle>
+      <template #title_bar_box_middle>
         <div class="DPF">
           <span class="MR10 ">{{title}}</span>
           <div class="DPIB DPFC">

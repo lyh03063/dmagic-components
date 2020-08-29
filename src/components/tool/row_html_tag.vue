@@ -52,19 +52,14 @@
               <span>=</span>
               <el-popover
                 placement="bottom-start"
-                width="420"
+                width="520"
                 trigger="click"
                 @show="fnShowPover({docEntity,prop})"
               >
                 <!-- {{docEntity}} -->
-                <div class="TAR">
-                  <!-- <i class="el-icon-close FS16 Cur1 P5" @click="docEntity.showPover=false"></i> -->
-                </div>
                 <div v-if="docEntity.showPover">
-                  <!-- <dm_object class="" v-model="docEntity.cf" ></dm_object> -->
                   <dm_dynamic_form :cf="cfFormPropVal" v-model="docEntity.cf"></dm_dynamic_form>
                 </div>
-
                 <span slot="reference" @click="$set(docEntity,'showPover',true)">
                   <span>"</span>
                   <span class="code_html_val" :title="value" slot="reference">{{valueShort(value)}}</span>
@@ -73,18 +68,53 @@
               </el-popover>
             </template>
           </span>
+          <!-- 自定义属性 -->
+          <span class="FS14" v-for="(item,index) in docEntity.diyProp" :key="index">
+            <span class="ML10 code_html_prop">{{item.prop}}</span>
+            <span>=</span>
+            <el-popover placement="bottom-start" width="320" trigger="click">
+              <!-- {{docEntity}} -->
+              <div v-if="docEntity.showPover2" class="PL10">
+                <el-input
+                  style="width:280px;"
+                  type="textarea"
+                  :rows="4"
+                  placeholder="请输入内容"
+                  v-model="item.value"
+                ></el-input>
+
+                <!-- <dm_dynamic_form :cf="cfFormPropVal" v-model="docEntity.cf"></dm_dynamic_form> -->
+              </div>
+              <span slot="reference" @click="$set(docEntity,'showPover2',true)">
+                <span>"</span>
+                <span
+                  class="code_html_val"
+                  :title="item.value"
+                  slot="reference"
+                >{{valueShort(item.value)}}</span>
+                <span>"</span>
+              </span>
+            </el-popover>
+          </span>
 
           <!--标签结束符-->
           <span class="code_html_tag FS14">&gt;</span>
 
           <!--  -->
-
-          <el-popover placement="bottom-start" width="520" trigger="click" v-if="!isCloseSelf(doc)">
+          <el-popover
+            class="ML3"
+            placement="bottom-start"
+            width="690"
+            trigger="click"
+            v-if="!isCloseSelf(doc)"
+          >
             <div class>
+              <!--如果是script元素-->
               <dm_js_code_curr v-model="docEntity.text" v-if="doc[cf.labelKey]=='script'"></dm_js_code_curr>
+              <!--否则-->
               <el-input
                 v-else
-                style="width:500px;"
+                style="width:670px;"
                 type="textarea"
                 autosize
                 placeholder="请输入内部文本"
@@ -92,7 +122,7 @@
               ></el-input>
             </div>
 
-            <span class="C_999 MR20 FS14 box_innertext" slot="reference">{{innerText(doc.text)}}</span>
+            <span class="MR20 FS14 box_innertext" slot="reference">{{innerText(doc.text)}}</span>
           </el-popover>
 
           <!-- <span class="C_999 MR20 FS14" v-if="doc.desc">({{doc.desc}})</span> -->
@@ -108,7 +138,9 @@
             v-if="doc.children && !isNoChildren(doc)"
             @click="showDialogAddCom(docEntity)"
           >+子组件</el-link>
-          <!-- {{showChildren[docEntity.__id]}} -->
+
+          <!-- TODO:Html:复制到剪贴板按钮 -->
+          <el-link class="MR10" @click="copyHtmlCode(docEntity)">复制</el-link>
         </span>
         <div
           class="BC_fff PT8 PL8 PR8 PB1"
@@ -119,6 +151,8 @@
           <dm_row_html_tag
             :ref="`children_${docEntity.__id}`"
             @add_son_com="addSonComFromChildren"
+            @html_tag_mouseenter="htmlTagMouseenterFromChildren"
+            @html_tag_mouseleave="htmlTagMouseleaveFromChildren"
             class
             v-model="docEntity.children"
             v-if="docEntity.children"
@@ -142,7 +176,6 @@ export default {
 
   data() {
     return {
-
       docHtmlFocus: null,
       cfFormPropVal: {
         size: "mini",
@@ -187,8 +220,11 @@ export default {
     valueShort: function () {
       let fn = function (text) {
         if (!text) return ""
-        if (text.length > 20) { //如果字符长度超过20
-          text = text.slice(0, 17)
+
+        let { modeShowHProp } = this.vm_auto_layout
+        let maxLength = modeShowHProp == "whole" ? 999 : 20
+        if (text.length > maxLength) { //如果字符长度超过限制
+          text = text.slice(0, maxLength - 3)
           text += `...`
         }
         return text
@@ -199,8 +235,10 @@ export default {
     innerText: function () {
       let fn = function (text) {
         if (!text) return ""
-        if (text.length > 20) { //如果字符长度超过20
-          text = text.slice(0, 17)
+        let { modeShowHProp } = this.vm_auto_layout
+        let maxLength = modeShowHProp == "whole" ? 999 : 20
+        if (text.length > modeShowHProp) { //如果字符长度超过20
+          text = text.slice(0, maxLength - 3)
           text += `...`
         }
         return text
@@ -213,12 +251,19 @@ export default {
 
   },
   methods: {
+
+    //函数：{将html元素代码复制到剪贴板函数}
+    copyHtmlCode: function ( docEntity) {
+      let objNeed = { arrHtml: [docEntity] }
+      var strObjNeed = JSON.stringify(objNeed);//Json对象转换Json字符串
+      let cpTxt = strObjNeed;
+      util.setClipBoardData(cpTxt)//设置剪贴板内容（兼容谷歌浏览器）
+      this.$message.success( '复制成功');
+    },
     //函数：{pover显示时的回调函数}
     fnShowPover: async function ({ docEntity, prop }) {
-      console.log(`prop:#############`, prop);
 
       this.cfFormPropVal.formItems = await this.getFormItemsByProp({ prop })
-      console.log(`this.cfFormPropVal.formItems:`, this.cfFormPropVal.formItems);
 
 
     },
@@ -261,14 +306,41 @@ export default {
 
     //函数：{集合鼠标移出的回调函数}
     afterMouseleave: async function (param) {
+      this.$emit("html_tag_mouseleave", param);
       if (this.vm_auto_layout.modeShowHtml == 'actual') return;//如果是真实模式，退出
       if (PUB.focusEle && PUB.focusEle.cf && PUB.focusEle.cf.focus_ele) {//如果聚焦元素存在,去掉聚焦样式
         this.$set(PUB.focusEle.cf, "focus_ele", "");//使用set方法添加一个空类
         delete PUB.focusEle.cf.focus_ele
       }
     },
+    //END:JS-htmlTagMouseleaveFromChildren
+    //函数：{子html鼠标移出的回调函数}
+    htmlTagMouseleaveFromChildren: async function () {
+      let { length } = window.arr_$target
+      let $target = window.arr_$target[length - 1]
+      $target.removeClass("focus_ele")
+      window.arr_$target.pop()
+
+
+    },
+    //函数：{子html鼠标移如的回调函数}
+    htmlTagMouseenterFromChildren: async function (param) {
+      let { focusIndex } = param
+
+      let { length } = window.arr_$target
+      let $parent = window.arr_$target[length - 1]
+      let $children = $parent.children()
+      $parent.removeClass("focus_ele")
+      let $target = $children.filter(`:eq(${focusIndex})`)
+      $target.addClass("focus_ele")
+      window.arr_$target.push($target)
+
+
+    },
     //函数：{集合鼠标移入的回调函数}
     afterMouseenter: async function (param) {
+      this.$emit("html_tag_mouseenter", param);
+
       if (this.vm_auto_layout.modeShowHtml == 'actual') return;//如果是真实模式，退出
       if (!this.vm_auto_layout.isHighLightLayout) return;//如果未启用高亮区块模式，退出
       let { list, focusIndex } = param
@@ -277,22 +349,25 @@ export default {
         delete PUB.focusEle.cf.focus_ele
 
       }
-
-
       PUB.focusEle = list[focusIndex]//当前元素变成聚焦元素
 
       if (!PUB.focusEle.cf) {//如果cf不存在-创建
         this.$set(PUB.focusEle, "cf", {});//
       }
       if (!PUB.focusEle.cf.focus_ele) {//如果class不存在
-        this.$set(PUB.focusEle.cf, "focus_ele", "");//使用set方法添加一个空类
+        this.$set(PUB.focusEle.cf, "focus_ele", "");//使用set方法添加一个空类,高亮处理
       }
-
       PUB.focusEle.cf.focus_ele = "1"
+
 
     },
     //函数：{添加数据后的回调函数}
     afterAdd: async function (data) {
+
+      console.log(`data:####`, data);
+      util.clearObj(data.cf)//调用：{清除对象中的空属性（null,undefined,空格等）}
+      util.clearObj(data)//调用：{清除对象中的空属性（null,undefined,空格等）}
+
       let { tag } = data
       util.addHtmlUseHistory({ tag })//调用：{添加html元素使用的LocalStorage历史记录}
 
@@ -301,6 +376,8 @@ export default {
     },
     //函数：{修改数据后的回调函数}
     afterModify: async function (data) {
+      util.clearObj(data.cf)//调用：{清除对象中的空属性（null,undefined,空格等）}
+      util.clearObj(data)//调用：{清除对象中的空属性（null,undefined,空格等）}
       let { tag } = data
       util.addHtmlUseHistory({ tag })//调用：{添加html元素使用的LocalStorage历史记录}
 
@@ -316,7 +393,6 @@ export default {
     //END:JS:添加子组件弹窗
     //函数：{显示添加子组件弹窗函数}
     showDialogAddCom: async function (docEntity) {
-      console.log(`showDialogAddCom####`, docEntity);
       this.$emit("add_son_com", docEntity);
 
     },
@@ -415,10 +491,12 @@ export default {
                   { prop: "onclick", label: "onclick（鼠标点击）", type: "onclick", },
                   { prop: "ondblclick", label: "ondblclick（鼠标双击）", type: "ondblclick", },
                   { prop: "onmouseenter", label: "onmouseenter（鼠标进入）", type: "onmouseenter", },
+                  { prop: "onmouseleave", label: "onmouseleave（鼠标离开）", type: "onmouseleave", },
                 ]
               }
             },
             { prop: "children", show: false, label: "children", type: "jsonEditor", default: [] },
+            { "prop": "diyProp", "label": "自定义属性", "col_span": 24, "type": "collection", "cfElBtnAdd": { text: "+添加一组", type: "primary", size: "mini", plain: false }, "collectionCfForm": { col_span: 12, formItems: [{ label: "属性名", prop: "prop", }, { label: "属性值", prop: "value", type: "textarea" },] } }
 
           ],
 
@@ -441,12 +519,13 @@ export default {
 <style  scoped>
 .box_innertext {
   margin: 5px 0 0 0;
-  border: 1px #999 solid;
+  border: 1px #333 solid;
   height: 18px;
   line-height: 16px;
   display: block;
   border-radius: 2px;
   padding: 0 4px;
   font-size: 12px;
+  overflow-y: auto;
 }
 </style>

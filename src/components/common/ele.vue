@@ -1,9 +1,9 @@
 <template>
-  <component :is="tag" v-bind="cf" v-if="ready">
-  {{text}}
+  <component :is="tag" v-bind="cfEle()" v-if="ready">
+    {{text}}
     <dm_ele
       :tag="d.tag"
-      v-bind="d.cf"
+      v-bind="cfEleChild(d)"
       :text="d.text"
       :children="d.children"
       v-for="(d,j) in children"
@@ -19,12 +19,45 @@ export default {
     text: {},
     tag: {},
     children: {},
-
     cf: {
       default: function () {
         return {};
       }
+    },
+    diyProp: {
+      default: function () {
+        return [];
+      }
     }
+  },
+  computed: {
+    //根元素的配置
+    cfEle() {
+      let fn = (d) => {
+        let { cf = {}, diyProp = [],children } = this//
+        let cfNeed = { ...cf }
+        diyProp.forEach(itemEach => {//循环：{自定义属性数组}
+          let { prop, value } = itemEach
+          cfNeed[prop] = value
+        })
+        return cfNeed
+      }
+      return fn
+    },
+     //子元素的配置-跟父元素几乎
+    cfEleChild() {
+      let fn = function (d) {
+        let { cf = {}, diyProp = [] } = d//
+        let cfNeed = { ...cf }
+        diyProp.forEach(itemEach => {//循环：{自定义属性数组}
+          let { prop, value } = itemEach
+          cfNeed[prop] = itemEach
+        })
+        return cfNeed
+      }
+      return fn
+    }
+
   },
   watch: {
     cf: {
@@ -45,7 +78,7 @@ export default {
 
   data() {
     return {
-      ready:true,
+      ready: true,
 
     };
   },

@@ -1,10 +1,11 @@
 <template>
   <div>
     <dm_pannel_new class="MB20" :cf="cfPannel1">
-      <template #titleBar_boxMiddle>
-        <div class="DPIB">
-          <el-button plain  size="mini">传递标题栏的插槽-按钮</el-button>
+      <template #title_bar_box_middle>
+        <div class="" >
+           <button class="n-button plain">插槽内容</button>
         </div>
+       
       </template>
     </dm_pannel_new>
 
@@ -31,7 +32,7 @@
 
     <dm_pannel_new class="MB20" :cf="cfPannel4" title="pannel_A风格微调-改变标题栏风格">pannel_A风格面板内容</dm_pannel_new>
 
-    <dm_pannel_new class="MB20" :cf="cfPannel5" title="pannel_A风格微调-改变标题图标和颜色">pannel_A风格面板内容</dm_pannel_new>
+    <dm_pannel_new class="MB20" :cf="cfPannel5" title="pannel_A风格微调-自定义图标和颜色">pannel_A风格面板内容</dm_pannel_new>
   </div>
 </template>
 
@@ -41,7 +42,7 @@ export default {
   data() {
     return {
       cfPannel1: {
-        title: "xxxx",
+        title: "yyyy",
         cfTitleBar: {
           skin: "default",
           boxMiddle: {

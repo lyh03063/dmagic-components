@@ -53,7 +53,7 @@ export default {
       comCard: "dm_card_note_history",//卡片组件
       cfListFlex: { col: 1 },
       dynamicDict: [
-        { "ajax": { "url": "/info/getCommonList", "param": { "_dataType": "note" } }, "idColumn2": "_id", "idColumn": "dataId", "populateColumn": "objNote" }
+        { "ajax": { "url": "/info/getCommonList", "param": { "_dataType": "note" } }, "idColumn2": "_id", "idColumn": "dataId", "populateColumn": "dataTarget" }
       ],
       sortJsonDefault: { "timeVisited": 1 },//第二次排序
       pageSize: 10,

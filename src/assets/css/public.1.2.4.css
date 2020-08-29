@@ -287,6 +287,20 @@ li {
     flex: 2;
 }
 
+
+.JCFS {
+    justify-content:flex-start
+}
+
+.JCC {
+    justify-content:center
+}
+
+
+.JCFE {
+    justify-content:flex-end
+}
+
 .MA {
     margin: 0 auto;
 }

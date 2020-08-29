@@ -251,8 +251,9 @@ export default {
     },
     //函数：{鼠标移出的回调函数}
     mouseleaveG: async function (i) {
+      let focusIndex=this.focusItem ;//移出也要传上次的聚焦索引*
       this.focusItem = 99999
-      this.$emit("after_mouseleave", { list: this.valueNeed });//触发外部数据变更
+      this.$emit("after_mouseleave", { focusIndex,list: this.valueNeed });//触发外部数据变更
     },
     //函数：{开始拖拽排序函数}
     dragStart: async function () {

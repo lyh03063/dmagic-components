@@ -12,7 +12,6 @@
     ></component>
     <!--slot自定义组件-注意是isReadyFormData为真时才开始渲染-->
     <slot :name="item.slot" :formData="valueNeed" v-else-if="item.slot"></slot>
-
     <!--下拉框-->
     <template class v-else-if="item.type=='select'">
       <select_ajax
@@ -49,7 +48,6 @@
       :cf="item.cfSelectAjaxLazy"
       v-else-if="item.type=='select_ajax_lazy'"
     ></dm_select_ajax_lazy>
-
     <!--地区选择下拉框-->
     <dm_select_area
       v-model="valueNeed[item.prop]"
@@ -57,7 +55,6 @@
       :cf="item.cfSelectAjaxLazy"
       v-else-if="item.type=='select_area'"
     ></dm_select_area>
-
     <!--弹窗选择列表-->
     <dm_select_list_data
       class="FX1"
@@ -65,7 +62,6 @@
       :cf="item.cfSelectList"
       v-else-if="item.type=='select_list_data'"
     ></dm_select_list_data>
-
     <!--单选框-->
     <el-radio-group class="MT8" v-model="valueNeed[item.prop]" v-else-if="item.type=='radio'">
       <el-radio
@@ -84,7 +80,6 @@
     </el-checkbox-group>
     <!--文本域-->
     <el-input type="textarea" v-model="valueNeed[item.prop]" v-else-if="item.type=='textarea'"></el-input>
-
     <!--date日期选择-->
     <el-date-picker
       v-model="valueNeed[item.prop]"
@@ -121,7 +116,6 @@
       v-else-if="item.type=='slider'"
       :marks="marks"
     ></el-slider>
-
     <!--如果是对象编辑器-->
     <dm_object
       v-model="valueNeed[item.prop]"
@@ -129,7 +123,6 @@
       :cf="item.cfItem"
       class="FX1"
     ></dm_object>
-
     <!--如果是vue-json编辑器-->
     <vue-json-editor
       v-model="valueNeed[item.prop]"
@@ -162,7 +155,6 @@
       :upload-config="item.uploadConfig"
       v-else-if="item.type=='upload'"
     ></upload_img>
-
     <!--如果是单个文件上传控件-->
     <upload_single
       v-model="valueNeed[item.prop]"
@@ -170,7 +162,6 @@
       v-else-if="item.type=='upload_single'"
     ></upload_single>
     <!--富文本编辑器-->
-
     <tiny_mce_new
       class="FX1"
       v-model="valueNeed[item.prop]"
@@ -179,7 +170,6 @@
       :pasteImage="item.pasteImage"
       :cf="item.cfTiny"
     ></tiny_mce_new>
-
     <quill_editor v-model="valueNeed[item.prop]" v-else-if="item.type=='editor'" class="FX1"></quill_editor>
     <!--模糊查询文本框  支持回车查询-->
     <input_find_vague
@@ -187,7 +177,6 @@
       v-else-if="item.type=='input_find_vague'"
       @enterClick="$emit('enterClick')"
     ></input_find_vague>
-
     <!--密码框-->
     <el-input
       placeholder="请输入密码"
@@ -197,7 +186,6 @@
     ></el-input>
     <!--json字段输入框，根据prop中是否包含点符号来判断-->
     <json_prop v-model="valueNeed[item.prop]" :prop="item.path" v-else-if="item.path" />
-
     <!--数字框-->
     <el-input-number
       v-model="valueNeed[item.prop]"
@@ -207,9 +195,7 @@
       :class="{'hide-btn':item.hideBtn}"
       v-else-if="item.type=='number'"
     ></el-input-number>
-
     <!--numberRange数字范围-->
-
     <template class v-else-if="item.type=='numberRange'">
       <!--如果prop存在-->
       <number_range class v-model="valueNeed[item.prop]" v-bind="item" v-if="item.prop"></number_range>
@@ -218,7 +204,6 @@
     </template>
     <!--标签列表（数组）-->
     <tag_list v-model="valueNeed[item.prop]" v-else-if="item.type=='tag_list'"></tag_list>
-
     <!--文本-->
     <span class="PR5" v-else-if="item.type=='text'" :style="item.style">{{valueNeed[item.prop]}}</span>
     <!--树状数据-->
@@ -229,7 +214,6 @@
       v-else-if="item.type=='tree_data'"
       :style="item.style"
     ></dm_tree_data>
-
     <!--codemirror代码块-->
     <dm_code
       class="FX1"
@@ -245,9 +229,7 @@
       :populateKey="$lodash.get(item, `cfAjaxPopulate.populateKey`)"
       :page="$lodash.get(item, `cfAjaxPopulate.page`)"
     ></dm_ajax_populate>
-
     <!--普通文本框  支持enter触发表单提交-->
-
     <el-input
       class="FX1"
       v-else
@@ -255,7 +237,6 @@
       @keyup.enter.native="$emit('enterClick')"
       clearable
     ></el-input>
-
     <template class v-if="item.frequency">
       <!--颜色选择器-->
       <el-color-picker
@@ -264,7 +245,6 @@
         v-bind="item.frequency.cfColorPicker"
         v-if="item.frequency.type=='color'"
       ></el-color-picker>
-      
       <!--普通候选项组件-->
       <dm_option_input
         class="ML5"
@@ -272,11 +252,11 @@
         :cf="cfOptionInput(cf)"
         v-model="valueNeed[item.prop]"
         :options="cf.frequency.options"
+        @change="changeOption"
       ></dm_option_input>
     </template>
   </div>
 </template>
-
 <script>
 import vueJsonEditor from "vue-json-editor";
 import select_ajax from "../../components/form_item/select_ajax.vue";
@@ -318,7 +298,6 @@ export default {
         0: "0", 0.1: "10", 0.2: "20", 0.3: "30", 0.4: "40", 0.5: "50",
         0.6: "60", 0.7: "70", 0.8: "80", 0.9: "90", 1: "100"
       },
-
       predefineColors: [
         '#ff4500',
         '#ff8c00',
@@ -335,53 +314,42 @@ export default {
         'hsla(209, 100%, 56%, 0.73)',
         '#c7158577'
       ]
-
     };
   },
   computed: {
     //候选项弹性列表配置***
     cfOptionInput: function () {
       let fn = function (cf) {
+        console.log(`cf:###`, cf);
         let cfNeed = {}
-        let style = cf.frequency.style || cf.frequency.sytle || {}
-        let widthG = lodash.get(style, `width`);
+        let { frequency } = cf
+        let { style, dataType } = frequency//获取样式和数据类型
+        let styleNeed = style || style || {}
+        let widthG = lodash.get(styleNeed, `width`);
         let cfListFlex = {}
         if (widthG) {
           cfListFlex.widthG = widthG
         }
-        return { cfListFlex }
+        return { cfListFlex, dataType }
       }
       return fn
-
     }
   },
-
   methods: {
-    //函数：{点击候选值后的函数}
-    async slectFOption(option) {
-      let { dataType } = this.item.frequency
-      if (dataType == "array") {//如果{数据类型}是数组
-        // this.valueNeed[this.item.prop] = [option.value];
-        this.$set(this.valueNeed, this.item.prop, [option.value]);
-      } else {
-        this.$set(this.valueNeed, this.item.prop, option.value);
-        // this.valueNeed[this.item.prop] = option.value;
-      }
-      this.visibleFrequency[this.item.prop] = false
+    //函数：{候选项值改变时函数}
+    changeOption: async function () {
       this.$nextTickStatus("ready")
-    }
+    },
   },
   created() { }
 };
 </script>
-
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 /****************************数字输入框隐藏操作按钮-START****************************/
 .hide-btn >>> [role="button"] {
   display: none;
 }
-
 .hide-btn >>> .el-input__inner {
   padding-right: 15px;
 }
@@ -393,13 +361,10 @@ export default {
   /* 不换行 */
   word-break: keep-all;
 }
-
 .el-col >>> .el-slider__runway {
   margin: 15px 0 0 0;
 }
 /****************************进度条补丁-END****************************/
-
-
 /* 让进度条的文字不掉下来 */
 .slider >>> .el-slider__marks-text {
   word-break: keep-all;

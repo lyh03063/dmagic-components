@@ -14,11 +14,9 @@
     <div class="TAR">
       <a href="javascript:;" class="n-a" @click="clear">清除</a>
     </div>
-
     <el-button slot="reference" icon="el-icon-more" size="mini"></el-button>
   </el-popover>
 </template>
-
 <script>
 export default {
   name: "option_input",
@@ -37,7 +35,6 @@ export default {
       }
     },
   },
-
   data() {
     return {
       ready: false,
@@ -49,74 +46,52 @@ export default {
     clear: async function () {
       this.$emit("input", null)
       this.visible = false;
-
     },
     //函数：{点击选项函数}
     fnClickOp: async function (option) {
-      this.$emit("input", option.value)
+      let { dataType } = this.cf
+      //END:候选项针对数组类型字段的传值处理
+      if (dataType == "array") {//如果{数据类型}是数组
+        this.$emit("input", [option.value])
+      } else {
+        this.$emit("input", option.value)
+      }
       this.visible = false;
+      this.$emit("change")
     },
     showDialog() {
       alert(`showDialog`);
     },
     initCf() {
-
-
       let cfPopover = lodash.get(this.cf, `cfPopover`, {});
-
-
       let cfPopoverDefault = {
         "placement": "right",
         width: "200",
         trigger: "hover",
         'open-delay': 0,
       }
-
-
       util.setObjDefault(cfPopover, cfPopoverDefault);
-
-
       let cfListFlex = lodash.get(this.cf, `cfListFlex`, {});
       let cfListFlexDefault = {
         widthG: "53px",
         spaceY: "5px",
-
-
       }
       console.log(`cfPopover:#####`, cfPopover);
-
       util.setObjDefault(cfListFlex, cfListFlexDefault);
-
-
-
-
-
       util.setObjDefault(this.cf, {
         // isShowSearchForm: false,
         cfPopover, cfListFlex
       });
-
       this.ready = true
-
     },
   },
   async created() {
     this.initCf()
-
-
-
-
-
   },
   mounted() {
-
-
-
   },
 };
 </script>
-
-
 <style scoped>
 /****************************常用值选项-START****************************/
 .frequency-option {
@@ -134,12 +109,10 @@ export default {
 .frequency-option:hover {
   border: 1px #f60 solid;
 }
-
 .frequency-option.focus {
   border: 1px #3a0 solid;
 }
 /****************************常用值选项-END****************************/
-
 .group .frequency-option {
   width: 100%;
 }

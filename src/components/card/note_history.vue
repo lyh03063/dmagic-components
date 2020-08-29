@@ -1,7 +1,7 @@
 <template>
   <div class="item-box TAC DPF">
     <a class="FX1" target="_blank" :href="linkDetail(item)">
-     <span v-if="item.objNote" >{{item.objNote.title}}</span>
+     <span v-if="item.dataTarget" >{{item.dataTarget.title}}</span>
     </a>
     <span class="C_999">{{moment(item.timeVisited).format("YYYY-MM-DD HH:mm:ss")}}</span>
   </div>

@@ -1,19 +1,15 @@
 // import Vue from 'vue'
 import dm_test from '@/components/common/test'
-import dm_debug_list from '@/components/common/debug_list/debug_list'
-import dm_debug_item from '../components/common/debug_item/debug_item'
+
+
 import dm_dynamic_form from '../components/list-data/dynamic-form.vue'
 import dm_list_data from '../components/list-data/list-data.vue'
-import dm_loading from '../components/common/loading/loading.vue'
+
 import dm_ajax_populate from '../components/common/ajax_populate/ajax_populate.vue'
-import dm_space from '../components/common/space/space.vue'
+
 import dm_select_list_data from '../components/form_item/select_list_data/select_list_data.vue'
 import dm_select_ajax_lazy from '../components/form_item/select_ajax_lazy.vue'
-import dm_pannel from '../components/common/pannel/index.vue'
 
-import dm_list_flex_res from '../components/common/list_flex_res/index.vue'
-import dm_title_bar from '../components/common/title_bar.vue'
-import dm_pannel_new from '../components/common/pannel_new.vue'
 import dm_form_item from '../components/form_item/form_item.vue'
 import dm_collection from '../components/form_item/collection.vue'
 import dm_tree_data from '../components/form_item/tree_data.vue'
@@ -31,7 +27,6 @@ import dm_option_input from '../components/form_item/option_input.vue'
 import dm_dialog_edit from '../components/list-data/dialog_edit.vue'
 
 import dm_com_row_js_code from '../components/common/com_row_js_code.vue'
-import dm_echart from '../components/common/echart.vue'
 import dm_ele from '../components/common/ele.vue'
 
 import dm_aplayer from '../components/common/aplayer.vue'
@@ -49,7 +44,7 @@ import dm_pannel_rel_list_data from '../components/list-data/pannel_rel_list_dat
 import dm_list_simple from '../components/list-data/list_simple.vue'
 import dm_detail_son_data from '../components/list-data/detail_son_data.vue'
 import dm_list_visit_history from '../components/list-data/list_visit_history.vue'
-
+import dm_list_visit_often from '../components/list-data/list_visit_often.vue'
 
 //以下两个要用到scss
 import dm_manage_home from '../components/manage/listHome.vue'
@@ -154,8 +149,10 @@ import  dm_note_familiarity_select from '../components/tool/note_familiarity_sel
 
 import  dm_card_note_normal from '../components/card/note_normal.vue'
 import  dm_card_note_history from '../components/card/note_history.vue'
-import  dm_card_js_code_hs from '../components/card/js_code_hs.vue'
+import  dm_card_note_often from '../components/card/note_often.vue'
 
+import  dm_card_js_code_hs from '../components/card/js_code_hs.vue'
+import  dm_card_js_code_often from '../components/card/js_code_often.vue'
 
 
 
@@ -258,14 +255,14 @@ import dm_manage_base from '@/manage.vue'
 
 
 const Components = {
-  dm_pannel,dm_list_flex_res,dm_test,
-  dm_debug_list, dm_debug_item,dm_json_editor,dm_input_css_prop,dm_input_html_tag,
-  dm_loading,dm_ajax_populate,dm_space,dm_input_style_prop,dm_auto_css_prop,dm_auto_html_tag,
+ dm_test,
+  dm_json_editor,dm_input_css_prop,dm_input_html_tag,
+ dm_ajax_populate,dm_input_style_prop,dm_auto_css_prop,dm_auto_html_tag,
   dm_dynamic_form,dm_list_data,dm_select_ajax_lazy,
   dm_codemirror:codemirror,dm_code,dm_form_css,
   dm_select_list_data,dm_collection,dm_dialog_edit,dm_dialog_add,dm_form_item,dm_option_input,
-  dm_tree_data,dm_title_bar,dm_pannel_new,dm_select_area,dm_object,
-  dm_com_row_js_code,dm_echart,
+  dm_tree_data,dm_select_area,dm_object,
+  dm_com_row_js_code,
   dm_detail_group_common,dm_detail_group,dm_detail_g_list,
   dm_pannel_d_g_list,dm_pannel_d_g_list_html_api,
   dm_rel_list_data,dm_pannel_rel_list_data,dm_list_common,
@@ -278,8 +275,9 @@ const Components = {
   dm_dialog_css_prop,dm_dialog_html_tag,
   dm_js_file_edit,dm_js_code_edit,dm_js_code_curr,dm_score_panel,dm_row_css_code,
   dm_familiarity_select,dm_note_familiarity_select,
-  com_score_panel,dm_card_note_normal,dm_card_note_history,dm_card_js_code_hs,
-  dm_list_visit_history,
+  com_score_panel,dm_card_note_normal,dm_card_note_history,dm_card_note_often,
+  dm_card_js_code_hs,dm_card_js_code_often,
+  dm_list_visit_history,dm_list_visit_often,
   com_complete,com_imagePreview,com_item_complete_search,com_f_item_listSpecPrice,com_c_item_payStatus,
   com_listGoods,com_addressObj,com_column_operate_rel_data,com_column_operate_entity_data,com_c_countSonTask,
   com_c_sonData,com_c_sonTaskGId,com_c_sonNoteGId,com_c_g_person_file,com_c_g_person_url,

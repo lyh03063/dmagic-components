@@ -1,12 +1,19 @@
 <template>
   <div class>
     <div class="DPF">
-      <div v-bind="cfIN.cfBoxLeft">
-        <slot class name="left">左侧盒子</slot>
+      <div class v-bind="cfIN.cfBoxLeft" v-show="cfIN.isShowLeft">
+        <slot class name="left"></slot>
       </div>
-      <div ref="resize" class="W3 BC_999 resize" @mousedown="fnMousedown"></div>
-      <div class="FX1">
-        <slot class name="right">右侧盒子</slot>
+
+      <div
+        ref="resize"
+        class="W3 BC_999 resize"
+        @mousedown="fnMousedown"
+        style="margin-top:-10px"
+        v-if="cfIN.isShowRight&&cfIN.isShowLeft"
+      ></div>
+      <div class="FX1" v-show="cfIN.isShowRight">
+        <slot class name="right"></slot>
       </div>
     </div>
     <!-- {{cfIN}} -->
@@ -29,9 +36,24 @@ export default {
     };
   },
   watch: {
+    "cf.isShowLeft": {
+      handler(newVal, oldVal) {
+        this.cfIN.isShowLeft = newVal;
+      },
+      immediate: true,
+      deep: true
+    },
+    "cf.isShowRight": {
+      handler(newVal, oldVal) {
+        this.cfIN.isShowRight = newVal;
+      },
+      immediate: true,
+      deep: true
+    },
     "cf.nWidthLeft": {
       handler(newVal, oldVal) {
-        this.cfIN.nWidthLeft=newVal;
+        if (!(this.cfIN.cfBoxLeft && this.cfIN.cfBoxLeft.style)) return
+        this.cfIN.nWidthLeft = newVal;
         this.cfIN.cfBoxLeft.style.width = `${this.cfIN.nWidthLeft}px`
       },
       immediate: true,
@@ -75,7 +97,7 @@ export default {
     //函数：{初始化组件配置函数}
     initCF: async function () {
       let cfIN = lodash.cloneDeep(this.cf)//cfIN****************
-      let { nWidthLeft = 200 } = cfIN
+      let { nWidthLeft = 200, isShowLeft = true, isShowRight = true } = cfIN
       let cfBoxLeft = lodash.get(cfIN, `cfBoxLeft`, {});
 
       {
@@ -83,7 +105,7 @@ export default {
         let style = lodash.get(cfBoxLeft, `style`, {});
         let styleDefault = { width: `${nWidthLeft}px` }//左盒子的默认style配置
         util.setObjDefault(style, styleDefault);
-        let cfBoxLeftDefault = { class: " BC_f0f0f0", style }
+        let cfBoxLeftDefault = { class: " ", style }
         util.setObjDefault(cfBoxLeft, cfBoxLeftDefault);
       }
 
@@ -91,7 +113,7 @@ export default {
 
 
       util.setObjDefault(cfIN, {
-        nWidthLeft, cfBoxLeft,
+        nWidthLeft, isShowLeft,isShowRight,cfBoxLeft,
       });
       this.cfIN = cfIN
 

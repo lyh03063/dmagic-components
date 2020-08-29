@@ -1,48 +1,91 @@
 <template>
   <div class>
     <div class="PL20 PT20">
-      <el-row
-        class="MB10"
-        :gutter="10"
-        type="flex"
-        v-for="(doc) in arrObjScore"
-        :key="doc.scoreKey"
-      >
-        <el-col style="width:190px">{{doc.name}} (数量：{{doc.allCount}})</el-col>
-        <el-col style="width:270px">
-          <el-progress
-            :stroke-width="26"
-            :percentage="doc.score"
-            :text-inside="true"
-            :color="customColors"
-          ></el-progress>
-        </el-col>
-        <el-col style="width:80px">
-          <a :href="doc.link">
-            <el-button type="primary" size="mini">去学习</el-button>
-          </a>
-        </el-col>
-      </el-row>
+      <el-tabs tab-position="left" v-model="activeName0">
+        <el-tab-pane label="我的" name="mine" :lazy="true">
+          <dm_pannel_new class="ML8" title="我的" skin="default__version2">
+            <el-tabs class="MT8" v-model="activeName1" type="card">
+              <el-tab-pane label="学习概况" name="desc" :lazy="true">
+                <el-row
+                  class="MB10"
+                  :gutter="10"
+                  type="flex"
+                  v-for="(doc) in arrObjScore"
+                  :key="doc.scoreKey"
+                >
+                  <el-col style="width:190px">{{doc.name}} (数量：{{doc.allCount}})</el-col>
+                  <el-col style="width:270px">
+                    <el-progress
+                      :stroke-width="26"
+                      :percentage="doc.score"
+                      :text-inside="true"
+                      :color="customColors"
+                    ></el-progress>
+                  </el-col>
+                  <el-col style="width:80px">
+                    <a :href="doc.link">
+                      <el-button type="primary" size="mini">去学习</el-button>
+                    </a>
+                  </el-col>
+                </el-row>
+              </el-tab-pane>
+              <el-tab-pane label="我的demo" name="my_demo" :lazy="true">
+                <dm_list_data :cf="cfListMyDemo" class></dm_list_data>
+              </el-tab-pane>
+              <el-tab-pane label="我的任务" name="my_task" :lazy="true">
+                <dm_list_data :cf="cfListMyTask" class></dm_list_data>
+              </el-tab-pane>
+            </el-tabs>
+          </dm_pannel_new>
+        </el-tab-pane>
+        <el-tab-pane label="最近访问" name="latest" :lazy="true">
+          <dm_pannel_new class="ML8" title="最近访问" skin="default__version2">
+            <el-tabs class="MT8" v-model="activeName" type="card">
+              <el-tab-pane label="笔记" name="first" :lazy="true">
+                <dm_list_visit_history
+                  :cf="{'dataTypeDict':'note','findJsonAddon':{_userId: $sys.userId,'dataType':'note',}}"
+                  class="PT10"
+                ></dm_list_visit_history>
+              </el-tab-pane>
 
-      <el-tabs v-model="activeName" type="card">
-        <el-tab-pane label="最近访问笔记" name="first" :lazy="true">
-          <dm_list_visit_history
-            :cf="{'dataTypeDict':'note','findJsonAddon':{_userId: $sys.userId,'dataType':'note',}}"
-            class="PT10"
-          ></dm_list_visit_history>
+              <el-tab-pane label="视频" name="second" :lazy="true">
+                <dm_list_visit_history
+                  :cf="{'dataTypeDict':'vedio','findJsonAddon':{_userId: $sys.userId,'dataType':'vedio',}}"
+                  class="PT10"
+                ></dm_list_visit_history>
+              </el-tab-pane>
+              <el-tab-pane label="JS代码块" name="js_code" :lazy="true">
+                <dm_list_visit_history
+                  :cf="{'dataTypeDict':'js_code','findJsonAddon':{_userId: $sys.userId,tagPage: 'js_code_edit',},cfListAddon: {comCard: 'dm_card_js_code_hs',cfComCard: { target: '_blank' },}}"
+                  class="PT10"
+                ></dm_list_visit_history>
+              </el-tab-pane>
+            </el-tabs>
+          </dm_pannel_new>
         </el-tab-pane>
-
-        <el-tab-pane label="最近访问视频" name="second" :lazy="true">
-          <dm_list_visit_history
-            :cf="{'dataTypeDict':'vedio','findJsonAddon':{_userId: $sys.userId,'dataType':'vedio',}}"
-            class="PT10"
-          ></dm_list_visit_history>
-        </el-tab-pane>
-        <el-tab-pane label="我的demo" name="my_demo" :lazy="true">
-          <dm_list_data :cf="cfListMyDemo" class></dm_list_data>
-        </el-tab-pane>
-        <el-tab-pane label="我的任务" name="third" :lazy="true">
-          <dm_list_data :cf="cfListMyTask" class></dm_list_data>
+        <el-tab-pane label="访问最多" name="most" :lazy="true">
+          <dm_pannel_new class="ML8" title="访问最多" skin="default__version2">
+            <el-tabs class="MT8" v-model="activeName2" type="card">
+              <el-tab-pane label="笔记" name="note" :lazy="true">
+                <dm_list_visit_often
+                  :cf="{'dataTypeDict':'note','findJsonAddon':{_userId: $sys.userId,'dataType':'note',},cfListAddon: {comCard: 'dm_card_note_often',cfComCard: { target: '_blank' },}}"
+                  class="PT10"
+                ></dm_list_visit_often>
+              </el-tab-pane>
+              <el-tab-pane label="视频" name="vedio" :lazy="true">
+                <dm_list_visit_often
+                  :cf="{'dataTypeDict':'vedio','findJsonAddon':{_userId: $sys.userId,'dataType':'vedio',},cfListAddon: {comCard: 'dm_card_note_often',cfComCard: { target: '_blank' },}}"
+                  class="PT10"
+                ></dm_list_visit_often>
+              </el-tab-pane>
+              <el-tab-pane label="JS代码块" name="js_code" :lazy="true">
+                <dm_list_visit_often
+                  :cf="{'dataTypeDict':'js_code','findJsonAddon':{_userId: $sys.userId,tagPage: 'js_code_edit',},cfListAddon: {comCard: 'dm_card_js_code_often',cfComCard: { target: '_blank' },}}"
+                  class="PT10"
+                ></dm_list_visit_often>
+              </el-tab-pane>
+            </el-tabs>
+          </dm_pannel_new>
         </el-tab-pane>
       </el-tabs>
 
@@ -60,6 +103,9 @@ export default {
   data() {
     return {
       activeName: 'first',
+      activeName0: 'mine',
+      activeName1: 'desc',
+      activeName2: 'note',
       cfListMyTask: null,
       cfListMyDemo: null,
       cfListMyHisNote: null,
@@ -201,7 +247,7 @@ export default {
       comCard: "dm_card_note_history",//卡片组件
       cfListFlex: { col: 1 },
       dynamicDict: [
-        { "ajax": { "url": "/info/getCommonList", "param": { "_dataType": "note" } }, "idColumn2": "_id", "idColumn": "dataId", "populateColumn": "objNote" }
+        { "ajax": { "url": "/info/getCommonList", "param": { "_dataType": "note" } }, "idColumn2": "_id", "idColumn": "dataId", "populateColumn": "dataTarget" }
       ],
       sortJsonDefault: { "timeVisited": 1 },//第二次排序
       pageSize: 10,

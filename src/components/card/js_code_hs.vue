@@ -1,7 +1,11 @@
 <template>
   <div class="item-box TAC DPFC">
-    <a class="FX1"  :href="`/#/js_code_edit?jsCodeId=${item.dataId}`">
-     <span v-if="item.objNote" >{{item.objNote.title}}</span>
+    <a
+      class="FX1"
+      :href="`/#/js_code_edit?jsCodeId=${item.dataId}`"
+      :target="target"
+    >
+      <span v-if="item.dataTarget">{{item.dataTarget.title}}</span>
     </a>
     <span class="C_999">{{moment(item.timeVisited).format("YYYY-MM-DD HH:mm:ss")}}</span>
   </div>
@@ -9,21 +13,21 @@
 
 <script>
 export default {
-  name: "card_note_history",
+  name: "card_js_code_hs",
   mixins: [MIX.base,],
-  props: ["item"],
+  props: ["item", "target"],
   data() {
     return {
     };
   },
 
   methods: {
-    moment:window.moment,
+    moment: window.moment,
 
   },
   created() {
 
-   }
+  }
 };
 </script>
 

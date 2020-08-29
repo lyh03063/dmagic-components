@@ -95,7 +95,7 @@ export default {
 
     if (!groupId) return
 
-
+let _systemId = util.getSystemId();//
 
     let {
       data: { list: listData }
@@ -104,8 +104,7 @@ export default {
       method: "post",
       url: `${PUB.domain}/info/getCommonGroupList`,
       data: {
-        _systemId: PUB._systemId,
-        groupId,
+        _systemId,groupId,
       }
     });
 

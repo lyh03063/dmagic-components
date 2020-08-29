@@ -369,6 +369,7 @@ PUB.menuDemo = [
         name: "list",
         title: "列表",
         menuItem: [
+            { name: "list_visit_often_demo", title: "列表-最近常用", },
             { name: "list_visit_history_demo", title: "列表-历史记录", },
             { name: "list_demo_hide_table", title: "列表-隐藏表格", },
             { name: "list_demo", title: "list_demo1", route: "/manage/list_demo" },
@@ -404,6 +405,7 @@ PUB.menuDemo = [
         name: "visualization",
         title: "可视化",
         menuItem: [
+            { name: "chartAnnulus2", title: "林晓聪chartAnnulus2" },
             { name: "echarts_demo", title: "echarts饼图" },
             { name: "echarts_demo2", title: "echarts折线图" },
             { name: "aplayer_demo", title: "aplayer音频播放器" },

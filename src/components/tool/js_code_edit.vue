@@ -13,13 +13,19 @@
           </div>
           <el-button slot="reference" icon="el-icon-more" size="mini">历史记录</el-button>
         </el-popover>
+        <el-popover placement="top-start" width="400" trigger="hover">
+          <div class style="min-height:700px">
+            <dm_list_visit_often :cf="cfListOften" class="PT10"></dm_list_visit_often>
+          </div>
+          <el-button slot="reference" icon="el-icon-more" size="mini">访问最多</el-button>
+        </el-popover>
         <el-popover placement="top-start" width="460" trigger="hover">
           <div class style="min-height:100px">
             <!-- listJSFile:{{listJSFile}} -->
             <dm_list_flex_res class="MB20" :list="listJSFile" #default="{item}" col="1">
               <div class="DPF">
                 <span class="C_f30 FX1">{{item.fileName}}</span>
-                
+
                 <el-button plain @click="buildDebugJs(item)" size="mini">生成测试文件</el-button>
                 <el-button plain @click="buildProductionJs(item)" size="mini">生成生产文件</el-button>
               </div>
@@ -80,12 +86,20 @@ export default {
       HtmlErrMessage: null,//语法错误提示代码
       cfListHistory: {
         dataTypeDict: "js_code",
-        findJsonAddon: { tagPage: "js_code_edit" },
+        findJsonAddon: { tagPage: "js_code_edit", _userId: "13691916429"  },
         cfListAddon: {
           comCard: "dm_card_js_code_hs",//卡片组件
-          pageSize:20,
+          pageSize: 20,
         }
 
+      },
+      cfListOften: {
+        dataTypeDict: "js_code",
+        findJsonAddon: { tagPage: "js_code_edit", _userId: "13691916429" },
+        cfListAddon: {
+          comCard: "dm_card_js_code_often",//卡片组件
+          pageSize: 20,
+        }
       },
       activeName: 'first',
       jsCodeId: null,

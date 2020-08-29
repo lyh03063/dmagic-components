@@ -18,7 +18,7 @@
         </div>
       </template>
 
-      <template #titleBar_boxMiddle>
+      <template #title_bar_box_middle>
         <div class="DPIB ML10 FS12 FM4 C_3a0 code_pannel_show FX1">{{getPannelCssCode(item)}}</div>
       </template>
       <dm_dynamic_form class="MT10" :cf="item.cfForm" v-model="valueNeed"></dm_dynamic_form>
