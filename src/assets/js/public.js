@@ -405,6 +405,8 @@ PUB.menuDemo = [
         name: "visualization",
         title: "可视化",
         menuItem: [
+            { name: "highlight_demo", title: "代码显示高亮" },
+            { name: "vedio_demo", title: "视频" },
             { name: "chartAnnulus2", title: "林晓聪chartAnnulus2" },
             { name: "echarts_demo", title: "echarts饼图" },
             { name: "echarts_demo2", title: "echarts折线图" },
@@ -451,8 +453,6 @@ PUB.menuDemo = [
         name: "tool",
         title: "工具",
         menuItem: [
-            { name: "tool_json_to_str", title: "json转字符串" },
-            { name: "tool_replace_space", title: "替换空行" },
             { name: "tool_old_cf_list", title: "替换旧列表配置" },
             { name: "auto_layout", title: "自动化布局", route: "/open/auto_layout" },
             { name: "js_file_edit", title: "js文件编辑", route: "/js_file_edit?jsFileId=5eb272bb298e45553493e821" },

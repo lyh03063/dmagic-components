@@ -1,6 +1,7 @@
 <template>
   <component :is="tag" v-bind="cfEle()" v-if="ready">
     {{text}}
+  
     <dm_ele
       :tag="d.tag"
       v-bind="cfEleChild(d)"
@@ -51,7 +52,8 @@ export default {
         let cfNeed = { ...cf }
         diyProp.forEach(itemEach => {//循环：{自定义属性数组}
           let { prop, value } = itemEach
-          cfNeed[prop] = itemEach
+      
+          cfNeed[prop] = value
         })
         return cfNeed
       }

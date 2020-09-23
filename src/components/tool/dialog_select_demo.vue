@@ -13,7 +13,7 @@
     >
       <el-tabs v-model="activeDemoG" type="card">
         <el-tab-pane :label="g.targetDoc.title" :name="i+''" v-for="(g,i) in listDemo" :key="i">
-          <dm_list_flex_res class="MB20" :list="g.sonList" #default="{item}" col="8">
+          <dm_list_flex_res class="MB20" :list="g.sonList" #default="{item}" col="6">
             <div class="data_group">
               <a
                 class="link_img"

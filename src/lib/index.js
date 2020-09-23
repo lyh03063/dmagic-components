@@ -27,6 +27,9 @@ import dm_option_input from '../components/form_item/option_input.vue'
 import dm_dialog_edit from '../components/list-data/dialog_edit.vue'
 
 import dm_com_row_js_code from '../components/common/com_row_js_code.vue'
+import dm_com_row_css_code from '../components/common/com_row_css_code.vue'
+
+
 import dm_ele from '../components/common/ele.vue'
 
 import dm_aplayer from '../components/common/aplayer.vue'
@@ -150,6 +153,8 @@ import  dm_note_familiarity_select from '../components/tool/note_familiarity_sel
 import  dm_card_note_normal from '../components/card/note_normal.vue'
 import  dm_card_note_history from '../components/card/note_history.vue'
 import  dm_card_note_often from '../components/card/note_often.vue'
+import  dm_card_front_demo from '../components/card/front_demo.vue'
+
 
 import  dm_card_js_code_hs from '../components/card/js_code_hs.vue'
 import  dm_card_js_code_often from '../components/card/js_code_often.vue'
@@ -231,7 +236,7 @@ import pannel_list_article_date from '@/components/site/pannel_list_article_date
 
 import dm_left_menu from '@/components/NavMenu/NavMenu'
 import dm_user_role from "@/components/common/role"
-
+import dm_video_player from "@/components/common/video_player"
 
 
 
@@ -262,7 +267,7 @@ const Components = {
   dm_codemirror:codemirror,dm_code,dm_form_css,
   dm_select_list_data,dm_collection,dm_dialog_edit,dm_dialog_add,dm_form_item,dm_option_input,
   dm_tree_data,dm_select_area,dm_object,
-  dm_com_row_js_code,
+  dm_com_row_js_code,dm_video_player,dm_com_row_css_code,
   dm_detail_group_common,dm_detail_group,dm_detail_g_list,
   dm_pannel_d_g_list,dm_pannel_d_g_list_html_api,
   dm_rel_list_data,dm_pannel_rel_list_data,dm_list_common,
@@ -276,6 +281,7 @@ const Components = {
   dm_js_file_edit,dm_js_code_edit,dm_js_code_curr,dm_score_panel,dm_row_css_code,
   dm_familiarity_select,dm_note_familiarity_select,
   com_score_panel,dm_card_note_normal,dm_card_note_history,dm_card_note_often,
+  dm_card_front_demo,
   dm_card_js_code_hs,dm_card_js_code_often,
   dm_list_visit_history,dm_list_visit_often,
   com_complete,com_imagePreview,com_item_complete_search,com_f_item_listSpecPrice,com_c_item_payStatus,

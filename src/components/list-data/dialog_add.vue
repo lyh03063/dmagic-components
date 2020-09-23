@@ -1,7 +1,5 @@
 <template>
   <div>
-
-    
     <!--新增数据表单弹窗-->
     <el-dialog
       class="n-el-dialog"
@@ -13,14 +11,14 @@
       :close-on-click-modal="false"
       :append-to-body="true"
     >
-     <div class>
+      <div class>
         <dm_debug_list level-up="2">
-           <dm_debug_item v-model="cf" text="配置" />
+          <dm_debug_item v-model="cf" text="配置" />
           <dm_debug_item v-model="formAdd" text="新增表单的绑定数据" />
           <dm_debug_item v-model="cf.formDataAddInit" text="新增表单的初始数据" />
         </dm_debug_list>
       </div>
-     
+
       <!--表单提示语-->
       <div class v-html="$lodash.get(cf.cfTips, `text`)" v-if="cf.cfTips" :style="getTipsStyle()"></div>
       <dm_dynamic_form
@@ -40,7 +38,7 @@
 </template>
 <script>
 export default {
-  name:"dialog_add",
+  name: "dialog_add",
   components: {},
   props: ["cf", "formAdd", "tableData"],//静态列表的新增数据需要tableData传入
   data() {
@@ -81,7 +79,7 @@ export default {
   },
   methods: {
     handelItem: util.handelItem,
-    //-------------新增数据的函数--------------
+    //TODO:ajax新增数据的函数
     async addData(_data) {
       if (this.cf.urlAdd) {//Q1:如果{新增数据接口地址}存在
         let ajaxParam;
@@ -98,13 +96,23 @@ export default {
 
         Object.assign(ajaxParam, this.cf.cfFormAdd.paramAddonInit); //合并公共参数，之前是cf.paramAddonPublic
 
+        const loading = this.$loading({
+          lock: true, text: "执行中", spinner: "el-icon-loading", background: "rgba(0, 0, 0, 0.7)"
+        });
 
 
 
 
+        let flagAjaxOk = true;//ajax是否正常
         let response = await axios({//请求接口
           method: "post", url: `${PUB.domain}${this.cf.urlAdd}`, data: ajaxParam //传递参数
+        }).catch((err) => {
+          this.$message.error(`网络异常:${err}`);
+          flagAjaxOk = false;
+
         });
+        loading.close(); //关闭loding
+        if(!flagAjaxOk)return //ajax异常退出
         //触发外部事件-把新增前后的数据都传过去
         this.$emit("after-add", response.data.addData, this.IN_formAdd);
       } else {//Q2:{新增数据接口地址}不存在-静态列表
@@ -189,7 +197,7 @@ export default {
     }
   },
   created() {
-    this.vm_list = this.$closest({vmT:this,name:"dm_list_data"})
+    this.vm_list = this.$closest({ vmT: this, name: "dm_list_data" })
     this.init()//调用：{初始化函数}
   },
   async mounted() { }

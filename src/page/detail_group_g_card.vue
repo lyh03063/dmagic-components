@@ -88,7 +88,7 @@ export default {
 
       //拼接{需要查询分数的分组id}-取二级数据
       this.listData.forEach(docBig => {
-        let { sonList } = docBig;
+        let { sonList=[] } = docBig;
         let arrGroupIdNeed = sonList.map(docSmall => docSmall._idRel2);
         arrGroupId.push(...arrGroupIdNeed);
       });

@@ -92,6 +92,12 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+/* 编辑器字体样式补丁 */
+.item-box >>> .CodeMirror-line {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 16px;
+  /* white-space: pre; */
+}
 .item-box >>> .cm-s-lucario .CodeMirror-selected {
   background: #999;
 }

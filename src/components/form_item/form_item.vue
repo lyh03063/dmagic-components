@@ -79,7 +79,7 @@
       >{{option.label}}</el-checkbox>
     </el-checkbox-group>
     <!--文本域-->
-    <el-input type="textarea" v-model="valueNeed[item.prop]" v-else-if="item.type=='textarea'"></el-input>
+    <el-input  type="textarea" v-model="valueNeed[item.prop]" v-else-if="item.type=='textarea'" v-bind="item.cfTextarea"></el-input>
     <!--date日期选择-->
     <el-date-picker
       v-model="valueNeed[item.prop]"
@@ -124,12 +124,12 @@
       class="FX1"
     ></dm_object>
     <!--如果是vue-json编辑器-->
-    <vue-json-editor
+    <!-- <vue-json-editor
       v-model="valueNeed[item.prop]"
       v-else-if="item.type=='vueJsonEditor'"
       class="FX1"
       lang="zh"
-    ></vue-json-editor>
+    ></vue-json-editor> -->
     <!--如果是普通json编辑器-->
     <dm_json_editor v-model="valueNeed[item.prop]" v-else-if="item.type=='jsonEditor'" class="FX1"></dm_json_editor>
     <!--如果是collection-->
@@ -258,7 +258,7 @@
   </div>
 </template>
 <script>
-import vueJsonEditor from "vue-json-editor";
+// import vueJsonEditor from "vue-json-editor";
 import select_ajax from "../../components/form_item/select_ajax.vue";
 import input_find_vague from "../../components/form_item/input_find_vague.vue";
 
@@ -267,7 +267,7 @@ import upload_single from "../../components/form_item/upload_single.vue";
 import time_period from "../../components/form_item/time_period.vue";
 import json_prop from "../../components/form_item/json_prop.vue";
 
-import quill_editor from "../../components/form_item/quill_editor.vue";
+// import quill_editor from "../../components/form_item/quill_editor.vue";
 import tiny_mce_new from "../../components/form_item/tiny_mce_new";
 
 import number_range from "../../components/form_item/number_range.vue";
@@ -277,9 +277,12 @@ import tag_list from "../../components/form_item/tag_list.vue";
 export default {
   name: "form_item", //组件名，用于递归
   components: {
-    vueJsonEditor: vueJsonEditor, select_ajax,
+    // vueJsonEditor, //600多k
+     // quill_editor, //500多k
+    select_ajax,
     input_find_vague, upload_img, upload_single, time_period, json_prop,
-    quill_editor, tiny_mce_new, number_range, tag_list,
+   
+    tiny_mce_new, number_range, tag_list,
   },
   mixins: [MIX.form_item_new], //混入-这个是高风险混入，注意避免双向同步时出现死循环！！！！
   // mixins: [MIX.form_item_2], //新的混入项，优化性能

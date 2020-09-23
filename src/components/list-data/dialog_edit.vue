@@ -102,16 +102,22 @@ export default {
           Object.assign(ajaxParam, PUB._paramAjaxAddon)//合并公共变量的基础参数
         }
         Object.assign(ajaxParam, this.cf.cfFormModify.paramAddonInit); //合并公共参数，之前是cf.paramAddonPublic
-
-        let response = await axios({
-          //请求接口
-          method: "post",
-          url: PUB.domain + this.cf.urlModify,
-          data: ajaxParam //传递参数
+        const loading = this.$loading({
+          lock: true, text: "执行中", spinner: "el-icon-loading", background: "rgba(0, 0, 0, 0.7)"
         });
-        //Q2：{修改数据接口地址}不存在
-      } else {
-      }
+        let flagAjaxOk=true;//ajax是否正常
+        let response = await axios({ //请求接口
+          method: "post",url: PUB.domain + this.cf.urlModify,
+          data: ajaxParam //传递参数
+        }).catch((err)=>{
+          this.$message.error(`网络异常:${err}`);
+          flagAjaxOk=false;
+        
+        });
+        
+        loading.close(); //关闭loding
+        if(!flagAjaxOk)return //ajax异常退出
+      } 
       //****修改静态列表的数据+修改动态列表的数据
       //找到对应的数据并修改成最新的
       if (this.cf.tableData) {
@@ -155,7 +161,7 @@ export default {
   },
   created() {
 
-    this.vm_list = this.$closest({vmT:this,name:"dm_list_data"})
+    this.vm_list = this.$closest({ vmT: this, name: "dm_list_data" })
 
 
 

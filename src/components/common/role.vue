@@ -1,5 +1,6 @@
 <template>
   <div>
+   <!-- $sys: {{$sys}} -->
     <el-dropdown @command="handleCommand">
       <span class="el-dropdown-link">
         <i class="el-icon-s-custom MR5" title="用户名"></i>
@@ -24,11 +25,15 @@ export default {
     handleCommand(command) {
       let systemId = this.$route.params.sysId||PUB._systemId;
     
-      if ((command == "logOut")) {
-        //退出登录函数
+      if ((command == "logOut")) {//退出登录函数
+
+      let longin
+        
         util.extendLocalStorageObj(systemId, { isLogin: "0" }); //调用：{拓展一个LocalStorage对象的函数}
-        this.$router.push({ path: "../login" }); //跳转到manage
-        this.$message("click on item " + command);
+
+        let path=`/system/${systemId}/login`
+        this.$router.push({ path: path}); //跳转到manage
+        this.$message(`已退出登录`);
       }
     }
   }
@@ -43,4 +48,6 @@ export default {
 .el-icon-arrow-down {
   font-size: 10px;
 }
+
+
 </style>

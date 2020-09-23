@@ -61,12 +61,12 @@ const group_home = { template: '<group_home></group_home>' }
 const study_collect = { template: '<study_collect></study_collect>' }
 const study_home = { template: '<study_home></study_home>' }
 const study_user = { template: '<study_user></study_user>' }
+const dm_login = { template: '<dm_login></dm_login>' }
 
 
 
 
-
-PUB._paramAjaxAddon = { _systemId: "$all" }
+PUB._paramAjaxAddon = { _systemId: "sys_api" }
 
 import manage from "./App.vue";
 import system from "./system.vue";
@@ -77,16 +77,19 @@ const router = new VueRouter({
         { path: '/', redirect: '/manage' },
 
         {
+
             path: '/system/:sysId/', component: system, props: { ttt: 111 },
             children: [//子路由
+                { path: 'login', component: dm_login },
                 { path: 'detail_data', component: detail_data },
+                { path: 'js_file_edit', component: js_file_edit, },
                 {
                     path: 'manage', component: dm_manage, props: { ttt: 2222 },//manage
                     children: [//子路由
 
 
                         { path: 'detail_html_api', component: detail_html_api, },
-                        { path: 'js_file_edit', component: js_file_edit, },
+                     
 
 
                         ...PUB.arrRouteManage,
@@ -114,14 +117,14 @@ const router = new VueRouter({
         {
             path: '/group_home/:gid', component: group_home,
             children: [//子路由
-              { path: 'detail_group', component: detail_group },
-              { path: 'study_user', component: study_user },
-              { path: 'search_result', component: search_result },
-              { path: 'detail_group_g_card', component: detail_group_g_card },
-              { path: 'detail_g_card_link', component: detail_g_card_link },
-              ...PUB.arrRouteManage
+                { path: 'detail_group', component: detail_group },
+                { path: 'study_user', component: study_user },
+                { path: 'search_result', component: search_result },
+                { path: 'detail_group_g_card', component: detail_group_g_card },
+                { path: 'detail_g_card_link', component: detail_g_card_link },
+                ...PUB.arrRouteManage
             ]
-          },
+        },
         {
             path: '/manage',
             component: manage,
@@ -146,7 +149,7 @@ const router = new VueRouter({
         },
         { path: '/detail_group', component: detail_group, },
         { path: '/detail_data', component: detail_data },
-     
+
         { path: '/open/auto_layout', component: auto_layout },
         { path: '/js_file_edit', component: js_file_edit },
         { path: '/js_code_edit', component: js_code_edit },
@@ -160,22 +163,31 @@ import Vuex from 'vuex' //导入vuex模块
 Vue.use(Vuex) //应用组件
 
 
-
-
-
-
-// 代码高亮插件
-import hljs from 'highlight.js';
-import javascript from 'highlight.js/lib/languages/javascript';
-hljs.registerLanguage('javascript', javascript);
-import 'highlight.js/styles/github.css' //样式文件
-
-Vue.directive('highlight', function (el) {
-    let highlight = el.querySelectorAll('pre code');
-    highlight.forEach((block) => {
-        hljs.highlightBlock(block)
-    })
+router.beforeEach((to, from, next) => {
+    let systemId = to.params.sysId || from.params.sysId || PUB._systemId;//***获取地址上的_systemId
+    let $sys = util.getLocalStorageObj(systemId); //调用：{从LocalStorage获取一个对象的函数}
+    PUB.keyPower = `${systemId}_power`;
+    window.rolePower = util.getLocalStorageObj(PUB.keyPower);
+    // 如果用户未登录，跳转登录页面
+    if ($sys.isLogin != 1) {//Q1：未登录
+        if (to.path.includes('/site/') || to.path.includes('/site_m/') || to.path.includes('/open/')) {//QK1：to路径中包含/site/表示网站首页
+            next();
+        } else if (to.path.includes('login')) {//QK2：to路径中包含login
+            next();
+        } else {//QK3：to路径中包含login
+            PUB.goUrlAfterLogin = to.fullPath//变量赋值：{登录后要跳转的地址}
+            next(`/system/${systemId}/login`);
+        }
+    } else {//Q2：已登录
+        PUB.goUrlAfterLogin = null//变量赋值：{登录后要跳转的地址}
+        next();
+    }
 })
+
+
+
+
+
 
 
 import main from './main.vue'

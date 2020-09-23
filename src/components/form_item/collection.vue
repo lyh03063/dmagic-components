@@ -1,5 +1,5 @@
 <template>
-  <div class>
+  <div :class="{[skin]:skin,root_collection:isRoot,}">
     <dm_debug_list>
       <dm_debug_item v-model="showToolbar" text="showToolbar" />
       <dm_debug_item v-model="valueNeed" text="valueNeed" />
@@ -27,7 +27,7 @@
           <div
             v-for="(doc,i) in valueNeed"
             :key="doc.__id"
-            :class="{'data-group':true,'edit':editItem==i,'active':focusItem==i,'data-form-group':listType=='form'}"
+            :class="{'data-group':true,'edit':editItem==i,'active':focusItem==i,'data-form-group':listType=='form',root_collection:isRoot}"
             @mouseenter="mouseenterG(i)"
             @mouseleave="mouseleaveG"
             @dblclick.ctrl.shift="editItem=i"
@@ -52,6 +52,7 @@
                   v-else-if="dataSlot"
                   :name="dataSlot"
                   :doc="handelShowDoc(doc)"
+                  :index="i"
                   :docEntity="doc"
                 ></slot>
                 <span v-else class="ML5">{{handelShowDoc(doc)}}</span>
@@ -141,6 +142,9 @@ export default {
   },
   mixins: [MIX.form_item_new], //混入
   props: {
+    skin: {
+      default: ""
+    },
     titleDialogAdd: {
       default: "添加数据"
     },
@@ -178,6 +182,7 @@ export default {
 
   data() {
     return {
+      isRoot: false,
       formDataEdit: {},//弹窗编辑表单对应的数据
       readyJs: false,
       dragging: false,
@@ -242,18 +247,31 @@ export default {
       await this.$nextTick();//延迟到视图更新,这句很重要，不加的话，会遇到【神坑1号】问题
       this.showDialog = false//关闭弹窗
     },
+
+    //TODO:函数：{聚焦上一个}
+    focusOld: async function (i) {
+      this.focusItem = this.focusItemBckkup;
+    },
     //函数：{鼠标移入的回调函数}
     mouseenterG: async function (i) {
       if (this.dragging) return
-      this.focusItem = i
+      this.focusItem = i;
+      this.focusItemBckkup = i;//备份聚焦序号
+      if (this.vm_parent) {//清除父级的聚焦，不然显得很杂乱 
+        this.vm_parent.focusItem = 99999;
+      }
+
 
       this.$emit("after_mouseenter", { focusIndex: i, list: this.valueNeed });//触发外部数据变更
     },
     //函数：{鼠标移出的回调函数}
     mouseleaveG: async function (i) {
-      let focusIndex=this.focusItem ;//移出也要传上次的聚焦索引*
+      let focusIndex = this.focusItem;//移出也要传上次的聚焦索引*
       this.focusItem = 99999
-      this.$emit("after_mouseleave", { focusIndex,list: this.valueNeed });//触发外部数据变更
+      this.$emit("after_mouseleave", { focusIndex, list: this.valueNeed });//触发外部数据变更
+      if (this.vm_parent) {//让父级聚焦，增加聚焦体验，如何定位到父级的index？？
+        this.vm_parent.focusOld();
+      }
     },
     //函数：{开始拖拽排序函数}
     dragStart: async function () {
@@ -374,6 +392,13 @@ export default {
 
 
     this.readyJs = true;
+  },
+  mounted() {
+
+    this.vm_parent = this.$closest({ vmT: this, name: "collection" })
+    if (!this.vm_parent) {//如果没有父集合，那么标记根元素
+      this.isRoot = true
+    }
   }
 };
 </script>
@@ -397,7 +422,12 @@ export default {
 
 .data-group.active {
   /* background: #e4f5e2; */
-  outline: 1px #67C23A solid;
+  outline: 1px #67c23a solid;
+}
+
+.skin_red .data-group.active {
+  /* background: #e4f5e2; */
+  outline: 1px #f00 solid;
 }
 
 .tool-bar {

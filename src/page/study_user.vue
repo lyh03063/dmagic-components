@@ -15,6 +15,7 @@
                 >
                   <el-col style="width:190px">{{doc.name}} (数量：{{doc.allCount}})</el-col>
                   <el-col style="width:270px">
+                    <!--要确保数值在0到100范围内-->
                     <el-progress
                       :stroke-width="26"
                       :percentage="doc.score"
@@ -32,8 +33,11 @@
               <el-tab-pane label="我的demo" name="my_demo" :lazy="true">
                 <dm_list_data :cf="cfListMyDemo" class></dm_list_data>
               </el-tab-pane>
-              <el-tab-pane label="我的任务" name="my_task" :lazy="true">
+              <el-tab-pane label="任务" name="my_task" :lazy="true">
                 <dm_list_data :cf="cfListMyTask" class></dm_list_data>
+              </el-tab-pane>
+              <el-tab-pane label="JS文件" name="my_js_file" :lazy="true">
+                <dm_list_data :cf="cfListMyJSFile" class></dm_list_data>
               </el-tab-pane>
             </el-tabs>
           </dm_pannel_new>
@@ -100,6 +104,7 @@ export default {
   components: {
     collect: () => import("@/page/study_collect.vue")
   },
+  //FIXME：data配置
   data() {
     return {
       activeName: 'first',
@@ -108,6 +113,7 @@ export default {
       activeName2: 'note',
       cfListMyTask: null,
       cfListMyDemo: null,
+      cfListMyJSFile: null,
       cfListMyHisNote: null,
       ready: false,
       customColors: "#67C23A",
@@ -223,16 +229,21 @@ export default {
 
 
     let cfListMyDemo = lodash.cloneDeep(PUB.listCF.list_front_demo);
+    cfListMyDemo.searchFormItems=[F_ITEMS.title_search]//改造查询字段
     cfListMyDemo.objParamAddon.findJson = { _userId: this.$sys.userId };
     cfListMyDemo.isShowBreadcrumb = false;
     cfListMyDemo.isShowToolBar = false;
     this.cfListMyDemo = { ...cfListMyDemo };
 
 
+    //TODO:我的JS文件列表-cfListMyJSFile列表配置
+    let cfListMyJSFile = lodash.cloneDeep(PUB.listCF.list_js_file_my);
+    cfListMyJSFile.paramAddonPublic._userId=this.$sys.userId;
+    cfListMyJSFile.objParamAddon.findJson = { _userId: this.$sys.userId };
+    cfListMyJSFile.isShowBreadcrumb = false;
+    this.cfListMyJSFile = { ...cfListMyJSFile };
 
-    // let cfListMyHisNote = lodash.cloneDeep(PUB.listCF.list_visit_record);
-    // cfListMyHisNote.objParamAddon.findJson = { _userId: this.$sys.userId, dataType: "note", tagPage: "detail_data" };
-    // this.cfListMyHisNote = { ...cfListMyHisNote };
+
 
     /****************************处理笔记历史记录列表配置-START****************************/
 

@@ -9,6 +9,7 @@
 
     <!-- <dm_dynamic_form :cf="cfFormSearch" v-model="formDataSearch" @submit="searchList"></dm_dynamic_form> -->
     <!--独立的查询表单-->
+
     <div
       class="n-boder-box PT18 PL10 PR10 MB10"
       v-if="cfFormSearch.formItems.length&&cf.isShowSearchForm"
@@ -33,7 +34,7 @@
       <!--自定义详情弹窗插槽-->
       <!-- <template v-slot:customDetail="{detailData}">
         <detail_data :propDataId="detailData._idRel2"></detail_data>
-      </template> -->
+      </template>-->
 
       <!--分组数据选择列表按钮插槽----->
       <template v-slot:slot_btn_select>
@@ -43,7 +44,7 @@
           :cf="cfSelectList2"
           @inited="initedSelectList"
           @select="afterSelect"
-         v-if="$power('groupDataList.all.modify')"
+          v-if="$power('groupDataList.all.modify')"
         ></dm_select_list_data>
       </template>
       <!--转移分组按钮插槽-->
@@ -80,6 +81,10 @@
         </div>
       </div>
     </el-dialog>
+    <div class v-if="$sys.userId==13691916429">
+      <el-link type="info" :href="getEditLink" target="_blank" v-if="$route.query.edit!=1">编辑</el-link>
+      <el-link type="info" :href="getNotEditLink" target="_blank" v-else>预览</el-link>
+    </div>
   </div>
 </template>
 
@@ -107,7 +112,24 @@ export default {
       docsSelected: [],//选中的数据
     };
   },
+  computed: {
+    getNotEditLink() {
+      let { fullPath } = this.$route
+      fullPath = fullPath.replace("&edit=1", "")
+      return `#${fullPath}`
+    },
+    getEditLink() {
+      // let {edit}=this.$route.query;
+
+      return `#${this.$route.fullPath}&edit=1`
+
+    }
+
+  },
   methods: {
+
+
+
     //函数：{转移分组函数}
     transGroup: async function () {
       if (!this.idTansG) return this.$message.error('分组id必填');

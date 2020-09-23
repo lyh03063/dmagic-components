@@ -1,5 +1,5 @@
 <template>
-  <div v-if="readyResource" :class="{box_fullScreen:fullScreen}">
+  <div v-if="readyResource" class="out" :class="{box_fullScreen:fullScreen}">
     <dm_debug_list>
       <dm_debug_item v-model="arrHtmlHead" />
       <dm_debug_item v-model="htmlCodeHead" />
@@ -27,12 +27,8 @@
             :value="item.value"
           ></el-option>
         </el-select>
-        <el-button plain @click="updateIframe" size="mini" v-if="modeShowHtml=='actual'">运行</el-button>
-
-        <!-- <el-checkbox class="ML20 C_fff" v-model="isHighLightLayout" v-else>悬停Html时高亮区块</el-checkbox> -->
-        <!-- <a class="ML5" target="_blank" :href="linkFullScreen" v-if="demoId">
-          <el-button plain size="mini">全屏</el-button>
-        </a>-->
+        <el-button plain @click="updateIframe" size="mini" v-if="modeShowHtml=='actual'">更新</el-button>
+        <el-checkbox class="C_fff" v-model="isHotUpdate">热更新</el-checkbox>
 
         <a
           class="ML5"
@@ -42,7 +38,6 @@
         >
           <el-button plain size="mini">预览</el-button>
         </a>
-
         <el-checkbox class="ML10 C_fff" v-model="cfDragBox.isShowLeft">演示区</el-checkbox>
         <el-checkbox class="C_fff" v-model="cfDragBox.isShowRight">编辑区</el-checkbox>
       </div>
@@ -59,8 +54,7 @@
         <el-button plain @click="showDialogSaveMyDemo" size="mini">保存为我的demo</el-button>
       </div>
     </div>
-
-    <div class="PL8 PR8 box_main">
+    <div class="PL8 PR8 box_main FM_JS">
       <dm_drag_box_width class :cf="cfDragBox">
         <template #left>
           <div class>
@@ -91,46 +85,35 @@
                   <el-button plain @click="dialogSelectDemo" size="mini">demo库</el-button>
                 </div>
               </div>
-              <el-tabs v-model="activeName" type="card">
-                <el-tab-pane :label="`Body配置(${arrHtml.length})`" name="tab1">
-                  <div class="PB8">
-                    <el-button
-                      plain
-                      @click="$refs.rowhtml.$refs.collectionTag.addGroup()"
-                      size="mini"
-                    >+ 一级元素</el-button>
-
-                    <el-select class="MR5" v-model="modeShowHProp" size="mini" style="width:120px">
-                      <el-option
-                        v-for="item in optionsModeHProp"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                      ></el-option>
-                    </el-select>
-
-                    <el-button plain @click="pasteHtmlCode(arrHtml)" size="mini">粘贴Html数据</el-button>
+              <!-- TODO:tabs -->
+              <el-tabs v-model="activeName" type="card" @tab-click="tabClick">
+                <el-tab-pane :label="`Body配置(${lengthBody})`" name="tab_body">
+                  <div class="DPFC H38">
+                    <!-- TODO:启用编辑 -->
+                    <div class>
+                      <el-select
+                        class="MR5"
+                        v-model="modeShowHProp"
+                        size="mini"
+                        style="width:120px"
+                      >
+                        <el-option
+                          v-for="item in optionsModeHProp"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value"
+                        ></el-option>
+                      </el-select>
+                      <el-checkbox class="C_666" v-model="allowEditHtml">启用编辑</el-checkbox>
+                    </div>
                   </div>
-                  <div class="box_scroll">
+                  <div class="box_scroll box_html_set">
                     <!-- END:Html:row_html_tag组件 -->
-                    <dm_row_html_tag
-                      class
-                      v-model="arrHtml"
-                      ref="rowhtml"
-                      @add_son_com="addSonCom"
-                      @html_tag_mouseenter="htmlTagMouseenter"
-                      @html_tag_mouseleave="htmlTagMouseleave"
-                    ></dm_row_html_tag>
+                    <dm_row_html_tag class v-model="arrHtml" ref="rowhtml" @add_son_com="addSonCom"></dm_row_html_tag>
                   </div>
                 </el-tab-pane>
-                <el-tab-pane :label="`head配置(${arrHtmlHead.length})`" name="tab_head">
+                <el-tab-pane :label="`head配置(${lengthHead})`" name="tab_head">
                   <div class="PB8">
-                    <el-button
-                      plain
-                      @click="$refs.rowhtmlHead.$refs.collectionTag.addGroup()"
-                      size="mini"
-                    >+ 一级元素</el-button>
-
                     <el-select class="MR5" v-model="modeShowHProp" size="mini" style="width:120px">
                       <el-option
                         v-for="item in optionsModeHProp"
@@ -139,24 +122,22 @@
                         :value="item.value"
                       ></el-option>
                     </el-select>
-                    <el-button plain @click="pasteHtmlCode(arrHtmlHead)" size="mini">粘贴Html数据</el-button>
+                    <el-checkbox class="C_666" v-model="allowEditHtml">启用编辑</el-checkbox>
                   </div>
-                  <div class="box_scroll">
+                  <div class="box_scroll box_html_set">
                     <!-- END:Html:row_html_tag组件 -->
                     <dm_row_html_tag
                       class
                       v-model="arrHtmlHead"
                       ref="rowhtmlHead"
                       @add_son_com="addSonCom"
-                      @html_tag_mouseenter="htmlTagMouseenter"
-                      @html_tag_mouseleave="htmlTagMouseleave"
                     ></dm_row_html_tag>
                   </div>
                 </el-tab-pane>
-                <el-tab-pane :label="`Css配置(${arrCss.length})`" name="tab2" lazy>
+                <el-tab-pane :label="`Css配置(${arrCss.length})`" name="tab_css" lazy>
                   <div class="PB8">
                     <el-button plain @click="$refs.collectionCss.addGroup()" size="mini">添加Css代码块</el-button>
-                    <el-button plain @click="pasteCssCode" size="mini">粘贴Css数据</el-button>
+                    <el-button plain @click="dialogPasteCss" size="mini">粘贴Css数据</el-button>
                   </div>
                   <!-- {{arrCss}} -->
                   <div class="box_scroll">
@@ -185,7 +166,7 @@
                                 v-if="!vm_pannel.cfIn.showContent"
                                 v-html="cssCodeShort(docEntity)"
                               ></span>
-                              <!-- TODO:Html:复制CSS到剪贴板按钮 -->
+                              <!-- END:Html:复制CSS到剪贴板按钮 -->
                               <el-link class="ML5 MR10" @click="copyCssCode(docEntity)">复制</el-link>
                             </div>
                           </template>
@@ -218,8 +199,7 @@
                     </dm_collection>
                   </div>
                 </el-tab-pane>
-
-                <el-tab-pane label="代码生成" name="tab3" lazy>
+                <el-tab-pane label="代码生成" name="tab_build" lazy>
                   <div class="MB10">
                     html：
                     <el-button
@@ -252,7 +232,7 @@
                   </dm_list_flex_res>
                 </el-tab-pane>
                 <!--END:基础信息表单-->
-                <el-tab-pane label="基础信息" name="tab5" lazy v-if="docDemo">
+                <el-tab-pane label="基础信息" name="tab_base" lazy v-if="docDemo&&isMine">
                   <dm_dynamic_form :cf="cfFormBase" v-model="docDemo"></dm_dynamic_form>
                 </el-tab-pane>
               </el-tabs>
@@ -283,9 +263,53 @@
         <dm_dynamic_form :cf="cfFormAddDemo" v-model="formDataAddDemo" @submit="ajaxAddMyDemo"></dm_dynamic_form>
       </div>
     </el-dialog>
+    <!--END:粘贴html代码弹窗-->
+    <el-dialog
+      custom-class="n-el-dialog"
+      width="65%"
+      title="粘贴html"
+      :close-on-press-escape="false"
+      :close-on-click-modal="false"
+      :append-to-body="true"
+      v-bind:visible.sync="isShowDialogPasteHtml"
+      v-if="isShowDialogPasteHtml"
+    >
+      <div class>
+        <dm_dynamic_form
+          :cf="cfFormPasteHtml"
+          v-model="formDataPasteHtml"
+          @submit="submitFormPasteHtml"
+        ></dm_dynamic_form>
+      </div>
+    </el-dialog>
+    <!--END:粘贴Css代码弹窗-->
+    <el-dialog
+      custom-class="n-el-dialog"
+      width="65%"
+      title="粘贴Css"
+      :close-on-press-escape="false"
+      :close-on-click-modal="false"
+      :append-to-body="true"
+      v-bind:visible.sync="isShowDialogPasteCss"
+      v-if="isShowDialogPasteCss"
+    >
+      <div class>
+        <dm_dynamic_form
+          :cf="cfFormPasteCss"
+          v-model="formDataPasteCss"
+          @submit="submitFormPasteCss"
+        ></dm_dynamic_form>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
+
+
+
+
+
+
 
 
 
@@ -309,15 +333,53 @@ export default {
   name: "auto_layout",
   mixins: [MIX.base],
   components: {},
+  //FIXME:data配置
   data() {
     return {
+
+      allowEditHtml: false,//允许编辑html
+      isCheckAllHtml: false,
+      /****************************Css粘贴-START****************************/
+      formDataPasteCss: {},
+      isShowDialogPasteCss: false,
+      //查询表单配置
+      cfFormPasteCss: {
+        size: "mini",
+        formItems: [
+          {
+            label: "Css代码",
+            prop: "cssCode",
+            type: "textarea",
+            cfTextarea: { rows: 10 }
+          }
+        ],
+        btns: [{ text: "确定粘贴", event: "submit", type: "primary", size: "mini" }]
+      },
+      /****************************Css粘贴-END****************************/
+      /****************************Html粘贴-START****************************/
+      formDataPasteHtml: {},
+      isShowDialogPasteHtml: false,
+      //查询表单配置
+      cfFormPasteHtml: {
+        size: "mini",
+        formItems: [
+          {
+            label: "html代码",
+            prop: "htmlCode",
+            type: "textarea",
+            cfTextarea: { rows: 10 }
+          }
+        ],
+        btns: [{ text: "确定粘贴", event: "submit", type: "primary", size: "mini" }]
+      },
+      /****************************Html粘贴-END****************************/
+      isHotUpdate: true,
       formData: {},
       //查询表单配置
       cfFormBase: {
         size: "mini",
         formItems: [F_ITEMS.title,
-        F_ITEMS.album,
-
+        F_ITEMS.album, F_ITEMS.keyword,
         ],
         // btns: [{ text: "查询", event: "submit", type: "primary", size: "mini" }]
       },
@@ -340,7 +402,6 @@ export default {
           mode: "text/css",
         }
       },
-
       readyResource: false,
       isHighLightLayout: true,//悬停代码时高亮区块
       isShowDialogSaveMy: false,//显示填写新建我的demo信息表单弹窗
@@ -380,13 +441,25 @@ export default {
           },
         ],
       },
-      arrHtml: [],
-      arrHtmlHead: [],
+      arrHtml: [{
+        "tag": "body",
+        "children": [],
+        "cf": {},
+        "__id": "222",
+        showChildren: true,
+      }],
+      arrHtmlHead: [{
+        "tag": "head",
+        "children": [{ "cf": {}, "children": [], "tag": "link", "diyProp": [{ "prop": "href", "value": "//qn-static.dmagic.cn/public.1.2.5.css" }, { "prop": "rel", "value": "stylesheet" }], "__id": "202009051152631717_37571" }],
+        "cf": {},
+        "__id": "111",
+        showChildren: true,
+      }],
       arrCss: [],
       vm_dialog_select_demo: null,//选择demo组件对象
       vm_form_css1: null,
       vm_form_css2: null,
-      activeName: "tab1",
+      activeName: "tab_body",
       htmlCode: "",
       htmlCodeHead: "",
       cssCode: "",
@@ -394,6 +467,12 @@ export default {
     };
   },
   computed: {
+    lengthBody() {
+      return lodash.get(this.arrHtml, `[0]children.length`)
+    },
+     lengthHead() {
+      return lodash.get(this.arrHtmlHead, `[0]children.length`)
+    },
     linkFullScreen() {
       return `#/open/auto_layout?demoId=${this.demoId}&fullScreen=1`
     },
@@ -422,7 +501,6 @@ export default {
     },
     arrCss: {//监听到arrClass变化，立马更新样式
       handler(newVal, oldVal) {
-        console.log(`arrCss变动`);
         this.updatePageCss()//调用：{更新页面样式函数}
       },
       immediate: true,
@@ -430,7 +508,7 @@ export default {
     },
     modeShowHtml: {//监听到arrClass变化，立马更新样式
       async handler(newVal, oldVal) {
-        if (this.modeShowHtml == 'actual') {
+        if (this.modeShowHtml == 'actual' && this.isHotUpdate) {
           await this.$nextTick();//延迟到视图更新
           this.updateIframe()//调用：{更新iframe函数}
         }
@@ -439,170 +517,123 @@ export default {
     },
     arrHtml: {//监听到arrHtml变化，更新Html
       async handler(newVal, oldVal) {
-        this.htmlCode = util.arrToHtml({ arrHtml: this.arrHtml })//函数：{根据arrHtml拼接Html代码函数}
-        if (this.modeShowHtml == 'actual') {
+
+        let arrHtml = lodash.get(this, `arrHtml[0].children`);
+        if (!arrHtml) return
+        this.htmlCode = util.arrToHtml({ arrHtml })//函数：{根据arrHtml拼接Html代码函数}
+        if (this.modeShowHtml == 'actual' && this.isHotUpdate) {
           this.updateIframe()//调用：{更新iframe函数}
         }
-
       },
       immediate: true,
       deep: true
     },
     arrHtmlHead: {//监听到arrHtml变化，更新Html
       async handler(newVal, oldVal) {
-        this.htmlCodeHead = util.arrToHtml({ arrHtml: this.arrHtmlHead })//函数：{根据arrHtml拼接Html代码函数}
-
-        if (this.modeShowHtml == 'actual') {
+        let arrHtml = lodash.get(this, `arrHtmlHead[0].children`);
+        this.htmlCodeHead = util.arrToHtml({ arrHtml })//函数：{根据arrHtml拼接Html代码函数}
+        if (this.modeShowHtml == 'actual' && this.isHotUpdate) {
           this.updateIframe()//调用：{更新iframe函数}
         }
-
       },
       immediate: true,
       deep: true
     },
   },
   methods: {
+    //TODO:函数：{选项卡点击的函数}
+    tabClick: function ({ name }) {
+      $("body").attr("tab", this.activeName)
+    },
 
-    //TODO:函数：{将一组Css代码复制到剪贴板函数}
+
+    //END:函数：{显示粘贴html代码弹窗函数}
+    dialogPasteHtml: async function (arrTarget) {
+      this.isShowDialogPasteHtml = true;
+      this.arrTarget = arrTarget
+    },
+
+    //END:函数：{提交粘贴html代码表单函数}
+    submitFormPasteHtml: async function (arrTarget) {
+      let { formDataPasteHtml } = this
+      let { htmlCode } = formDataPasteHtml
+      if (!htmlCode) return this.$message.error(`请输入Html代码`);
+      htmlCode = htmlCode.trim()
+      if (!htmlCode.startsWith("<")) return this.$message.error(`${name}不规范`);
+      let arrHtml = util.htmlToArr({ htmlCode })
+      if (!arrHtml) return this.$message.error(`Html代码异常`);
+      util.randomCollectionId(arrHtml);//调用：{修改数组元素对象的__id属性的函数}
+      // arrTarget = arrTarget || this.arrHtml;//可以指定arrTarget，默认是this.arrHtml
+      this.arrTarget.unshift(...arrHtml)//html代码更新
+      // this.arrTarget[0].children.unshift(...arrHtml)//html代码更新
+      this.$message.success('粘贴Html成功');
+      this.isShowDialogPasteHtml = false;
+    },
+    //END:函数：{显示粘贴Css代码弹窗函数}
+    dialogPasteCss: async function (arrTarget) {
+      this.isShowDialogPasteCss = true;
+    },
+    //END:函数：{提交粘贴Css代码弹窗函数}
+    submitFormPasteCss: async function (arrTarget) {
+      let { formDataPasteCss } = this
+      let { cssCode } = formDataPasteCss
+      if (!cssCode) return this.$message.error(`请输入Css代码`);
+      let arrCss = util.cssToArr({ cssCode })//调用：{Css代码转换成数据对象的函数【难】}
+      if (!arrCss) return this.$message.error(`Css代码异常`);
+      this.arrCss.push(...arrCss)//html代码更新
+      this.$message.success('粘贴Css成功');
+      this.isShowDialogPasteCss = false;
+    },
+    //END:函数：{将一组Css代码复制到剪贴板函数}
     copyCssCode: function (docEntity) {
-      let objNeed = { arrCss: [docEntity] }
-      var strObjNeed = JSON.stringify(objNeed);//Json对象转换Json字符串
-      let cpTxt = strObjNeed;
-      util.setClipBoardData(cpTxt)//设置剪贴板内容（兼容谷歌浏览器）
+      // let objNeed = { arrCss: [docEntity] }
+      // var strObjNeed = JSON.stringify(objNeed);//Json对象转换Json字符串
+      // let cpTxt = strObjNeed;
+      let cssCode = util.joinPageCss({ arrCss: [docEntity] })
+      util.setClipBoardData(cssCode)//设置剪贴板内容（兼容谷歌浏览器）
       this.$message.success('复制成功');
-    },
-    //TODO:函数：{粘贴Css代码数据函数}
-    pasteCssCode: async function () {
-      let clipText = await navigator.clipboard.readText()//获取当前剪贴板内容
-      console.log(`clipText:`, clipText);
-      try {
-        var obj = JSON.parse(clipText);//Json字符串转换Json对象
-        let { arrCss } = obj
-        if (!arrCss) throw ""
-        this.handelEleId(arrCss);//调用：{修改数组元素对象的__id属性的函数}
-        this.arrCss.push(...arrCss)//html代码更新
-        this.$message.success('粘贴Css成功');
-
-      } catch (err) {
-        alert(`Css数据格式不规范，请从Css数据复制`);
-      }
-
-
-
-    },
-    //TODO:函数：{粘贴html代码数据函数}
-    pasteHtmlCode: async function (arrTarget) {
-      let clipText = await navigator.clipboard.readText()//获取当前剪贴板内容
-      console.log(`clipText:`, clipText);
-      try {
-        var obj = JSON.parse(clipText);//Json字符串转换Json对象
-        let { arrHtml } = obj
-        if (!arrHtml) throw ""
-        this.handelEleId(arrHtml);//调用：{修改数组元素对象的__id属性的函数}
-        arrTarget=arrTarget||this.arrHtml;//可以指定arrTarget，默认是this.arrHtml
-        arrTarget.push(...arrHtml)//html代码更新
-        this.$message.success('粘贴Html成功');
-
-      } catch (err) {
-        alert(`html数据格式不规范，请从html元素复制`);
-      }
-
-
-
-    },
-    //TODO:函数：{修改数组元素对象的__id属性的函数}，避免重复
-    handelEleId: function (arr) {
-      let __id = util.getTimeRandom()//调用：{返回带时间戳的随机数函数}
-      arr.forEach(d => {//循环
-        d.__id = __id
-      })
-
-
-
     },
     //函数：{生成html文件函数}
     buildHtmlFile: async function () {
-
       let fnBuild = PUB.listCFAddon.front_demo.methods.singleBtnClick;
       fnBuild.call(this, "buildHtmlFile", this.docDemo)
-
     },
-
-
-
     //END:JS：宽度文本框变化后的回调函数
     //函数：{宽度文本框变化后的回调函数}
     changeWidth: function (e) {
-      console.log(`e.target.value:`, e.target.value);
       let n = Number(e.target.value)
-      console.log(`changeWidth#####`);
-
       this.cfDragBox.nWidthLeft = n + 10
-
     },
     //函数：{测试函数}
     test: async function () {
     },
-    //END:htmlTagMouseenter
-    //函数：{处理鼠标移入html元素代码函数}
-    htmlTagMouseenter: async function (param) {
-      // window.arr_$target=[]
-      let { focusIndex } = param
-      let $bodyMain = $('#id_iframe').contents().find('#id__box_main')
-      let $children = $bodyMain.children()
-      $children.removeClass("focus_ele")
-      let $target = $children.filter(`:eq(${focusIndex})`)
-      window.arr_$target.push($target)
-      $target.addClass("focus_ele")
-    },
-    //END:htmlTagMouseleave
-    //函数：{处理鼠标移出html元素代码函数}
-    htmlTagMouseleave: async function (param) {
-      let { focusIndex } = param
-      let { length } = window.arr_$target
-      let $parent = window.arr_$target[length - 1]
-      $parent.removeClass("focus_ele")
-      window.arr_$target.pop()
-    },
-    //END:函数：{更新iframe函数}
+
+    //TODO:函数：{更新iframe函数}
     updateIframe: async function () {
-      console.log(`updateIframe:########`);
-
-
-
       if (this.modeShowHtml == 'actual') {//如果是真实模式
         let { cssCode, htmlCode, htmlCodeHead, jsCodeTop } = this
-
-
         let title = ""
         if (this.docDemo) {//如果是修改demo
           title = this.docDemo.title
         }
-
-
-
-
         this.pageHtmlCode = util.joinPageHtml({ cssCode, htmlCode, htmlCodeHead, jsCodeTop, title })
-
         let pageHtmlCodeIframe = util.joinPageHtml({ cssCode, htmlCode, htmlCodeHead, jsCodeTop, title, inIframe: true })
-
         $("#id_iframe").attr("srcdoc", pageHtmlCodeIframe)
+
       }
     },
     //函数：{更新页面样式函数}
     updatePageCss: async function () {
 
-
-
       this.cssCode = util.joinPageCss({ arrCss: this.arrCss })
-      // this.cssCode = cssCode
-      util.addCssToPage({ css: this.cssCode })//调用：{输出css代码到当前页面的函数}
+      console.log(`this.cssCode:`, this.cssCode);
+      if (this.modeShowHtml == 'test') {
+        util.addCssToPage({ css: this.cssCode })//调用：{输出css代码到当前页面的函数}
+      }
       await util.timeout(500); //延迟
-      if (this.modeShowHtml == 'actual') {
+      if (this.modeShowHtml == 'actual' && this.isHotUpdate) {
         this.updateIframe()//调用：{更新iframe函数}
       }
-
-
     },
     //函数：{打开css集合添加数据弹窗函数}
     collectionCssAdd: async function (formData = {}) {
@@ -638,13 +669,10 @@ export default {
         this.objEleParent.children.push(...arrHtml)
         this.objEleParent = null;//将{当前父元素对象}设置为null
       } else { //Q2:{否则}
-        this.arrHtml.push(...arrHtml)//html代码更新
+        arrHtml = arrHtml[0].children;//提取children
+        arrHtml.push(...arrHtml)//html代码更新
       }
-
-
-      console.log(`arrCssNeed:####`, arrCssNeed);
       this.arrCss.push(...arrCssNeed)//Css代码更新
-
       this.$message.success('切换demo成功');
     },
     //END:JS:添加子组件回调
@@ -663,14 +691,16 @@ export default {
     saveDemo: async function () {
       let clickStatus = await this.$confirm("确定修改？").catch(() => { });
       if (clickStatus != "confirm") return
-      let { arrCss, arrHtml, arrHtmlHead, modeShowHtml, jsCodeTop, cfDragBox, pageHtmlCode,docDemo } = this
+      let { arrCss, arrHtml, arrHtmlHead, modeShowHtml, jsCodeTop, cfDragBox, pageHtmlCode, docDemo } = this
+      arrHtml = arrHtml[0].children;//提取children
+      arrHtmlHead = arrHtmlHead[0].children;//提取children
       let { nWidthLeft } = cfDragBox
-      let { title, album } = docDemo
+      let { title, album, keyword } = docDemo
       await axios({//修改接口-当前父任务
         method: "post", url: `${PUB.domain}/info/commonModify`,
         data: {
           _id: this.demoId, _systemId: "$all", _dataType: "front_demo",
-          _data: { arrCss, arrHtml, arrHtmlHead, modeShowHtml, jsCodeTop, nWidthLeft, pageHtmlCode, title, album }
+          _data: { arrCss, arrHtml, arrHtmlHead, modeShowHtml, jsCodeTop, nWidthLeft, pageHtmlCode, title, album, keyword }
         }
       });
       this.$message.success('修改成功');
@@ -678,7 +708,7 @@ export default {
     //函数：{保存为我的demo函数}
     showDialogSaveMyDemo: async function () {
       this.isShowDialogSaveMy = true;
-       let { docDemo } = this
+      let { docDemo } = this
       if (docDemo) {
         this.formDataAddDemo.title = docDemo.title
       }
@@ -690,11 +720,10 @@ export default {
       if (!_userId) {
         return this.$message.error('未登录，无法保存demo');
       }
-
-
       let { arrCss, arrHtml, arrHtmlHead, modeShowHtml, cfDragBox, pageHtmlCode, } = this
-      
       let { nWidthLeft } = cfDragBox
+      arrHtml = arrHtml[0].children;//提取children
+      arrHtmlHead = arrHtmlHead[0].children;//提取children
       let dataAdd = { ...this.formDataAddDemo, arrCss, arrHtml, arrHtmlHead, modeShowHtml, nWidthLeft, pageHtmlCode }
       let rsp = await axios({
         method: "post", url: `${PUB.domain}/info/commonAdd`,
@@ -705,8 +734,6 @@ export default {
       this.isShowDialogSaveMy = false;
       this.$router.push({ path: 'auto_layout', query: { demoId: demoId } });//跳转登录页-不产生历史记录
     },
-
-
     //函数：{获取demo详情函数}
     getDemoDoc: async function () {
       let { data } = await axios({  //请求接口
@@ -716,8 +743,23 @@ export default {
       this.docDemo = data.doc;
       let { arrCss = [], arrHtml = [], arrHtmlHead = [], modeShowHtml, jsCodeTop, nWidthLeft = 320, pageHtmlCode } = data.doc
       this.pageHtmlCode = pageHtmlCode//完整html代码更新
-      this.arrHtml = arrHtml//body代码更新
+      this.arrHtml = [{
+        "tag": "body",
+        showChildren: true,
+        "children": arrHtml,
+        "cf": {},
+        "__id": "222"
+      }]
+      // arrHtml//body代码更新
       this.arrHtmlHead = arrHtmlHead//头部代码更新
+
+      this.arrHtmlHead = [{
+        showChildren: true,
+        "tag": "head",
+        "children": arrHtmlHead,
+        "cf": {},
+        "__id": "111"
+      }]
       this.arrCss = arrCss//Css代码更新
       this.modeShowHtml = modeShowHtml || "test"
       this.jsCodeTop = jsCodeTop//Js代码更新
@@ -746,6 +788,7 @@ export default {
     },
   },
   async created() {
+    $("body").attr("tab", this.activeName)//body设置tab属性
     await util.loadJs({ url: PUB.urlJS.html_tag })//加载html相关JS
     await util.loadJs({ url: PUB.urlJS.css_prop })//加载css相关JS
     this.readyResource = true
@@ -753,8 +796,16 @@ export default {
     if (this.demoId) {//
       await this.getDemoDoc(); //调用：{获取demo详情函数}
     } else {
-      this.arrHtml = [{ "text": " 欢迎使用码帮网页在线布局工具，这里是演示区域，下方是一个介绍本工具使用的视频(建议全屏观看)", "tag": "div", "children": [], "cf": { "style": "margin-bottom:10px;color:#FF9900;background-color:#FFFFFF;padding:10px;" }, "__id": "202007201440332020_42202" }, { "tag": "video", "children": [], "cf": { "controls": "controls", "width": "300", "src": "http://qn-dmagic.dmagic.cn/%E7%A0%81%E5%B8%AE%E7%BD%91%E9%A1%B5%E5%B8%83%E5%B1%80%E7%A5%9E%E5%99%A8%E6%96%B0%E7%89%88%E5%8A%9F%E8%83%BD%E4%BB%8B%E7%BB%8D.mp4" }, "__id": "202007201158242222_11518" }]
-      this.arrHtmlHead = [{ "__id": "202008241821951616_7398", "cf": { "rel": "stylesheet", "href": "//qn-static.dmagic.cn/public.1.2.5.css\"" }, "children": [], "tag": "link", "diyProp": [] }]
+      this.arrHtml =
+        [{
+          "tag": "body",
+          showChildren: true,
+          "children": [{ "text": " 欢迎使用码帮网页在线布局工具，这里是演示区域，下方是一个介绍本工具使用的视频(建议全屏观看)", "tag": "div", "children": [], "cf": { "style": "margin-bottom:10px;color:#FF9900;background-color:#FFFFFF;padding:10px;" }, "__id": "202007201440332020_42202" }, { "tag": "video", "children": [], "cf": { "controls": "controls", "width": "300", "src": "http://qn-dmagic.dmagic.cn/%E7%A0%81%E5%B8%AE%E7%BD%91%E9%A1%B5%E5%B8%83%E5%B1%80%E7%A5%9E%E5%99%A8%E6%96%B0%E7%89%88%E5%8A%9F%E8%83%BD%E4%BB%8B%E7%BB%8D.mp4" }, "__id": "202007201158242222_11518" }, { "__id": "202009051127445555_90462", "cf": { "src": "http://qn-dmagic.dmagic.cn/20200905112580000_42090_js%E4%B8%BA%E6%89%80%E6%AC%B2%E4%B8%BA.gif" }, "children": [], "tag": "img", "diyProp": [] }],
+          "cf": {},
+          "__id": "202007201440332020_42202"
+        }]
+
+
 
     }
     if (this.modeShowHtml == 'actual') {//如果是真实模式
@@ -765,10 +816,7 @@ export default {
   async mounted() {
     util.ajaxAddVisitRecord({ tagPage: "auto_layout", })//变量：{ajax添加访客记录函数}
     util.changeFavicon(`//qn-dmagic.dmagic.cn/202007171024372424_67675_layout.png`)//函数：{改变网页标题图标的函数}
-    window.arr_$target = []
-
-
-
+    window.arr_$targetIndex = []//聚焦的元素链索引数组
   }
 };
 </script>
@@ -780,23 +828,16 @@ export default {
   outline: 3px #000 solid;
   height: calc(100vh - 70px);
 }
-
 .box_fullScreen .box_iframe {
   background-image: none;
   border: none;
   outline: none;
   height: 100vh;
 }
-
-.box_main {
-  height: 1000px;
-}
-
 .box_fullScreen .box_main {
   padding: 0;
   height: auto;
 }
-
 .box_html_show {
   padding-top: 1px;
 }
@@ -822,6 +863,26 @@ export default {
 .btn_class.focus {
   border: 1px #f60 solid;
 }
+/* 饿了么复选框的边距补丁 */
+.out >>> .el-checkbox {
+  margin-right: 6px;
+}
+.out >>> .el-checkbox__label {
+  padding-left: 4px;
+}
+/* html配置集合条目背景色去除 */
+.box_html_set >>> .data-group {
+  background-color: #fff;
+  outline: 1px dashed #ccc;
+}
+/* html配置集合根元素特殊处理 */
+.box_html_set >>> .data-group.root_collection {
+  outline: none;
+}
+/* html配置集合根元素特殊处理 */
+.box_html_set >>> .data-group.root_collection.active {
+  outline: none;
+}
 </style>
 <!--全局样式-->
 <style >
@@ -846,4 +907,62 @@ export default {
 [focus_ele="1"] {
   outline: 2px #f00 solid;
 }
+/* 小操作按钮 */
+.btn_small_op {
+  border: 1px #ddd solid;
+  color: #777;
+  border-radius: 5px;
+  padding: 3px 6px;
+  font-size: 12px;
+  text-decoration: none;
+  margin: 0 5px 0 0;
+  background-color: #fff;
+  cursor: pointer;
+}
+/* 小操作按钮 */
+.btn_mimi {
+  font-style: normal;
+  border: 1px #ddd solid;
+  color: #777;
+  border-radius: 5px;
+  padding: 3px 6px;
+  font-size: 12px;
+  text-decoration: none;
+  margin: 0 5px 0 0;
+  background-color: #fff;
+  cursor: pointer;
+}
+.btn_pop_close {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  padding: 2px;
+  cursor: pointer;
+  font-size: 18px;
+  color: #666;
+  border: 1px #999 solid;
+  border-radius: 50%;
+}
+/****************************处理切换tabs时内部popover的显示和隐藏-START****************************/
+.tab_body_popover,
+.tab_head_popover {
+  display: none;
+}
+
+body[tab="tab_body"] .tab_body_popover {
+  display: block;
+}
+
+body[tab="tab_head"] .tab_head_popover {
+  display: block;
+}
+/****************************处理切换tabs时内部popover的显示和隐藏-END****************************/
+/****************************处理切换popover弹窗样式-START****************************/
+.el-popover {
+  border: 1px solid #999;
+}
+.el-popper[x-placement^="bottom"] .popper__arrow {
+  border-bottom-color: #999;
+}
+/****************************处理切换popover弹窗样式-END****************************/
 </style>

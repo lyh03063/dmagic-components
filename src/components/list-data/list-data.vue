@@ -460,7 +460,8 @@ export default {
     getSigleLinkUrl(item, row) {
 
       /****************************获取当前页面的路径-START****************************/
-      let { path } = this.$route
+      let {$route}=this;
+      let { path } = $route
       let arrPath = path.split("/")
       arrPath.length--//去掉最后一个目录
       let pathNew = arrPath.join("/")
@@ -472,7 +473,7 @@ export default {
       let linkNeed = item.url ? item.url + row[this.cf.idKey] : "javascript:;";
       //如果地址格式函数存在
       if (item.urlFormatter) {
-        linkNeed = item.urlFormatter(row, pathNew);
+        linkNeed = item.urlFormatter(row, pathNew,$route);
       }
       return linkNeed;
     },
@@ -556,7 +557,8 @@ export default {
       }
       return this.$emit("bacth-btn-click", eventType, selection); //抛出自定义事件
     },
-    showAdd() {
+    //TODO:显示新增弹窗
+    showAdd() {//显示新增弹窗
       //清空初始化数据ajax地址，赋值数据时可能添加了这个，
       this.$refs.listDialogs.cfAddDialog.cfFormAdd.urlInit = null
       this.$refs.listDialogs.cfAddDialog.visible = true
@@ -614,12 +616,17 @@ export default {
     },
     //-------------确认删除数据的函数--------------
     async confirmDelete(dataId) {
-      let clickStatus = await this.$confirm("确认删除该数据？", "提示",
+      let idType = util.type(dataId);
+      let textTips="确认删除该数据？";
+       if (idType == "array") {
+         textTips=`确认删除选中的${dataId.length}条数据？`;
+        } 
+      let clickStatus = await this.$confirm(textTips, "提示",
         { confirmButtonText: "确定", cancelButtonText: "取消", type: "warning" }
       ).catch(() => { });
       let deleteData = []; //删除的数据，统一为数组格式
       if (clickStatus == "confirm") {
-        let idType = util.type(dataId);
+        
         //如果是id数组（批量删除）
         if (idType == "array") {
           deleteData = this.tableData.filter(doc => dataId.includes(doc[this.cf.idKey]));

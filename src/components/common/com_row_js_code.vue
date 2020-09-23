@@ -7,6 +7,8 @@
       </div>
       <div class>
         <span class="C_3a0 FS14 ">{{docComplete.title}}</span>
+
+        <span v-if="docComplete.jsCode" class="C_999 FS12">：[{{bytes(docComplete.jsCode)}}b]</span>
         <span v-if="docComplete.desc" class="C_333 FS14">：{{docComplete.desc}}</span>
 
         <el-link type="primary" @click="isShowEditJs=true" v-if="!isShowEditJs" class="ML10">编辑</el-link>
@@ -62,6 +64,7 @@ export default {
   components: {},
 
   data() {
+
     return {
       vm_select_list_data: null,
       isShowEditJs: false,//是否显示js代码块编辑表单
@@ -73,6 +76,14 @@ export default {
     };
   },
   computed: {
+     //  TODO：computed-bytes
+    bytes: function () {
+      let fn = function (str) {
+        return util.countByte(str)
+      }
+      return fn
+
+    },
     countRelJs: function () {
       return lodash.get(this.docComplete, `relJsCode.length`);
     },

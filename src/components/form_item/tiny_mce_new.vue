@@ -63,6 +63,12 @@ export default {
         'quickbars', 'lists', 'image', 'autoresize', 'code', 'link', 'autolink', 'codesample', 'table', 'powerpaste',
 
       ],
+      //配置代码样例是选项***
+      codesample_languages: [
+        { text: 'JavaScript', value: 'javascript' },
+        { text: 'HTML/XML', value: 'html' },
+        { text: 'CSS', value: 'css' },
+      ],
       menubar: false,
       statusbar: false,
       // inline: true,
