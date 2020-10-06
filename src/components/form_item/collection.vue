@@ -224,6 +224,7 @@ export default {
             if (!itemEach.__id) {//如果没有__id，补上，因为很多地方要用到
               itemEach.__id = util.getTimeRandom()
             }
+            //  itemEach.__id = util.getTimeRandom()
           })
         }
       },
@@ -411,7 +412,7 @@ export default {
   line-height: 26px;
   background-color: #f0f0f0;
   margin: 0 0 10px 0;
-  overflow: hidden;
+  /* overflow: hidden; */
   display: flex;
 }
 

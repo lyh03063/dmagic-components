@@ -1,5 +1,6 @@
 <template>
   <div class="out">
+    <!-- pid:{{pid}} -->
     <!--修改属性弹窗-->
     <el-dialog
       custom-class="n-el-dialog"
@@ -12,7 +13,12 @@
       v-if="isShowDialog"
     >
       <div class>
-        <el-input style="width:500px;" type="textarea" :rows="4" v-model="propValCurr"></el-input>
+        <el-input
+          style="width: 500px"
+          type="textarea"
+          :rows="4"
+          v-model="propValCurr"
+        ></el-input>
         <div class="PT10 TAC">
           <el-button type="primary" @click="savePropVal">保存</el-button>
         </div>
@@ -26,7 +32,7 @@
       :show-toolbar="true"
       :cf-form="cf.cfForm"
       :cfElBtnAdd="cfElBtnAdd"
-      :hidePart="{'btn-add':true}"
+      :hidePart="{ 'btn-add': true }"
       data-slot="dataSlot1"
       :showToolbar="false"
       :showSortNum="false"
@@ -38,117 +44,130 @@
       titleDialogAdd="添加Html元素/属性"
     >
       <!--插槽内容-->
-      <template v-slot:dataSlot1="{doc,docEntity,index}">
-        <div class="WP100 C_3a0 PL10" v-if="doc.desc">&lt;!-- {{doc.desc}}--&gt;</div>
+      <template v-slot:dataSlot1="{ doc, docEntity, index }">
         <!-- {{index}}--- -->
         <!-- {{docEntity.__id}} -->
-
-        <span
-      
-          class="DPFC PL5 BC_f0f0f0"
-          v-if="doc&&(doc.tag!=='body'&&doc.tag!=='head')"
-          style="flex-wrap:wrap"
-        >
+        <!-- v-if="doc&&(doc.tag!=='body'&&doc.tag!=='head')" -->
+        <div class="DPFC PL5" style="flex-wrap: wrap">
           <!--折叠按钮-->
-
-          <div class="Cur1 MR4 DPFC LH18" @click="fold(docEntity)" v-if="doc.children.length">
-            <i class="el-icon-caret-right FS16" :class="{Rotate90:docEntity.showChildren}"></i>
-            <span class="C_3a0 FS14">{{doc.children.length}}</span>
+          <div
+            class="btn_fold"
+            @click="fold(docEntity)"
+            v-if="doc.children.length"
+          >
+            <i
+              class="el-icon-caret-right FS16"
+              :class="{ Rotate90: docEntity.showChildren }"
+            ></i>
+            <!-- <span class="C_3a0 FS14">{{ doc.children.length }}</span> -->
           </div>
           <div class v-show="allowEditHtml">
             <!--复选框-->
-            <input v-model="docEntity.checked" class="DPB MR4" type="checkbox" />
+            <input
+              v-model="docEntity.checked"
+              class="DPB MR4"
+              type="checkbox"
+            />
           </div>
 
           <!--标签开始符-->
           <span
             class="code_html_tag FS14"
             @click="$refs.collectionTag.showEditDialog(index)"
-          >&lt;{{doc[cf.labelKey]}}</span>
-          <!--html属性-->
-          <span class="FS14" v-for="(value,prop) in docEntity.cf" :key="prop">
-            <template v-if="prop!='focus_ele'">
-              <span class="ML10 code_html_prop">{{prop}}</span>
-              <span>=</span>
-              <el-popover
-                placement="bottom-start"
-                :popper-class="popperClass"
-                width="520"
-                @after-enter="afterEnter"
-                trigger="manual"
-                v-model="showProp[`${docEntity.__id}_${prop}`]"
-                @show="fnShowPover({docEntity,prop})"
-                class="PSR"
-              >
-                <!-- {{docEntity}} -->
-                <div class="PR22 PSR">
-                  <!--关闭按钮-->
-                  <i
-                    class="el-icon-close btn_pop_close"
-                    @click="showProp[`${docEntity.__id}_${prop}`]=false"
-                  ></i>
-                  <dm_dynamic_form :cf="cfFormPropVal" v-model="docEntity.cf" class="showBigIn"></dm_dynamic_form>
-                </div>
-                <!-- showPopover -->
-                <span slot="reference" @click="showPopoverProp({docEntity,prop})">
-                  <span
-                    class="code_html_val"
-                    :title="value"
-                    slot="reference"
-                  >"{{valueShort(value)}}"</span>
-                </span>
-              </el-popover>
-            </template>
-          </span>
+            >&lt;{{ doc[cf.labelKey] }}</span
+          >
+          <!-- {{docEntity.diyProp}}--- -->
+
           <!-- 自定义属性 -->
-          <span class="FS14" v-for="(item,index) in docEntity.diyProp" :key="index">
-            <span class="ML10 code_html_prop">{{item.prop}}</span>
+          <span
+            class="FS14"
+            v-for="(item, index) in docEntity.diyProp"
+            :key="index"
+          >
+            <span class="ML10 code_html_prop">{{ item.prop }}</span>
             <span>=</span>
+
             <el-popover
               placement="bottom-start"
               :popper-class="popperClass"
               @after-enter="afterEnter"
               width="420"
               trigger="manual"
-              v-model="showPropDiy[`${docEntity.__id}_${item.prop}`]"
+              v-model="
+                vm_auto_layout.showPopoverBody[`${pid}__${docEntity.__id}_${item.prop}`]
+              "
             >
               <!-- {{docEntity}} -->
               <div class="showBigIn PSR PR22">
                 <!--关闭按钮-->
                 <i
                   class="el-icon-close btn_pop_close"
-                  @click="showPropDiy[`${docEntity.__id}_${item.prop}`]=false"
+                  @click="
+                    vm_auto_layout.showPopoverBody[
+                    
+                      `${pid}__${docEntity.__id}_${item.prop}`
+                    ] = false
+                  "
                 ></i>
-                <el-input type="textarea" :rows="4" placeholder="请输入内容" v-model="item.value"></el-input>
+                <el-input
+                  type="textarea"
+                  :rows="4"
+                  placeholder="请输入内容"
+                  v-model="item.value"
+                ></el-input>
                 <!-- <dm_dynamic_form :cf="cfFormPropVal" v-model="docEntity.cf"></dm_dynamic_form> -->
               </div>
-              <span slot="reference" @click="showPopoverPropDiy({docEntity,prop:item.prop})">
-                <span
-                  class="code_html_val"
-                  :title="item.value"
-                  slot="reference"
-                >"{{valueShort(item.value)}}"</span>
+              <span
+                slot="reference"
+                @click="showPopoverPropDiy({ docEntity, prop: item.prop })"
+              >
+                <span class="code_html_val" :title="item.value" slot="reference"
+                  >"{{ valueShort(item.value) }}"</span
+                >
               </span>
             </el-popover>
           </span>
           <!--标签结束符-->
           <span class="code_html_tag FS14 MR5">&gt;</span>
           <!--  TODO:节点内容-->
+          <!-- v-model="showContent[docEntity.__id]" -->
           <el-popover
             class="MR10"
             :popper-class="popperClass"
             placement="bottom-start"
-            :width="doc[cf.labelKey]=='script'?800:500"
+            :width="
+              doc[cf.labelKey] == 'script' || doc[cf.labelKey] == 'style'
+                ? 800
+                : 500
+            "
             @after-enter="afterEnter"
             trigger="manual"
-            v-model="showContent[docEntity.__id]"
+            v-model="
+              vm_auto_layout.showPopoverBody[`${pid}__${docEntity.__id}_in_content`]
+            "
             v-if="!noInnerHtml(doc)"
           >
             <div class="showBigIn PSR" v-if="isShowPopoverIn">
               <!--关闭按钮-->
-              <i class="el-icon-close btn_pop_close" @click="showContent[docEntity.__id]=false"></i>
+
+              <i
+                class="el-icon-close btn_pop_close"
+                @click="
+                  vm_auto_layout.showPopoverBody[
+                    `${pid}__${docEntity.__id}_in_content`
+                  ] = false
+                "
+              ></i>
               <!--如果是script元素-->
-              <dm_js_code_curr v-model="docEntity.text" v-if="doc[cf.labelKey]=='script'"></dm_js_code_curr>
+              <dm_js_code_curr
+                v-model="docEntity.text"
+                v-if="doc[cf.labelKey] == 'script'"
+              ></dm_js_code_curr>
+              <!--如果是style元素-->
+              <dm_css_code_curr
+                v-model="docEntity.text"
+                v-else-if="doc[cf.labelKey] == 'style'"
+              ></dm_css_code_curr>
               <!--否则-->
               <el-input
                 class="WP95"
@@ -161,28 +180,38 @@
             </div>
 
             <!-- END:节点内文本 -->
+
             <div
               class="MR8 FS14 box_innertext PSR"
               slot="reference"
-              style="max-width:300px"
-              @click="showContent[docEntity.__id]=true"
+              style="max-width: 300px"
+              @click="showPopoverPropDiy({ docEntity, prop: 'in_content' })"
             >
-              {{innerText(doc.text)}}
-              <div class="PSA R0 T0 box_count_bytes" v-if="bytes(doc.text)>60">
-                {{bytes(doc.text)}}
-                <span class="ML2" style="color:#ccc">b</span>
+              {{ innerText(doc.text) }}
+              <div
+                class="PSA R0 T0 box_count_bytes"
+                v-if="bytes(doc.text) > 60"
+              >
+                {{ bytes(doc.text) }}
+                <span class="ML2" style="color: #ccc">b</span>
               </div>
             </div>
           </el-popover>
           <!-- <span class="C_999 MR20 FS14" v-if="doc.desc">({{doc.desc}})</span> -->
-          <el-popover placement="right-start" width="260" trigger="hover" v-show="allowEditHtml">
-            <div class="DPF" style="flex-wrap:wrap">
+          <el-popover
+            placement="right-start"
+            width="260"
+            trigger="hover"
+            v-show="allowEditHtml"
+          >
+            <div class="DPF" style="flex-wrap: wrap">
               <i
                 title="+子节点"
                 class="MR10 btn_mimi el-icon-plus"
                 @click="showDialogAddChild(docEntity)"
                 v-if="doc.children && !isNoChildren(doc)"
-              >节点</i>
+                >子节点</i
+              >
 
               <!-- END:Html:子组件按钮 -->
 
@@ -191,13 +220,15 @@
                 class="MR10 btn_mimi el-icon-plus"
                 @click="showDialogAddCom(docEntity)"
                 v-if="doc.children && !isNoChildren(doc)"
-              >组件</i>
+                >子组件</i
+              >
 
               <i
                 title="复制节点"
                 class="MR10 btn_mimi el-icon-document-copy"
                 @click="$refs.collectionTag.copyData(index)"
-              >节点</i>
+                >节点</i
+              >
 
               <i
                 title="修改节点"
@@ -211,25 +242,29 @@
                 title="上移"
                 class="MR10 btn_mimi el-icon-aaa"
                 @click="$refs.collectionTag.move(index, 'up')"
-              >上移</i>
+                >上移</i
+              >
 
               <i
                 title="下移"
                 class="MR10 btn_mimi el-icon-aaa"
                 @click="$refs.collectionTag.move(index, 'down')"
-              >下移</i>
+                >下移</i
+              >
 
               <i
                 title="置顶"
                 class="MR10 btn_mimi el-icon-aaa"
                 @click="$refs.collectionTag.move(index, 'top')"
-              >置顶</i>
+                >置顶</i
+              >
 
               <i
                 title="置底"
                 class="MR10 btn_mimi el-icon-aaa"
                 @click="$refs.collectionTag.move(index, 'bottom')"
-              >置底</i>
+                >置底</i
+              >
 
               <i
                 title="删除当前节点"
@@ -242,30 +277,39 @@
                 title="复制代码到剪贴板"
                 class="MR10 btn_mimi el-icon-document-copy"
                 @click="copyHtmlCode(docEntity)"
-              >代码</i>
+                >代码</i
+              >
 
               <i
                 title="粘贴代码到此"
                 class="MR10 btn_mimi el-icon-document-copy"
                 @click="pasteHtmlForChildren(docEntity)"
-              >粘贴代码到此</i>
+                >粘贴代码到此</i
+              >
             </div>
             <span slot="reference" class="el-icon-setting DP3 FS18 MT4"></span>
             <!-- <el-button  icon="el-icon-more" size="mini">操作</el-button> -->
           </el-popover>
           <div class="FX1"></div>
-          <i
-                title="删除当前节点"
-                class="C_999 Cur1 P3  el-icon-delete"
-                @click="$refs.collectionTag.deleteData(index)"
-              ></i>
+          <div class="" v-if="allowEditHtml">
+             <i
+            title="删除当前节点"
+            class="C_999 Cur1 P3 el-icon-delete"
+            @click="$refs.collectionTag.deleteData(index)"
+          ></i>
           <i class="ML20 sort-num">拖</i>
-        </span>
+          </div>
+         
+        </div>
+
+        <div class="box_remark" v-if="doc.desc">
+          &lt;!-- {{ doc.desc }}--&gt;
+        </div>
         <!--TODO:子节点批量操作栏-->
         <div
           class="PL10 C_999 PT8"
-          v-show="docEntity.showChildren&&allowEditHtml"
-          v-if="doc.children&&doc.children.length"
+          v-show="docEntity.showChildren && allowEditHtml"
+          v-if="doc.children && doc.children.length"
         >
           <i
             title="全选/全不选子节点"
@@ -276,12 +320,14 @@
             title="+子节点"
             class="MR10 btn_mimi el-icon-plus"
             @click="showDialogAddChild(docEntity)"
-          >节点</i>
+            >子节点</i
+          >
           <i
             title="+选择子组件作为子节点"
             class="MR10 btn_mimi el-icon-plus"
             @click="showDialogAddCom(docEntity)"
-          >组件</i>
+            >子组件</i
+          >
           <i
             title="删除选中子节点"
             class="MR10 btn_mimi el-icon-delete"
@@ -291,27 +337,46 @@
             title="复制选中子节点代码"
             class="MR10 btn_mimi el-icon-document-copy"
             @click="copyCheckedHtml(docEntity)"
-          >代码</i>
-          <i title="粘贴代码到此" class="MR10 btn_mimi" @click="pasteHtmlForChildren(docEntity)">粘贴</i>
-          <i title="继续展开" class="MR10 btn_mimi el-icon-s-unfold" @click="unfoldContinue(docEntity)"></i>
-          <i title="全部折叠" class="MR10 btn_mimi el-icon-s-fold" @click="foldContinue(docEntity)"></i>
+            >代码</i
+          >
+          <i
+            title="粘贴代码到此"
+            class="MR10 btn_mimi"
+            @click="pasteHtmlForChildren(docEntity)"
+            >粘贴</i
+          >
+          <i
+            title="继续展开"
+            class="MR10 btn_mimi el-icon-s-unfold"
+            @click="unfoldContinue(docEntity)"
+          ></i>
+          <i
+            title="全部折叠"
+            class="MR10 btn_mimi el-icon-s-fold"
+            @click="foldContinue(docEntity)"
+          ></i>
         </div>
+        <!-- :class="{PL12:(doc.tag!=='body'&&doc.tag!=='head')}" -->
         <div
-          class="BC_fff PT0 PR12 PB1 MT8"
-          :class="{PL12:(doc.tag!=='body'&&doc.tag!=='head')}"
-          v-if="doc.children"
+          class="BC_fff PT0 PR12 PB1 MT8 PL15"
+          v-if="doc.children&&doc.children.length"
           v-show="docEntity.showChildren"
         >
           <!--END:Html:递归-->
           <dm_row_html_tag
-            :ref="`children_${docEntity.__id}`"
+          :pid="`${pid}__${docEntity.__id}`"
+            :ref="`children_${pid}__${docEntity.__id}`"
             @add_son_com="addSonComFromChildren"
             @html_tag_mouseenter="htmlTagMouseenterFromChildren"
             @html_tag_mouseleave="htmlTagMouseleaveFromChildren"
             class
             v-model="docEntity.children"
-            v-if="docEntity.children"
           ></dm_row_html_tag>
+        </div>
+        <div class="PL2">
+          <span class="code_html_tag FS14"
+            >&lt;/{{ doc[cf.labelKey] }}&gt;</span
+          >
         </div>
       </template>
     </dm_collection>
@@ -325,6 +390,9 @@ export default {
   mixins: [MIX.base, MIX.form_item_new],
   name: "dm_row_html_tag",//
   props: {
+    pid:{//父元素的__id值，用于形成绝对唯一的id链条
+      default:"body"
+    },
     cf: {
       default: function () {
         return {};
@@ -334,8 +402,11 @@ export default {
   //  FIXME:data配置
   data() {
     return {
-      showPropDiy: {},//显示html-diy属性popover弹窗配置对象
-      showProp: {},//显示html-cf属性的popover弹窗配置对象
+     
+      vm_auto_layout: null,//父组件
+
+
+
       popperClass: "",//popper弹窗的附加类名
       isShowPopoverIn: true,//是否显示el-popover内部盒子
       popperOptions: {
@@ -533,24 +604,16 @@ export default {
         this.propValCurr = cf[this.propCurr];
       }
     },
-    //TODO:函数：{showPopoverProp}
-    showPopoverProp: async function ({ docEntity, prop }) {
-      let { __id } = docEntity;
-      let { showProp } = this
-      for (let prop in showProp) {//遍历showProp,全部设置为false
-        showProp[prop] = false
-      }
-      // showProp[`${docEntity.__id}_${prop}`] = true
-      this.$set(showProp, `${docEntity.__id}_${prop}`, true);
-    },
+
     //TODO:函数：{showPopoverPropDiy}
     showPopoverPropDiy: async function ({ docEntity, prop }) {
+      let { showPopoverBody } = this.vm_auto_layout//提取父组件的数据
       let { __id } = docEntity;
-      let { showPropDiy } = this
-      for (let prop in showPropDiy) {//遍历showProp,全部设置为false
-        showPropDiy[prop] = false
+     
+      for (let prop in showPopoverBody) {//遍历showProp,全部设置为false
+        showPopoverBody[prop] = false
       }
-      this.$set(showPropDiy, `${docEntity.__id}_${prop}`, true);
+      this.$set(showPopoverBody, `${this.pid}__${docEntity.__id}_${prop}`, true);
     },
     //TODO:函数：{popover弹窗完全显示的回调函数}
     afterEnter: async function () {
@@ -628,7 +691,7 @@ export default {
     },
     //函数：{显示添加子元素弹窗函数}
     showDialogAddChild: async function (docEntity) {
-      let key = `children_${docEntity.__id}`;//ref变量
+      let key = `children_${this.pid}__${docEntity.__id}`;//ref变量
       this.$refs[key].$refs.collectionTag.addGroup()//弹窗打开
       this.$set(docEntity, "showChildren", true);//强行展开
     },
@@ -681,41 +744,7 @@ export default {
             },
             { prop: "desc", label: "描述", type: "input", default: "" },
             { prop: "text", label: "innerText(内部文本)", type: "input", },
-            {
-              prop: "cf", label: "公共属性", default: {}, cfForm: {
-                size: "mini",
-                labelWidth: "190px",
-                col_span: 12,
-                formItems: [
-                  { prop: "class", label: "class(类名)", type: "input", },
-                  { prop: "id", label: "id", type: "input" },
-                  // { prop: "style", label: "style(样式)", type: "input" },
-                  { prop: "style", label: "style", component: "dm_input_style_prop", },
-                  { prop: "title", label: "title(悬停提示)", type: "input" },
-                ]
-              }
-            },
-            {
-              prop: "cf", label: "私有属性", default: {}, cfForm: {
-                size: "mini",
-                labelWidth: "190px",
-                col_span: 12,
-                formItems: formItemsAddon
-              }
-            },
-            {
-              prop: "cf", label: "事件属性", default: {}, cfForm: {
-                size: "mini",
-                labelWidth: "190px",
-                col_span: 12,
-                formItems: [
-                  { prop: "onclick", label: "onclick（鼠标点击）", type: "onclick", },
-                  { prop: "ondblclick", label: "ondblclick（鼠标双击）", type: "ondblclick", },
-                  { prop: "onmouseenter", label: "onmouseenter（鼠标进入）", type: "onmouseenter", },
-                  { prop: "onmouseleave", label: "onmouseleave（鼠标离开）", type: "onmouseleave", },
-                ]
-              }
-            },
+
             { prop: "children", show: false, label: "children", type: "jsonEditor", default: [] },
             { "prop": "diyProp", "label": "自定义属性", "col_span": 24, "type": "collection", "cfElBtnAdd": { text: "+添加一组", type: "primary", size: "mini", plain: false }, "collectionCfForm": { col_span: 12, formItems: [{ label: "属性名", prop: "prop", }, { label: "属性值", prop: "value", type: "textarea" },] } }
           ],
@@ -733,6 +762,25 @@ export default {
 };
 </script>
 <style  scoped>
+/* FIXME样式 */
+
+/* 注释节点 */
+.box_remark {
+  width: 100%;
+  color: #3a0;
+  padding-left: 4px;
+  line-height: 12px;
+   margin-top: -2px;
+}
+/* 折叠按钮 */
+.btn_fold {
+  cursor: pointer;
+  margin-left: -22px;
+  margin-right: 4px;
+  display: flex;
+  align-items: center;
+  line-height: 18px;
+}
 .box_innertext {
   border: 1px #333 solid;
   height: 18px;

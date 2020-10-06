@@ -1,9 +1,5 @@
 <template>
   <div class style="padding:10px">
-
-
-
-
     <h1 class="title TAC MB10" id="id_floor_top">{{doc.title}}</h1>
     <div class="desc" v-if="doc.desc">{{doc.desc}}</div>
     <dm_debug_list>
@@ -45,10 +41,16 @@
       ></el-button>
       <div class="C_999 DPIB FR MT6" style="display:flex">
         <span class="keyword_box">关键词：{{doc.keyword}}</span>
-        <el-button plain @click="cfEditDialog.visible=true" size="mini" style="width:60px">编辑</el-button>
+        <el-button
+          plain
+          @click="cfEditDialog.visible=true"
+          size="mini"
+          style="width:60px"
+          v-if="$sys.userId==13691916429"
+        >编辑</el-button>
       </div>
     </div>
- 
+
     <!-- <h1>{{dataTypeLabel}}详情</h1> -->
     <div class="detail_box">
       <!-- 使用v-once指令进行性能优化 -->
@@ -140,6 +142,7 @@
 </template>
 <script>
 export default {
+  mixins: [MIX.base],
   name: "dm_detail_data",
   props: {
     propDataId: null,
@@ -454,12 +457,11 @@ export default {
 </style>
 
 <style >
-.detail_box *{
+.detail_box * {
   /* line-height: normal; */
 }
 
-.detail_box code{
-   line-height: 1; 
+.detail_box code {
+  line-height: 1;
 }
-
 </style>

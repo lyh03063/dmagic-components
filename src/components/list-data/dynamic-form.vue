@@ -34,7 +34,7 @@
               :class="{'form-group-box':true,'form-group-no-label':!item.label}"
               :style="item.style"
             >
-              <div class="FWB FS16">{{item.label}}</div>
+              <div class="FWB FS16 MB8">{{item.label}}</div>
               <!--递归表单组件，如果有配置prop-->
               <dm_dynamic_form :cf="item.cfForm" v-model="formDataNeed[item.prop]" v-if="item.prop">
                 <!--递归插槽-->

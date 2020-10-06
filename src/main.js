@@ -168,9 +168,10 @@ router.beforeEach((to, from, next) => {
     let $sys = util.getLocalStorageObj(systemId); //调用：{从LocalStorage获取一个对象的函数}
     PUB.keyPower = `${systemId}_power`;
     window.rolePower = util.getLocalStorageObj(PUB.keyPower);
+    
     // 如果用户未登录，跳转登录页面
     if ($sys.isLogin != 1) {//Q1：未登录
-        if (to.path.includes('/site/') || to.path.includes('/site_m/') || to.path.includes('/open/')) {//QK1：to路径中包含/site/表示网站首页
+        if (to.path.includes('/site/') || to.path.includes('/site_m/') || to.path.includes('/open/')|| to.path.includes('/detail_data')) {//QK1：to路径中包含/site/表示网站首页
             next();
         } else if (to.path.includes('login')) {//QK2：to路径中包含login
             next();

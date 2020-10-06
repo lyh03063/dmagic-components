@@ -143,6 +143,7 @@ import dm_row_css_code from '../components/tool/row_css_code.vue'
 import dm_js_file_edit from '../components/tool/js_file_edit.vue'
 import dm_js_code_edit from '../components/tool/js_code_edit.vue'
 import dm_js_code_curr from '../components/tool/js_code_curr.vue'
+import dm_css_code_curr from '../components/tool/css_code_curr.vue'
 import dm_score_panel from '../components/tool/score_panel.vue'
 import com_score_panel from '../components/tool/com_score_panel.vue'
 
@@ -278,7 +279,8 @@ const Components = {
   dm_list_simple,dm_detail_son_data,dm_pannel_son_note,
   dm_ele,dm_auto_layout,dm_dialog_select_demo,dm_single_class_edit,dm_row_html_tag,
   dm_dialog_css_prop,dm_dialog_html_tag,
-  dm_js_file_edit,dm_js_code_edit,dm_js_code_curr,dm_score_panel,dm_row_css_code,
+  dm_js_file_edit,dm_js_code_edit,dm_js_code_curr,dm_css_code_curr,
+  dm_score_panel,dm_row_css_code,
   dm_familiarity_select,dm_note_familiarity_select,
   com_score_panel,dm_card_note_normal,dm_card_note_history,dm_card_note_often,
   dm_card_front_demo,

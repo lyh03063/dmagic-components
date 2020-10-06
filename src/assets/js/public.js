@@ -405,6 +405,7 @@ PUB.menuDemo = [
         name: "visualization",
         title: "可视化",
         menuItem: [
+            { name: "collection_demo", title: "集合" },
             { name: "highlight_demo", title: "代码显示高亮" },
             { name: "vedio_demo", title: "视频" },
             { name: "chartAnnulus2", title: "林晓聪chartAnnulus2" },
@@ -415,6 +416,7 @@ PUB.menuDemo = [
             { name: "calendar1", title: "日历组件" },
             { name: "tree_data_normal", title: "树数据组件1" },
             { name: "tree_data_menu", title: "树数据组件2" },
+           
         ]
     },
     {

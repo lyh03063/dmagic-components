@@ -39,7 +39,19 @@
 export default {
   name: "dialog_edit",
   components: {},
-  props: ["cf", "formModify"],
+  props:{
+    cf:{
+      type:Object,
+      default:function(){
+        return {}
+      }
+
+    },
+    formModify:{
+
+    },
+  },
+  
   data() {
     return {
       // cf.visible: null,

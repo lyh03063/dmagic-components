@@ -118,6 +118,7 @@
         :prop="cf.idKey"
         :width="26"
         type="selection"
+    
         v-if="cf.isShowCheckedBox"
       ></el-table-column>
       <el-table-column :width="40" type="expand" v-if="cf.expand" fixed>
@@ -718,6 +719,7 @@ export default {
         this.tableData = util.searchCollection({ dataBase: this.value, findJson: obj1 });
         // this.$emit("input", this.tableData); //****触发外部value的改变，使用watch的话不太好，会有延迟
       }
+      this.loading = false;//取消loading-放在动态数据字典前面，看起来更快加载
       if (this.cf.dynamicDict) {
         //如果{填充配置数组}存在.
         for await (const populateCFEach of this.cf.dynamicDict) {
@@ -733,7 +735,7 @@ export default {
         // }))
       }
       this.$emit("after-search", this.tableData); //触发外部事件
-      this.loading = false;//取消loading
+      
     },
     //函数：{初始化组件cf配置函数}
     initCF: async function () {

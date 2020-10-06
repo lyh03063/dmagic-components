@@ -1,5 +1,5 @@
 <template>
-  <div v-if="readyResource" class="out" :class="{box_fullScreen:fullScreen}">
+  <div v-if="readyResource" class="out" :class="{ box_fullScreen: fullScreen }">
     <dm_debug_list>
       <dm_debug_item v-model="arrHtmlHead" />
       <dm_debug_item v-model="htmlCodeHead" />
@@ -8,7 +8,11 @@
       <!-- <dm_debug_item v-model="docDemo" />
       <dm_debug_item v-model="pageHtmlCode" />-->
     </dm_debug_list>
-    <div class="H50 DPFC BC_000 PL15 MB10" style="background:rgb(84, 92, 100);" v-if="!fullScreen">
+    <div
+      class="H50 DPFC BC_000 PL15 MB10"
+      style="background: rgb(84, 92, 100)"
+      v-if="!fullScreen"
+    >
       <div class="LH50 C_fff FS24 MR20">
         码邦网页布局工具
         <!-- <el-button plain @click="test" size="mini">test</el-button> -->
@@ -17,9 +21,20 @@
         <!--END:视图宽度-->
         <div class="C_fff DPIB MR8">
           宽
-          <input class="W50" type="number" @input="changeWidth" :value="cfDragBox.nWidthLeft-10" /> px
+          <input
+            class="W50"
+            type="number"
+            @input="changeWidth"
+            :value="cfDragBox.nWidthLeft - 10"
+          />
+          px
         </div>
-        <el-select class="W100 MR5" v-model="modeShowHtml" placeholder="请选择" size="mini">
+        <el-select
+          class="W100 MR5"
+          v-model="modeShowHtml"
+          placeholder="请选择"
+          size="mini"
+        >
           <el-option
             v-for="item in optionsMode"
             :key="item.value"
@@ -27,7 +42,13 @@
             :value="item.value"
           ></el-option>
         </el-select>
-        <el-button plain @click="updateIframe" size="mini" v-if="modeShowHtml=='actual'">更新</el-button>
+        <el-button
+          plain
+          @click="updateIframe"
+          size="mini"
+          v-if="modeShowHtml == 'actual'"
+          >更新</el-button
+        >
         <el-checkbox class="C_fff" v-model="isHotUpdate">热更新</el-checkbox>
 
         <a
@@ -38,20 +59,30 @@
         >
           <el-button plain size="mini">预览</el-button>
         </a>
-        <el-checkbox class="ML10 C_fff" v-model="cfDragBox.isShowLeft">演示区</el-checkbox>
-        <el-checkbox class="C_fff" v-model="cfDragBox.isShowRight">编辑区</el-checkbox>
+        <el-checkbox class="ML10 C_fff" v-model="cfDragBox.isShowLeft"
+          >演示区</el-checkbox
+        >
+        <el-checkbox class="C_fff" v-model="cfDragBox.isShowRight"
+          >编辑区</el-checkbox
+        >
       </div>
-      <div class="PR15" v-if="demoId&&docDemo">
-        <span class="C_fff FS16 MR10">{{docDemo.title}}</span>
+      <div class="PR15" v-if="demoId && docDemo">
+        <span class="C_fff FS16 MR10">{{ docDemo.title }}</span>
         <!-- v-if="$power('groupDataList.all.modify')" -->
-        <el-button plain @click="saveDemo" size="mini" v-if="isMine">保存demo</el-button>
-        <el-button plain @click="showDialogSaveMyDemo" size="mini">拷贝</el-button>
+        <el-button plain @click="saveDemo" size="mini" v-if="isMine"
+          >保存demo</el-button
+        >
+        <el-button plain @click="showDialogSaveMyDemo" size="mini"
+          >拷贝</el-button
+        >
         <a class="ML10" target="_blank" href="#/open/auto_layout">
           <el-button plain size="mini">新建demo</el-button>
         </a>
       </div>
       <div class="PT8 PR15" v-else>
-        <el-button plain @click="showDialogSaveMyDemo" size="mini">保存为我的demo</el-button>
+        <el-button plain @click="showDialogSaveMyDemo" size="mini"
+          >保存为我的demo</el-button
+        >
       </div>
     </div>
     <div class="PL8 PR8 box_main FM_JS">
@@ -61,9 +92,18 @@
             <!--END:iframe视窗-->
             <!-- scrolling="no" -->
             <div class="MR10">
-              <iframe id="id_iframe" class="WP100 box_iframe" style v-if="modeShowHtml=='actual'"></iframe>
+              <iframe
+                id="id_iframe"
+                class="WP100 box_iframe"
+                style
+                v-if="modeShowHtml == 'actual'"
+              ></iframe>
             </div>
-            <div id="id_html_box" class="box_html_show MR10" v-if="modeShowHtml!='actual'">
+            <div
+              id="id_html_box"
+              class="box_html_show MR10"
+              v-if="modeShowHtml != 'actual'"
+            >
               <!--html元素-->
               <dm_ele
                 :tag="doc.tag"
@@ -71,18 +111,20 @@
                 :diyProp="doc.diyProp"
                 :text="doc.text"
                 :children="doc.children"
-                v-for="(doc,i) in arrHtml"
+                v-for="(doc, i) in arrHtml"
                 :key="i"
               ></dm_ele>
             </div>
           </div>
         </template>
         <template #right>
-          <div class="panel_config" style="min-width:660px">
+          <div class="panel_config" style="min-width: 660px">
             <div class>
               <div class="PSR">
-                <div class="PSA R10 T6" style="z-index:888;">
-                  <el-button plain @click="dialogSelectDemo" size="mini">demo库</el-button>
+                <div class="PSA R10 T6" style="z-index: 888">
+                  <el-button plain @click="dialogSelectDemo" size="mini"
+                    >demo库</el-button
+                  >
                 </div>
               </div>
               <!-- TODO:tabs -->
@@ -95,7 +137,7 @@
                         class="MR5"
                         v-model="modeShowHProp"
                         size="mini"
-                        style="width:120px"
+                        style="width: 120px"
                       >
                         <el-option
                           v-for="item in optionsModeHProp"
@@ -104,17 +146,29 @@
                           :value="item.value"
                         ></el-option>
                       </el-select>
-                      <el-checkbox class="C_666" v-model="allowEditHtml">启用编辑</el-checkbox>
+                      <el-checkbox class="C_666" v-model="allowEditHtml"
+                        >强化编辑</el-checkbox
+                      >
                     </div>
                   </div>
-                  <div class="box_scroll box_html_set">
+                  <div class="box_scroll box_html_set PL20">
                     <!-- END:Html:row_html_tag组件 -->
-                    <dm_row_html_tag class v-model="arrHtml" ref="rowhtml" @add_son_com="addSonCom"></dm_row_html_tag>
+                    <dm_row_html_tag
+                      class
+                      v-model="arrHtml"
+                      ref="rowhtml"
+                      @add_son_com="addSonCom"
+                    ></dm_row_html_tag>
                   </div>
                 </el-tab-pane>
                 <el-tab-pane :label="`head配置(${lengthHead})`" name="tab_head">
                   <div class="PB8">
-                    <el-select class="MR5" v-model="modeShowHProp" size="mini" style="width:120px">
+                    <el-select
+                      class="MR5"
+                      v-model="modeShowHProp"
+                      size="mini"
+                      style="width: 120px"
+                    >
                       <el-option
                         v-for="item in optionsModeHProp"
                         :key="item.value"
@@ -122,7 +176,9 @@
                         :value="item.value"
                       ></el-option>
                     </el-select>
-                    <el-checkbox class="C_666" v-model="allowEditHtml">启用编辑</el-checkbox>
+                    <el-checkbox class="C_666" v-model="allowEditHtml"
+                      >启用编辑</el-checkbox
+                    >
                   </div>
                   <div class="box_scroll box_html_set">
                     <!-- END:Html:row_html_tag组件 -->
@@ -134,10 +190,21 @@
                     ></dm_row_html_tag>
                   </div>
                 </el-tab-pane>
-                <el-tab-pane :label="`Css配置(${arrCss.length})`" name="tab_css" lazy>
+                <el-tab-pane
+                  :label="`Css配置(${arrCss.length})`"
+                  name="tab_css"
+                  lazy
+                >
                   <div class="PB8">
-                    <el-button plain @click="$refs.collectionCss.addGroup()" size="mini">添加Css代码块</el-button>
-                    <el-button plain @click="dialogPasteCss" size="mini">粘贴Css数据</el-button>
+                    <el-button
+                      plain
+                      @click="$refs.collectionCss.addGroup()"
+                      size="mini"
+                      >添加Css代码块</el-button
+                    >
+                    <el-button plain @click="dialogPasteCss" size="mini"
+                      >粘贴Css数据</el-button
+                    >
                   </div>
                   <!-- {{arrCss}} -->
                   <div class="box_scroll">
@@ -148,35 +215,53 @@
                       :show-toolbar="true"
                       :cf-form="cfFormClass"
                       :cfElBtnAdd="cfElBtnAdd"
-                      :hidePart="{'btn-add':true}"
+                      :hidePart="{ 'btn-add': true }"
                       :showSortNum="false"
                       data-slot="dataSlot1"
                     >
                       <!--插槽内容-->
-                      <template v-slot:dataSlot1="{doc,docEntity}">
+                      <template v-slot:dataSlot1="{ doc, docEntity }">
                         <!-- <div class="" >docEntity: {{docEntity}}</div> -->
-                        <dm_pannel_new :cf="cfPannel" :title="`${docEntity.selector}`">
-                          <template #title_bar_box_middle="{vm_title_bar,vm_pannel}">
+                        <dm_pannel_new
+                          :cf="cfPannel"
+                          :title="`${docEntity.selector}`"
+                        >
+                          <template
+                            #title_bar_box_middle="{ vm_title_bar, vm_pannel }"
+                          >
                             <div class="DPF">
-                              <span
-                                class="C_999"
-                              >({{docEntity.arrProp.length}}) {{docEntity.desc?' '+docEntity.desc:''}}</span>
+                              <span class="C_999"
+                                >({{ docEntity.arrProp.length }})
+                                {{
+                                  docEntity.desc ? " " + docEntity.desc : ""
+                                }}</span
+                              >
                               <span
                                 class="FS12 PL5 FX1 OFH"
                                 v-if="!vm_pannel.cfIn.showContent"
                                 v-html="cssCodeShort(docEntity)"
                               ></span>
                               <!-- END:Html:复制CSS到剪贴板按钮 -->
-                              <el-link class="ML5 MR10" @click="copyCssCode(docEntity)">复制</el-link>
+                              <el-link
+                                class="ML5 MR10"
+                                @click="copyCssCode(docEntity)"
+                                >复制</el-link
+                              >
                             </div>
                           </template>
-                          <template #titleBar_boxLeft="{vm_title_bar,vm_pannel}">
+                          <template
+                            #titleBar_boxLeft="{ vm_title_bar, vm_pannel }"
+                          >
                             <div
                               class="PT1 PL6 PR6 WP100 HP100 BC_999 C_fff Cur1"
                               @click="vm_pannel.toggle()"
                             >
                               <i
-                                :class="vm_pannel.cfIn.showContent?'el-icon-arrow-down':'el-icon-arrow-right'"
+                                :class="
+                                  vm_pannel.cfIn.showContent
+                                    ? 'el-icon-arrow-down'
+                                    : 'el-icon-arrow-right'
+                                "
                               ></i>
                             </div>
                           </template>
@@ -206,20 +291,36 @@
                       plain
                       @click="buildHtmlFile"
                       size="mini"
-                      v-if="docDemo&&docDemo.builtFilePath"
-                    >生成静态文件到{{docDemo.builtFilePath}}{{docDemo.builtFileName}}</el-button>
+                      v-if="docDemo && docDemo.builtFilePath"
+                      >生成静态文件到{{ docDemo.builtFilePath
+                      }}{{ docDemo.builtFileName }}</el-button
+                    >
                   </div>
                   <!-- <el-input type="textarea" :rows="8" v-model="htmlCode"></el-input> -->
-                  <dm_code class="FX1" v-model="htmlCode" ref="codeMHtml" :cf="cfCodeMHtml"></dm_code>
+                  <dm_code
+                    class="FX1"
+                    v-model="htmlCode"
+                    ref="codeMHtml"
+                    :cf="cfCodeMHtml"
+                  ></dm_code>
                   <div class>Css：</div>
                   <!-- <el-input type="textarea" :rows="8" v-model="cssCode"></el-input> -->
-                  <dm_code class="FX1" v-model="cssCode" ref="codeMCss" :cf="cfCodeMCss"></dm_code>
+                  <dm_code
+                    class="FX1"
+                    v-model="cssCode"
+                    ref="codeMCss"
+                    :cf="cfCodeMCss"
+                  ></dm_code>
                 </el-tab-pane>
-                <el-tab-pane :label="`相关笔记(${noteListByKeyword.length})`" name="tab4" lazy>
+                <el-tab-pane
+                  :label="`相关笔记(${noteListByKeyword.length})`"
+                  name="tab4"
+                  lazy
+                >
                   <dm_list_flex_res
                     class="MB20"
                     :list="noteListByKeyword"
-                    #default="{item}"
+                    #default="{ item }"
                     col="1"
                   >
                     <div class="group">
@@ -227,13 +328,22 @@
                         class="n-a"
                         target="_blank"
                         :href="`#/detail_data?dataId=${item._id}`"
-                      >{{item.title}}</a>
+                        >{{ item.title }}</a
+                      >
                     </div>
                   </dm_list_flex_res>
                 </el-tab-pane>
                 <!--END:基础信息表单-->
-                <el-tab-pane label="基础信息" name="tab_base" lazy v-if="docDemo&&isMine">
-                  <dm_dynamic_form :cf="cfFormBase" v-model="docDemo"></dm_dynamic_form>
+                <el-tab-pane
+                  label="基础信息"
+                  name="tab_base"
+                  lazy
+                  v-if="docDemo && isMine"
+                >
+                  <dm_dynamic_form
+                    :cf="cfFormBase"
+                    v-model="docDemo"
+                  ></dm_dynamic_form>
                 </el-tab-pane>
               </el-tabs>
             </div>
@@ -243,11 +353,13 @@
     </div>
     <!--End:Html-选择demo弹窗组件-->
     <dm_dialog_select_demo
-      @inited="({vm})=>vm_dialog_select_demo=vm"
+      @inited="({ vm }) => (vm_dialog_select_demo = vm)"
       @select_demo="afterSelectDemo"
     ></dm_dialog_select_demo>
     <!--选择Css属性弹窗组件 -->
-    <dm_dialog_css_prop @inited="({vm})=>vm_dialog_css_prop=vm"></dm_dialog_css_prop>
+    <dm_dialog_css_prop
+      @inited="({ vm }) => (vm_dialog_css_prop = vm)"
+    ></dm_dialog_css_prop>
     <!--填写新建我的demo信息表单弹窗-->
     <el-dialog
       custom-class="n-el-dialog"
@@ -260,7 +372,11 @@
       v-if="isShowDialogSaveMy"
     >
       <div class>
-        <dm_dynamic_form :cf="cfFormAddDemo" v-model="formDataAddDemo" @submit="ajaxAddMyDemo"></dm_dynamic_form>
+        <dm_dynamic_form
+          :cf="cfFormAddDemo"
+          v-model="formDataAddDemo"
+          @submit="ajaxAddMyDemo"
+        ></dm_dynamic_form>
       </div>
     </el-dialog>
     <!--END:粘贴html代码弹窗-->
@@ -336,7 +452,7 @@ export default {
   //FIXME:data配置
   data() {
     return {
-
+      showPopoverBody: {},//html元素的pover弹窗显示对象-给子组件用的
       allowEditHtml: false,//允许编辑html
       isCheckAllHtml: false,
       /****************************Css粘贴-START****************************/
@@ -470,7 +586,7 @@ export default {
     lengthBody() {
       return lodash.get(this.arrHtml, `[0]children.length`)
     },
-     lengthHead() {
+    lengthHead() {
       return lodash.get(this.arrHtmlHead, `[0]children.length`)
     },
     linkFullScreen() {
@@ -691,7 +807,7 @@ export default {
     saveDemo: async function () {
       let clickStatus = await this.$confirm("确定修改？").catch(() => { });
       if (clickStatus != "confirm") return
-      let { arrCss, arrHtml, arrHtmlHead, modeShowHtml, jsCodeTop, cfDragBox, pageHtmlCode, docDemo } = this
+      let { arrCss, arrHtml, arrHtmlHead, modeShowHtml, allowEditHtml,modeShowHProp, jsCodeTop, cfDragBox, pageHtmlCode, docDemo } = this
       arrHtml = arrHtml[0].children;//提取children
       arrHtmlHead = arrHtmlHead[0].children;//提取children
       let { nWidthLeft } = cfDragBox
@@ -700,7 +816,7 @@ export default {
         method: "post", url: `${PUB.domain}/info/commonModify`,
         data: {
           _id: this.demoId, _systemId: "$all", _dataType: "front_demo",
-          _data: { arrCss, arrHtml, arrHtmlHead, modeShowHtml, jsCodeTop, nWidthLeft, pageHtmlCode, title, album, keyword }
+          _data: { arrCss, arrHtml, arrHtmlHead, modeShowHtml, allowEditHtml, modeShowHProp,jsCodeTop, nWidthLeft, pageHtmlCode, title, album, keyword }
         }
       });
       this.$message.success('修改成功');
@@ -720,11 +836,11 @@ export default {
       if (!_userId) {
         return this.$message.error('未登录，无法保存demo');
       }
-      let { arrCss, arrHtml, arrHtmlHead, modeShowHtml, cfDragBox, pageHtmlCode, } = this
+      let { arrCss, arrHtml, arrHtmlHead, modeShowHtml, allowEditHtml,modeShowHProp, cfDragBox, pageHtmlCode, } = this
       let { nWidthLeft } = cfDragBox
       arrHtml = arrHtml[0].children;//提取children
       arrHtmlHead = arrHtmlHead[0].children;//提取children
-      let dataAdd = { ...this.formDataAddDemo, arrCss, arrHtml, arrHtmlHead, modeShowHtml, nWidthLeft, pageHtmlCode }
+      let dataAdd = { ...this.formDataAddDemo, arrCss, arrHtml, arrHtmlHead, modeShowHtml, allowEditHtml,modeShowHProp, nWidthLeft, pageHtmlCode }
       let rsp = await axios({
         method: "post", url: `${PUB.domain}/info/commonAdd`,
         data: { "_data": dataAdd, "_systemId": "sys_api", "_dataType": "front_demo", _userId }
@@ -741,7 +857,7 @@ export default {
         data: { _id: this.demoId, _systemId: "$all" } //传递参数
       });
       this.docDemo = data.doc;
-      let { arrCss = [], arrHtml = [], arrHtmlHead = [], modeShowHtml, jsCodeTop, nWidthLeft = 320, pageHtmlCode } = data.doc
+      let { arrCss = [], arrHtml = [], arrHtmlHead = [], modeShowHtml, allowEditHtml,modeShowHProp, jsCodeTop, nWidthLeft = 320, pageHtmlCode } = data.doc
       this.pageHtmlCode = pageHtmlCode//完整html代码更新
       this.arrHtml = [{
         "tag": "body",
@@ -762,6 +878,10 @@ export default {
       }]
       this.arrCss = arrCss//Css代码更新
       this.modeShowHtml = modeShowHtml || "test"
+      this.allowEditHtml = allowEditHtml || false
+
+      this.modeShowHProp = modeShowHProp ||"whole"
+
       this.jsCodeTop = jsCodeTop//Js代码更新
       this.cfDragBox.nWidthLeft = nWidthLeft;//演示区域宽度
       //根据关键词请求关联数据的ajax固定参数
@@ -795,18 +915,6 @@ export default {
     this.demoId = this.$route.query.demoId;//
     if (this.demoId) {//
       await this.getDemoDoc(); //调用：{获取demo详情函数}
-    } else {
-      this.arrHtml =
-        [{
-          "tag": "body",
-          showChildren: true,
-          "children": [{ "text": " 欢迎使用码帮网页在线布局工具，这里是演示区域，下方是一个介绍本工具使用的视频(建议全屏观看)", "tag": "div", "children": [], "cf": { "style": "margin-bottom:10px;color:#FF9900;background-color:#FFFFFF;padding:10px;" }, "__id": "202007201440332020_42202" }, { "tag": "video", "children": [], "cf": { "controls": "controls", "width": "300", "src": "http://qn-dmagic.dmagic.cn/%E7%A0%81%E5%B8%AE%E7%BD%91%E9%A1%B5%E5%B8%83%E5%B1%80%E7%A5%9E%E5%99%A8%E6%96%B0%E7%89%88%E5%8A%9F%E8%83%BD%E4%BB%8B%E7%BB%8D.mp4" }, "__id": "202007201158242222_11518" }, { "__id": "202009051127445555_90462", "cf": { "src": "http://qn-dmagic.dmagic.cn/20200905112580000_42090_js%E4%B8%BA%E6%89%80%E6%AC%B2%E4%B8%BA.gif" }, "children": [], "tag": "img", "diyProp": [] }],
-          "cf": {},
-          "__id": "202007201440332020_42202"
-        }]
-
-
-
     }
     if (this.modeShowHtml == 'actual') {//如果是真实模式
       await util.timeout(500); //延迟
@@ -817,10 +925,20 @@ export default {
     util.ajaxAddVisitRecord({ tagPage: "auto_layout", })//变量：{ajax添加访客记录函数}
     util.changeFavicon(`//qn-dmagic.dmagic.cn/202007171024372424_67675_layout.png`)//函数：{改变网页标题图标的函数}
     window.arr_$targetIndex = []//聚焦的元素链索引数组
+
+    //绑定关闭页面事件，弹窗提醒
+    window.onbeforeunload = function (e) {
+      var e = window.event || e;
+      e.returnValue = ("确定离开当前页面吗？");
+    }
   }
 };
 </script>
+
+
 <style scoped>
+/* FIXME样式 */
+
 .box_html_show,
 .box_iframe {
   background-image: url("http://tool.alixixi.com/csseditor/images/grid.gif");
@@ -847,7 +965,7 @@ export default {
 .box_scroll {
   height: calc(100vh - 155px);
   overflow-y: auto;
-  padding: 0 5px 0 0;
+  padding: 0 5px 0 20px;
 }
 .out >>> .el-input__inner {
   color: #000;

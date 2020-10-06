@@ -40,7 +40,22 @@
 export default {
   name: "dialog_add",
   components: {},
-  props: ["cf", "formAdd", "tableData"],//静态列表的新增数据需要tableData传入
+  props: {
+    cf: {
+      type: Object,
+      default: function () {
+        return {}
+      }
+
+    },
+    formAdd: {
+
+    },
+    //静态列表的新增数据需要tableData传入
+    tableData: {
+
+    },
+  },
   data() {
     return {
       // cf.visible: null,
@@ -112,7 +127,7 @@ export default {
 
         });
         loading.close(); //关闭loding
-        if(!flagAjaxOk)return //ajax异常退出
+        if (!flagAjaxOk) return //ajax异常退出
         //触发外部事件-把新增前后的数据都传过去
         this.$emit("after-add", response.data.addData, this.IN_formAdd);
       } else {//Q2:{新增数据接口地址}不存在-静态列表
