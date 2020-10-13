@@ -128,6 +128,7 @@ import "codemirror/addon/display/fullscreen.js"; //全屏Js
 
 
 import dm_code from '../components/form_item/codemirror.vue'
+import dm_collection_html_prop from '../components/form_item/collection_html_prop.vue'
 
 import dm_auto_layout from '../components/tool/auto_layout.vue'
 import dm_dialog_select_demo from '../components/tool/dialog_select_demo.vue'
@@ -265,7 +266,7 @@ const Components = {
   dm_json_editor,dm_input_css_prop,dm_input_html_tag,
  dm_ajax_populate,dm_input_style_prop,dm_auto_css_prop,dm_auto_html_tag,
   dm_dynamic_form,dm_list_data,dm_select_ajax_lazy,
-  dm_codemirror:codemirror,dm_code,dm_form_css,
+  dm_codemirror:codemirror,dm_code,dm_form_css,dm_collection_html_prop,
   dm_select_list_data,dm_collection,dm_dialog_edit,dm_dialog_add,dm_form_item,dm_option_input,
   dm_tree_data,dm_select_area,dm_object,
   dm_com_row_js_code,dm_video_player,dm_com_row_css_code,

@@ -115,4 +115,9 @@ export default {
 .item-box >>> .cm-error {
   color: #f00;
 }
+
+/*补丁-强制换行 */
+.item-box >>> .CodeMirror-wrap pre.CodeMirror-line, .item-box >>> .CodeMirror-wrap pre.CodeMirror-line-like{
+  word-break: break-all;
+}
 </style>

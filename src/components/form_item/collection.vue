@@ -108,7 +108,6 @@
 
     <!--修改对象弹窗-->
     <!--用v-show="showDialog"，可避免日期控出错,但有副作用！！！-->
-    <!--用v-show="showDialog"，可避免日期控出错-->
     <el-dialog
       custom-class="n-el-dialog"
       width="95%"
@@ -257,13 +256,14 @@ export default {
     mouseenterG: async function (i) {
       if (this.dragging) return
       this.focusItem = i;
+      let objTarget=this.valueNeed[i]//变量：{当前数据对象}
       this.focusItemBckkup = i;//备份聚焦序号
       if (this.vm_parent) {//清除父级的聚焦，不然显得很杂乱 
         this.vm_parent.focusItem = 99999;
       }
 
 
-      this.$emit("after_mouseenter", { focusIndex: i, list: this.valueNeed });//触发外部数据变更
+      this.$emit("after_mouseenter", { focusIndex: i, list: this.valueNeed,objTarget });//触发外部数据变更
     },
     //函数：{鼠标移出的回调函数}
     mouseleaveG: async function (i) {
@@ -328,12 +328,12 @@ export default {
         }
       });
 
-      if (this.listType == "form") {
-        //如果不是表单类型
+      if (this.listType == "form") {//Q1：{列表类型}是表单类型
+        
 
         this.valueNeed.unshift(obj);//前方追加一组新数据
 
-      } else {
+      } else {//Q2：否则
         this.formDataEdit = obj//表单数据切换
         this.showDialog = true;
       }

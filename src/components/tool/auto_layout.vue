@@ -8,6 +8,7 @@
       <!-- <dm_debug_item v-model="docDemo" />
       <dm_debug_item v-model="pageHtmlCode" />-->
     </dm_debug_list>
+      <!-- {{showPopoverBody}} -->
     <div
       class="H50 DPFC BC_000 PL15 MB10"
       style="background: rgb(84, 92, 100)"
@@ -15,6 +16,7 @@
     >
       <div class="LH50 C_fff FS24 MR20">
         码邦网页布局工具
+      
         <!-- <el-button plain @click="test" size="mini">test</el-button> -->
       </div>
       <div class="FX1">
@@ -29,19 +31,7 @@
           />
           px
         </div>
-        <el-select
-          class="W100 MR5"
-          v-model="modeShowHtml"
-          placeholder="请选择"
-          size="mini"
-        >
-          <el-option
-            v-for="item in optionsMode"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
+
         <el-button
           plain
           @click="updateIframe"
@@ -131,8 +121,12 @@
               <el-tabs v-model="activeName" type="card" @tab-click="tabClick">
                 <el-tab-pane :label="`Body配置(${lengthBody})`" name="tab_body">
                   <div class="DPFC H38">
-                    <!-- TODO:启用编辑 -->
+                    <div class="FX1" ></div>
+              
                     <div class>
+                       <el-checkbox class="C_666" v-model="allowEditHtml"
+                        >强化编辑</el-checkbox
+                      >
                       <el-select
                         class="MR5"
                         v-model="modeShowHProp"
@@ -146,9 +140,7 @@
                           :value="item.value"
                         ></el-option>
                       </el-select>
-                      <el-checkbox class="C_666" v-model="allowEditHtml"
-                        >强化编辑</el-checkbox
-                      >
+                     
                     </div>
                   </div>
                   <div class="box_scroll box_html_set PL20">
@@ -162,24 +154,29 @@
                   </div>
                 </el-tab-pane>
                 <el-tab-pane :label="`head配置(${lengthHead})`" name="tab_head">
-                  <div class="PB8">
-                    <el-select
-                      class="MR5"
-                      v-model="modeShowHProp"
-                      size="mini"
-                      style="width: 120px"
-                    >
-                      <el-option
-                        v-for="item in optionsModeHProp"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                      ></el-option>
-                    </el-select>
-                    <el-checkbox class="C_666" v-model="allowEditHtml"
-                      >启用编辑</el-checkbox
-                    >
-                  </div>
+                 <div class="DPFC H38">
+                    <div class="FX1" ></div>
+              
+                    <div class>
+                       <el-checkbox class="C_666" v-model="allowEditHtml"
+                        >强化编辑</el-checkbox
+                      >
+                      <el-select
+                        class="MR5"
+                        v-model="modeShowHProp"
+                        size="mini"
+                        style="width: 120px"
+                      >
+                        <el-option
+                          v-for="item in optionsModeHProp"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value"
+                        ></el-option>
+                      </el-select>
+                     
+                    </div>
+                  </div>  
                   <div class="box_scroll box_html_set">
                     <!-- END:Html:row_html_tag组件 -->
                     <dm_row_html_tag
@@ -340,6 +337,20 @@
                   lazy
                   v-if="docDemo && isMine"
                 >
+                  <el-select
+                    class="W100  MB20"
+                    v-model="modeShowHtml"
+                    placeholder="请选择"
+                    size="mini"
+                    style="margin-left:120px"
+                  >
+                    <el-option
+                      v-for="item in optionsMode"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    ></el-option>
+                  </el-select>
                   <dm_dynamic_form
                     :cf="cfFormBase"
                     v-model="docDemo"
@@ -566,7 +577,7 @@ export default {
       }],
       arrHtmlHead: [{
         "tag": "head",
-        "children": [{ "cf": {}, "children": [], "tag": "link", "diyProp": [{ "prop": "href", "value": "//qn-static.dmagic.cn/public.1.2.5.css" }, { "prop": "rel", "value": "stylesheet" }], "__id": "202009051152631717_37571" }],
+        "children": [{ "cf": {}, "children": [], "tag": "link", "diyProp": [{ "prop": "href", "value": "https://qn-static.dmagic.cn/public.1.2.5.css" }, { "prop": "rel", "value": "stylesheet" }], "__id": "202009051152631717_37571" }],
         "cf": {},
         "__id": "111",
         showChildren: true,
@@ -637,6 +648,7 @@ export default {
         let arrHtml = lodash.get(this, `arrHtml[0].children`);
         if (!arrHtml) return
         this.htmlCode = util.arrToHtml({ arrHtml })//函数：{根据arrHtml拼接Html代码函数}
+        this.htmlCodeHasId = util.arrToHtml({ arrHtml, needId: true })
         if (this.modeShowHtml == 'actual' && this.isHotUpdate) {
           this.updateIframe()//调用：{更新iframe函数}
         }
@@ -648,6 +660,7 @@ export default {
       async handler(newVal, oldVal) {
         let arrHtml = lodash.get(this, `arrHtmlHead[0].children`);
         this.htmlCodeHead = util.arrToHtml({ arrHtml })//函数：{根据arrHtml拼接Html代码函数}
+        this.htmlCodeHeadHasId = util.arrToHtml({ arrHtml, needId: true })//函数：{根据arrHtml拼接Html代码函数}
         if (this.modeShowHtml == 'actual' && this.isHotUpdate) {
           this.updateIframe()//调用：{更新iframe函数}
         }
@@ -657,6 +670,7 @@ export default {
     },
   },
   methods: {
+
     //TODO:函数：{选项卡点击的函数}
     tabClick: function ({ name }) {
       $("body").attr("tab", this.activeName)
@@ -727,13 +741,17 @@ export default {
     //TODO:函数：{更新iframe函数}
     updateIframe: async function () {
       if (this.modeShowHtml == 'actual') {//如果是真实模式
-        let { cssCode, htmlCode, htmlCodeHead, jsCodeTop } = this
+        let { cssCode, htmlCode, htmlCodeHasId, htmlCodeHead, htmlCodeHeadHasId, jsCodeTop } = this
         let title = ""
         if (this.docDemo) {//如果是修改demo
           title = this.docDemo.title
         }
-        this.pageHtmlCode = util.joinPageHtml({ cssCode, htmlCode, htmlCodeHead, jsCodeTop, title })
-        let pageHtmlCodeIframe = util.joinPageHtml({ cssCode, htmlCode, htmlCodeHead, jsCodeTop, title, inIframe: true })
+        this.pageHtmlCode = util.joinPageHtml({
+          cssCode, htmlCode: htmlCodeHasId, htmlCodeHead: htmlCodeHeadHasId, jsCodeTop, title
+        })
+        let pageHtmlCodeIframe = util.joinPageHtml({
+          cssCode, htmlCode: htmlCodeHasId, htmlCodeHead: htmlCodeHeadHasId, jsCodeTop, title, inIframe: true
+        })
         $("#id_iframe").attr("srcdoc", pageHtmlCodeIframe)
 
       }
@@ -742,7 +760,7 @@ export default {
     updatePageCss: async function () {
 
       this.cssCode = util.joinPageCss({ arrCss: this.arrCss })
-      console.log(`this.cssCode:`, this.cssCode);
+
       if (this.modeShowHtml == 'test') {
         util.addCssToPage({ css: this.cssCode })//调用：{输出css代码到当前页面的函数}
       }
@@ -758,6 +776,7 @@ export default {
     },
     //函数：{选择demo后的回调函数}
     afterSelectDemo: async function ({ doc }) {
+
       doc = lodash.cloneDeep(doc);//深拷贝，避免影响数据源
       let { arrCss, arrHtml, } = doc
       let { vm_dialog_select_demo } = this;
@@ -782,11 +801,12 @@ export default {
       }
       //END:JS-适应子组件插入位置
       if (this.objEleParent) {//Q1:{当前父元素对象}存在
-        this.objEleParent.children.push(...arrHtml)
+        this.objEleParent.children.unshift(...arrHtml)
         this.objEleParent = null;//将{当前父元素对象}设置为null
       } else { //Q2:{否则}
-        arrHtml = arrHtml[0].children;//提取children
-        arrHtml.push(...arrHtml)//html代码更新
+        // arrHtml = arrHtml[0].children;//提取children
+        console.log(`arrHtml:`, arrHtml);
+        this.arrHtml[0].children.unshift(...arrHtml)//html代码更新
       }
       this.arrCss.push(...arrCssNeed)//Css代码更新
       this.$message.success('切换demo成功');
@@ -807,7 +827,7 @@ export default {
     saveDemo: async function () {
       let clickStatus = await this.$confirm("确定修改？").catch(() => { });
       if (clickStatus != "confirm") return
-      let { arrCss, arrHtml, arrHtmlHead, modeShowHtml, allowEditHtml,modeShowHProp, jsCodeTop, cfDragBox, pageHtmlCode, docDemo } = this
+      let { arrCss, arrHtml, arrHtmlHead, modeShowHtml, allowEditHtml, modeShowHProp, jsCodeTop, cfDragBox, pageHtmlCode, docDemo } = this
       arrHtml = arrHtml[0].children;//提取children
       arrHtmlHead = arrHtmlHead[0].children;//提取children
       let { nWidthLeft } = cfDragBox
@@ -816,7 +836,7 @@ export default {
         method: "post", url: `${PUB.domain}/info/commonModify`,
         data: {
           _id: this.demoId, _systemId: "$all", _dataType: "front_demo",
-          _data: { arrCss, arrHtml, arrHtmlHead, modeShowHtml, allowEditHtml, modeShowHProp,jsCodeTop, nWidthLeft, pageHtmlCode, title, album, keyword }
+          _data: { arrCss, arrHtml, arrHtmlHead, modeShowHtml, allowEditHtml, modeShowHProp, jsCodeTop, nWidthLeft, pageHtmlCode, title, album, keyword }
         }
       });
       this.$message.success('修改成功');
@@ -836,11 +856,11 @@ export default {
       if (!_userId) {
         return this.$message.error('未登录，无法保存demo');
       }
-      let { arrCss, arrHtml, arrHtmlHead, modeShowHtml, allowEditHtml,modeShowHProp, cfDragBox, pageHtmlCode, } = this
+      let { arrCss, arrHtml, arrHtmlHead, modeShowHtml, allowEditHtml, modeShowHProp, cfDragBox, pageHtmlCode, } = this
       let { nWidthLeft } = cfDragBox
       arrHtml = arrHtml[0].children;//提取children
       arrHtmlHead = arrHtmlHead[0].children;//提取children
-      let dataAdd = { ...this.formDataAddDemo, arrCss, arrHtml, arrHtmlHead, modeShowHtml, allowEditHtml,modeShowHProp, nWidthLeft, pageHtmlCode }
+      let dataAdd = { ...this.formDataAddDemo, arrCss, arrHtml, arrHtmlHead, modeShowHtml, allowEditHtml, modeShowHProp, nWidthLeft, pageHtmlCode }
       let rsp = await axios({
         method: "post", url: `${PUB.domain}/info/commonAdd`,
         data: { "_data": dataAdd, "_systemId": "sys_api", "_dataType": "front_demo", _userId }
@@ -857,7 +877,7 @@ export default {
         data: { _id: this.demoId, _systemId: "$all" } //传递参数
       });
       this.docDemo = data.doc;
-      let { arrCss = [], arrHtml = [], arrHtmlHead = [], modeShowHtml, allowEditHtml,modeShowHProp, jsCodeTop, nWidthLeft = 320, pageHtmlCode } = data.doc
+      let { arrCss = [], arrHtml = [], arrHtmlHead = [], modeShowHtml, allowEditHtml, modeShowHProp, jsCodeTop, nWidthLeft = 320, pageHtmlCode } = data.doc
       this.pageHtmlCode = pageHtmlCode//完整html代码更新
       this.arrHtml = [{
         "tag": "body",
@@ -880,7 +900,7 @@ export default {
       this.modeShowHtml = modeShowHtml || "test"
       this.allowEditHtml = allowEditHtml || false
 
-      this.modeShowHProp = modeShowHProp ||"whole"
+      this.modeShowHProp = modeShowHProp || "whole"
 
       this.jsCodeTop = jsCodeTop//Js代码更新
       this.cfDragBox.nWidthLeft = nWidthLeft;//演示区域宽度
@@ -992,6 +1012,7 @@ export default {
 .box_html_set >>> .data-group {
   background-color: #fff;
   outline: 1px dashed #ccc;
+  padding-bottom: 3px;
 }
 /* html配置集合根元素特殊处理 */
 .box_html_set >>> .data-group.root_collection {
@@ -1023,7 +1044,7 @@ export default {
   color: #1313f5;
 }
 [focus_ele="1"] {
-  outline: 2px #f00 solid;
+  outline: 5px #f00 solid;
 }
 /* 小操作按钮 */
 .btn_small_op {
@@ -1082,5 +1103,10 @@ body[tab="tab_head"] .tab_head_popover {
 .el-popper[x-placement^="bottom"] .popper__arrow {
   border-bottom-color: #999;
 }
+
+.el-popper[x-placement^="right"] .popper__arrow {
+  border-right-color: #999;
+}
+
 /****************************处理切换popover弹窗样式-END****************************/
 </style>

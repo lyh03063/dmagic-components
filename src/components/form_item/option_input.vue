@@ -1,8 +1,9 @@
 <template>
   <!-- placement不能在对象中传递过来，奇怪 -->
-  <el-popover v-model="visible" v-bind="cf.cfPopover" v-if="ready" placement="right">
+  <el-popover v-model="visible" v-bind="cf.cfPopover" v-if="ready" placement="right" :open-delay="300">
     <!-- {{valueNeed}}-- -->
     <!-- widthG="100px" -->
+    <!-- cf:{{cf}} -->
     <dm_list_flex_res :list="options" #default="{item}" v-bind="cf.cfListFlex">
       <div class="group">
         <i :class="['frequency-option',{focus:valueNeed==item.value}] " @click="fnClickOp(item)">
@@ -76,7 +77,6 @@ export default {
         widthG: "53px",
         spaceY: "5px",
       }
-      console.log(`cfPopover:#####`, cfPopover);
       util.setObjDefault(cfListFlex, cfListFlexDefault);
       util.setObjDefault(this.cf, {
         // isShowSearchForm: false,

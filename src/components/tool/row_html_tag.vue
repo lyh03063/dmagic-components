@@ -80,21 +80,23 @@
 
           <!-- 自定义属性 -->
           <span
-            class="FS14"
+            class="FS14 DPF"
             v-for="(item, index) in docEntity.diyProp"
             :key="index"
           >
-            <span class="ML10 code_html_prop">{{ item.prop }}</span>
-            <span>=</span>
-
-            <el-popover
+            <!--属性名部分-->
+            <!-- <span class="ML10 code_html_prop">{{ item.prop }}</span> -->
+               <el-popover
+               class="ML10"
               placement="bottom-start"
               :popper-class="popperClass"
               @after-enter="afterEnter"
               width="420"
               trigger="manual"
               v-model="
-                vm_auto_layout.showPopoverBody[`${pid}__${docEntity.__id}_${item.prop}`]
+                vm_auto_layout.showPopoverBody[
+                  `${pid}__${docEntity.__id}_${index}_name`
+                ]
               "
             >
               <!-- {{docEntity}} -->
@@ -104,7 +106,48 @@
                   class="el-icon-close btn_pop_close"
                   @click="
                     vm_auto_layout.showPopoverBody[
-                    
+                      `${pid}__${docEntity.__id}_${index}_name`
+                    ] = false
+                  "
+                ></i>
+                <el-input
+                type="textarea"
+                  :rows="1"
+                  placeholder="请输入内容"
+                  v-model="item.prop"
+                ></el-input>
+              </div>
+              <span
+                slot="reference"
+                @click="showPopoverProp({ docEntity, prop: item.prop,index })"
+              >
+                <span class="code_html_prop"  slot="reference"
+                  >{{ valueShort(item.prop) }}</span
+                >
+              </span>
+            </el-popover>
+
+            <span>=</span>
+            <!--属性值部分-->
+            <el-popover
+              placement="bottom-start"
+              :popper-class="popperClass"
+              @after-enter="afterEnter"
+              width="420"
+              trigger="manual"
+              v-model="
+                vm_auto_layout.showPopoverBody[
+                  `${pid}__${docEntity.__id}_${item.prop}`
+                ]
+              "
+            >
+              <!-- {{docEntity}} -->
+              <div class="showBigIn PSR PR22">
+                <!--关闭按钮-->
+                <i
+                  class="el-icon-close btn_pop_close"
+                  @click="
+                    vm_auto_layout.showPopoverBody[
                       `${pid}__${docEntity.__id}_${item.prop}`
                     ] = false
                   "
@@ -119,7 +162,7 @@
               </div>
               <span
                 slot="reference"
-                @click="showPopoverPropDiy({ docEntity, prop: item.prop })"
+                @click="showPopoverPropVal({ docEntity, prop: item.prop })"
               >
                 <span class="code_html_val" :title="item.value" slot="reference"
                   >"{{ valueShort(item.value) }}"</span
@@ -132,7 +175,7 @@
           <!--  TODO:节点内容-->
           <!-- v-model="showContent[docEntity.__id]" -->
           <el-popover
-            class="MR10"
+            class=""
             :popper-class="popperClass"
             placement="bottom-start"
             :width="
@@ -143,7 +186,9 @@
             @after-enter="afterEnter"
             trigger="manual"
             v-model="
-              vm_auto_layout.showPopoverBody[`${pid}__${docEntity.__id}_in_content`]
+              vm_auto_layout.showPopoverBody[
+                `${pid}__${docEntity.__id}_in_content`
+              ]
             "
             v-if="!noInnerHtml(doc)"
           >
@@ -182,10 +227,10 @@
             <!-- END:节点内文本 -->
 
             <div
-              class="MR8 FS14 box_innertext PSR"
+              class="MR2 FS14 box_innertext PSR"
               slot="reference"
               style="max-width: 300px"
-              @click="showPopoverPropDiy({ docEntity, prop: 'in_content' })"
+              @click="showPopoverPropVal({ docEntity, prop: 'in_content' })"
             >
               {{ innerText(doc.text) }}
               <div
@@ -198,11 +243,21 @@
             </div>
           </el-popover>
           <!-- <span class="C_999 MR20 FS14" v-if="doc.desc">({{doc.desc}})</span> -->
+
+          <!--结束标签，同一行（非自闭合元素，且不含子元素）-->
+          <div v-if="!noInnerHtml(doc) && doc.children.length == 0">
+            <span class="code_html_tag FS14"
+              >&lt;/{{ doc[cf.labelKey] }}&gt;</span
+            >
+          </div>
+
           <el-popover
             placement="right-start"
             width="260"
             trigger="hover"
             v-show="allowEditHtml"
+            :open-delay="300"
+            class="ML6"
           >
             <div class="DPF" style="flex-wrap: wrap">
               <i
@@ -291,15 +346,17 @@
             <!-- <el-button  icon="el-icon-more" size="mini">操作</el-button> -->
           </el-popover>
           <div class="FX1"></div>
-          <div class="" v-if="allowEditHtml">
-             <i
-            title="删除当前节点"
-            class="C_999 Cur1 P3 el-icon-delete"
-            @click="$refs.collectionTag.deleteData(index)"
-          ></i>
-          <i class="ML20 sort-num">拖</i>
+          <div
+            class=""
+            v-if="allowEditHtml && doc.tag !== 'body' && doc.tag !== 'head'"
+          >
+            <i
+              title="删除当前节点"
+              class="C_999 Cur1 P3 el-icon-delete"
+              @click="deleteDomCurr(index)"
+            ></i>
+            <i class="ML10 sort-num">拖</i>
           </div>
-         
         </div>
 
         <div class="box_remark" v-if="doc.desc">
@@ -357,14 +414,16 @@
           ></i>
         </div>
         <!-- :class="{PL12:(doc.tag!=='body'&&doc.tag!=='head')}" -->
+        <!-- && doc.children.length 这个还不能删掉，影响添加子节点-->
         <div
-          class="BC_fff PT0 PR12 PB1 MT8 PL15"
-          v-if="doc.children&&doc.children.length"
+          class="BC_fff PT0 PR12 PB1 PL15"
+          :class="{ MT8: doc.children.length }"
+          v-if="doc.children"
           v-show="docEntity.showChildren"
         >
           <!--END:Html:递归-->
           <dm_row_html_tag
-          :pid="`${pid}__${docEntity.__id}`"
+            :pid="`${pid}__${docEntity.__id}`"
             :ref="`children_${pid}__${docEntity.__id}`"
             @add_son_com="addSonComFromChildren"
             @html_tag_mouseenter="htmlTagMouseenterFromChildren"
@@ -373,7 +432,8 @@
             v-model="docEntity.children"
           ></dm_row_html_tag>
         </div>
-        <div class="PL2">
+        <!--结束标签，独占一行（非自闭合元素，且含子元素）-->
+        <div class="PL2 LH14" v-if="!noInnerHtml(doc) && doc.children.length">
           <span class="code_html_tag FS14"
             >&lt;/{{ doc[cf.labelKey] }}&gt;</span
           >
@@ -390,8 +450,8 @@ export default {
   mixins: [MIX.base, MIX.form_item_new],
   name: "dm_row_html_tag",//
   props: {
-    pid:{//父元素的__id值，用于形成绝对唯一的id链条
-      default:"body"
+    pid: {//父元素的__id值，用于形成绝对唯一的id链条
+      default: "body"
     },
     cf: {
       default: function () {
@@ -402,7 +462,7 @@ export default {
   //  FIXME:data配置
   data() {
     return {
-     
+
       vm_auto_layout: null,//父组件
 
 
@@ -498,6 +558,13 @@ export default {
     },
   },
   methods: {
+    //函数：{删除当前html节点函数}-真对右侧的删除节点按钮
+    deleteDomCurr: async function (index) {
+
+      window.arr_$targetIndex = [];//**清空链条数组，否则会影响后续的聚焦
+      this.$refs.collectionTag.deleteData(index)
+
+    },
     //END:函数：{全选按钮值变动函数}
     changeCheckAll: function (docEntity) {
       let { isCheckAll } = docEntity;
@@ -525,7 +592,7 @@ export default {
       let childrenNew = docEntity.children.filter(d => d.checked == true)
       let lengthNew = childrenNew.length
       if (lengthNew == 0) return this.$message.error('未选择任何子节点');
-      let htmlCode = util.arrToHtml({ arrHtml: [...childrenNew] })//函数：{根据arrHtml拼接Html代码函数}
+      let htmlCode = util.arrToHtml({ arrHtml: [...childrenNew], needId: false })//函数：{根据arrHtml拼接Html代码函数}
       util.setClipBoardData(htmlCode)//设置剪贴板内容（兼容谷歌浏览器）
       this.$message.success('复制成功');
     },
@@ -568,7 +635,7 @@ export default {
     //函数：{将html元素代码复制到剪贴板函数}
     copyHtmlCode: function (docEntity) {
       let objNeed = { arrHtml: [docEntity] }
-      let htmlCode = util.arrToHtml({ arrHtml: [docEntity] })//函数：{根据arrHtml拼接Html代码函数}
+      let htmlCode = util.arrToHtml({ arrHtml: [docEntity], needId: false })//函数：{根据arrHtml拼接Html代码函数}
       util.setClipBoardData(htmlCode)//设置剪贴板内容（兼容谷歌浏览器）
       this.$message.success('复制成功');
     },
@@ -605,15 +672,28 @@ export default {
       }
     },
 
-    //TODO:函数：{showPopoverPropDiy}
-    showPopoverPropDiy: async function ({ docEntity, prop }) {
+    //TODO:函数：{showPopoverPropVal}
+    showPopoverPropVal: async function ({ docEntity, prop }) {
       let { showPopoverBody } = this.vm_auto_layout//提取父组件的数据
       let { __id } = docEntity;
-     
+
       for (let prop in showPopoverBody) {//遍历showProp,全部设置为false
         showPopoverBody[prop] = false
+        delete showPopoverBody[prop]//清除掉，调试时好看一些
       }
       this.$set(showPopoverBody, `${this.pid}__${docEntity.__id}_${prop}`, true);
+    },
+
+  //TODO:函数：{showPopoverProp}
+    showPopoverProp: async function ({ docEntity, prop,index }) {
+      let { showPopoverBody } = this.vm_auto_layout//提取父组件的数据
+      let { __id } = docEntity;
+
+      for (let prop in showPopoverBody) {//遍历showProp,全部设置为false
+        showPopoverBody[prop] = false
+        delete showPopoverBody[prop]//清除掉，调试时好看一些
+      }
+      this.$set(showPopoverBody, `${this.pid}__${docEntity.__id}_${index}_name`, true);
     },
     //TODO:函数：{popover弹窗完全显示的回调函数}
     afterEnter: async function () {
@@ -625,14 +705,14 @@ export default {
     },
     //END:函数：{集合鼠标移入的回调函数}
     afterMouseenter: async function (param) {
-      console.log(`afterMouseenter_in_1`);
-      console.log(`param:`, param);
       this.$emit("html_tag_mouseenter", param);//传递到外部组件去执行聚焦！！！
       if (this.vm_auto_layout.modeShowHtml == 'actual') return;//如果是真实模式，退出
 
       //以下是测试模式！！！
       if (!this.vm_auto_layout.isHighLightLayout) return;//如果未启用高亮区块模式，退出
       let { list, focusIndex } = param
+
+
       if (PUB.focusEle && PUB.focusEle.cf && PUB.focusEle.cf.focus_ele) {//如果聚焦元素已存在,去掉聚焦样式
         delete PUB.focusEle.cf.focus_ele
       }
@@ -656,9 +736,9 @@ export default {
     },
     //END:函数：{子html鼠标移入的回调函数}
     htmlTagMouseenterFromChildren: async function (param) {
-      console.log(`htmlTagMouseenterFromChildren_in`);
-      let { focusIndex } = param
-      window.arr_$targetIndex.push(focusIndex)
+      let { focusIndex, objTarget } = param
+      let { __id } = objTarget//获取__id
+      window.arr_$targetIndex.push(__id)
       let $target = util.getParentJQ()
       util.removeAllFocusClass()//调用：{清除所有focus元素状态的函数}
       $target.addClass("focus_ele")
@@ -746,7 +826,8 @@ export default {
             { prop: "text", label: "innerText(内部文本)", type: "input", },
 
             { prop: "children", show: false, label: "children", type: "jsonEditor", default: [] },
-            { "prop": "diyProp", "label": "自定义属性", "col_span": 24, "type": "collection", "cfElBtnAdd": { text: "+添加一组", type: "primary", size: "mini", plain: false }, "collectionCfForm": { col_span: 12, formItems: [{ label: "属性名", prop: "prop", }, { label: "属性值", prop: "value", type: "textarea" },] } }
+
+            { "prop": "diyProp", "label": "html属性", "col_span": 24, component: "dm_collection_html_prop", }
           ],
         },
       });
@@ -770,7 +851,7 @@ export default {
   color: #3a0;
   padding-left: 4px;
   line-height: 12px;
-   margin-top: -2px;
+  margin-top: -2px;
 }
 /* 折叠按钮 */
 .btn_fold {

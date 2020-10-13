@@ -1,0 +1,104 @@
+[{
+	"tag": "body",
+	"showChildren": true,
+	"children": [{
+		"cf": {},
+		"children": [],
+		"tag": "div",
+		"diyProp": [{
+			"prop": "class",
+			"value": "box1 box_tips"
+		}, {
+			"prop": "MT10"
+		}, {
+			"prop": "FS14"
+		}],
+		"text": "vue的简单demo{{ message }}",
+		"__id": "202010081728891313_72909"
+	}, {
+		"desc": "vue视图节点",
+		"showPover": true,
+		"text": "",
+		"tag": "div",
+		"children": [{
+			"cf": {},
+			"children": [{
+				"cf": {},
+				"children": [],
+				"tag": "button",
+				"diyProp": [{
+					"prop": "type",
+					"value": "button",
+					"__id": "20201008170344000_17816"
+				}, {
+					"prop": "class",
+					"value": "box_btn",
+					"__id": "20201008170344000_41374"
+				}, {
+					"prop": "@click",
+					"value": "getValue",
+					"__id": "20201008170344000_26437"
+				}],
+				"text": "获取下方盒子的文字",
+				"__id": "202010081700501010_76827"
+			}, {
+				"cf": {},
+				"children": [],
+				"tag": "button",
+				"diyProp": [{
+					"prop": "type",
+					"value": "button",
+					"__id": "202010081701604444_16453"
+				}, {
+					"prop": "class",
+					"value": "box_btn",
+					"__id": "202010081701604444_21221"
+				}, {
+					"prop": "@click",
+					"value": "setValue",
+					"__id": "202010081701604444_69014"
+				}],
+				"text": "修改下方盒子的文字",
+				"__id": "202010081700501010_34399",
+				"desc": ""
+			}],
+			"tag": "div",
+			"diyProp": [{
+				"prop": "class",
+				"value": "search_item"
+			}],
+			"__id": "202010081700481010_15001",
+			"showChildren": true
+		}, {
+			"__id": "202010081658291313_1286",
+			"children": [],
+			"tag": "div",
+			"diyProp": [],
+			"text": "{{ message }}----{{ type }}--{{ age}}"
+		}],
+		"__id": "202008251903252323_48091",
+		"diyProp": [{
+			"__id": "202010081634335454_32324",
+			"prop": "class",
+			"value": "box1 box_tips MT10 FS14"
+		}, {
+			"__id": "202010081634335454_68409",
+			"prop": "id",
+			"value": "id_box1"
+		}],
+		"showChildren": true
+	}, {
+		"desc": "vue实例创建",
+		"text": "let app = new Vue({\n    el: '#id_box1',\n    data: {\n        message: '测试文字',\n        type: '前端班',\n        age: null\n    },\n    methods: {\n        setValue: function() {\n            this.message += \"码帮124\"\n        },\n        getValue: function() {\n            alert(this.message);\n        },\n    }\n})\napp.age = '18'\nconsole.log(`app:`, app);",
+		"tag": "script",
+		"children": [],
+		"__id": "202010081651933939_95850",
+		"diyProp": [{
+			"__id": "20201008163508099_96527",
+			"prop": "type",
+			"value": "text/javascript"
+		}]
+	}],
+	"cf": {},
+	"__id": "222"
+}]
