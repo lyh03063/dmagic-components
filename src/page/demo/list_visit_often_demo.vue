@@ -11,7 +11,18 @@ export default {
   components: {},
   data() {
     return {
-      cf1: {
+     cf1: {
+            dataTypeDict: "front_demo",
+            findJsonAddon: {
+                tagPage: "auto_layout",
+                _userId: "13691916429"
+            },
+            cfListAddon: {
+                comCard: "dm_card_front_demo_often", //卡片组件
+                pageSize: 200,
+            }
+        },
+      cf1111: {
         dataTypeDict: "js_code",
         findJsonAddon: { tagPage: "js_code_edit",_userId:"13691916429" },
         cfListAddon: {

@@ -369,6 +369,8 @@ PUB.menuDemo = [
         name: "list",
         title: "列表",
         menuItem: [
+            { name: "list_data_collect_demo", title: "列表-我的收藏", },
+            { name: "list_data_version_demo", title: "列表-版本记录", },
             { name: "list_visit_often_demo", title: "列表-最近常用", },
             { name: "list_visit_history_demo", title: "列表-历史记录", },
             { name: "list_demo_hide_table", title: "列表-隐藏表格", },
@@ -438,6 +440,7 @@ PUB.menuDemo = [
         name: "other",
         title: "其他",
         menuItem: [
+            { name: "option_input_demo", title: "候选值组件" },
             { name: "draggable_demo", title: "draggable_demo" },
             { name: "row_html_tag_demo", title: "html集合组件测试" },
             { name: "upload_qiniu", title: "upload_qiniu", route: "/manage/upload_qiniu" },

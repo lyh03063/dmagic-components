@@ -1,40 +1,55 @@
 <template>
   <section class="out" :class="`layer_${layer}`">
     <section class="section_title">
-      <span class="section_title_icon">{{indexText}}</span>
-      <h2 class="FX1">{{doc.targetDoc.title}}</h2>
-      <div class>
-        熟悉度：
-        <dm_familiarity_select
-          class=""
-          v-model="familiarityDoc"
-          :data="doc.targetDoc"
-          :dataType="doc.targetDoc._dataType"
-          v-if="doc.targetDoc._dataType"
-        ></dm_familiarity_select>
-        <i class="el-icon-edit Cur1" @click="editDetail">编辑</i>
+      <span class="section_title_icon">{{ indexText }}</span>
+      <h2 class="FX1">{{ doc.targetDoc.title }}</h2>
+      <div class="DPFC">
+        <div class="" v-if="$sys.isLogin">
+          熟悉度：
+          <dm_familiarity_select
+            class=""
+            v-model="familiarityDoc"
+            :data="doc.targetDoc"
+            :dataType="doc.targetDoc._dataType"
+            v-if="doc.targetDoc._dataType"
+          ></dm_familiarity_select>
+        </div>
+
+        <i
+          class="el-icon-edit Cur1"
+          @click="editDetail"
+          v-if="$sys.userId == 13691916429"
+          >编辑</i
+        >
       </div>
     </section>
     <div class="DPF content_box">
       <!--连线效果-->
       <div class="left_line"></div>
       <div class="right_box FX1">
-        <section v-html="doc.targetDoc._detail" class="section_content"></section>
+        <section
+          v-html="doc.targetDoc._detail"
+          class="section_content"
+        ></section>
 
         <div class v-if="doc.sonList">
           <dm_pannel_son_note
-            :layer="layer+1"
-            :indexText="getSonIndexText(i+1)"
+            :layer="layer + 1"
+            :indexText="getSonIndexText(i + 1)"
             :index="i"
             :doc="docSon"
-            v-for="(docSon,i) in doc.sonList"
+            v-for="(docSon, i) in doc.sonList"
             :key="i"
           ></dm_pannel_son_note>
         </div>
       </div>
     </div>
     <!--编辑笔记弹窗-->
-    <dm_dialog_edit :cf="cfEditDialog" @after-modify="afterModify" v-if="ready"></dm_dialog_edit>
+    <dm_dialog_edit
+      :cf="cfEditDialog"
+      @after-modify="afterModify"
+      v-if="ready"
+    ></dm_dialog_edit>
   </section>
 </template>
 <script>

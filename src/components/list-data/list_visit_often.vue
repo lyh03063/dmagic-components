@@ -1,5 +1,6 @@
 <template>
   <div class="out">
+    
     <dm_list_data :cf="cfList">
       <!--无数据提示插槽传递-->
       <template #noData>
@@ -26,6 +27,7 @@ export default {
 
     let ajaxParam = {}
     if (dataTypeDict) {
+    
       ajaxParam._dataType = dataTypeDict
     }
 

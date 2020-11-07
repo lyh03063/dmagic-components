@@ -8,7 +8,7 @@
       <div class>
         <span class="C_3a0 FS14 ">{{docComplete.title}}</span>
 
-        <span v-if="docComplete.jsCode" class="C_999 FS12">：[{{bytes(docComplete.jsCode)}}b]</span>
+        <span v-if="docComplete.cssCode" class="C_999 FS12">：[{{bytes(docComplete.cssCode)}}b]</span>
         <span v-if="docComplete.desc" class="C_333 FS14">：{{docComplete.desc}}</span>
 
         <el-link type="primary" @click="isShowEditJs=true" v-if="!isShowEditJs" class="ML10">编辑</el-link>
@@ -16,7 +16,7 @@
         <el-link
           type="primary"
           target="_blank"
-          :href="`#/js_code_edit?jsCodeId=${docComplete._id}`"
+          :href="`#/css_code_edit?dataId=${docComplete._id}`"
           class="ML10"
         >新窗口编辑</el-link>
 
@@ -24,18 +24,17 @@
       </div>
     </div>
     <div class="PL8 PR8 PB8" v-if="isShowEditJs">
-      <dm_js_code_curr class v-model="docComplete.jsCode" ref="jsCodeCurr">
+      <dm_css_code_curr class v-model="docComplete.cssCode" ref="codeCurr">
         <template #toobar_addon>
           <el-button plain @click="isShowEditJs=false" size="mini">关闭</el-button>
           <el-button plain @click="saveACode" size="mini">保存</el-button>
         </template>
-      </dm_js_code_curr>
+      </dm_css_code_curr>
     </div>
-    <!-- v-if="isShowSon&&docComplete.relJsCode" -->
     <div class="BC_fff PT1 PL8 PR8 PB1" v-show="isShowSon">
       <!--递归-->
       <dm_select_list_data
-        v-model="docComplete.relJsCode"
+        v-model="docComplete.relCssCode"
         :cf="cf"
         @son_change="son_change"
         @inited="({vm})=>vm_select_list_data=vm"
@@ -46,7 +45,7 @@
 
 <script>
 export default {
-  name: "com_row_js_code",
+  name: "com_row_css_code",
   props: {
 
     doc: {},
@@ -67,7 +66,7 @@ export default {
 
     return {
       vm_select_list_data: null,
-      isShowEditJs: false,//是否显示js代码块编辑表单
+      isShowEditJs: false,//是否显示css代码块编辑表单
       isShowSon: false,
       cfCode: {
         cfCodeMirror: {}
@@ -85,7 +84,7 @@ export default {
 
     },
     countRelJs: function () {
-      return lodash.get(this.docComplete, `relJsCode.length`);
+      return lodash.get(this.docComplete, `relCssCode.length`);
     },
 
 
@@ -98,23 +97,14 @@ export default {
       this.vm_select_list_data.showDialog()//打开选择列表弹窗
 
     },
-    //函数：{显示js代码块编辑表单函数}
+    //函数：{显示css代码块编辑表单函数}
     saveACode: async function () {
-      let flag = await this.$refs.jsCodeCurr.checkSyntax();
-      if (!flag) {
-        let clickStatus = await this.$confirm("代码语法校验错误，确定保存？").catch(() => { });
-        if (clickStatus != "confirm") return
-
-      }
-
-
-
-      let { jsCode } = this.docComplete
+      let { cssCode } = this.docComplete
       await axios({//修改接口-当前父任务
         method: "post", url: `${PUB.domain}/info/commonModify`,
         data: {
           _id: this.docComplete._id, _systemId: "$all",
-          _data: { jsCode }
+          _data: { cssCode }
         }
       });
       this.$message.success('保存成功!');
@@ -138,7 +128,7 @@ export default {
         method: "post", url: `${PUB.domain}/info/commonModify`,
         data: {
           _id: this.docComplete._id, _systemId: "$all",
-          _data: { relJsCode: dataSon }
+          _data: { relCssCode: dataSon }
         }
       });
 

@@ -1,6 +1,6 @@
 <template>
   <!-- placement不能在对象中传递过来，奇怪 -->
-  <el-popover v-model="visible" v-bind="cf.cfPopover" v-if="ready" placement="right" :open-delay="300">
+  <el-popover v-model="visible" v-bind="cf.cfPopover" v-if="ready"  :open-delay="300">
     <!-- {{valueNeed}}-- -->
     <!-- widthG="100px" -->
     <!-- cf:{{cf}} -->
@@ -15,7 +15,7 @@
     <div class="TAR">
       <a href="javascript:;" class="n-a" @click="clear">清除</a>
     </div>
-    <el-button slot="reference" icon="el-icon-more" size="mini"></el-button>
+    <el-button slot="reference" icon="el-icon-more" size="mini">{{btnText||cf.btnText||""}}</el-button>
   </el-popover>
 </template>
 <script>
@@ -23,6 +23,7 @@ export default {
   name: "option_input",
   mixins: [MIX.form_item_new], //混入
   props: {
+    btnText:{},//按钮文字
     cf: {
       type: Object,
       default: function () {
@@ -32,7 +33,7 @@ export default {
     options: {
       type: [Array],
       default: function () {
-        return [{ label: "选项1", value: "1", }, { label: "选项2", value: "2", }]
+        return []
       }
     },
   },

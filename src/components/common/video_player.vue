@@ -45,8 +45,8 @@ export default {
     };
   }, async mounted() {
     this.id = "id_" + util.getTimeRandom();//随机id
-    await util.loadJs({ url: "https://cdnjs.cloudflare.com/ajax/libs/video.js/7.3.0/video.min.js" })//加载
-    await util.loadCss({ url: "https://cdnjs.cloudflare.com/ajax/libs/video.js/7.3.0/video-js.min.css" })//加载
+    await util.loadJs({ url: "https://qn-static.dmagic.cn/video.min.7.3.0.js" })//加载
+    await util.loadCss({ url: "https://qn-static.dmagic.cn/video-js.min.7.3.0.css" })//加载
     var player = videojs(this.id, this.optionsNeed);
   }
 };

@@ -48,6 +48,9 @@ import dm_list_simple from '../components/list-data/list_simple.vue'
 import dm_detail_son_data from '../components/list-data/detail_son_data.vue'
 import dm_list_visit_history from '../components/list-data/list_visit_history.vue'
 import dm_list_visit_often from '../components/list-data/list_visit_often.vue'
+import dm_list_data_version from '../components/list-data/list_data_version.vue'
+import dm_list_data_collect from '../components/list-data/list_data_collect.vue'
+
 
 //以下两个要用到scss
 import dm_manage_home from '../components/manage/listHome.vue'
@@ -107,15 +110,15 @@ import "codemirror/addon/fold/brace-fold.js"; //代码折叠-一定要引用
 import 'codemirror/addon/search/match-highlighter.js'//匹配选中单词高亮
 
 
- /****************************hint-暂时无用-START****************************/
- import "codemirror/addon/hint/show-hint.css"; //hint
+/****************************hint-暂时无用-START****************************/
+import "codemirror/addon/hint/show-hint.css"; //hint
 import "codemirror/addon/hint/show-hint.js"; //
 import "codemirror/addon/hint/xml-hint.js"; //
 import "codemirror/addon/hint/html-hint.js"; //
- /****************************hint-暂时无用-END****************************/
+/****************************hint-暂时无用-END****************************/
 
 
- import "codemirror/mode/css/css.js"; //Css高亮
+import "codemirror/mode/css/css.js"; //Css高亮
 
 import "codemirror/mode/xml/xml.js"; //html高亮
 
@@ -143,24 +146,27 @@ import dm_row_css_code from '../components/tool/row_css_code.vue'
 
 import dm_js_file_edit from '../components/tool/js_file_edit.vue'
 import dm_js_code_edit from '../components/tool/js_code_edit.vue'
+import dm_css_code_edit from '../components/tool/css_code_edit.vue'
 import dm_js_code_curr from '../components/tool/js_code_curr.vue'
 import dm_css_code_curr from '../components/tool/css_code_curr.vue'
 import dm_score_panel from '../components/tool/score_panel.vue'
 import com_score_panel from '../components/tool/com_score_panel.vue'
 
 import dm_familiarity_select from '../components/tool/familiarity_select.vue'
-import  dm_note_familiarity_select from '../components/tool/note_familiarity_select.vue'
+import dm_note_familiarity_select from '../components/tool/note_familiarity_select.vue'
 
 
-import  dm_card_note_normal from '../components/card/note_normal.vue'
-import  dm_card_note_history from '../components/card/note_history.vue'
-import  dm_card_note_often from '../components/card/note_often.vue'
-import  dm_card_front_demo from '../components/card/front_demo.vue'
+import dm_card_note_normal from '../components/card/note_normal.vue'
+import dm_card_note_history from '../components/card/note_history.vue'
+import dm_card_data_version from '../components/card/data_version.vue'
+import dm_card_note_often from '../components/card/note_often.vue'
+import dm_card_front_demo from '../components/card/front_demo.vue'
+import dm_card_data_collect from '../components/card/data_collect.vue'
 
-
-import  dm_card_js_code_hs from '../components/card/js_code_hs.vue'
-import  dm_card_js_code_often from '../components/card/js_code_often.vue'
-
+import dm_card_js_code_hs from '../components/card/js_code_hs.vue'
+import dm_card_auto_layout_hs from '../components/card/auto_layout_hs.vue'
+import dm_card_js_code_often from '../components/card/js_code_often.vue'
+import dm_card_front_demo_often from '../components/card/front_demo_often.vue'
 
 
 
@@ -208,7 +214,7 @@ import com_c_g_company_album from '@/components/common/com_c_g_company_album.vue
 import com_c_g_bankruptcy_file_1 from '@/components/common/com_c_g_bankruptcy_file_1.vue'
 import com_c_g_bankruptcy_file_2 from '@/components/common/com_c_g_bankruptcy_file_2.vue'
 
-
+import com_btn_collect from '@/components/common/btn_collect.vue'
 
 
 
@@ -246,7 +252,7 @@ import search_result from '@/page/search_result'
 import detail_g_card_link from '@/page/detail_g_card_link'
 import detail_group_g_card from '@/page/detail_group_g_card'
 import group_home from '@/page/group_home'
-import study_collect from '@/page/study_collect'
+
 import study_home from '@/page/study_home'
 import study_user from '@/page/study_user'
 import dm_system from '@/page/system/system'
@@ -262,50 +268,51 @@ import dm_manage_base from '@/manage.vue'
 
 
 const Components = {
- dm_test,
-  dm_json_editor,dm_input_css_prop,dm_input_html_tag,
- dm_ajax_populate,dm_input_style_prop,dm_auto_css_prop,dm_auto_html_tag,
-  dm_dynamic_form,dm_list_data,dm_select_ajax_lazy,
-  dm_codemirror:codemirror,dm_code,dm_form_css,dm_collection_html_prop,
-  dm_select_list_data,dm_collection,dm_dialog_edit,dm_dialog_add,dm_form_item,dm_option_input,
-  dm_tree_data,dm_select_area,dm_object,
-  dm_com_row_js_code,dm_video_player,dm_com_row_css_code,
-  dm_detail_group_common,dm_detail_group,dm_detail_g_list,
-  dm_pannel_d_g_list,dm_pannel_d_g_list_html_api,
-  dm_rel_list_data,dm_pannel_rel_list_data,dm_list_common,
-  dm_manage_home,dm_built_file_from_temp,dm_detail_bankruptcy_case,
-  dm_modify_password,dm_aplayer,dm_detail_audio,dm_detail_data,dm_drag_box_width,
-  dm_group_audio,dm_detail_html_api,
-  dm_c_operate_g,dm_c_operate_g_file,dm_c_operate_normal,dm_c_party_case,
-  dm_list_simple,dm_detail_son_data,dm_pannel_son_note,
-  dm_ele,dm_auto_layout,dm_dialog_select_demo,dm_single_class_edit,dm_row_html_tag,
-  dm_dialog_css_prop,dm_dialog_html_tag,
-  dm_js_file_edit,dm_js_code_edit,dm_js_code_curr,dm_css_code_curr,
-  dm_score_panel,dm_row_css_code,
-  dm_familiarity_select,dm_note_familiarity_select,
-  com_score_panel,dm_card_note_normal,dm_card_note_history,dm_card_note_often,
-  dm_card_front_demo,
-  dm_card_js_code_hs,dm_card_js_code_often,
-  dm_list_visit_history,dm_list_visit_often,
-  com_complete,com_imagePreview,com_item_complete_search,com_f_item_listSpecPrice,com_c_item_payStatus,
-  com_listGoods,com_addressObj,com_column_operate_rel_data,com_column_operate_entity_data,com_c_countSonTask,
-  com_c_sonData,com_c_sonTaskGId,com_c_sonNoteGId,com_c_g_person_file,com_c_g_person_url,
-  com_c_g_person_image,com_c_g_person_album,com_c_g_album_image,com_c_g_company_url,com_c_g_company_person,
-  com_c_g_company_file,com_c_g_company_image,com_c_g_company_album,com_c_g_bankruptcy_file_1,com_c_g_bankruptcy_file_2,
+  dm_test,
+  dm_json_editor, dm_input_css_prop, dm_input_html_tag,
+  dm_ajax_populate, dm_input_style_prop, dm_auto_css_prop, dm_auto_html_tag,
+  dm_dynamic_form, dm_list_data, dm_select_ajax_lazy,
+  dm_codemirror: codemirror, dm_code, dm_form_css, dm_collection_html_prop,
+  dm_select_list_data, dm_collection, dm_dialog_edit, dm_dialog_add, dm_form_item, dm_option_input,
+  dm_tree_data, dm_select_area, dm_object,
+  dm_com_row_js_code, dm_video_player, dm_com_row_css_code,
+  dm_detail_group_common, dm_detail_group, dm_detail_g_list,
+  dm_pannel_d_g_list, dm_pannel_d_g_list_html_api,
+  dm_rel_list_data, dm_pannel_rel_list_data, dm_list_common,
+  dm_manage_home, dm_built_file_from_temp, dm_detail_bankruptcy_case,
+  dm_modify_password, dm_aplayer, dm_detail_audio, dm_detail_data, dm_drag_box_width,
+  dm_group_audio, dm_detail_html_api,
+  dm_c_operate_g, dm_c_operate_g_file, dm_c_operate_normal, dm_c_party_case,
+  dm_list_simple, dm_detail_son_data, dm_pannel_son_note,
+  dm_ele, dm_auto_layout, dm_dialog_select_demo, dm_single_class_edit, dm_row_html_tag,
+  dm_dialog_css_prop, dm_dialog_html_tag,
+  dm_js_file_edit, dm_js_code_edit, dm_js_code_curr, dm_css_code_curr,
+  dm_score_panel, dm_row_css_code,dm_css_code_edit,
+  dm_familiarity_select, dm_note_familiarity_select,
+  com_score_panel, dm_card_note_normal, dm_card_note_history, dm_card_note_often,
+  dm_card_front_demo, dm_card_data_version, dm_card_data_collect,
+  dm_card_js_code_hs,dm_card_auto_layout_hs,  dm_card_js_code_often,dm_card_front_demo_often,
+  dm_list_visit_history, dm_list_visit_often, dm_list_data_version, dm_list_data_collect,
+  com_complete, com_imagePreview, com_item_complete_search, com_f_item_listSpecPrice, com_c_item_payStatus,
+  com_listGoods, com_addressObj, com_column_operate_rel_data, com_column_operate_entity_data, com_c_countSonTask,
+  com_c_sonData, com_c_sonTaskGId, com_c_sonNoteGId, com_c_g_person_file, com_c_g_person_url,
+  com_c_g_person_image, com_c_g_person_album, com_c_g_album_image, com_c_g_company_url, com_c_g_company_person,
+  com_c_g_company_file, com_c_g_company_image, com_c_g_company_album,
+   com_c_g_bankruptcy_file_1, com_c_g_bankruptcy_file_2,
 
-  card_course,card_goods,
-  card_student_work,card_case,card_case_old,card_partner,card_product_old,
+  card_course, card_goods,com_btn_collect,
+  card_student_work, card_case, card_case_old, card_partner, card_product_old,
   com_longting_order_statistics,
 
-  banner,contact_right,list_article,list_article_date,list_article_img,
-  breadcrumb,page_foot,page_head,page_menu,pannel_list_article_date,com_block,
+  banner, contact_right, list_article, list_article_date, list_article_img,
+  breadcrumb, page_foot, page_head, page_menu, pannel_list_article_date, com_block,
 
-  dm_left_menu,dm_user_role,
-  search_result,detail_g_card_link,detail_group_g_card,group_home,
-  study_collect,study_home,study_user,dm_manage,
-  dm_system,site_home,site_list_course,site_main,
+  dm_left_menu, dm_user_role,
+  search_result, detail_g_card_link, detail_group_g_card, group_home,
+  study_home, study_user, dm_manage,
+  dm_system, site_home, site_list_course, site_main,
 
-  dm_login,dm_manage_base
+  dm_login, dm_manage_base
 
 }
 

@@ -10,11 +10,13 @@
                   class="MB10"
                   :gutter="10"
                   type="flex"
-                  v-for="(doc) in arrObjScore"
+                  v-for="doc in arrObjScore"
                   :key="doc.scoreKey"
                 >
-                  <el-col style="width:190px">{{doc.name}} (数量：{{doc.allCount}})</el-col>
-                  <el-col style="width:270px">
+                  <el-col style="width: 190px"
+                    >{{ doc.name }} (数量：{{ doc.allCount }})</el-col
+                  >
+                  <el-col style="width: 270px">
                     <!--要确保数值在0到100范围内-->
                     <el-progress
                       :stroke-width="26"
@@ -23,7 +25,7 @@
                       :color="customColors"
                     ></el-progress>
                   </el-col>
-                  <el-col style="width:80px">
+                  <el-col style="width: 80px">
                     <a :href="doc.link">
                       <el-button type="primary" size="mini">去学习</el-button>
                     </a>
@@ -39,6 +41,13 @@
               <el-tab-pane label="JS文件" name="my_js_file" :lazy="true">
                 <dm_list_data :cf="cfListMyJSFile" class></dm_list_data>
               </el-tab-pane>
+              <el-tab-pane
+                label="Css文件/代码块"
+                name="my_css_file"
+                :lazy="true"
+              >
+                <dm_list_data :cf="cfListMyCssCode" class></dm_list_data>
+              </el-tab-pane>
             </el-tabs>
           </dm_pannel_new>
         </el-tab-pane>
@@ -47,22 +56,60 @@
             <el-tabs class="MT8" v-model="activeName" type="card">
               <el-tab-pane label="笔记" name="first" :lazy="true">
                 <dm_list_visit_history
-                  :cf="{'dataTypeDict':'note','findJsonAddon':{_userId: $sys.userId,'dataType':'note',}}"
+                  :cf="{
+                    dataTypeDict: 'note',
+                    findJsonAddon: { _userId: $sys.userId, dataType: 'note' },
+                  }"
                   class="PT10"
                 ></dm_list_visit_history>
               </el-tab-pane>
 
               <el-tab-pane label="视频" name="second" :lazy="true">
                 <dm_list_visit_history
-                  :cf="{'dataTypeDict':'vedio','findJsonAddon':{_userId: $sys.userId,'dataType':'vedio',}}"
+                  :cf="{
+                    dataTypeDict: 'vedio',
+                    findJsonAddon: { _userId: $sys.userId, dataType: 'vedio' },
+                  }"
                   class="PT10"
                 ></dm_list_visit_history>
               </el-tab-pane>
               <el-tab-pane label="JS代码块" name="js_code" :lazy="true">
                 <dm_list_visit_history
-                  :cf="{'dataTypeDict':'js_code','findJsonAddon':{_userId: $sys.userId,tagPage: 'js_code_edit',},cfListAddon: {comCard: 'dm_card_js_code_hs',cfComCard: { target: '_blank' },}}"
+                  :cf="{
+                    dataTypeDict: 'js_code',
+                    findJsonAddon: {
+                      _userId: $sys.userId,
+                      tagPage: 'js_code_edit',
+                    },
+                    cfListAddon: {
+                      comCard: 'dm_card_js_code_hs',
+                      cfComCard: { target: '_blank' },
+                    },
+                  }"
                   class="PT10"
                 ></dm_list_visit_history>
+              </el-tab-pane>
+
+              <el-tab-pane label="前端demo" name="front_demo" :lazy="true">
+                <dm_list_visit_history
+                  :cf="{
+                    dataTypeDict: 'front_demo',
+                    findJsonAddon: {
+                      _userId: $sys.userId,
+                      tagPage: 'auto_layout',
+                    },
+                    cfListAddon: {
+                      comCard: 'dm_card_auto_layout_hs',
+                      cfComCard: { target: '_blank' },
+                    },
+                  }"
+                  class="PT10"
+                ></dm_list_visit_history>
+                <!--                 
+                <dm_list_visit_history
+                  :cf="{'dataTypeDict':'front_demo','findJsonAddon':{_userId: $sys.userId,'dataType':'front_demo',}}"
+                  class="PT10"
+                ></dm_list_visit_history> -->
               </el-tab-pane>
             </el-tabs>
           </dm_pannel_new>
@@ -72,21 +119,96 @@
             <el-tabs class="MT8" v-model="activeName2" type="card">
               <el-tab-pane label="笔记" name="note" :lazy="true">
                 <dm_list_visit_often
-                  :cf="{'dataTypeDict':'note','findJsonAddon':{_userId: $sys.userId,'dataType':'note',},cfListAddon: {comCard: 'dm_card_note_often',cfComCard: { target: '_blank' },}}"
+                  :cf="{
+                    dataTypeDict: 'note',
+                    findJsonAddon: { _userId: $sys.userId, dataType: 'note' },
+                    cfListAddon: {
+                      comCard: 'dm_card_note_often',
+                      cfComCard: { target: '_blank' },
+                    },
+                  }"
                   class="PT10"
                 ></dm_list_visit_often>
               </el-tab-pane>
               <el-tab-pane label="视频" name="vedio" :lazy="true">
                 <dm_list_visit_often
-                  :cf="{'dataTypeDict':'vedio','findJsonAddon':{_userId: $sys.userId,'dataType':'vedio',},cfListAddon: {comCard: 'dm_card_note_often',cfComCard: { target: '_blank' },}}"
+                  :cf="{
+                    dataTypeDict: 'vedio',
+                    findJsonAddon: { _userId: $sys.userId, dataType: 'vedio' },
+                    cfListAddon: {
+                      comCard: 'dm_card_note_often',
+                      cfComCard: { target: '_blank' },
+                    },
+                  }"
+                  class="PT10"
+                ></dm_list_visit_often>
+              </el-tab-pane>
+              <el-tab-pane label="前端demo" name="front_demo" :lazy="true">
+                <dm_list_visit_often
+                  :cf="{
+                    dataTypeDict: 'front_demo',
+                    findJsonAddon: {
+                      _userId: $sys.userId,
+                      tagPage: 'auto_layout',
+                    },
+                    cfListAddon: {
+                      comCard: 'dm_card_front_demo_often',
+                      cfComCard: { target: '_blank' },
+                    },
+                  }"
                   class="PT10"
                 ></dm_list_visit_often>
               </el-tab-pane>
               <el-tab-pane label="JS代码块" name="js_code" :lazy="true">
                 <dm_list_visit_often
-                  :cf="{'dataTypeDict':'js_code','findJsonAddon':{_userId: $sys.userId,tagPage: 'js_code_edit',},cfListAddon: {comCard: 'dm_card_js_code_often',cfComCard: { target: '_blank' },}}"
+                  :cf="{
+                    dataTypeDict: 'js_code',
+                    findJsonAddon: {
+                      _userId: $sys.userId,
+                      tagPage: 'js_code_edit',
+                    },
+                    cfListAddon: {
+                      comCard: 'dm_card_js_code_often',
+                      cfComCard: { target: '_blank' },
+                    },
+                  }"
                   class="PT10"
                 ></dm_list_visit_often>
+              </el-tab-pane>
+            </el-tabs>
+          </dm_pannel_new>
+        </el-tab-pane>
+
+        <el-tab-pane label="我的收藏" name="collect" :lazy="true">
+          <dm_pannel_new class="ML8" title="我的收藏" skin="default__version2">
+            <el-tabs class="MT8" v-model="activeName3" type="card">
+              <el-tab-pane label="笔记" name="note" :lazy="true">
+                <dm_list_data_collect
+                  :userId="$sys.userId"
+                  dataType="note"
+                  class="PT10"
+                ></dm_list_data_collect>
+              </el-tab-pane>
+              <el-tab-pane label="视频" name="vedio" :lazy="true">
+                <dm_list_data_collect
+                  :userId="$sys.userId"
+                  dataType="vedio"
+                  class="PT10"
+                ></dm_list_data_collect>
+              </el-tab-pane>
+              <el-tab-pane label="前端demo" name="front_demo" :lazy="true">
+                <dm_list_data_collect
+                  :userId="$sys.userId"
+                  dataType="front_demo"
+                  class="PT10"
+                ></dm_list_data_collect>
+              </el-tab-pane>
+              <el-tab-pane label="专题/分组" name="group" :lazy="true">
+                <dm_list_data_collect
+                  :userId="$sys.userId"
+                  dataType="group"
+                  class="PT10"
+                ></dm_list_data_collect>
               </el-tab-pane>
             </el-tabs>
           </dm_pannel_new>
@@ -94,16 +216,13 @@
       </el-tabs>
 
       <!--我的收藏-->
-      <!-- <collect></collect> -->
     </div>
   </div>
 </template>
 <script>
 export default {
   mixins: [MIX.base],
-  components: {
-    collect: () => import("@/page/study_collect.vue")
-  },
+
   //FIXME：data配置
   data() {
     return {
@@ -111,9 +230,11 @@ export default {
       activeName0: 'mine',
       activeName1: 'desc',
       activeName2: 'note',
+      activeName3: 'note',
       cfListMyTask: null,
       cfListMyDemo: null,
       cfListMyJSFile: null,
+      cfListMyCssCode: null,
       cfListMyHisNote: null,
       ready: false,
       customColors: "#67C23A",
@@ -229,21 +350,28 @@ export default {
 
 
     let cfListMyDemo = lodash.cloneDeep(PUB.listCF.list_front_demo);
-    cfListMyDemo.searchFormItems=[F_ITEMS.title_search]//改造查询字段
+    cfListMyDemo.searchFormItems = [F_ITEMS.title_search]//改造查询字段
     cfListMyDemo.objParamAddon.findJson = { _userId: this.$sys.userId };
     cfListMyDemo.isShowBreadcrumb = false;
     cfListMyDemo.isShowToolBar = false;
     this.cfListMyDemo = { ...cfListMyDemo };
 
 
-    //TODO:我的JS文件列表-cfListMyJSFile列表配置
+    //END:我的JS文件列表-cfListMyJSFile列表配置
     let cfListMyJSFile = lodash.cloneDeep(PUB.listCF.list_js_file_my);
-    cfListMyJSFile.paramAddonPublic._userId=this.$sys.userId;
+    cfListMyJSFile.paramAddonPublic._userId = this.$sys.userId;
     cfListMyJSFile.objParamAddon.findJson = { _userId: this.$sys.userId };
     cfListMyJSFile.isShowBreadcrumb = false;
     this.cfListMyJSFile = { ...cfListMyJSFile };
 
 
+
+    //TODO:我的Css代码列表-cfListMyCssCode列表配置
+    let cfListMyCssCode = lodash.cloneDeep(PUB.listCF.list_css_code_my);
+    cfListMyCssCode.paramAddonPublic._userId = this.$sys.userId;
+    cfListMyCssCode.objParamAddon.findJson = { _userId: this.$sys.userId };
+    cfListMyCssCode.isShowBreadcrumb = false;
+    this.cfListMyCssCode = { ...cfListMyCssCode };
 
     /****************************处理笔记历史记录列表配置-START****************************/
 

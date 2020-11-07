@@ -8,13 +8,19 @@
     <dm_pannel_new class="MB20" title="自定义无数据提示">
       <dm_list_visit_history :cf="cf3" class="PT10"></dm_list_visit_history>
     </dm_pannel_new> -->
-
-     <dm_pannel_new class="MB20" title="笔记访问历史(findJson指定用户13691916429)">
-      <dm_list_visit_history :cf="cf5" class="PT10"></dm_list_visit_history>
-    </dm_pannel_new> 
-    <!-- <dm_pannel_new class="MB20" title="笔记访问历史">
+  <dm_pannel_new class="MB20" title="demo访问历史">
       <dm_list_visit_history :cf="cf1" class="PT10"></dm_list_visit_history>
     </dm_pannel_new>
+    <dm_pannel_new
+      class="MB20"
+      title="笔记访问历史(findJson指定用户13691916429)"
+    >
+      <dm_list_visit_history :cf="cf5" class="PT10"></dm_list_visit_history>
+    </dm_pannel_new>
+
+  
+
+    <!-- 
 
     <dm_pannel_new class="MB20" title="视频访问历史">
       <dm_list_visit_history :cf="cf2" class="PT10"></dm_list_visit_history>
@@ -39,13 +45,8 @@ export default {
         findJsonAddon: { dataType: "note1" }
       },
       cf1: {
-        dataTypeDict: "note",
-        findJsonAddon: { dataType: "note" },
-        // cfListAddon: {
-        //   dynamicDict: [
-        //     { "ajax": { "url": "/info/getCommonList", "param": { _dataType: "note" } }, "idColumn2": "_id", "idColumn": "dataId", "populateColumn": "dataTarget" }
-        //   ],
-        // }
+        dataTypeDict: "front_demo",
+        findJsonAddon: { _userId: "13691916429", tagPage: 'auto_layout', }, cfListAddon: { comCard: 'dm_card_auto_layout_hs', cfComCard: { target: '_blank' }, }
       },
       cf2: {
         dataTypeDict: "vedio",

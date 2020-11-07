@@ -2586,6 +2586,12 @@ li {
 .C_f90 {
     color: #f90;
 }
+.C_ccc {
+    color: #ccc;
+}
+.C_ddd {
+    color: #ddd;
+}
 .C_999 {
     color: #999;
 }
@@ -2639,6 +2645,39 @@ li {
 }
 .BC_f90 {
     background-color: #f90;
+}
+
+.B_ddd{
+    border: 1px solid #ddd;
+}
+
+.B_ccc{
+    border: 1px solid #ccc;
+}
+
+.B_999{
+    border: 1px solid #999;
+}
+.B_000{
+    border: 1px solid #000;
+}
+.B_f00{
+    border: 1px solid #f00;
+}
+.B_f30{
+    border: 1px solid #f30;
+}
+.B_f60{
+    border: 1px solid #f60;
+}
+.B_f90{
+    border: 1px solid #f90;
+}
+.B_3a0{
+    border: 1px solid #3a0;
+}
+.B_06c{
+    border: 1px solid #06c;
 }
 .TI-9999 {
     text-indent: -9999px;

@@ -63,6 +63,15 @@ export default {
         'quickbars', 'lists', 'image', 'autoresize', 'code', 'link', 'autolink', 'codesample', 'table', 'powerpaste',
 
       ],
+      //powerpaste处理内容的回调函数，20201027添加，厉害！！
+      paste_preprocess: function (pluginApi, data) {
+        console.log(data.content, data.mode, data.source);
+        console.log(`data:`, data);
+        let { content } = data
+        //正则替换超链接，让其新窗口打开
+        content = content.replace(/<a href=/g, `<a target="_blank" href=`)
+        data.content = content;
+      },
       //配置代码样例是选项***
       codesample_languages: [
         { text: 'JavaScript', value: 'javascript' },

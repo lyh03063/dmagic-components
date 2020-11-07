@@ -33,6 +33,7 @@ const detail_bankruptcy_case = { template: '<dm_detail_bankruptcy_case></dm_deta
 const auto_layout = { template: '<dm_auto_layout></dm_auto_layout>' }
 const js_file_edit = { template: '<dm_js_file_edit></dm_js_file_edit>' }
 const js_code_edit = { template: '<dm_js_code_edit></dm_js_code_edit>' }
+const css_code_edit = { template: '<dm_css_code_edit></dm_css_code_edit>' }
 const detail_html_api = { template: '<dm_detail_html_api></dm_detail_html_api>' }
 const detail_data = { template: '<dm_detail_data></dm_detail_data>' }
 const detail_group = { template: '<dm_detail_group></dm_detail_group>' }
@@ -58,7 +59,7 @@ PUB.arrRouteManage = [
 const search_result = { template: '<search_result></search_result>' }
 const detail_g_card_link = { template: '<detail_g_card_link></detail_g_card_link>' }
 const group_home = { template: '<group_home></group_home>' }
-const study_collect = { template: '<study_collect></study_collect>' }
+
 const study_home = { template: '<study_home></study_home>' }
 const study_user = { template: '<study_user></study_user>' }
 const dm_login = { template: '<dm_login></dm_login>' }
@@ -83,6 +84,7 @@ const router = new VueRouter({
                 { path: 'login', component: dm_login },
                 { path: 'detail_data', component: detail_data },
                 { path: 'js_file_edit', component: js_file_edit, },
+                { path: 'css_code_edit', component: css_code_edit, },
                 {
                     path: 'manage', component: dm_manage, props: { ttt: 2222 },//manage
                     children: [//子路由
@@ -153,6 +155,7 @@ const router = new VueRouter({
         { path: '/open/auto_layout', component: auto_layout },
         { path: '/js_file_edit', component: js_file_edit },
         { path: '/js_code_edit', component: js_code_edit },
+        { path: '/css_code_edit', component: css_code_edit },
         { path: '/group_home', component: group_home },
     ]
 })

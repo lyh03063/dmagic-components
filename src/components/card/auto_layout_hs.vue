@@ -1,0 +1,41 @@
+<template>
+  <div class="item-box TAC DPFC">
+    <a
+      class="FX1"
+      :href="`/#/open/auto_layout?demoId=${item.dataId}`"
+      :target="target"
+    >
+      <span v-if="item.dataTarget">{{item.dataTarget.title}}</span>
+    </a>
+    <span class="C_999">{{moment(item.timeVisited).format("YYYY-MM-DD HH:mm:ss")}}</span>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "card_auto_layout_hs",
+  mixins: [MIX.base,],
+  props: ["item", "target"],
+  data() {
+    return {
+    };
+  },
+
+  methods: {
+    moment: window.moment,
+
+  },
+  created() {
+
+  }
+};
+</script>
+
+<style scoped>
+.item-box {
+  border-bottom: 1px #ddd solid;
+  background: #fff;
+  padding: 2px 0;
+  text-align: left;
+}
+</style>

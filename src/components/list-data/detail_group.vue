@@ -1,7 +1,15 @@
 <template>
-  <div class style="padding:10px">
-    <!--如果是路由组件模式，显示标题-->
-    <h1 class="title" v-if="!prop_groupId">{{groupDoc.title||"标题"}}</h1>
+  <div class style="padding: 10px">
+    <div class="DPF PB10 PT6">
+      <!--如果是路由组件模式，显示标题-->
+      <h1 class="title FX1" v-if="!prop_groupId">{{ groupDoc.title || "标题" }}</h1>
+      <!--收藏按钮-->
+      <com_btn_collect
+        class="MR10 "
+        :dataId="groupId"
+        v-if="groupId && $sys.userId"
+      ></com_btn_collect>
+    </div>
 
     <dm_debug_list>
       <dm_debug_item v-model="groupId" text="groupId" />
@@ -28,7 +36,9 @@
         v-else
       ></dm_detail_group_common>
     </template>
-    <div class="PSF B0 R0 BC_fff W200 H20 LH_20 C_999 FS12 PL10">系统编号：{{systemId}}</div>
+    <div class="PSF B0 R0 BC_fff W200 H20 LH_20 C_999 FS12 PL10">
+      系统编号：{{ systemId }}
+    </div>
   </div>
 </template>
 
@@ -36,6 +46,7 @@
 
 
 export default {
+  mixins: [MIX.base],
   name: "detail_group",
 
   data() {

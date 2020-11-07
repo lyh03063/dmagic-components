@@ -1,18 +1,24 @@
 <template>
-  <div class style="padding:10px">
-    <h1 class="title TAC MB10" id="id_floor_top">{{doc.title}}</h1>
-    <div class="desc" v-if="doc.desc">{{doc.desc}}</div>
+  <div class style="padding: 10px">
+    <h1 class="title TAC MB10" id="id_floor_top">{{ doc.title }}</h1>
+    <div class="desc" v-if="doc.desc">{{ doc.desc }}</div>
     <dm_debug_list>
       <dm_debug_item v-model="doc" text="doc" />
       <dm_debug_item v-model="familiarityDoc" text="familiarityDoc" />
     </dm_debug_list>
     <div class="familiarity_box MB10">
+      <!--收藏按钮-->
+      <com_btn_collect
+        class="MR10"
+        :dataId="dataId"
+        v-if="dataId && $sys.userId"
+      ></com_btn_collect>
       <el-popover
         class="MR10"
         placement="top-start"
         width="200"
         trigger="hover"
-        v-if="doc.arrGroup&&doc.arrGroup.length"
+        v-if="doc.arrGroup && doc.arrGroup.length"
       >
         <!--候选值列表-->
         <el-link
@@ -20,65 +26,71 @@
           :href="`#/study_home/detail_group?groupId=${docG._idRel}`"
           v-for="docG in doc.arrGroup"
           :key="docG.relationId"
-        >{{docG.title}}</el-link>
-        <el-button slot="reference" icon="el-icon-more" size="mini">所属分组</el-button>
+          >{{ docG.title }}</el-link
+        >
+        <el-button slot="reference" icon="el-icon-more" size="mini"
+          >所属分组</el-button
+        >
       </el-popover>
-      {{dataTypeLabel}}熟悉度：
-      <dm_familiarity_select
-        class="MT6"
-        v-model="familiarityDoc"
-        :data="doc"
-        :dataType="doc._dataType"
-        v-if="doc._dataType"
-      ></dm_familiarity_select>
+      <template v-if="dataId && $sys.userId">
+        {{ dataTypeLabel }}熟悉度：
+        <dm_familiarity_select
+          class=" MR8"
+          v-model="familiarityDoc"
+          :data="doc"
+          :dataType="doc._dataType"
+          v-if="doc._dataType"
+        ></dm_familiarity_select>
+      </template>
+      <div class="FX1"></div>
+      <span class="keyword_box C_999 MR8">关键词：{{ doc.keyword }}</span>
+
       <el-button
-        :type="collectBottonAuto?'warning':''"
+        plain
+        @click="cfEditDialog.visible = true"
         size="mini"
-        style="margin:0 10px;"
-        :icon="collectBotton"
-        @click="collectAuto()"
-        circle
-      ></el-button>
-      <div class="C_999 DPIB FR MT6" style="display:flex">
-        <span class="keyword_box">关键词：{{doc.keyword}}</span>
-        <el-button
-          plain
-          @click="cfEditDialog.visible=true"
-          size="mini"
-          style="width:60px"
-          v-if="$sys.userId==13691916429"
-        >编辑</el-button>
-      </div>
+        style="width: 60px"
+        v-if="$sys.userId == 13691916429"
+        >编辑</el-button
+      >
     </div>
 
     <!-- <h1>{{dataTypeLabel}}详情</h1> -->
     <div class="detail_box">
       <!-- 使用v-once指令进行性能优化 -->
-      <div class v-html="doc._detail" v-highlight v-if="doc._detail" v-once></div>
+      <div
+        class
+        v-html="doc._detail"
+        v-highlight
+        v-if="doc._detail"
+        v-once
+      ></div>
       <dm_pannel
         class="MB20"
         :title="doc.title"
         type="plain"
-        v-for="(doc,i) in arrRelNote"
+        v-for="(doc, i) in arrRelNote"
         :key="i"
       >
         <div class="MT20" v-html="doc._detail"></div>
       </dm_pannel>
-      <div class v-if="doc._dataType=='vedio'">
+      <div class v-if="doc._dataType == 'vedio'">
         <!-- <video width="760" height="440" controls :src="srcVedio"></video> -->
         <dm_video_player :src="srcVedio"></dm_video_player>
       </div>
-      <div class="FS18" v-if="doc._dataType=='front_demo'">
+      <div class="FS18" v-if="doc._dataType == 'front_demo'">
         <template v-if="!doc.link">
           本demo为新型demo，
-          <a target="_blank" :href="`#/open/auto_layout?demoId=${dataId}`">点此查看demo</a>
+          <a target="_blank" :href="`#/open/auto_layout?demoId=${dataId}`"
+            >点此查看demo</a
+          >
         </template>
       </div>
-      <div class v-if="doc._dataType=='note'&&doc.sonNoteGId">
+      <div class v-if="doc._dataType == 'note' && doc.sonNoteGId">
         <!--子笔记列表-->
         <dm_detail_son_data class :doc="doc"></dm_detail_son_data>
       </div>
-      <template class v-if="doc.link&&isShowIframe">
+      <template class v-if="doc.link && isShowIframe">
         <div class>
           以下内容通过嵌入其他网页引用：
           <a target="_blank" :href="doc.link">在新页面打开</a>
@@ -87,52 +99,70 @@
       </template>
     </div>
     <!-- 编辑实体数据弹窗 -->
-    <dm_dialog_edit :cf="cfEditDialog" @after-modify="init" v-if="ready"></dm_dialog_edit>
-    <div class="float_bar" v-if="countReldata>0&&isShowFloatBar">
+    <dm_dialog_edit
+      :cf="cfEditDialog"
+      @after-modify="init"
+      v-if="ready"
+    ></dm_dialog_edit>
+    <div class="float_bar" v-if="countReldata > 0 && isShowFloatBar">
       <ul>
         <li>
           <a href="javascript:;" @click="scrollView('top')">详情</a>
         </li>
-        <template class v-for="(item,i) in arrCards">
-          <li :key="i" v-if="item.list&&item.list.length">
-            <a
-              href="javascript:;"
-              @click="scrollView(item.type)"
-            >{{item.title}}（{{item.list.length}}）</a>
+        <template class v-for="(item, i) in arrCards">
+          <li :key="i" v-if="item.list && item.list.length">
+            <a href="javascript:;" @click="scrollView(item.type)"
+              >{{ item.title }}（{{ item.list.length }}）</a
+            >
           </li>
         </template>
       </ul>
-      <a class="btn-hide MT15" href="javascript:;" @click="isShowFloatBar=false">
+      <a
+        class="btn-hide MT15"
+        href="javascript:;"
+        @click="isShowFloatBar = false"
+      >
         <i class="el-icon-close">隐藏</i>
       </a>
     </div>
     <el-collapse v-model="activeNames" class="n-el-collapse">
-      <template class v-for="(item,i) in arrCards">
+      <template class v-for="(item, i) in arrCards">
         <el-collapse-item
           :key="i"
-          v-if="item.list&&item.list.length"
+          v-if="item.list && item.list.length"
           :id="`id_floor_${item.type}`"
           :name="item.type"
         >
           <template slot="title">
             <div class="n-title-bar">
               <b>
-                {{item.title}}
-                <span class="C_999">（{{item.list.length}}）</span>
+                {{ item.title }}
+                <span class="C_999">（{{ item.list.length }}）</span>
               </b>
             </div>
             <!-- <i class="header-icon el-icon-info"></i> -->
           </template>
           <ul class="list-link">
             <li v-for="doc in item.list" :key="doc._id">
-              <div class v-if="item.type=='front_demo'">
-                <a target="_blank" :href="doc.link" v-if="doc.link">{{doc.title}}</a>
-                <a target="_blank" :href="`#/open/auto_layout?demoId=${doc._id}`" v-else>
-                  {{doc.title}}
+              <div class v-if="item.type == 'front_demo'">
+                <a target="_blank" :href="doc.link" v-if="doc.link">{{
+                  doc.title
+                }}</a>
+                <a
+                  target="_blank"
+                  :href="`#/open/auto_layout?demoId=${doc._id}`"
+                  v-else
+                >
+                  {{ doc.title }}
                   <el-tag type="danger" size="mini">新型demo</el-tag>
                 </a>
               </div>
-              <a target="_blank" :href="`#/detail_data?dataId=${doc._id}`" v-else>{{doc.title}}</a>
+              <a
+                target="_blank"
+                :href="`#/detail_data?dataId=${doc._id}`"
+                v-else
+                >{{ doc.title }}</a
+              >
             </li>
           </ul>
         </el-collapse-item>
@@ -164,8 +194,8 @@ export default {
       },
       arrRelNote: [], //关联笔记的数组
       relNoteDetail: "", //关联笔记的详情html
-      collectBottonAuto: false, //收藏按钮是否聚焦
-      collectBotton: "el-icon-star-off", //收藏按钮图案
+
+
       isShowFloatBar: true,
       activeNames: [], //激活的折叠面板
       familiarityDoc: {},
@@ -238,15 +268,7 @@ export default {
     }
   },
   methods: {
-    //函数：{收藏按钮点击的函数}
-    collectAuto() {
-      if (this.collectBottonAuto) {
-        this.collectBotton = "el-icon-star-off";
-      } else {
-        this.collectBotton = "el-icon-star-on";
-      }
-      this.collectBottonAuto = !this.collectBottonAuto;
-    },
+
     //函数：{滚动到指定位置的函数}
     scrollView(type) {
       //让指定元素进入视口
@@ -338,6 +360,8 @@ export default {
         } //传递参数
       });
       this.doc = data.doc;
+
+
       //变量：{ajax添加访客记录函数}
       util.ajaxAddVisitRecord({ tagPage: "detail_data", dataId: this.dataId, dataType: this.doc._dataType })
       this.ajaxGetFamiliarity(); //调用：{ajax获取当前数据的熟悉度}
@@ -376,12 +400,15 @@ export default {
         this.ajaxGetJsApiList(); //调用：{ajax获取关联Js-API列表}
         this.ajaxGetVedioList(); //调用：{ajax获取关联视频列表}
       }
+
     }
   },
   async created() {
     //如果地址没有(非页面级组件)，从属性中获取数据id
     this.dataId = this.$route.query.dataId || this.docDetail._idRel2 || this.propDataId;
     this.init(); //函数：{初始化函数}
+
+
   }, mounted() {
   }
 };
@@ -426,6 +453,8 @@ export default {
   border-radius: 5px;
   padding: 0 10px;
   height: 40px;
+  display: flex;
+  align-items: center;
 }
 .keyword_box {
   display: inline-block;
@@ -433,7 +462,6 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  margin-top: 8px;
 }
 .desc {
   color: #666;

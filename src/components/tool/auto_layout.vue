@@ -5,18 +5,22 @@
       <dm_debug_item v-model="htmlCodeHead" />
       <dm_debug_item v-model="arrHtml" />
       <dm_debug_item v-model="arrCss" />
-      <!-- <dm_debug_item v-model="docDemo" />
-      <dm_debug_item v-model="pageHtmlCode" />-->
+      <dm_debug_item v-model="hasModify" />
+      <dm_debug_item v-model="docDemo" />
+      <!-- <dm_debug_item v-model="joinDemoDoc" /> -->
+      <!-- <dm_debug_item v-model="pageHtmlCode" /> -->
     </dm_debug_list>
-      <!-- {{showPopoverBody}} -->
+    <!-- <div class="">{{ docDemoNew }}</div>
+    <div class="">{{ hasModify }}</div>
+    <div class="">{{ countChange }}</div>
+    <div class="">{{ formDataAddDemo }}</div> -->
     <div
       class="H50 DPFC BC_000 PL15 MB10"
       style="background: rgb(84, 92, 100)"
       v-if="!fullScreen"
     >
       <div class="LH50 C_fff FS24 MR20">
-        码邦网页布局工具
-      
+        码帮IDE
         <!-- <el-button plain @click="test" size="mini">test</el-button> -->
       </div>
       <div class="FX1">
@@ -31,7 +35,6 @@
           />
           px
         </div>
-
         <el-button
           plain
           @click="updateIframe"
@@ -40,14 +43,13 @@
           >更新</el-button
         >
         <el-checkbox class="C_fff" v-model="isHotUpdate">热更新</el-checkbox>
-
         <a
           class="ML5"
           target="_blank"
           :href="`//www.dmagic.cn/page_preview?id=${demoId}`"
           v-if="demoId"
         >
-          <el-button plain size="mini">预览</el-button>
+          <el-button plain size="mini" v-if="!vid">预览</el-button>
         </a>
         <el-checkbox class="ML10 C_fff" v-model="cfDragBox.isShowLeft"
           >演示区</el-checkbox
@@ -55,12 +57,24 @@
         <el-checkbox class="C_fff" v-model="cfDragBox.isShowRight"
           >编辑区</el-checkbox
         >
+        <span class="FS2 ML10" v-if="vid" style="color: #ccc"
+          >历史版本数据，不支持保存和新页面预览</span
+        >
       </div>
       <div class="PR15" v-if="demoId && docDemo">
         <span class="C_fff FS16 MR10">{{ docDemo.title }}</span>
-        <!-- v-if="$power('groupDataList.all.modify')" -->
-        <el-button plain @click="saveDemo" size="mini" v-if="isMine"
-          >保存demo</el-button
+        <!--收藏按钮-->
+        <com_btn_collect
+          class="MR10"
+          :dataId="demoId"
+          v-if="demoId && $sys.userId"
+        ></com_btn_collect>
+        <el-button
+          type="primary"
+          @click="saveDemo"
+          size="mini"
+          v-if="isMine && !vid"
+          >保存</el-button
         >
         <el-button plain @click="showDialogSaveMyDemo" size="mini"
           >拷贝</el-button
@@ -117,14 +131,13 @@
                   >
                 </div>
               </div>
-              <!-- TODO:tabs -->
+              <!-- tabs -->
               <el-tabs v-model="activeName" type="card" @tab-click="tabClick">
                 <el-tab-pane :label="`Body配置(${lengthBody})`" name="tab_body">
                   <div class="DPFC H38">
-                    <div class="FX1" ></div>
-              
+                    <div class="FX1"></div>
                     <div class>
-                       <el-checkbox class="C_666" v-model="allowEditHtml"
+                      <el-checkbox class="C_666" v-model="allowEditHtml"
                         >强化编辑</el-checkbox
                       >
                       <el-select
@@ -140,7 +153,6 @@
                           :value="item.value"
                         ></el-option>
                       </el-select>
-                     
                     </div>
                   </div>
                   <div class="box_scroll box_html_set PL20">
@@ -154,11 +166,10 @@
                   </div>
                 </el-tab-pane>
                 <el-tab-pane :label="`head配置(${lengthHead})`" name="tab_head">
-                 <div class="DPFC H38">
-                    <div class="FX1" ></div>
-              
+                  <div class="DPFC H38">
+                    <div class="FX1"></div>
                     <div class>
-                       <el-checkbox class="C_666" v-model="allowEditHtml"
+                      <el-checkbox class="C_666" v-model="allowEditHtml"
                         >强化编辑</el-checkbox
                       >
                       <el-select
@@ -174,9 +185,8 @@
                           :value="item.value"
                         ></el-option>
                       </el-select>
-                     
                     </div>
-                  </div>  
+                  </div>
                   <div class="box_scroll box_html_set">
                     <!-- END:Html:row_html_tag组件 -->
                     <dm_row_html_tag
@@ -338,11 +348,11 @@
                   v-if="docDemo && isMine"
                 >
                   <el-select
-                    class="W100  MB20"
+                    class="W100 MB20"
                     v-model="modeShowHtml"
                     placeholder="请选择"
                     size="mini"
-                    style="margin-left:120px"
+                    style="margin-left: 120px"
                   >
                     <el-option
                       v-for="item in optionsMode"
@@ -355,6 +365,12 @@
                     :cf="cfFormBase"
                     v-model="docDemo"
                   ></dm_dynamic_form>
+                  <dm_pannel_new class="MB20" title="历史版本">
+                    <dm_list_data_version
+                      :cf="cfLDataVersion"
+                      class="PT10"
+                    ></dm_list_data_version>
+                  </dm_pannel_new>
                 </el-tab-pane>
               </el-tabs>
             </div>
@@ -463,6 +479,10 @@ export default {
   //FIXME:data配置
   data() {
     return {
+      hasModify: false,//数据是否被修改
+      cfLDataVersion: {
+        'findJsonAddon': { _idRel: "" },
+      },
       showPopoverBody: {},//html元素的pover弹窗显示对象-给子组件用的
       allowEditHtml: false,//允许编辑html
       isCheckAllHtml: false,
@@ -530,6 +550,8 @@ export default {
         }
       },
       readyResource: false,
+      readyDemo: false,//是否准备好初始demo数据
+      startWatch: false,//开始监听变动
       isHighLightLayout: true,//悬停代码时高亮区块
       isShowDialogSaveMy: false,//显示填写新建我的demo信息表单弹窗
       formDataAddDemo: { title: "新建demo" },
@@ -546,6 +568,7 @@ export default {
         // cfBoxLeft: { class: " ", style: { 'background-image': "url('http://tool.alixixi.com/csseditor/images/grid.gif')" } },
       },
       demoId: null,
+      vid: null,//版本id
       docDemo: null,
       cfElBtnAdd: { text: "+添加样式代码块", type: "info", size: "mini", },
       cfPannel: lodash.cloneDeep(cfPannel),
@@ -591,9 +614,27 @@ export default {
       htmlCodeHead: "",
       cssCode: "",
       pageHtmlCode: "",//页面完整的html代码
+      countChange: 0,//代码变动次数，用于测试
     };
   },
   computed: {
+    //TODO:函数：{拼接初始的DemoDoc函数}
+    joinDemoDoc: function () {
+      let { arrCss, arrHtml, arrHtmlHead, modeShowHtml, allowEditHtml, modeShowHProp, cfDragBox, pageHtmlCode, docDemo } = this
+      let { nWidthLeft } = cfDragBox
+      arrHtml = arrHtml[0].children;//提取children
+      arrHtmlHead = arrHtmlHead[0].children;//提取children
+      let objAddon = this.formDataAddDemo
+      if (this.demoId && this.readyDemo) {//如果demoId存在，获取标题，相册，关键词
+        let { title, album, keyword } = docDemo
+        objAddon = { title, album, keyword }
+      }
+      this.countChange++
+      return { ...objAddon, arrCss, arrHtml, arrHtmlHead, modeShowHtml, allowEditHtml, modeShowHProp, nWidthLeft, pageHtmlCode }
+    },
+    docDemoNew() {//将docDemo转成字符串，用于监听变化
+      return JSON.stringify(this.joinDemoDoc)
+    },
     lengthBody() {
       return lodash.get(this.arrHtml, `[0]children.length`)
     },
@@ -620,11 +661,24 @@ export default {
     },
   },
   watch: {
+    "hasModify": {
+      handler(newVal, oldVal) {
+        this.setBeforeunload()
+      },
+    },
     "$route.query.demoId": {//监听demoId变化（切换demo）
       handler(newVal, oldVal) {
         window.location.reload();//函数调用：{重载页面}
       },
       deep: true
+    },
+    docDemoNew: {//监听到docDemoNew变化
+      handler(newVal, oldVal) {
+
+        if (this.startWatch) {//如果{开始监听变动}为真
+          this.hasModify = true;
+        }
+      },
     },
     arrCss: {//监听到arrClass变化，立马更新样式
       handler(newVal, oldVal) {
@@ -642,47 +696,67 @@ export default {
       },
       immediate: true,
     },
-    arrHtml: {//监听到arrHtml变化，更新Html
-      async handler(newVal, oldVal) {
 
-        let arrHtml = lodash.get(this, `arrHtml[0].children`);
-        if (!arrHtml) return
-        this.htmlCode = util.arrToHtml({ arrHtml })//函数：{根据arrHtml拼接Html代码函数}
-        this.htmlCodeHasId = util.arrToHtml({ arrHtml, needId: true })
-        if (this.modeShowHtml == 'actual' && this.isHotUpdate) {
-          this.updateIframe()//调用：{更新iframe函数}
-        }
+    arrHtml: {//监听到arrHtml变化，更新Html
+      async handler() {
+        this.debouncedAfterArrHtmlChange()//调用：{防抖版arrHtml变动后的后续处理函数}
       },
-      immediate: true,
+      // immediate: true,
       deep: true
     },
     arrHtmlHead: {//监听到arrHtml变化，更新Html
-      async handler(newVal, oldVal) {
-        let arrHtml = lodash.get(this, `arrHtmlHead[0].children`);
-        this.htmlCodeHead = util.arrToHtml({ arrHtml })//函数：{根据arrHtml拼接Html代码函数}
-        this.htmlCodeHeadHasId = util.arrToHtml({ arrHtml, needId: true })//函数：{根据arrHtml拼接Html代码函数}
-        if (this.modeShowHtml == 'actual' && this.isHotUpdate) {
-          this.updateIframe()//调用：{更新iframe函数}
-        }
+      async handler() {
+        this.debouncedAfterArrHtmlHeadChange()//调用：{防抖版arrHtmlHead变动后的后续处理函数}
+
       },
-      immediate: true,
+      // immediate: true,
       deep: true
     },
   },
   methods: {
+    //函数：{arrHtmlHead变动后的后续处理函数}
+    afterArrHtmlHeadChange: function () {
+      let arrHtml = lodash.get(this, `arrHtmlHead[0].children`);
+      this.htmlCodeHead = util.arrToHtml({ arrHtml })//函数：{根据arrHtml拼接Html代码函数}
+      this.htmlCodeHeadHasId = util.arrToHtml({ arrHtml, needId: true })//函数：{根据arrHtml拼接Html代码函数}
+      if (this.modeShowHtml == 'actual' && this.isHotUpdate) {
+        this.updateIframe()//调用：{更新iframe函数}
+      }
 
-    //TODO:函数：{选项卡点击的函数}
+    },
+    //函数：{arrHtml变动后的后续处理函数}
+    afterArrHtmlChange: function () {
+      let arrHtml = lodash.get(this, `arrHtml[0].children`);
+      if (!arrHtml) return
+      this.htmlCode = util.arrToHtml({ arrHtml })//函数：{根据arrHtml拼接Html代码函数}
+      this.htmlCodeHasId = util.arrToHtml({ arrHtml, needId: true })
+      if (this.modeShowHtml == 'actual' && this.isHotUpdate) {
+        this.updateIframe()//调用：{更新iframe函数}
+      }
+
+    },
+    //END:函数：{设置标签页关闭时的事件}
+    setBeforeunload: function () {
+
+      if (!this.$window) return
+      if (this.hasModify) {//Q1：内容有改动
+        this.$window.off("beforeunload").on("beforeunload", function () {
+          var e = window.event || e;
+          e.returnValue = ("确定离开当前页面吗？");
+        })
+      } else {//Q1：内容无改动
+        this.$window.off("beforeunload")
+      }
+    },
+    //END:函数：{选项卡点击的函数}
     tabClick: function ({ name }) {
       $("body").attr("tab", this.activeName)
     },
-
-
     //END:函数：{显示粘贴html代码弹窗函数}
     dialogPasteHtml: async function (arrTarget) {
       this.isShowDialogPasteHtml = true;
       this.arrTarget = arrTarget
     },
-
     //END:函数：{提交粘贴html代码表单函数}
     submitFormPasteHtml: async function (arrTarget) {
       let { formDataPasteHtml } = this
@@ -737,8 +811,7 @@ export default {
     //函数：{测试函数}
     test: async function () {
     },
-
-    //TODO:函数：{更新iframe函数}
+    //END:函数：{更新iframe函数}
     updateIframe: async function () {
       if (this.modeShowHtml == 'actual') {//如果是真实模式
         let { cssCode, htmlCode, htmlCodeHasId, htmlCodeHead, htmlCodeHeadHasId, jsCodeTop } = this
@@ -747,20 +820,17 @@ export default {
           title = this.docDemo.title
         }
         this.pageHtmlCode = util.joinPageHtml({
-          cssCode, htmlCode: htmlCodeHasId, htmlCodeHead: htmlCodeHeadHasId, jsCodeTop, title
+          cssCode, htmlCode, htmlCodeHead, jsCodeTop, title
         })
         let pageHtmlCodeIframe = util.joinPageHtml({
           cssCode, htmlCode: htmlCodeHasId, htmlCodeHead: htmlCodeHeadHasId, jsCodeTop, title, inIframe: true
         })
         $("#id_iframe").attr("srcdoc", pageHtmlCodeIframe)
-
       }
     },
     //函数：{更新页面样式函数}
     updatePageCss: async function () {
-
       this.cssCode = util.joinPageCss({ arrCss: this.arrCss })
-
       if (this.modeShowHtml == 'test') {
         util.addCssToPage({ css: this.cssCode })//调用：{输出css代码到当前页面的函数}
       }
@@ -776,7 +846,6 @@ export default {
     },
     //函数：{选择demo后的回调函数}
     afterSelectDemo: async function ({ doc }) {
-
       doc = lodash.cloneDeep(doc);//深拷贝，避免影响数据源
       let { arrCss, arrHtml, } = doc
       let { vm_dialog_select_demo } = this;
@@ -827,19 +896,24 @@ export default {
     saveDemo: async function () {
       let clickStatus = await this.$confirm("确定修改？").catch(() => { });
       if (clickStatus != "confirm") return
-      let { arrCss, arrHtml, arrHtmlHead, modeShowHtml, allowEditHtml, modeShowHProp, jsCodeTop, cfDragBox, pageHtmlCode, docDemo } = this
-      arrHtml = arrHtml[0].children;//提取children
-      arrHtmlHead = arrHtmlHead[0].children;//提取children
-      let { nWidthLeft } = cfDragBox
-      let { title, album, keyword } = docDemo
       await axios({//修改接口-当前父任务
         method: "post", url: `${PUB.domain}/info/commonModify`,
         data: {
           _id: this.demoId, _systemId: "$all", _dataType: "front_demo",
-          _data: { arrCss, arrHtml, arrHtmlHead, modeShowHtml, allowEditHtml, modeShowHProp, jsCodeTop, nWidthLeft, pageHtmlCode, title, album, keyword }
+          _data: this.joinDemoDoc
         }
       });
       this.$message.success('修改成功');
+      this.hasModify = false;
+      {//保存一个历史版本数据
+        let _userId = this.$sys.userId
+        let rsp = await axios({
+          method: "post", url: `${PUB.domain}/info/addDataVersion`,
+          data: {
+            "_id": this.demoId, _userId
+          }
+        });
+      }
     },
     //函数：{保存为我的demo函数}
     showDialogSaveMyDemo: async function () {
@@ -856,14 +930,14 @@ export default {
       if (!_userId) {
         return this.$message.error('未登录，无法保存demo');
       }
-      let { arrCss, arrHtml, arrHtmlHead, modeShowHtml, allowEditHtml, modeShowHProp, cfDragBox, pageHtmlCode, } = this
-      let { nWidthLeft } = cfDragBox
-      arrHtml = arrHtml[0].children;//提取children
-      arrHtmlHead = arrHtmlHead[0].children;//提取children
-      let dataAdd = { ...this.formDataAddDemo, arrCss, arrHtml, arrHtmlHead, modeShowHtml, allowEditHtml, modeShowHProp, nWidthLeft, pageHtmlCode }
+      let _data = lodash.cloneDeep(this.joinDemoDoc);
+      if (this.demoId) {//如果demoId存在，即拷贝demo
+        _data.title = this.formDataAddDemo.title
+        delete _data.keyword
+      }
       let rsp = await axios({
         method: "post", url: `${PUB.domain}/info/commonAdd`,
-        data: { "_data": dataAdd, "_systemId": "sys_api", "_dataType": "front_demo", _userId }
+        data: { "_data": _data, "_systemId": "sys_api", "_dataType": "front_demo", _userId }
       });
       this.$message.success('操作成功');
       let demoId = lodash.get(rsp, `data.addData._id`);
@@ -872,12 +946,24 @@ export default {
     },
     //函数：{获取demo详情函数}
     getDemoDoc: async function () {
+      if (!this.demoId) {//
+        this.readyDemo = true;//{是否准备好初始demo数据}设为真
+        await util.timeout(100); //延迟
+        this.startWatch = true;//{开始监听变动}设为真
+        return
+      }
       let { data } = await axios({  //请求接口
         method: "post", url: `${PUB.domain}/info/commonDetail`,
-        data: { _id: this.demoId, _systemId: "$all" } //传递参数
+        data: { _id: this.vid || this.demoId, _systemId: "$all" } //传递参数,优先使用版本id
       });
-      this.docDemo = data.doc;
-      let { arrCss = [], arrHtml = [], arrHtmlHead = [], modeShowHtml, allowEditHtml, modeShowHProp, jsCodeTop, nWidthLeft = 320, pageHtmlCode } = data.doc
+      if (this.vid) {//如果{版本id}存在
+        //  data.doc.dataBackup;
+        //合并，这里感觉有点混乱
+        this.docDemo = Object.assign(data.doc, data.doc.dataBackup);//合并对象
+      } else {
+        this.docDemo = data.doc;
+      }
+      let { arrCss = [], arrHtml = [], arrHtmlHead = [], modeShowHtml, allowEditHtml, modeShowHProp, jsCodeTop, nWidthLeft = 320, pageHtmlCode } = this.docDemo
       this.pageHtmlCode = pageHtmlCode//完整html代码更新
       this.arrHtml = [{
         "tag": "body",
@@ -888,7 +974,6 @@ export default {
       }]
       // arrHtml//body代码更新
       this.arrHtmlHead = arrHtmlHead//头部代码更新
-
       this.arrHtmlHead = [{
         showChildren: true,
         "tag": "head",
@@ -899,9 +984,7 @@ export default {
       this.arrCss = arrCss//Css代码更新
       this.modeShowHtml = modeShowHtml || "test"
       this.allowEditHtml = allowEditHtml || false
-
       this.modeShowHProp = modeShowHProp || "whole"
-
       this.jsCodeTop = jsCodeTop//Js代码更新
       this.cfDragBox.nWidthLeft = nWidthLeft;//演示区域宽度
       //根据关键词请求关联数据的ajax固定参数
@@ -917,9 +1000,17 @@ export default {
           vedio: 1
         }
       };
+      // this.hasModify=false;//{内容是否变更}设为假
       if (this.docDemo.keyword) {//如果有关键词
         this.ajaxGetNoteList(); //调用：{ajax获取关联笔记列表}
       }
+      this.readyDemo = true;//{是否准备好初始demo数据}设为真
+
+
+      util.ajaxAddVisitRecord({ tagPage: "auto_layout", dataId: this.demoId, })//变量：{ajax添加访客记录函数}
+
+      await util.timeout(500); //延迟
+      this.startWatch = true;//{开始监听变动}设为真
     },
     //函数：{获取关联笔记列表函数}
     ajaxGetNoteList: async function () {
@@ -928,37 +1019,39 @@ export default {
     },
   },
   async created() {
+
+    //函数：{防抖版arrHtml变动后的后续处理函数}
+    this.debouncedAfterArrHtmlChange = lodash.debounce(this.afterArrHtmlChange, 1000)
+    //函数：{防抖版arrHtmlHead变动后的后续处理函数}
+    this.debouncedAfterArrHtmlHeadChange = lodash.debounce(this.afterArrHtmlHeadChange, 1000)
+
     $("body").attr("tab", this.activeName)//body设置tab属性
     await util.loadJs({ url: PUB.urlJS.html_tag })//加载html相关JS
     await util.loadJs({ url: PUB.urlJS.css_prop })//加载css相关JS
     this.readyResource = true
-    this.demoId = this.$route.query.demoId;//
-    if (this.demoId) {//
-      await this.getDemoDoc(); //调用：{获取demo详情函数}
-    }
+    let { demoId, vid } = this.$route.query
+    this.demoId = demoId;//
+    this.vid = vid;//版本id
+    this.cfLDataVersion.findJsonAddon._idRel = demoId;//历史版本列表配置关联id
+    await this.getDemoDoc(); //调用：{获取demo详情函数}
     if (this.modeShowHtml == 'actual') {//如果是真实模式
       await util.timeout(500); //延迟
       this.updateIframe()//调用：{更新iframe函数}
     }
   },
   async mounted() {
-    util.ajaxAddVisitRecord({ tagPage: "auto_layout", })//变量：{ajax添加访客记录函数}
+
     util.changeFavicon(`//qn-dmagic.dmagic.cn/202007171024372424_67675_layout.png`)//函数：{改变网页标题图标的函数}
     window.arr_$targetIndex = []//聚焦的元素链索引数组
-
     //绑定关闭页面事件，弹窗提醒
-    window.onbeforeunload = function (e) {
-      var e = window.event || e;
-      e.returnValue = ("确定离开当前页面吗？");
-    }
+    // window.onbeforeunload = function (e) {
+    // }
+    this.$window = $(window)//缓存$Window对象
   }
 };
 </script>
-
-
 <style scoped>
 /* FIXME样式 */
-
 .box_html_show,
 .box_iframe {
   background-image: url("http://tool.alixixi.com/csseditor/images/grid.gif");
@@ -1081,6 +1174,7 @@ export default {
   color: #666;
   border: 1px #999 solid;
   border-radius: 50%;
+  background-color: #fff;
 }
 /****************************处理切换tabs时内部popover的显示和隐藏-START****************************/
 .tab_body_popover,
@@ -1103,10 +1197,8 @@ body[tab="tab_head"] .tab_head_popover {
 .el-popper[x-placement^="bottom"] .popper__arrow {
   border-bottom-color: #999;
 }
-
 .el-popper[x-placement^="right"] .popper__arrow {
   border-right-color: #999;
 }
-
 /****************************处理切换popover弹窗样式-END****************************/
 </style>
