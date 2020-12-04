@@ -6,7 +6,7 @@
     <!-- cf:{{cf}} -->
     <dm_list_flex_res :list="options" #default="{item}" v-bind="cf.cfListFlex">
       <div class="group">
-        <i :class="['frequency-option',{focus:valueNeed==item.value}] " @click="fnClickOp(item)">
+        <i :class="['frequency-option',{focus:valueNeed==item.value}] " :title="item.label||item.value" @click="fnClickOp(item)">
           {{item.label
           ||item.value}}
         </i>
@@ -60,6 +60,7 @@ export default {
       }
       this.visible = false;
       this.$emit("change")
+     
     },
     showDialog() {
       alert(`showDialog`);
@@ -106,6 +107,9 @@ export default {
   color: #999;
   font-style: normal;
   text-align: center;
+  max-height: 26px;
+  overflow: hidden; 
+  text-overflow:ellipsis;white-space:nowrap;
 }
 .frequency-option:hover {
   border: 1px #f60 solid;

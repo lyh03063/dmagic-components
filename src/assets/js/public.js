@@ -394,6 +394,14 @@ PUB.menuDemo = [
         ]
     },
     {
+        name: "list-c",
+        title: "列表小组件",
+        menuItem: [
+            { name: "com_c_relData_demo", title: "列表关联数据列", },
+           
+        ]
+    },
+    {
         name: "form",
         title: "表单",
         menuItem: [

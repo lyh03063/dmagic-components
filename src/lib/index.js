@@ -196,6 +196,7 @@ import com_column_operate_entity_data from '@/components/common/com_c_operate_en
 
 import com_c_countSonTask from '@/components/common/com_c_countSonTask.vue'
 import com_c_sonData from '@/components/common/com_c_sonData.vue'
+import com_c_relData from '@/components/common/com_c_relData.vue'
 import com_c_sonTaskGId from '@/components/common/com_c_sonTaskGId.vue'
 import com_c_sonNoteGId from '@/components/common/com_c_sonNoteGId.vue'
 import com_c_g_person_file from '@/components/common/com_c_g_person_file.vue'
@@ -294,7 +295,8 @@ const Components = {
   dm_card_js_code_hs,dm_card_auto_layout_hs,  dm_card_js_code_often,dm_card_front_demo_often,
   dm_list_visit_history, dm_list_visit_often, dm_list_data_version, dm_list_data_collect,
   com_complete, com_imagePreview, com_item_complete_search, com_f_item_listSpecPrice, com_c_item_payStatus,
-  com_listGoods, com_addressObj, com_column_operate_rel_data, com_column_operate_entity_data, com_c_countSonTask,
+  com_listGoods, com_addressObj, com_column_operate_rel_data, com_column_operate_entity_data,
+   com_c_countSonTask,com_c_relData,
   com_c_sonData, com_c_sonTaskGId, com_c_sonNoteGId, com_c_g_person_file, com_c_g_person_url,
   com_c_g_person_image, com_c_g_person_album, com_c_g_album_image, com_c_g_company_url, com_c_g_company_person,
   com_c_g_company_file, com_c_g_company_image, com_c_g_company_album,

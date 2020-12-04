@@ -5,7 +5,7 @@
     </dm_debug_list>
 
     <el-menu
-    style=""
+      style=""
       :default-active="activeMenuIndex"
       class="el-menu-demo"
       mode="horizontal"
@@ -15,8 +15,6 @@
       active-text-color="#ffd04b"
       v-if="arrMenu"
     >
-   
-
       <template v-for="menuEach in arrMenu">
         <!--一级菜单带route，表示无子菜单-->
         <el-menu-item
@@ -26,36 +24,49 @@
           :key="menuEach.name"
         >
           <i :class="menuEach.icon"></i>
-          <span slot="title">{{menuEach.title}}</span>
+          <span slot="title">{{ menuEach.title }}</span>
         </el-menu-item>
         <!--一级菜单不带route，表示有子菜单-->
         <el-submenu :index="menuEach.name" :key="menuEach.name" v-else>
           <template slot="title">
             <i :class="menuEach.icon"></i>
-            <span>{{menuEach.title}}</span>
+            <span>{{ menuEach.title }}</span>
           </template>
 
           <el-menu-item
             :index="item.name"
-            :route="item.route?item.route:`/manage/demo_show?com=${item.name}`"
+            :route="
+              item.route ? item.route : `/manage/demo_show?com=${item.name}`
+            "
             v-for="item in menuEach.menuItem"
             :key="item.name"
-          >{{item.title||item.name}}</el-menu-item>
+            >{{ item.title || item.name }}</el-menu-item
+          >
         </el-submenu>
       </template>
     </el-menu>
     <div class="main-box1111">
-      <div class="left-box" :style="{'width':showDialog?'60%':'100%'}">
-        <router-view style="padding:10px;"></router-view>
+      <div class="left-box" :style="{ width: showDialog ? '60%' : '100%' }">
+        <router-view style="padding: 10px"></router-view>
       </div>
 
-      <div :class="{'side-bar-box':true,'show':showDialog}" v-if="true">
-        <i class="el-icon-document-copy btn-copy" :data-clipboard-text="dataConfigForCopy"></i>
-        <i class="el-icon-circle-close btn-close-cf" @click="showDialog=false"></i>
-        <dm_dynamic_form :cf="cfForm" v-model="dataConfig" v-if="showCFForm"></dm_dynamic_form>
+      <div :class="{ 'side-bar-box': true, show: showDialog }" v-if="true">
+        <i
+          class="el-icon-document-copy btn-copy"
+          :data-clipboard-text="dataConfigForCopy"
+        ></i>
+        <i
+          class="el-icon-circle-close btn-close-cf"
+          @click="showDialog = false"
+        ></i>
+        <dm_dynamic_form
+          :cf="cfForm"
+          v-model="dataConfig"
+          v-if="showCFForm"
+        ></dm_dynamic_form>
       </div>
       <!-- <div class="side-bar-cover" v-if="showDialog" @click="showDialog=false"></div> -->
-      <div class="btn-cf" @click="showDialog=true" v-if="!showDialog">
+      <div class="btn-cf" @click="showDialog = true" v-if="!showDialog">
         配
         <br />置
       </div>
@@ -123,8 +134,12 @@ export default {
       deep: true
     }
   },
-  created(){
- util.changeFavicon(`//qn-dmagic.dmagic.cn/images/icon_dm.png`)//函数：{改变网页标题图标的函数}
+  created() {
+    
+    util.changeFavicon(`//qn-dmagic.dmagic.cn/images/icon_dm.png`)//函数：{改变网页标题图标的函数}
+
+
+
   },
 
   mounted() {
@@ -132,7 +147,7 @@ export default {
     clipboard.on("success", e => {
       this.$message.success("复制成功");
     });
-   
+
   }
 };
 </script>

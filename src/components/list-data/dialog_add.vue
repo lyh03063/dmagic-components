@@ -1,5 +1,6 @@
 <template>
   <div>
+
     <!--新增数据表单弹窗-->
     <el-dialog
       class="n-el-dialog"
@@ -11,6 +12,7 @@
       :close-on-click-modal="false"
       :append-to-body="true"
     >
+        {{cfFormAdd}}
       <div class>
         <dm_debug_list level-up="2">
           <dm_debug_item v-model="cf" text="配置" />

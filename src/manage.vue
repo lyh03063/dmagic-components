@@ -88,6 +88,9 @@ export default {
       // _systemId: "sys_api"
     }
 
+
+    
+
     document.title = PUB.systemName; //修改浏览器标题栏文字
      util.changeFavicon(`http://qn-dmagic.dmagic.cn/images/icon_sys_api.png`)//函数：{改变网页标题图标的函数}
 

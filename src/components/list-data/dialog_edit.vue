@@ -1,6 +1,9 @@
 <template>
   <div>
     <!--修改数据表单弹窗-->
+
+    <!-- <div class="">cf.filterFormItems：{{ cf.filterFormItems }}</div> -->
+
     <el-dialog
       class="n-el-dialog"
       title="修改数据"
@@ -17,14 +20,22 @@
         <dm_debug_item v-model="IN_formModify" text="修改表单的绑定数据" />
       </dm_debug_list>
       <!--表单提示语-->
-      <div class v-html="$lodash.get(cf.cfTips, `text`)" v-if="cf.cfTips" :style="getTipsStyle()"></div>
+      <div
+        class
+        v-html="$lodash.get(cf.cfTips, `text`)"
+        v-if="cf.cfTips"
+        :style="getTipsStyle()"
+      ></div>
       <dm_dynamic_form
         v-model="IN_formModify"
         :cf="cf.cfFormModify"
         @submit="modifyData"
         @cancel="cf.visible = false"
       >
-        <template v-slot:[item.slot]="{formData}" v-for="item in cf.cfFormModify.formItems">
+        <template
+          v-slot:[item.slot]="{ formData }"
+          v-for="item in cf.cfFormModify.formItems"
+        >
           <!--根据cf.formItems循环输出插槽--新增修改表单弹窗-->
           <slot :name="item.slot" :formData="formData" v-if="item.slot"></slot>
         </template>
@@ -33,29 +44,33 @@
   </div>
 </template>
 <script>
-
-
-
 export default {
   name: "dialog_edit",
   components: {},
-  props:{
-    cf:{
-      type:Object,
-      default:function(){
+  props: {
+    cf: {
+      type: Object,
+      default: function () {
         return {}
       }
-
     },
-    formModify:{
-
+    formModify: {
     },
   },
-  
   data() {
+
+
+    let { _dataType } = this.cf.cfFormModify.paramAddonInit; //变量：{数据类型}
+    let listCF = lodash.get(PUB.listCF, `list_${_dataType}`); //根据数据类型获取对应的列表配置
+
+
+
     return {
+      //表单字段配置备份
+      formItemsBackup: lodash.cloneDeep(this.cf.cfFormModify.formItems),
+      listCF: listCF,//列表配置提取
       // cf.visible: null,
-      IN_formModify: this.formModify || {}
+      IN_formModify: this.formModify || {},
     };
   },
   watch: {
@@ -65,7 +80,21 @@ export default {
         this.IN_formModify = this.formModify || {};
       },
       // immediate: true,
-      deep: true
+      deep: true,
+    },
+    //监听-字段过滤器-用于编辑单个字段时
+    "cf.filterFormItems": {
+      handler(fnFilter, oldVal) {
+        console.log(`cf.filterFormItems变动#############`);
+        if (fnFilter) {//Q1：{字段过滤器}存在
+          this.cf.cfFormModify.formItems = fnFilter(this.listCF.formItems)//执行过滤器
+        } else {//Q2：否则
+          //优先读取父级列表的表单字段配置****兼容普通列表和分组数据列表
+          this.cf.cfFormModify.formItems = this.formItemsBackup || this.listCF.formItems
+
+        }
+      },
+      deep: true,
     },
     //监听
     "cf.visible": {
@@ -117,19 +146,17 @@ export default {
         const loading = this.$loading({
           lock: true, text: "执行中", spinner: "el-icon-loading", background: "rgba(0, 0, 0, 0.7)"
         });
-        let flagAjaxOk=true;//ajax是否正常
+        let flagAjaxOk = true;//ajax是否正常
         let response = await axios({ //请求接口
-          method: "post",url: PUB.domain + this.cf.urlModify,
+          method: "post", url: PUB.domain + this.cf.urlModify,
           data: ajaxParam //传递参数
-        }).catch((err)=>{
+        }).catch((err) => {
           this.$message.error(`网络异常:${err}`);
-          flagAjaxOk=false;
-        
+          flagAjaxOk = false;
         });
-        
         loading.close(); //关闭loding
-        if(!flagAjaxOk)return //ajax异常退出
-      } 
+        if (!flagAjaxOk) return //ajax异常退出
+      }
       //****修改静态列表的数据+修改动态列表的数据
       //找到对应的数据并修改成最新的
       if (this.cf.tableData) {
@@ -147,17 +174,6 @@ export default {
         type: "success"
       });
       this.cf.visible = false; //关闭弹窗
-
-
-
-
-
-
-
-
-
-
-
       //如果{增删改操作后是否自动刷新}为真
       if (this.cf.isRefreshAfterModify) {
         this.vm_list.getDataList(); //更新数据列表-暂时去掉
@@ -172,24 +188,15 @@ export default {
     },
   },
   created() {
-
     this.vm_list = this.$closest({ vmT: this, name: "dm_list_data" })
-
-
-
     /****************************处理通用列表编辑的配置-START****************************/
     //这里有点乱！！！！！
     //设置主参数
     this.$set(this.cf, "visible", !!this.cf.visible); //增加到响应系统-有了这一句，visible就可以不预留配置，默认关闭
-
-
-
-
     //如果是通用列表
     this.cf.cfFormModify = this.cf.cfFormModify || {};
     if (this.cf.listType == "common") {//如果是通用型数据
       let cfFormModifyTemp = {
-
         idKey: "_id", watch: {},
         urlInit: "/info/commonDetail",
         btns: [
@@ -197,19 +204,15 @@ export default {
           { text: "取消", event: "cancel" }
         ]
       };
-      let { _dataType } = this.cf.cfFormModify.paramAddonInit; //变量：{数据类型}
-      let listCF = lodash.get(PUB.listCF, `list_${_dataType}`); //根据数据类型获取对应的列表配置
-      let { formItems, cfForm } = listCF; //获取对应的表单项
-      cfFormModifyTemp.formItems = formItems; //表单字段
+
+      let { formItems, cfForm } = this.listCF; //从列表配置中获取对应的表单项
+      // cfFormModifyTemp.formItems = formItems; //表单字段
       if (cfForm) {//如果额外配置存在
         Object.assign(cfFormModifyTemp, cfForm);//合并对象
       }
+
       //调用：{给一个对象设置默认属性函数}
       util.setObjDefault(this.cf.cfFormModify, cfFormModifyTemp);
-
-
-
-
       //设置主参数
       this.cf.urlModify = "/info/commonModify";
     }

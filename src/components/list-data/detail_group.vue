@@ -10,15 +10,14 @@
         v-if="groupId && $sys.userId"
       ></com_btn_collect>
     </div>
-
     <dm_debug_list>
       <dm_debug_item v-model="groupId" text="groupId" />
       <dm_debug_item v-model="componentName" text="对应的列表组件名" />
       <dm_debug_item v-model="groupDoc" text="groupDoc" />
       <dm_debug_item v-model="isSpecial" text="isSpecial" />
     </dm_debug_list>
-
     <template class v-if="ready">
+      <!-- {{groupDoc.dataType}} -->
       <!--动态组件-->
       <component
         :is="componentName"
@@ -41,14 +40,10 @@
     </div>
   </div>
 </template>
-
 <script>
-
-
 export default {
   mixins: [MIX.base],
   name: "detail_group",
-
   data() {
     return {
       systemId: null,
@@ -58,7 +53,6 @@ export default {
       ready: false
     };
   },
-
   props: {
     prop_groupId: {},//***属性过来的groupId，这种是组件形式而不是路由形式！！！！
     cf: {
@@ -73,7 +67,6 @@ export default {
       return PUB.arrGroupMoudlesSpe.includes(this.groupDoc.dataType);
     }
   },
-
   methods: {
     //函数：{单条数据操作事件}
     singleBtnClick: async function (actionType, row) {
@@ -90,32 +83,24 @@ export default {
         data: { _id: this.groupId, _systemId: "$all" } //传递参数
       });
       this.groupDoc = data.doc;
+      // this.groupDoc.dataType = "note_2";
       this.componentName = `detail_group_${this.groupDoc.dataType}`;
       //如果hash值是当前页面为主（不是嵌套在其他路由下）
       if (location.hash.startsWith(`#/detail_group?`)) {
         document.title = this.groupDoc.title; //修改浏览器标题栏文字
       }
-
       let { _systemId } = this.groupDoc
       this.systemId = _systemId;
-
       // alert(this.systemId);
-
-
       if (!PUB._paramAjaxAddon) {//如果{PUB._paramAjaxAddon}不存在
         //存在了就不要去覆盖！！！！！
         PUB._paramAjaxAddon = { _systemId: _systemId || "sys_apiaaaa" }
       }
-
-
-
       this.ready = true;
     },
     //函数：{detail_group_common组件加载后的回调函数}
     initedDetailGCommon: async function ({ vm }) {
       this.vm_detail_group_common = vm;
-
-
     },
     //函数：{初始化CF配置函数}
     initCf: async function () {
@@ -128,26 +113,18 @@ export default {
         // isShowSearchForm: false,
         cfAAA
       });
-
-
     },
   },
   async created() {
     this.groupId = this.prop_groupId || this.$route.query.groupId;//***优先使用prop_groupId
     this.initCf(); //调用：{初始化CF配置函数}
-
     this.getGroupDoc(); //调用：{获取分组详情函数}
-
-
-
   },
   mounted() {
     this.$emit("inited", { vm: this }); //将当前对象抛出
   }
 };
 </script>
-
-
 <style scoped>
 .title {
   font-size: 18px;

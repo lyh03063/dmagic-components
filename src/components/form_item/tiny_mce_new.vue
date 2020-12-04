@@ -65,8 +65,6 @@ export default {
       ],
       //powerpaste处理内容的回调函数，20201027添加，厉害！！
       paste_preprocess: function (pluginApi, data) {
-        console.log(data.content, data.mode, data.source);
-        console.log(`data:`, data);
         let { content } = data
         //正则替换超链接，让其新窗口打开
         content = content.replace(/<a href=/g, `<a target="_blank" href=`)

@@ -252,12 +252,17 @@ export default {
 
 
     //-------------显示修改弹窗的函数--------------
-    async showModify(row) {
+    async showModify(row,others={}) {
+      let {filterFormItems}=others
       this.$emit("after-show-Dialog-Modify", row);//触发外部事件
       this.beforeModify = row;
       let rowNew = lodash.cloneDeep(row); //深拷贝
       this.formModify = rowNew; //表单赋值
       this.dataIdModify = rowNew[this.cf.idKey];
+
+      console.log(`filterFormItems:#########`, filterFormItems);
+
+      this.$set(this.cfEditDialog, "filterFormItems", filterFormItems);//表单字段过滤函数
 
       this.cfEditDialog.dataIdModify = this.dataIdModify; //
       this.cfEditDialog.visible = true;

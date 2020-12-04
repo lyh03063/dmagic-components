@@ -69,11 +69,12 @@
           :dataId="demoId"
           v-if="demoId && $sys.userId"
         ></com_btn_collect>
+
         <el-button
           type="primary"
           @click="saveDemo"
           size="mini"
-          v-if="isMine && !vid"
+          v-if="isAllowSave"
           >保存</el-button
         >
         <el-button plain @click="showDialogSaveMyDemo" size="mini"
@@ -133,7 +134,11 @@
               </div>
               <!-- tabs -->
               <el-tabs v-model="activeName" type="card" @tab-click="tabClick">
-                <el-tab-pane :label="`Body配置(${lengthBody})`" name="tab_body">
+                <el-tab-pane
+                  :label="`Body配置(${lengthBody})`"
+                  name="tab_body"
+                  lazy
+                >
                   <div class="DPFC H38">
                     <div class="FX1"></div>
                     <div class>
@@ -165,7 +170,11 @@
                     ></dm_row_html_tag>
                   </div>
                 </el-tab-pane>
-                <el-tab-pane :label="`head配置(${lengthHead})`" name="tab_head">
+                <el-tab-pane
+                  :label="`head配置(${lengthHead})`"
+                  name="tab_head"
+                  lazy
+                >
                   <div class="DPFC H38">
                     <div class="FX1"></div>
                     <div class>
@@ -345,7 +354,7 @@
                   label="基础信息"
                   name="tab_base"
                   lazy
-                  v-if="docDemo && isMine"
+                  v-if="docDemo && isAllowSave"
                 >
                   <el-select
                     class="W100 MB20"
@@ -618,6 +627,13 @@ export default {
     };
   },
   computed: {
+    isAllowSave() {//是否运行保存
+      let { isMine, vid } = this;
+      let arrUserSpec = ["13691916429", "17788757975"]//特殊用户数组
+      let flag1 = !vid;//无版本id
+      let flag2 = isMine || arrUserSpec.includes(this.$sys.userId);
+      return flag1 && flag2
+    },
     //TODO:函数：{拼接初始的DemoDoc函数}
     joinDemoDoc: function () {
       let { arrCss, arrHtml, arrHtmlHead, modeShowHtml, allowEditHtml, modeShowHProp, cfDragBox, pageHtmlCode, docDemo } = this
@@ -674,7 +690,6 @@ export default {
     },
     docDemoNew: {//监听到docDemoNew变化
       handler(newVal, oldVal) {
-
         if (this.startWatch) {//如果{开始监听变动}为真
           this.hasModify = true;
         }
@@ -684,34 +699,19 @@ export default {
       handler(newVal, oldVal) {
         this.updatePageCss()//调用：{更新页面样式函数}
       },
-      immediate: true,
       deep: true
     },
     modeShowHtml: {//监听到arrClass变化，立马更新样式
       async handler(newVal, oldVal) {
         if (this.modeShowHtml == 'actual' && this.isHotUpdate) {
           await this.$nextTick();//延迟到视图更新
+          console.log(`updateIframe:###4`);
           this.updateIframe()//调用：{更新iframe函数}
         }
       },
-      immediate: true,
+      // immediate: true,
     },
 
-    arrHtml: {//监听到arrHtml变化，更新Html
-      async handler() {
-        this.debouncedAfterArrHtmlChange()//调用：{防抖版arrHtml变动后的后续处理函数}
-      },
-      // immediate: true,
-      deep: true
-    },
-    arrHtmlHead: {//监听到arrHtml变化，更新Html
-      async handler() {
-        this.debouncedAfterArrHtmlHeadChange()//调用：{防抖版arrHtmlHead变动后的后续处理函数}
-
-      },
-      // immediate: true,
-      deep: true
-    },
   },
   methods: {
     //函数：{arrHtmlHead变动后的后续处理函数}
@@ -834,9 +834,9 @@ export default {
       if (this.modeShowHtml == 'test') {
         util.addCssToPage({ css: this.cssCode })//调用：{输出css代码到当前页面的函数}
       }
-      await util.timeout(500); //延迟
+      // await util.timeout(500); //延迟
       if (this.modeShowHtml == 'actual' && this.isHotUpdate) {
-        this.updateIframe()//调用：{更新iframe函数}
+        // this.updateIframe()//调用：{更新iframe函数}
       }
     },
     //函数：{打开css集合添加数据弹窗函数}
@@ -933,7 +933,8 @@ export default {
       let _data = lodash.cloneDeep(this.joinDemoDoc);
       if (this.demoId) {//如果demoId存在，即拷贝demo
         _data.title = this.formDataAddDemo.title
-        delete _data.keyword
+        delete _data.keyword//关键词不赋值
+        delete _data.album//关键词不赋值
       }
       let rsp = await axios({
         method: "post", url: `${PUB.domain}/info/commonAdd`,
@@ -948,7 +949,7 @@ export default {
     getDemoDoc: async function () {
       if (!this.demoId) {//
         this.readyDemo = true;//{是否准备好初始demo数据}设为真
-        await util.timeout(100); //延迟
+        // await util.timeout(100); //延迟
         this.startWatch = true;//{开始监听变动}设为真
         return
       }
@@ -1009,7 +1010,7 @@ export default {
 
       util.ajaxAddVisitRecord({ tagPage: "auto_layout", dataId: this.demoId, })//变量：{ajax添加访客记录函数}
 
-      await util.timeout(500); //延迟
+      // await util.timeout(500); //延迟
       this.startWatch = true;//{开始监听变动}设为真
     },
     //函数：{获取关联笔记列表函数}
@@ -1020,10 +1021,12 @@ export default {
   },
   async created() {
 
-    //函数：{防抖版arrHtml变动后的后续处理函数}
-    this.debouncedAfterArrHtmlChange = lodash.debounce(this.afterArrHtmlChange, 1000)
-    //函数：{防抖版arrHtmlHead变动后的后续处理函数}
-    this.debouncedAfterArrHtmlHeadChange = lodash.debounce(this.afterArrHtmlHeadChange, 1000)
+    Vue.vm_auto_layout = this;//缓存当前实例，供子组件获取
+
+    // //函数：{防抖版arrHtml变动后的后续处理函数}
+    this.debouncedAfterArrHtmlChange = lodash.debounce(this.afterArrHtmlChange, 2000)
+    // //函数：{防抖版arrHtmlHead变动后的后续处理函数}
+    this.debouncedAfterArrHtmlHeadChange = lodash.debounce(this.afterArrHtmlHeadChange, 2000)
 
     $("body").attr("tab", this.activeName)//body设置tab属性
     await util.loadJs({ url: PUB.urlJS.html_tag })//加载html相关JS
@@ -1035,8 +1038,36 @@ export default {
     this.cfLDataVersion.findJsonAddon._idRel = demoId;//历史版本列表配置关联id
     await this.getDemoDoc(); //调用：{获取demo详情函数}
     if (this.modeShowHtml == 'actual') {//如果是真实模式
-      await util.timeout(500); //延迟
+      // await util.timeout(500); //延迟
+      console.log(`updateIframe:###1`);
+      this.afterArrHtmlChange()//调用：{arrHtml变动后的后续处理函数}
+      this.afterArrHtmlHeadChange()//调用：{防抖版arrHtmlHead变动后的后续处理函数}
       this.updateIframe()//调用：{更新iframe函数}
+
+
+      //动态监听当前字典的属性名****
+      this.$watch(`arrHtml`, function () {
+        console.log(`arrHtml变动########`);
+        this.debouncedAfterArrHtmlChange()//调用：{防抖版arrHtml变动后的后续处理函数}
+      },
+        { deep: true,immediate: false }
+      );
+
+       //动态监听当前字典的属性名****
+      this.$watch(`arrHtmlHead`, function () {
+        console.log(`arrHtmlHead变动########`);
+        this.debouncedAfterArrHtmlHeadChange()//调用：{防抖版arrHtmlHead变动后的后续处理函数}
+      },
+        { deep: true,immediate: false }
+      );
+
+
+      
+
+
+
+
+
     }
   },
   async mounted() {

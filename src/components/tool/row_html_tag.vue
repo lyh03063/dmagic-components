@@ -69,13 +69,11 @@
               type="checkbox"
             />
           </div>
-
-          <!--标签开始符-->
-
+          <!--标签开始符 -->
           <el-popover
             placement="bottom"
-            width="260"
             :open-delay="300"
+            width="260"
             trigger="manual"
             v-model="
               vm_auto_layout.showPopoverBody[`${pid}__${docEntity.__id}`]
@@ -113,7 +111,6 @@
                 "
                 >属性</i
               >
-
               <i
                 title="+子组件"
                 class="MR10 btn_mimi el-icon-plus"
@@ -121,7 +118,6 @@
                 v-if="doc.children && !isNoChildren(doc)"
                 >子组件</i
               >
-
               <i
                 title="修改节点"
                 class="MR10 btn_mimi el-icon-edit"
@@ -130,37 +126,31 @@
                   $refs.collectionTag.showEditDialog(index);
                 "
               ></i>
-
               <div class="H1 BC_f0f0f0 OFH MT10 MB10 WP100"></div>
-
               <i
                 title="上移"
                 class="MR10 btn_mimi el-icon-aaa"
                 @click="$refs.collectionTag.move(index, 'up')"
                 >上移</i
               >
-
               <i
                 title="下移"
                 class="MR10 btn_mimi el-icon-aaa"
                 @click="$refs.collectionTag.move(index, 'down')"
                 >下移</i
               >
-
               <i
                 title="置顶"
                 class="MR10 btn_mimi el-icon-aaa"
                 @click="$refs.collectionTag.move(index, 'top')"
                 >置顶</i
               >
-
               <i
                 title="置底"
                 class="MR10 btn_mimi el-icon-aaa"
                 @click="$refs.collectionTag.move(index, 'bottom')"
                 >置底</i
               >
-
               <i
                 title="删除当前节点"
                 class="MR10 btn_mimi el-icon-delete"
@@ -176,14 +166,12 @@
                 "
                 >节点</i
               >
-
               <i
                 title="复制代码到剪贴板"
                 class="MR10 btn_mimi el-icon-document-copy"
                 @click="copyHtmlCode(docEntity)"
                 >代码</i
               >
-
               <i
                 title="粘贴代码到此"
                 class="MR10 btn_mimi el-icon-document-copy"
@@ -191,19 +179,16 @@
                 >粘贴代码到此</i
               >
             </div>
-            <span
+            <div
               slot="reference"
               class="code_html_tag FS14"
-              @click="showPopoverTag({ docEntity })"
-              >&lt;{{ doc[cf.labelKey] }}</span
+              @click.left="showPopoverTag({ docEntity })"
+              @click.right.prevent="showPopoverTag({ docEntity })"
             >
-            <!-- @click="$refs.collectionTag.showEditDialog(index)" -->
-            <!-- <span  class="el-icon-setting DP3 FS18 MT4"></span> -->
-            <!-- <el-button  icon="el-icon-more" size="mini">操作</el-button> -->
+              &lt;{{ doc[cf.labelKey] }}
+            </div>
           </el-popover>
-
           <!-- {{docEntity.diyProp}}--- -->
-
           <!-- 自定义属性 -->
           <span
             class="FS14 DPF"
@@ -238,35 +223,39 @@
                   placeholder="请输入内容"
                   v-model="item.prop"
                 ></el-input>
-
                 <div class="PT6">
                   <i
                     class="MR10 btn_mimi el-icon-plus"
                     @click="addPropAfter({ docEntity, index })"
-                    >后面添加属性</i
+                    >后面属性</i
                   >
-
                   <i
                     class="MR10 btn_mimi el-icon-plus"
                     @click="
                       addPropAfter({ docEntity, index, position: 'before' })
                     "
-                    >前面添加属性</i
+                    >前面属性</i
                   >
-
+                  <i
+                    class="MR10 btn_mimi"
+                    @click="
+                      addPropAfter({
+                        docEntity,
+                        index,
+                        prop: `${item.prop}_1`,
+                        value: item.value,
+                      })
+                    "
+                    >复制</i
+                  >
                   <i
                     class="MR10 btn_mimi el-icon-delete"
                     @click="deleteProp({ docEntity, index })"
-                    >删除属性</i
+                    >删除</i
                   >
-
                   <label>
-                   
-                    <input
-                      v-model="item.ignoreVal"
-                      type="checkbox"
-                    />
-                     省略属性值
+                    <input v-model="item.ignoreVal" type="checkbox" />
+                    省略属性值
                   </label>
                 </div>
                 <div class="MT10 DPF">
@@ -275,31 +264,32 @@
                     class="MR6"
                     v-model="item.prop"
                     :options="propList(docEntity.tag)"
+                    @change="showPopoverPropVal({ docEntity, prop: item.prop })"
                     btnText="私有属性"
                     v-if="propList(docEntity.tag).length"
                     :cf="cfOptionInput"
                   ></dm_option_input>
-
                   <dm_option_input
                     class="MR6"
                     v-model="item.prop"
                     :options="optionsGlobal"
                     btnText="全局属性"
+                    @change="showPopoverPropVal({ docEntity, prop: item.prop })"
                     :cf="cfOptionInput"
                   ></dm_option_input>
-
                   <dm_option_input
                     class="MR6"
                     v-model="item.prop"
                     :options="optionsJsEvent"
+                    @change="showPopoverPropVal({ docEntity, prop: item.prop })"
                     btnText="JS事件"
                     :cf="cfOptionInput"
                   ></dm_option_input>
-
                   <dm_option_input
                     class="MR6"
                     v-model="item.prop"
                     :options="optionsVueCmd"
+                    @change="showPopoverPropVal({ docEntity, prop: item.prop })"
                     btnText="Vue指令"
                     :cf="cfOptionInput"
                   ></dm_option_input>
@@ -314,11 +304,10 @@
                 }}</span>
               </span>
             </el-popover>
-
             <span v-if="!item.ignoreVal">=</span>
             <!--属性值部分-->
             <el-popover
-            v-if="!item.ignoreVal"
+              v-if="!item.ignoreVal"
               placement="bottom-start"
               :popper-class="popperClass"
               @after-enter="afterEnter"
@@ -343,7 +332,6 @@
                   placeholder="请输入内容"
                   v-model="item.value"
                 ></el-input>
-
                 <div
                   class="B_ddd P5 MT10"
                   v-if="arrPropFrequency(docEntity.tag, item.prop).length"
@@ -392,7 +380,6 @@
           >
             <div class="showBigIn PSR" v-if="isShowPopoverIn">
               <!--关闭按钮-->
-
               <i
                 class="el-icon-close btn_pop_close"
                 @click="closeAllPopover"
@@ -417,9 +404,7 @@
                 v-model="docEntity.text"
               ></el-input>
             </div>
-
             <!-- END:节点内文本 -->
-
             <div
               class="MR2 FS14 box_innertext PSR"
               slot="reference"
@@ -437,14 +422,12 @@
             </div>
           </el-popover>
           <!-- <span class="C_999 MR20 FS14" v-if="doc.desc">({{doc.desc}})</span> -->
-
           <!--结束标签，同一行（非自闭合元素，且不含子元素）-->
           <div v-if="!noInnerHtml(doc) && doc.children.length == 0">
             <span class="code_html_tag FS14"
               >&lt;/{{ doc[cf.labelKey] }}&gt;</span
             >
           </div>
-
           <div class="FX1"></div>
           <div
             class=""
@@ -458,7 +441,6 @@
             <i class="ML10 sort-num">拖</i>
           </div>
         </div>
-
         <div class="box_remark" v-if="doc.desc">
           &lt;!-- {{ doc.desc }}--&gt;
         </div>
@@ -592,50 +574,25 @@ export default {
         { label: 'onunload（用户退出页面）', value: "onunload" },
         { label: 'onreset（表单重置）', value: "onreset" },
         { label: 'onsubmit（表单提交）', value: "onsubmit" },
-
-
       ],
       //Vue指令属性选项
       optionsVueCmd: [
-
         { label: 'v-bind（动态属性绑定,缩写为:）', value: ":xxx" },
-        { label: 'v-on（事件绑定,缩写为@）', value: "@xxx" },
+        { label: 'v-on（事件绑定,缩写为@）', value: "@click" },
         { label: 'v-if（条件判断）', value: "v-if" },
         { label: 'v-else-if（分支条件判断）', value: "v-else-if" },
         { label: 'v-else（其他条件判断）', value: "v-else" },
         { label: 'v-for（循环/遍历）', value: "v-for" },
-        { label: 'aaaa（bbb）', value: "aaa" },
-        { label: 'aaaa（bbb）', value: "aaa" },
-        { label: 'aaaa（bbb）', value: "aaa" },
-        { label: 'aaaa（bbb）', value: "aaa" },
-        { label: 'aaaa（bbb）', value: "aaa" },
-        { label: 'aaaa（bbb）', value: "aaa" },
-        { label: 'aaaa（bbb）', value: "aaa" },
-        { label: 'aaaa（bbb）', value: "aaa" },
-
-
+        { label: 'v-model（双向绑定）', value: "v-model" },
       ],
       cfOptionInput: {
         cfPopover: { width: 400, placement: "bottom" },
         cfListFlex: { widthG: "32%", spaceY: "5px", }
       },
-
       vm_auto_layout: null,//父组件
-
-
-
       popperClass: "",//popper弹窗的附加类名
       isShowPopoverIn: true,//是否显示el-popover内部盒子
       popperOptions: {
-        // placement:"bottom-start",
-        // modifiers: [
-        //   {
-        //     name: 'arrow',
-        //     options: {
-        //       padding: 5, // 5px from the edges of the popper
-        //     },
-        //   },
-        // ],
       },
       showContent: {},//显示节点内容popover弹窗配置对象
       docHtmlFocus: null,
@@ -665,7 +622,6 @@ export default {
       }
       return fn
     },
-
     //TODO:arrPropFrequency计算属性-获取当前属性的候选值
     arrPropFrequency: function () {
       let fn = function (tag, prop) {
@@ -675,7 +631,7 @@ export default {
         if (!(arrProp && arrProp.length)) return []
         let docProp = arrProp.find(d => d.prop == prop)
         if (!docProp) return []
-        let { arrPropFrequency=[] } = docProp
+        let { arrPropFrequency = [] } = docProp
         return arrPropFrequency
       }
       return fn
@@ -743,41 +699,30 @@ export default {
     },
   },
   methods: {
-
-
-
     //函数：{删除一个html属性}
     deleteProp: async function ({ docEntity, index }) {
       docEntity.diyProp.splice(index, 1)
       //当前属性弹窗关闭
       this.closeAllPopover()//调用：{关闭所有popover弹窗函数}
       // this.vm_auto_layout.showPopoverBody[`${this.pid}__${docEntity.__id}_${index}_name`] = false
-
     },
     //函数：{在html属性后方添加属性}
-    addPropAfter: async function ({ docEntity, index, position = "after" }) {
-
+    addPropAfter: async function ({ docEntity, index, position = "after", prop = "new", value = "xxx", }) {
       let indexNew = index + 1;
       if (position == "before") {
         indexNew = index
       }
-
       let { showPopoverBody } = this.vm_auto_layout//提取父组件的数据
-      docEntity.diyProp.splice(indexNew, 0, { prop: "new", value: "xxx" })
+      docEntity.diyProp.splice(indexNew, 0, { prop, value })
       this.closeAllPopover()//调用：{关闭所有popover弹窗函数}
-
       //新属性弹窗展示
       await this.$nextTick();//延迟到视图更新
       this.$set(showPopoverBody, `${this.pid}__${docEntity.__id}_${indexNew}_name`, true);
     },
-
-
     //函数：{删除当前html节点函数}-真对右侧的删除节点按钮
     deleteDomCurr: async function (index) {
-
       window.arr_$targetIndex = [];//**清空链条数组，否则会影响后续的聚焦
       this.$refs.collectionTag.deleteData(index)
-
     },
     //END:函数：{全选按钮值变动函数}
     changeCheckAll: function (docEntity) {
@@ -886,8 +831,6 @@ export default {
         this.propValCurr = cf[this.propCurr];
       }
     },
-
-
     //TODO:函数：{关闭所有popover弹窗函数}
     closeAllPopover: function () {
       let { showPopoverBody } = this.vm_auto_layout//提取父组件的数据
@@ -896,14 +839,15 @@ export default {
         delete showPopoverBody[prop]//清除掉，调试时好看一些
       }
     },
-
-
     //TODO:函数：{showPopoverTag}
     showPopoverTag: async function ({ docEntity }) {
+
       let { showPopoverBody } = this.vm_auto_layout//提取父组件的数据
       let { __id } = docEntity;
       this.closeAllPopover()//调用：{关闭所有popover弹窗函数}
       this.$set(showPopoverBody, `${this.pid}__${docEntity.__id}`, true);
+
+
     },
     //END:函数：{showPopoverPropVal}
     showPopoverPropVal: async function ({ docEntity, prop }) {
@@ -912,7 +856,6 @@ export default {
       this.closeAllPopover()//调用：{关闭所有popover弹窗函数}
       this.$set(showPopoverBody, `${this.pid}__${docEntity.__id}_${prop}`, true);
     },
-
     //END:函数：{showPopoverProp}
     showPopoverProp: async function ({ docEntity, prop, index }) {
       let { showPopoverBody } = this.vm_auto_layout//提取父组件的数据
@@ -932,12 +875,9 @@ export default {
     afterMouseenter: async function (param) {
       this.$emit("html_tag_mouseenter", param);//传递到外部组件去执行聚焦！！！
       if (this.vm_auto_layout.modeShowHtml == 'actual') return;//如果是真实模式，退出
-
       //以下是测试模式！！！
       if (!this.vm_auto_layout.isHighLightLayout) return;//如果未启用高亮区块模式，退出
       let { list, focusIndex } = param
-
-
       if (PUB.focusEle && PUB.focusEle.cf && PUB.focusEle.cf.focus_ele) {//如果聚焦元素已存在,去掉聚焦样式
         delete PUB.focusEle.cf.focus_ele
       }
@@ -973,12 +913,10 @@ export default {
       let $target = util.getParentJQ()
       $target.removeClass("focus_ele")
       window.arr_$targetIndex.pop()
-
       let $targetP = util.getParentJQ()//继续获取父元素，如果有的话，聚焦 
       if ($targetP) {
         $targetP.addClass("focus_ele")
       }
-
     },
     //函数：{添加数据后的回调函数}
     afterAdd: async function (data) {
@@ -1051,9 +989,7 @@ export default {
             },
             { prop: "desc", label: "描述", type: "input", default: "" },
             { prop: "text", label: "innerText(内部文本)", type: "input", },
-
             { prop: "children", show: false, label: "children", type: "jsonEditor", default: [] },
-
             { "prop": "diyProp", "label": "html属性", "col_span": 24, component: "dm_collection_html_prop", }
           ],
         },
@@ -1061,19 +997,16 @@ export default {
     },
   },
   async created() {
+    this.vm_auto_layout = Vue.vm_auto_layout;
     this.initCF()//调用：{初始化组件配置函数}
   },
   mounted() {
     this.$emit("inited", { vm: this }); //将当前对象抛出
-    this.vm_auto_layout = this.$closest({ vmT: this, name: "auto_layout" })
   },
-
-
 };
 </script>
 <style  scoped>
 /* FIXME样式 */
-
 /* 注释节点 */
 .box_remark {
   width: 100%;
@@ -1114,7 +1047,6 @@ export default {
   font-family: Consolas, "Courier New", monospace;
   background-color: #333;
 }
-
 /* 拖拽按钮*/
 .sort-num {
   text-align: center;

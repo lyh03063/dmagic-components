@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="float-tips" v-if="$sys.env=='dev'">非生产XXX</div>
+    <div class="float-tips" v-if="$sys.env == 'dev'">非生产XXX</div>
     <div class v-if="ready">
       <div class v-if="systemDoc._id">
         <el-container>
@@ -9,7 +9,7 @@
               <div class="FL MT13 C_fff MR10" v-if="systemDoc.logoSrc">
                 <img class="W60" :src="systemDoc.logoSrc" alt />
               </div>
-              <div class="FL MT13 C_fff MR10 FS24">{{systemDoc.title}}</div>
+              <div class="FL MT13 C_fff MR10 FS24">{{ systemDoc.title }}</div>
               <div class="FR MT20 C_fff">
                 <dm_user_role></dm_user_role>
               </div>
@@ -27,11 +27,13 @@
           </div>
           <div class="g-right-box">
             <keep-alive>
-              <router-view :key="routerKey" style="padding:10px"></router-view>
+              <router-view :key="routerKey" style="padding: 10px"></router-view>
             </keep-alive>
           </div>
         </div>
-        <div class="PSF B0 L0 BC_fff W200 H20 LH_20 C_999 FS12 PL10">{{sysId}}</div>
+        <div class="PSF B0 L0 BC_fff W200 H20 LH_20 C_999 FS12 PL10">
+          {{ sysId }}
+        </div>
       </div>
       <div class="LH50 TAC" v-else>没有对应的系统</div>
     </div>
@@ -108,6 +110,18 @@ export default {
     PUB._paramAjaxAddon = {
       _systemId: this.sysId
     }
+
+    let _systemId = util.getSystemId();//
+    // alert(_systemId);
+    //好律助系统的页面配置差异化
+    if (_systemId == "sys_haolvzhu") {
+
+      PUB.listCF.detail_group_note = PUB.listCF.detail_group_note_2
+      PUB.listCF.list_note = PUB.listCF.list_note_2
+    }
+
+
+
     await this.getDocSystem()//调用：{ajax获取系统doc函数}
     this.ready = true;
 
@@ -132,5 +146,4 @@ export default {
 .el-header {
   background-color: rgb(84, 92, 100) !important;
 }
-
 </style>

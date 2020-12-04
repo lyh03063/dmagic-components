@@ -11,38 +11,49 @@
     <!-- 兼容之前版本面包屑 -->
     <el-breadcrumb
       separator-class="el-icon-arrow-right"
-      v-if="cf.isShowBreadcrumb&&!cf.breadcrumb"
+      v-if="cf.isShowBreadcrumb && !cf.breadcrumb"
       class="MB12"
     >
       <el-breadcrumb-item :to="{ path: '/listHome' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>{{cf.twoTitle}}</el-breadcrumb-item>
-      <el-breadcrumb-item>{{cf.threeTitle}}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{ cf.twoTitle }}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{ cf.threeTitle }}</el-breadcrumb-item>
     </el-breadcrumb>
     <!-- 新面包屑 -->
     <el-breadcrumb
       separator-class="el-icon-arrow-right"
-      v-if="cf.isShowBreadcrumb&&cf.breadcrumb"
+      v-if="cf.isShowBreadcrumb && cf.breadcrumb"
       class="MB12"
     >
-      <el-breadcrumb-item v-for="(item,index) in cf.breadcrumb" :key="index">
+      <el-breadcrumb-item v-for="(item, index) in cf.breadcrumb" :key="index">
         <!-- <a :href="item.path" v-if="item.path">{{item.value}}</a> -->
-        <router-link :to="item.path" v-if="item.path">{{item.value}}</router-link>
-        <span v-else>{{item.value}}</span>
+        <router-link :to="item.path" v-if="item.path">{{
+          item.value
+        }}</router-link>
+        <span v-else>{{ item.value }}</span>
       </el-breadcrumb-item>
     </el-breadcrumb>
     <!--查询表单-->
     <div class="search-form-box MB10" v-if="cf.isShowSearchForm">
-      <dm_dynamic_form @submit1="searchList" :cf="cfSearchForm" v-model="objParam.findJson"></dm_dynamic_form>
+      <dm_dynamic_form
+        @submit1="searchList"
+        :cf="cfSearchForm"
+        v-model="objParam.findJson"
+      ></dm_dynamic_form>
     </div>
     <!-- v-if="cf.flag"这个规则去掉 -->
     <el-row size="mini" class="MB10" v-show="cf.isShowToolBar">
       <template class v-if="$lodash.hasIn(cf, 'batchBtns.addon')">
-        <template class v-for="(item,index) in cf.batchBtns.addon">
-          <slot class v-if="item.uiType=='slot'" :name="item.slot" :data="$data"></slot>
+        <template class v-for="(item, index) in cf.batchBtns.addon">
+          <slot
+            class
+            v-if="item.uiType == 'slot'"
+            :name="item.slot"
+            :data="$data"
+          ></slot>
           <!--组件形式，配置ref用于外部控制-->
           <component
             :key="index"
-            v-else-if="item.uiType=='component'"
+            v-else-if="item.uiType == 'component'"
             :is="item.component"
             :ref="item.ref"
             @list-event-in="comListEventIn"
@@ -51,18 +62,19 @@
           <a
             class="MR10"
             :target="item.target"
-            :href="item.url||'javascript:;'"
+            :href="item.url || 'javascript:;'"
             :key="index"
             v-else
             v-show="!item.hide"
           >
             <el-button
               v-bind="item.cfElBtn"
-              @click="batchBtnClick(item.eventType,item.needSelect)"
+              @click="batchBtnClick(item.eventType, item.needSelect)"
               :key="index"
               size="mini"
               :id="getBacthButtonId(item)"
-            >{{$lodash.get(item, `cfElBtn.text`)||item.text}}</el-button>
+              >{{ $lodash.get(item, `cfElBtn.text`) || item.text }}</el-button
+            >
           </a>
         </template>
       </template>
@@ -84,12 +96,18 @@
         <slot class name="noData"></slot>
       </template>
 
-      <template #default="{item,index}">
+      <template #default="{ item, index }">
         <!--如果有配置卡片,通过cfComCard传递附近配置-->
-        <component :item="item" :index="index" :is="cf.comCard" v-if="cf.comCard" v-bind="cf.cfComCard"></component>
+        <component
+          :item="item"
+          :index="index"
+          :is="cf.comCard"
+          v-if="cf.comCard"
+          v-bind="cf.cfComCard"
+        ></component>
         <!--否则--使用插槽-->
         <slot class v-else name="card" :item="item" :index="index">
-          <div class>{{item}}</div>
+          <div class>{{ item }}</div>
         </slot>
       </template>
     </dm_list_flex_res>
@@ -103,9 +121,9 @@
       :data="tableData"
       border
       :stripe="true"
-      :cell-style="{padding:'5px'}"
-      :header-cell-style="{padding:'5px'}"
-      style="width: 100%;"
+      :cell-style="{ padding: '5px' }"
+      :header-cell-style="{ padding: '5px' }"
+      style="width: 100%"
       @sort-change="sortChange"
       @selection-change="selectionChange"
       @filter-change="filterHandler"
@@ -118,19 +136,22 @@
         :prop="cf.idKey"
         :width="26"
         type="selection"
-    
         v-if="cf.isShowCheckedBox"
       ></el-table-column>
       <el-table-column :width="40" type="expand" v-if="cf.expand" fixed>
         <template slot-scope="props">
-          <div v-for="(item,index) in cf.expands" :key="index">
+          <div v-for="(item, index) in cf.expands" :key="index">
             <div>
-              <span style="display:inline-block;width: 80px;">{{item.label}}：</span>
+              <span style="display: inline-block; width: 80px"
+                >{{ item.label }}：</span
+              >
               <!--Q1:有slot-->
               <slot :name="item.slot" :row="props.row" v-if="item.slot"></slot>
               <!--Q2:有formatter-->
-              <span class v-else-if="item.formatter">{{item.formatter(props.row)}}</span>
-              <span v-else>{{props.row[item.prop]}}</span>
+              <span class v-else-if="item.formatter">{{
+                item.formatter(props.row)
+              }}</span>
+              <span v-else>{{ props.row[item.prop] }}</span>
             </div>
           </div>
         </template>
@@ -155,7 +176,7 @@
 
           <el-table-column
             class
-            v-for="(columnSon,i) in column.columnChildren"
+            v-for="(columnSon, i) in column.columnChildren"
             v-bind="columnSon"
             :key="i"
           ></el-table-column>
@@ -164,22 +185,31 @@
           <template v-slot="scope">
             <div class="DPI">
               <!--Q1:有插槽-->
-              <slot :name="column.slot" :row="scope.row" v-if="column.slot"></slot>
+              <slot
+                :name="column.slot"
+                :row="scope.row"
+                v-if="column.slot"
+              ></slot>
               <!--Q2:有formatter-->
-              <span class v-else-if="column.formatter">{{column.formatter(scope.row)}}</span>
-              <!--Q4:有组件名-->
+              <span class v-else-if="column.formatter">{{
+                column.formatter(scope.row)
+              }}</span>
+              <!--Q4:有组件名--cfAddon附加参数-->
               <component
                 v-else-if="column.component"
                 :is="column.component"
                 @list-event-in="comListEventIn"
+                :addon="column.addon"
                 :doc="scope.row"
+                :prop="column.prop"
+                :cfListParent="cf"
               ></component>
               <!--Q5:其他-->
-              <span class v-else>{{scope.row[column.prop]}}</span>
+              <span class v-else>{{ scope.row[column.prop] }}</span>
               <i
                 class="el-icon-edit icon-edit"
                 v-if="column.edit"
-                @click="tdEdit(scope.row,column)"
+                @click="tdEdit(scope.row, column)"
               ></i>
             </div>
           </template>
@@ -188,32 +218,31 @@
       <el-table-column
         fixed="right"
         label="操作"
-        :min-width="$lodash.get(cf, `columnOperate['min-width']`,140)"
+        :min-width="$lodash.get(cf, `columnOperate['min-width']`, 140)"
         v-if="cf.isShowOperateColumn"
       >
         <!-- <div class="" :test="test(scope)" >test调1次</div> -->
         <template class="operation-box" v-slot="scope">
           <!-- <div class="" :test="test(scope)" >test调9次</div> -->
           <template class v-if="$lodash.hasIn(cf, 'singleBtns.addon')">
-            <template class v-for="(item,index) in cf.singleBtns.addon">
+            <template class v-for="(item, index) in cf.singleBtns.addon">
               <a
                 :class="item.class"
                 :target="item.target"
                 :title="item.title"
-                :href="getSigleLinkUrl(item,scope.row)"
+                :href="getSigleLinkUrl(item, scope.row)"
                 :key="index"
               >
                 <el-button
                   v-bind="item.cfElBtn"
-                  @click="singleBtnClick(item.eventType,scope.row)"
+                  @click="singleBtnClick(item.eventType, scope.row)"
                   :key="index"
                   size="mini"
-                  style="margin-right:5px"
+                  style="margin-right: 5px"
                 >
-                  <template
-                    class
-                    v-if="!($lodash.get(item, `cfElBtn.circle`))"
-                  >{{$lodash.get(item, `cfElBtn.text`)||item.text}}</template>
+                  <template class v-if="!$lodash.get(item, `cfElBtn.circle`)">{{
+                    $lodash.get(item, `cfElBtn.text`) || item.text
+                  }}</template>
                 </el-button>
               </a>
             </template>
@@ -236,33 +265,45 @@
       ref="listDialogs"
       :cf="cf"
       :tableData="tableData"
-      @after-add="(data,olddata)=>{$emit('after-add',data,olddata)}"
-      @after-modify="(newdata,olddata)=>{$emit('after-modify',newdata,olddata)}"
-      @after-show-Dialog-Modify="(row)=>{$emit('after-show-Dialog-Modify',row)}"
+      @after-add="
+        (data, olddata) => {
+          $emit('after-add', data, olddata);
+        }
+      "
+      @after-modify="
+        (newdata, olddata) => {
+          $emit('after-modify', newdata, olddata);
+        }
+      "
+      @after-show-Dialog-Modify="
+        (row) => {
+          $emit('after-show-Dialog-Modify', row);
+        }
+      "
     >
-      <template v-slot:[item.slot]="{row}" v-for="item in cf.detailItems">
+      <template v-slot:[item.slot]="{ row }" v-for="item in cf.detailItems">
         <!--根据cf.detailItems循环输出插槽--详情弹窗-->
         <slot :name="item.slot" :row="row" v-if="item.slot"></slot>
       </template>
       <!-- 自定义详情弹窗插槽 -->
-      <template v-slot:customDetail="{detailData}">
+      <template v-slot:customDetail="{ detailData }">
         <slot name="customDetail" :detailData="detailData"></slot>
       </template>
       <!--这里的for循环的item不要跟上面的重名，否则冲突！！！所以使用formItem-->
-      <template v-slot:[formItem.slot]="{formData}" v-for="formItem in cf.formItems">
+      <template
+        v-slot:[formItem.slot]="{ formData }"
+        v-for="formItem in cf.formItems"
+      >
         <!--根据cf.formItems循环输出插槽--新增修改表单弹窗-->
-        <slot :name="formItem.slot" :formData="formData" v-if="formItem.slot"></slot>
+        <slot
+          :name="formItem.slot"
+          :formData="formData"
+          v-if="formItem.slot"
+        ></slot>
       </template>
       <!--列表用到的各种弹窗-->
     </listDialogs>
-    <div class v-if="isShowDialogEditRow2">
-      <!--行内编辑字段弹窗2-->
-      <dm_dialog_edit
-        :cf="cfEditDialogRow"
-        :formModify="formModifyRow"
-        @after-modify="afterModifyItem"
-      ></dm_dialog_edit>
-    </div>
+   
   </div>
 </template>
 <script>
@@ -272,7 +313,8 @@ import listDialogs from "./list-dialogs";
 // import { log } from "util";
 export default {
   name: "dm_list_data", //组件名，用于递归
-  components: {    listDialogs,
+  components: {
+    listDialogs,
   }, //注册组件
   props: {
     value: Array, //绑定的静态数据
@@ -288,12 +330,10 @@ export default {
     return {
       id: `id_${util.getTimeRandom()}`,//随机Id，导出excel表格时需用到
       loading: false,//加载中
-      formModifyRow: {},//字段修改弹窗表单数据
-      cfEditDialogRow: {},//字段修改弹窗配置
-      cfEditItem: null,//当前修改字段的附加配置
-      //------------------单元格编辑配置--------------
-      rowEdit: null,
-      isShowDialogEditRow2: false, //是否显示行内编辑弹窗
+     
+      
+      
+      
       //------------------筛选表单组件配置--------------
       cfSearchForm: {
         // col_span: 8,//控制显示一行多列
@@ -395,86 +435,49 @@ export default {
     //函数：{单元格编辑函数}
     async tdEdit(row, column) {
       let { edit, cfEdit, prop } = column;
-      this.cfEditItem = cfEdit;//变量：{当前修改字段的附加配置}
-      if (!edit) return;
-      this.rowEdit = row;//当前修改的原行数据
-      let formItemsAdd = this.cf.formItems;//列表对应的新增表单字段数组
-      let itemTarget;
-      let formItemsNeed;
-      let cfListNeed = this.cf;
-      let idKeyFrom = this.cf.idKey
-      let paramAddonInit//变量：{ajax的公共参数}
-      if (cfEdit) {//如果{编辑配置存在}
-        let { listIndex, formItems, paramAddon = {}, idKey } = cfEdit
-        idKeyFrom = idKey || idKeyFrom;
-        cfListNeed = PUB.listCF[listIndex];
-        paramAddonInit = paramAddon
-        if (formItems) {//Q1：{编辑配置中的表单字段}存在-直接使用
-          formItemsNeed = formItems; //改变表单字段配置
-        } else {//Q2：{编辑配置中的表单字段}不存在-获取listIndex对应的表单
-          formItemsAdd = cfListNeed.formItems
-        }
+
+      if (this.cf.isGroupList) {//Q1：是分组数据列表
+        //抛出编辑实体事件
+        this.$emit("single-btn-click", "edit_entity", row, {
+          filterFormItems: function (formItems) {//字段过滤函数
+            return formItems.filter(d => d.prop == prop)
+          }
+        });
+      } else {//Q1：是普通数据列表
+
+        return this.$emit("single-btn-click", "modify", row, {
+          filterFormItems: function (formItems) {//字段过滤函数
+          console.log(`prop:####`, prop);
+            return formItems.filter(d => d.prop == prop)
+          }
+        });
       }
-      if (!formItemsNeed) {//如果{对应的表单字段}不存在
-        itemTarget = formItemsAdd.find(doc => doc.prop == prop); //获取对应的表单字段
-        if (itemTarget) {
-          formItemsNeed = [itemTarget]; //改变表单字段配置
-        }
-      }
-      if (!formItemsNeed) {//如果{对应的表单字段}不存在
-        return alert(`找不到对应的表单字段`)
-      }
-      this.formModifyRow = row;//**先填充一次表单---因为里面的初始化也需要从这里拿id数据
-      this.cfEditDialogRow = {
-        visible: false,
-        urlModify: lodash.get(cfListNeed, `url.modify`),//--------
-        dataIdModify: null,
-        cfFormModify: {
-          paramAddonInit,
-          idKey: cfListNeed.idKey, //键名
-          urlInit: lodash.get(cfListNeed, `url.detail`),//--------
-          formItems: this.cf.formItems,
-          btns: [
-            { text: "修改", event: "submit", type: "primary", validate: true },
-            { text: "取消", event: "cancel" }
-          ]
-        }
-      }
-      this.cfEditDialogRow.dataIdModify = row[idKeyFrom]//修改数据的id
-      this.cfEditDialogRow.cfFormModify.formItems = formItemsNeed;//修改表单字段
-      this.formModifyRow[cfListNeed.idKey] = this.cfEditDialogRow.dataIdModify//修改id
-      this.$nextTickStatus("isShowDialogEditRow2")//***重新渲染 */
-      // this.isShowDialogEditRow2 = true
-      this.cfEditDialogRow.visible = true;
+
     },
-    //函数：{修改字段后的回调函数}
-    afterModifyItem: async function (docNew) {
-      if (this.cfEditItem) {//Q1:{当前修改字段的附加配置}存在
-        if (this.cfEditItem.fnAfterModify) {
-          this.cfEditItem.fnAfterModify({ docOld: this.rowEdit, docNew: docNew })
-        }
-      } else { //不存在
-        Object.assign(this.rowEdit, docNew);//合并对象
-      }
-    },
+    
     test() { },
     getSigleLinkUrl(item, row) {
 
       /****************************获取当前页面的路径-START****************************/
-      let {$route}=this;
-      let { path } = $route
-      let arrPath = path.split("/")
-      arrPath.length--//去掉最后一个目录
-      let pathNew = arrPath.join("/")
-      /****************************获取当前页面的路径-END****************************/
+      let { $route } = this;
+      let pathNew;//
 
+      if ($route) {//2020113补充-如果$route存在，有些系统，比如派成系统就没有使用路由，要兼容！！！
+        let { path } = $route
+        let arrPath = path.split("/")
+        arrPath.length--//去掉最后一个目录
+        pathNew = arrPath.join("/")
+      }
+
+      /****************************获取当前页面的路径-END****************************/
+      console.log(`pathNew:####################`, pathNew);
 
 
       //注意，这个方法会调用很多次
       let linkNeed = item.url ? item.url + row[this.cf.idKey] : "javascript:;";
       //如果地址格式函数存在
       if (item.urlFormatter) {
-        linkNeed = item.urlFormatter(row, pathNew,$route);
+        linkNeed = item.urlFormatter(row, pathNew, $route);
       }
       return linkNeed;
     },
@@ -618,16 +621,16 @@ export default {
     //-------------确认删除数据的函数--------------
     async confirmDelete(dataId) {
       let idType = util.type(dataId);
-      let textTips="确认删除该数据？";
-       if (idType == "array") {
-         textTips=`确认删除选中的${dataId.length}条数据？`;
-        } 
+      let textTips = "确认删除该数据？";
+      if (idType == "array") {
+        textTips = `确认删除选中的${dataId.length}条数据？`;
+      }
       let clickStatus = await this.$confirm(textTips, "提示",
         { confirmButtonText: "确定", cancelButtonText: "取消", type: "warning" }
       ).catch(() => { });
       let deleteData = []; //删除的数据，统一为数组格式
       if (clickStatus == "confirm") {
-        
+
         //如果是id数组（批量删除）
         if (idType == "array") {
           deleteData = this.tableData.filter(doc => dataId.includes(doc[this.cf.idKey]));
@@ -735,7 +738,7 @@ export default {
         // }))
       }
       this.$emit("after-search", this.tableData); //触发外部事件
-      
+
     },
     //函数：{初始化组件cf配置函数}
     initCF: async function () {
@@ -840,13 +843,13 @@ export default {
     }
     util.setListPower(this.cf); //调用：{根据当前角色权限设置列表配置的函数}
     //监听标准的单选操作按钮事件
-    this.$on("single-btn-click", function (eventType, row) {
+    this.$on("single-btn-click", function (eventType, row,others={}) {
       if (eventType == "delete") {
         //Q1：删除按钮点击事件
         this.confirmDelete(row[this.cf.idKey]);
       } else if (eventType == "modify") {
         //Q2：修改按钮点击事件
-        this.$refs.listDialogs.showModify(row);
+        this.$refs.listDialogs.showModify(row,others);//传递others-如编辑单个字段
       } else if (eventType == "detail") {
         //Q3：详情按钮点击事件
         this.showDetail(row);
