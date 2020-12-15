@@ -2,31 +2,57 @@
   <div class>
     <div class="DPF ML5">
       <div class="Cur1 MR4" @click="unfold" v-if="countRelJs">
-        <i class="el-icon-caret-right" :class="{Rotate90:isShowSon}"></i>
-        <span class="C_999">[{{countRelJs}}]</span>
+        <i class="el-icon-caret-right" :class="{ Rotate90: isShowSon }"></i>
+        <span class="C_999">[{{ countRelJs }}]</span>
       </div>
       <div class>
-        <span class="C_3a0 FS14 ">{{docComplete.title}}</span>
+        <span class="C_3a0 FS14">{{ docComplete.title }}</span>
 
-        <span v-if="docComplete.jsCode" class="C_999 FS12">：[{{bytes(docComplete.jsCode)}}b]</span>
-        <span v-if="docComplete.desc" class="C_333 FS14">：{{docComplete.desc}}</span>
+        <span v-if="docComplete.jsCode" class="C_999 FS12"
+          >：[{{ bytes(docComplete.jsCode) }}b]</span
+        >
+        <span v-if="docComplete.desc" class="C_333 FS14"
+          >：{{ docComplete.desc }}</span
+        >
 
-        <el-link type="primary" @click="isShowEditJs=true" v-if="!isShowEditJs" class="ML10">编辑</el-link>
+        <el-link
+          type="primary"
+          @click="isShowEditJs = true"
+          v-if="!isShowEditJs"
+          class="ML10"
+          >编辑</el-link
+        >
 
         <el-link
           type="primary"
           target="_blank"
           :href="`#/js_code_edit?jsCodeId=${docComplete._id}`"
           class="ML10"
-        >新窗口编辑</el-link>
+          >新窗口编辑</el-link
+        >
 
         <el-link @click="fnSelect" class="ML10 FS13">选择子代码</el-link>
       </div>
     </div>
     <div class="PL8 PR8 PB8" v-if="isShowEditJs">
-      <dm_js_code_curr class v-model="docComplete.jsCode" ref="jsCodeCurr">
+      <div class="" v-if="docComplete.jsCodeType == 1">
+        <el-button plain @click="isShowEditJs = false" size="mini"
+          >关闭</el-button
+        >
+        <el-button plain @click="ajaxSaveACode" size="mini">保存</el-button>
+        <!--vue组件表单组件-->
+        <dm_form_vue_sfc class="" :docComplete="docComplete"></dm_form_vue_sfc>
+      </div>
+      <dm_js_code_curr
+        class
+        v-model="docComplete.jsCode"
+        ref="jsCodeCurr"
+        v-else
+      >
         <template #toobar_addon>
-          <el-button plain @click="isShowEditJs=false" size="mini">关闭</el-button>
+          <el-button plain @click="isShowEditJs = false" size="mini"
+            >关闭</el-button
+          >
           <el-button plain @click="saveACode" size="mini">保存</el-button>
         </template>
       </dm_js_code_curr>
@@ -38,7 +64,7 @@
         v-model="docComplete.relJsCode"
         :cf="cf"
         @son_change="son_change"
-        @inited="({vm})=>vm_select_list_data=vm"
+        @inited="({ vm }) => (vm_select_list_data = vm)"
       ></dm_select_list_data>
     </div>
   </div>
@@ -76,7 +102,7 @@ export default {
     };
   },
   computed: {
-     //  TODO：computed-bytes
+    //  TODO：computed-bytes
     bytes: function () {
       let fn = function (str) {
         return util.countByte(str)
@@ -100,27 +126,31 @@ export default {
     },
     //函数：{显示js代码块编辑表单函数}
     saveACode: async function () {
+
       let flag = await this.$refs.jsCodeCurr.checkSyntax();
       if (!flag) {
         let clickStatus = await this.$confirm("代码语法校验错误，确定保存？").catch(() => { });
         if (clickStatus != "confirm") return
 
       }
+      this.ajaxSaveACode()//调用：{ajax保存一块代码函数}
 
 
-
-      let { jsCode } = this.docComplete
+    },
+    //函数：{ajax保存一块代码函数}
+    ajaxSaveACode: async function () {
+      let { jsCode,objVCom } = this.docComplete
       await axios({//修改接口-当前父任务
         method: "post", url: `${PUB.domain}/info/commonModify`,
         data: {
           _id: this.docComplete._id, _systemId: "$all",
-          _data: { jsCode }
+          _data: { jsCode,objVCom }
         }
       });
       this.$message.success('保存成功!');
 
-
     },
+
     //函数：{展开函数}
     unfold: async function () {
       this.isShowSon = !this.isShowSon;

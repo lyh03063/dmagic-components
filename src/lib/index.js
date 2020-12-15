@@ -28,12 +28,17 @@ import dm_dialog_edit from '../components/list-data/dialog_edit.vue'
 
 import dm_com_row_js_code from '../components/common/com_row_js_code.vue'
 import dm_com_row_css_code from '../components/common/com_row_css_code.vue'
+import dm_form_vue_sfc from '../components/common/form_vue_sfc.vue'
 
 
 import dm_ele from '../components/common/ele.vue'
 
 import dm_aplayer from '../components/common/aplayer.vue'
 import dm_drag_box_width from '../components/common/drag_box_width.vue'
+import dm_popper from '../components/common/popper.vue'
+import dm_tab_bar from '../components/common/tab_bar.vue'
+import dm_expand_son_group from '../components/common/expand_son_group.vue'
+
 
 import dm_dialog_add from '../components/list-data/dialog_add.vue'
 import dm_detail_group_common from '../components/list-data/detail_group_common.vue'
@@ -50,8 +55,6 @@ import dm_list_visit_history from '../components/list-data/list_visit_history.vu
 import dm_list_visit_often from '../components/list-data/list_visit_often.vue'
 import dm_list_data_version from '../components/list-data/list_data_version.vue'
 import dm_list_data_collect from '../components/list-data/list_data_collect.vue'
-
-
 //以下两个要用到scss
 import dm_manage_home from '../components/manage/listHome.vue'
 import dm_modify_password from '../components/manage/modify_password.vue'
@@ -80,7 +83,6 @@ import dm_c_party_case from '../components/column/party_case.vue'
 import { codemirror } from "vue-codemirror";
 import "codemirror/lib/codemirror.css";//暂时不做懒加载，因为会影响到全屏css
 // 引入主题后还需要在 options 中指定主题才会生效
-
 // import "codemirror/theme/lucario.css"; //黑背景主题
 /**
  * 
@@ -102,14 +104,8 @@ import "codemirror/addon/selection/active-line"; //高亮当前行
 import "codemirror/addon/fold/foldgutter"; //代码折叠-一定要引用
 import "codemirror/addon/fold/foldgutter.css"; //代码折叠样式一定要引用
 import "codemirror/addon/fold/brace-fold.js"; //代码折叠-一定要引用
-
-
-
-
 // highlightSelectionMatches
 import 'codemirror/addon/search/match-highlighter.js'//匹配选中单词高亮
-
-
 /****************************hint-暂时无用-START****************************/
 import "codemirror/addon/hint/show-hint.css"; //hint
 import "codemirror/addon/hint/show-hint.js"; //
@@ -142,6 +138,11 @@ import dm_dialog_html_tag from '../components/tool/dialog_html_tag.vue'
 
 import dm_single_class_edit from '../components/tool/single_class_edit.vue'
 import dm_row_html_tag from '../components/tool/row_html_tag.vue'
+import dm_popper_html_tag from '../components/tool/popper_html_tag.vue'
+import dm_popper_html_prop from '../components/tool/popper_html_prop.vue'
+import dm_popper_html_pval from '../components/tool/popper_html_pval.vue'
+import dm_popper_html_content from '../components/tool/popper_html_content.vue'
+
 import dm_row_css_code from '../components/tool/row_css_code.vue'
 
 import dm_js_file_edit from '../components/tool/js_file_edit.vue'
@@ -149,6 +150,7 @@ import dm_js_code_edit from '../components/tool/js_code_edit.vue'
 import dm_css_code_edit from '../components/tool/css_code_edit.vue'
 import dm_js_code_curr from '../components/tool/js_code_curr.vue'
 import dm_css_code_curr from '../components/tool/css_code_curr.vue'
+import dm_html_code_curr from '../components/tool/html_code_curr.vue'
 import dm_score_panel from '../components/tool/score_panel.vue'
 import com_score_panel from '../components/tool/com_score_panel.vue'
 
@@ -167,23 +169,16 @@ import dm_card_js_code_hs from '../components/card/js_code_hs.vue'
 import dm_card_auto_layout_hs from '../components/card/auto_layout_hs.vue'
 import dm_card_js_code_often from '../components/card/js_code_often.vue'
 import dm_card_front_demo_often from '../components/card/front_demo_often.vue'
-
-
-
-
 //列-完成度显示
 import com_complete from '@/components/common/com_complete.vue'
 //列-图片预览
 import com_imagePreview from '@/components/common/com_imagePreview.vue'
-
-
 //查询表单-完成度
 import com_item_complete_search from '@/components/common/com_item_complete_search.vue'
 // 表单-规格价格组件（复杂）
 import com_f_item_listSpecPrice from '@/components/common/com_f_item_listSpecPrice.vue'
 // 列-订单支付状态和退款操作
 import com_c_item_payStatus from '@/components/common/com_c_item_payStatus.vue'
-
 //详情-订单商品列表
 import com_listGoods from '@/components/common/com_d_item_listGoods.vue'
 //详情-订单地址显示
@@ -276,18 +271,20 @@ const Components = {
   dm_codemirror: codemirror, dm_code, dm_form_css, dm_collection_html_prop,
   dm_select_list_data, dm_collection, dm_dialog_edit, dm_dialog_add, dm_form_item, dm_option_input,
   dm_tree_data, dm_select_area, dm_object,
-  dm_com_row_js_code, dm_video_player, dm_com_row_css_code,
+  dm_com_row_js_code, dm_video_player, dm_com_row_css_code, dm_form_vue_sfc, 
   dm_detail_group_common, dm_detail_group, dm_detail_g_list,
   dm_pannel_d_g_list, dm_pannel_d_g_list_html_api,
   dm_rel_list_data, dm_pannel_rel_list_data, dm_list_common,
   dm_manage_home, dm_built_file_from_temp, dm_detail_bankruptcy_case,
   dm_modify_password, dm_aplayer, dm_detail_audio, dm_detail_data, dm_drag_box_width,
-  dm_group_audio, dm_detail_html_api,
+  dm_group_audio, dm_detail_html_api,dm_popper,dm_tab_bar,dm_expand_son_group,
   dm_c_operate_g, dm_c_operate_g_file, dm_c_operate_normal, dm_c_party_case,
   dm_list_simple, dm_detail_son_data, dm_pannel_son_note,
   dm_ele, dm_auto_layout, dm_dialog_select_demo, dm_single_class_edit, dm_row_html_tag,
-  dm_dialog_css_prop, dm_dialog_html_tag,
+  dm_dialog_css_prop, dm_dialog_html_tag,dm_popper_html_tag,dm_popper_html_prop,
+  dm_popper_html_pval, dm_popper_html_content,
   dm_js_file_edit, dm_js_code_edit, dm_js_code_curr, dm_css_code_curr,
+  dm_html_code_curr,
   dm_score_panel, dm_row_css_code,dm_css_code_edit,
   dm_familiarity_select, dm_note_familiarity_select,
   com_score_panel, dm_card_note_normal, dm_card_note_history, dm_card_note_often,
@@ -301,21 +298,16 @@ const Components = {
   com_c_g_person_image, com_c_g_person_album, com_c_g_album_image, com_c_g_company_url, com_c_g_company_person,
   com_c_g_company_file, com_c_g_company_image, com_c_g_company_album,
    com_c_g_bankruptcy_file_1, com_c_g_bankruptcy_file_2,
-
   card_course, card_goods,com_btn_collect,
   card_student_work, card_case, card_case_old, card_partner, card_product_old,
   com_longting_order_statistics,
-
   banner, contact_right, list_article, list_article_date, list_article_img,
   breadcrumb, page_foot, page_head, page_menu, pannel_list_article_date, com_block,
-
   dm_left_menu, dm_user_role,
   search_result, detail_g_card_link, detail_group_g_card, group_home,
   study_home, study_user, dm_manage,
   dm_system, site_home, site_list_course, site_main,
-
   dm_login, dm_manage_base
-
 }
 
 
@@ -326,15 +318,11 @@ const comment = {
       Vue.component(name, Components[name])
       // Vue.component(name, VueComment)
     })
-
   }
 }
-
 // global 情况下 自动安装
 if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(comment)
 }
 // 导出模块
 export default comment
-
-

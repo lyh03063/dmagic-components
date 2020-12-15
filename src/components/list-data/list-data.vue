@@ -131,27 +131,47 @@
       v-if="cf.isShowTable"
     >
       <el-table-column
-        fixed
+        :fixed="getFixed(true)"
         label="Id"
         :prop="cf.idKey"
         :width="26"
         type="selection"
         v-if="cf.isShowCheckedBox"
       ></el-table-column>
-      <el-table-column :width="40" type="expand" v-if="cf.expand" fixed>
+      <el-table-column
+      
+        :width="cf.expandWidth||40"
+        type="expand"
+        v-if="cf.expand"
+        :fixed="getFixed(true)"
+      >
         <template slot-scope="props">
-          <div v-for="(item, index) in cf.expands" :key="index">
-            <div>
-              <span style="display: inline-block; width: 80px"
-                >{{ item.label }}：</span
-              >
-              <!--Q1:有slot-->
-              <slot :name="item.slot" :row="props.row" v-if="item.slot"></slot>
-              <!--Q2:有formatter-->
-              <span class v-else-if="item.formatter">{{
-                item.formatter(props.row)
-              }}</span>
-              <span v-else>{{ props.row[item.prop] }}</span>
+          <div class="" v-if="cf.expandsCom">
+            <!--自定义组件-->
+            <component
+              :is="cf.expandsCom"
+              :cfListParent="cf"
+              :row="props.row"
+            ></component>
+          </div>
+          <div class="" v-else>
+            <div v-for="(item, index) in cf.expands" :key="index">
+              <div>
+                <span style="display: inline-block; width: 80px"
+                  >{{ item.label }}：</span
+                >
+                <!--Q1:有slot-->
+                <slot
+                  :name="item.slot"
+                  :row="props.row"
+                  v-if="item.slot"
+                ></slot>
+                <!--Q2:有formatter-->
+                <span class v-else-if="item.formatter">{{
+                  item.formatter(props.row)
+                }}</span>
+                <span v-else>{{ props.row[item.prop] }}</span>
+              </div>
             </div>
           </div>
         </template>
@@ -163,7 +183,7 @@
           :label="column.label"
           :width="column.width"
           :type="column.type"
-          :fixed="column.fixed"
+          :fixed="getFixed(column.fixed)"
           :formatter="column.formatter"
           :sortable="column.sortable"
           :column-key="column.columnKey"
@@ -216,7 +236,7 @@
         </el-table-column>
       </template>
       <el-table-column
-        fixed="right"
+        :fixed="getFixed('right')"
         label="操作"
         :min-width="$lodash.get(cf, `columnOperate['min-width']`, 140)"
         v-if="cf.isShowOperateColumn"
@@ -303,7 +323,6 @@
       </template>
       <!--列表用到的各种弹窗-->
     </listDialogs>
-   
   </div>
 </template>
 <script>
@@ -330,10 +349,10 @@ export default {
     return {
       id: `id_${util.getTimeRandom()}`,//随机Id，导出excel表格时需用到
       loading: false,//加载中
-     
-      
-      
-      
+
+
+
+
       //------------------筛选表单组件配置--------------
       cfSearchForm: {
         // col_span: 8,//控制显示一行多列
@@ -398,6 +417,16 @@ export default {
     }
   },
   methods: {
+    
+    //函数：{处理并返回固定列状态函数}
+    getFixed: function (flag) {
+      if (this.cf.forbidFixed) {//如果禁止固定列
+        return false
+      }
+      return flag
+
+
+    },
     //函数：{行拖拽功能初始化函数}
     async rowDrop() {
 
@@ -421,9 +450,15 @@ export default {
     },
     //函数：{列组件传递的事件函数}
     comListEventIn(param = {}) {
-      let { callbackInList } = param;//变量：{回调函数}
+      let { callbackInList, eventType, doc } = param;//变量：{回调函数}
       if (callbackInList) {//如果{回调函数}存在
         callbackInList(this)
+      }
+      console.log(`param:###`, param);
+      if (eventType == "expand_row") {
+        this.$refs.table.toggleRowExpansion(doc, true);
+      } else if (eventType == "unexpand_row") {
+        this.$refs.table.toggleRowExpansion(doc, false);
       }
       this.$emit("list-event-in", param)//继续往列表外传递
     },
@@ -447,14 +482,14 @@ export default {
 
         return this.$emit("single-btn-click", "modify", row, {
           filterFormItems: function (formItems) {//字段过滤函数
-          console.log(`prop:####`, prop);
+            console.log(`prop:####`, prop);
             return formItems.filter(d => d.prop == prop)
           }
         });
       }
 
     },
-    
+
     test() { },
     getSigleLinkUrl(item, row) {
 
@@ -827,8 +862,10 @@ export default {
     //改变列表的初始状态值
     this.$store.commit("initListState", { listIndex: this.cf.listIndex, objState: objState });
     if (this.cf.focusMenu) {
+      console.log(`created----############`);
       //如果需要聚焦菜单
       this.$store.commit("changeActiveMenu", this.cf.listIndex); //菜单聚焦
+      this.$store.commit("changeActiveMenuName", this.cf.name || "未命名"); //菜单聚焦
     }
     //添加标准批量操作按钮
     let batchBtnsAddon = lodash.get(this.cf, `batchBtns.addon`);
@@ -843,13 +880,13 @@ export default {
     }
     util.setListPower(this.cf); //调用：{根据当前角色权限设置列表配置的函数}
     //监听标准的单选操作按钮事件
-    this.$on("single-btn-click", function (eventType, row,others={}) {
+    this.$on("single-btn-click", function (eventType, row, others = {}) {
       if (eventType == "delete") {
         //Q1：删除按钮点击事件
         this.confirmDelete(row[this.cf.idKey]);
       } else if (eventType == "modify") {
         //Q2：修改按钮点击事件
-        this.$refs.listDialogs.showModify(row,others);//传递others-如编辑单个字段
+        this.$refs.listDialogs.showModify(row, others);//传递others-如编辑单个字段
       } else if (eventType == "detail") {
         //Q3：详情按钮点击事件
         this.showDetail(row);

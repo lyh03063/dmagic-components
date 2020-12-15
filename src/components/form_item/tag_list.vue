@@ -1,13 +1,31 @@
 <template>
-  <div class="DPLB">
-   
-    <el-tag
-      :key="tag"
-      v-for="tag in valueNeed"
-      closable
-      :disable-transitions="false"
-      @close="handleClose(tag)"
-    >{{tag}}</el-tag>
+  <div class="DPIB">
+    <template class="" v-for="(tag, index) in valueNeed">
+      <!-- 将key改为Index,不要时tag -->
+      <!--编辑框,这里用原生的input，因为el-input不支持lazy修饰符
+     
+      -->
+      <input
+        v-focus
+        :key="index"
+        class="n-input DPIB MR10 W200 ML10"
+        v-if="editIndex == index"
+        v-model.lazy="valueNeed[index]"
+        size="small"
+         @blur="editIndex = null"
+        @keyup.enter.native="editIndex = null"
+      >
+      <el-tag
+        v-else
+        closable
+        :key="index"
+        :disable-transitions="false"
+        @click="editIndex = index"
+        @close="handleClose(tag)"
+        >{{ tag }}</el-tag
+      >
+    </template>
+
     <el-input
       class="input-new-tag"
       v-if="inputVisible"
@@ -17,7 +35,9 @@
       @keyup.enter.native="handleInputConfirm"
       @blur="handleInputConfirm"
     ></el-input>
-    <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
+    <el-button v-else class="button-new-tag" size="small" @click="showInput"
+      >+ New Tag</el-button
+    >
   </div>
 </template>
 
@@ -26,6 +46,14 @@ export default {
   name: "tag_list",
   props: {
     value: [Array]
+  },
+  data() {
+    return {
+      editIndex: null,//当前处于编辑状态的索引值
+      valueNeed: null,
+      inputVisible: false,
+      inputValue: ""
+    };
   },
   watch: {
     value: {
@@ -49,16 +77,10 @@ export default {
       deep: true //深度监听
     }
   },
-  data() {
-    return {
-      valueNeed:null,
-      inputVisible: false,
-      inputValue: ""
-    };
-  },
+
   methods: {
     handleClose(tag) {
-      let index=this.valueNeed.indexOf(tag);
+      let index = this.valueNeed.indexOf(tag);
       this.valueNeed.splice(index, 1);//删除
     },
 
@@ -80,6 +102,8 @@ export default {
   },
   created() {
 
+    // this.valueNeed = lodash.cloneDeep(this.value)||[];   //深拷贝
+
   }
 };
 </script>
@@ -100,5 +124,10 @@ export default {
   width: 90px;
   margin-left: 10px;
   vertical-align: bottom;
+}
+
+.n-input:focus{
+  border: 1px #ddd solid;
+
 }
 </style>

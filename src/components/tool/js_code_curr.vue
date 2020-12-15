@@ -9,6 +9,8 @@
     </div>
 
     <dm_code class="FX1" v-model="valueNeed" ref="codeMCurr"></dm_code>
+
+    
   </div>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="float-tips" v-if="$sys.env == 'dev'">非生产XXX</div>
+    <div class="float-tips" v-if="$sys.env == 'dev'">非生产y</div>
     <div class v-if="ready">
       <div class v-if="systemDoc._id">
         <el-container>
@@ -26,6 +26,8 @@
             <dm_left_menu :cf="listMenu"></dm_left_menu>
           </div>
           <div class="g-right-box">
+            <!--横切导航-->
+            <dm_tab_bar class="MT10 ML10"></dm_tab_bar>
             <keep-alive>
               <router-view :key="routerKey" style="padding: 10px"></router-view>
             </keep-alive>
@@ -44,21 +46,17 @@
 <script>
 export default {
   mixins: [MIX.base],
-  components: {
-
-  },
+  components: {},
   props: {
-    ttt: {},
     // systemDoc: {}//从router-view传过来！！！
   },
   data() {
     return {
       ready: false,
-      sysId: null,//系统Id
+      sysId: null, //系统Id
       routerKey: "key1",
       listMenu: [],
-      systemDoc: {}//从router-view传过来！！！
-
+      systemDoc: {}, //从router-view传过来！！！
     };
   },
   watch: {
@@ -66,20 +64,21 @@ export default {
       this.setActiveMenu(); //调用：{设置聚焦菜单函数}
     },
     // immediate: true,
-    deep: true
+    deep: true,
   },
 
   methods: {
     //函数：{设置聚焦菜单函数}
     async setActiveMenu() {
       this.routerKey = document.URL; //路由key，确保路由能响应
-      await util.timeout(500); //延迟
-
+      // await util.timeout(500); //延迟
     },
 
     //函数：{ajax获取系统doc函数}
     async getDocSystem() {
-      let { data: { doc } } = await axios({
+      let {
+        data: { doc },
+      } = await axios({
         //请求接口
         method: "post",
         url: `${PUB.domain}/info/commonDetail`,
@@ -87,48 +86,41 @@ export default {
           findJson: { systemId: this.sysId },
 
           _dataType: "system",
-          _systemId: "$all"
-        } //传递参数
+          _systemId: "$all",
+        }, //传递参数
       });
-      this.systemDoc = doc
+      this.systemDoc = doc;
       this.ready = true;
-      if (this.systemDoc.iconSrc) {//如果{icon地址}存在
-        util.changeFavicon(this.systemDoc.iconSrc)//函数：{改变网页标题图标的函数}
+      if (this.systemDoc.iconSrc) {
+        //如果{icon地址}存在
+        util.changeFavicon(this.systemDoc.iconSrc); //函数：{改变网页标题图标的函数}
       }
-      this.listMenu = this.systemDoc.treeDataMenu || []
+      this.listMenu = this.systemDoc.treeDataMenu || [];
 
-      PUB.homeGroupId = this.systemDoc.homeGroupId
-      PUB.systemName = this.systemDoc.title
-      document.title = this.systemDoc.title
-
+      PUB.homeGroupId = this.systemDoc.homeGroupId;
+      PUB.systemName = this.systemDoc.title;
+      document.title = this.systemDoc.title;
     },
-
   },
   async created() {
-
     this.sysId = this.$route.params.sysId;
     PUB._paramAjaxAddon = {
-      _systemId: this.sysId
-    }
+      _systemId: this.sysId,
+    };
 
-    let _systemId = util.getSystemId();//
+    let _systemId = util.getSystemId(); //
     // alert(_systemId);
     //好律助系统的页面配置差异化
     if (_systemId == "sys_haolvzhu") {
-
-      PUB.listCF.detail_group_note = PUB.listCF.detail_group_note_2
-      PUB.listCF.list_note = PUB.listCF.list_note_2
+      PUB.listCF.detail_group_note = PUB.listCF.detail_group_note_2;
+      PUB.listCF.list_note = PUB.listCF.list_note_2;
     }
 
-
-
-    await this.getDocSystem()//调用：{ajax获取系统doc函数}
+    await this.getDocSystem(); //调用：{ajax获取系统doc函数}
     this.ready = true;
-
-  }
+  },
 };
 </script>
-
 
 <style scoped>
 .g-left-box {

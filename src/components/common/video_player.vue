@@ -8,17 +8,14 @@
 export default {
   name: "video_player",
   props: {
-    src: {
-
-    },
-    options: {}
-
+    src: {},
+    options: {},
   },
   data() {
     return {
       id: null,
       optionsNeed: {
-        playbackRates: [0.5, 1.0, 1.5, 2.0,], //播放速度
+        playbackRates: [0.5,0.75, 1.0, 1.25, 1.5, 2.0], //播放速度
         autoplay: false, //如果true,浏览器准备好时开始回放。
         muted: false, // 默认情况下将会消除任何音频。
         loop: false, // 导致视频一结束就重新开始。
@@ -29,26 +26,26 @@ export default {
         sources: [
           {
             type: "video/mp4",
-            src: this.src || "http://vjs.zencdn.net/v/oceans.mp4" //视频url地址
-          }
+            src: this.src || "http://vjs.zencdn.net/v/oceans.mp4", //视频url地址
+          },
         ],
         // poster: "http://vjs.zencdn.net/v/oceans.png", //你的封面地址
         notSupportedMessage: "此视频暂无法播放，请稍后再试", //允许覆盖Video.js无法播放媒体源时显示的默认信息。
         controlBar: {
-
           timeDivider: true,
           durationDisplay: true,
           remainingTimeDisplay: true,
-          fullscreenToggle: true //全屏按钮
-        }
-      }
+          fullscreenToggle: true, //全屏按钮
+        },
+      },
     };
-  }, async mounted() {
-    this.id = "id_" + util.getTimeRandom();//随机id
-    await util.loadJs({ url: "https://qn-static.dmagic.cn/video.min.7.3.0.js" })//加载
-    await util.loadCss({ url: "https://qn-static.dmagic.cn/video-js.min.7.3.0.css" })//加载
+  },
+  async mounted() {
+    this.id = "id_" + util.getTimeRandom(); //随机id
+    await util.loadJs({ url: "https://qn-static.dmagic.cn/video.min.7.3.0.js" }); //加载
+    await util.loadCss({ url: "https://qn-static.dmagic.cn/video-js.min.7.3.0.css" }); //加载
     var player = videojs(this.id, this.optionsNeed);
-  }
+  },
 };
 </script>
 
@@ -56,7 +53,20 @@ export default {
 .video-box {
   width: 800px;
   height: 450px;
+  
 }
+
+.video-box *{
+
+ line-height: normal;
+}
+
+.video-box >>> .vjs-menu{
+
+width: 80px;
+}
+
+
 /* 让播放按钮居中 */
 .video-box >>> .vjs-big-play-button {
   position: absolute;
@@ -77,5 +87,3 @@ export default {
   }
 }
 </style>
-
-

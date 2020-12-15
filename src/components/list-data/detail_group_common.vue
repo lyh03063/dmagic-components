@@ -12,9 +12,15 @@
 
     <div
       class="n-boder-box PT18 PL10 PR10 MB10"
-      v-if="cfFormSearch.formItems.length&&cf.isShowSearchForm"
+      v-if="
+        cfFormSearch.formItems.length && cf.isShowSearchForm && mode != 'simple'
+      "
     >
-      <dm_dynamic_form :cf="cfFormSearch" v-model="formDataSearch" @submit="searchList"></dm_dynamic_form>
+      <dm_dynamic_form
+        :cf="cfFormSearch"
+        v-model="formDataSearch"
+        @submit="searchList"
+      ></dm_dynamic_form>
     </div>
 
     <!--数据列表-->
@@ -30,7 +36,9 @@
       @sort_by_drag="sort_by_drag"
     >
       <!--分数列插槽-->
-      <template v-slot:slot_column_score="{row}">{{$lodash.get(dictScore, `${row._idRel2}.score`)}}</template>
+      <template v-slot:slot_column_score="{ row }">{{
+        $lodash.get(dictScore, `${row._idRel2}.score`)
+      }}</template>
       <!--自定义详情弹窗插槽-->
       <!-- <template v-slot:customDetail="{detailData}">
         <detail_data :propDataId="detailData._idRel2"></detail_data>
@@ -59,9 +67,16 @@
       </template>
     </dm_list_data>
     <!-- 编辑实体数据弹窗 -->
-    <dm_dialog_edit :cf="cfEditDialogEntity" @after-modify="$refs.listData.getDataList()"></dm_dialog_edit>
+    <dm_dialog_edit
+      :cf="cfEditDialogEntity"
+      @after-modify="$refs.listData.getDataList()"
+    ></dm_dialog_edit>
     <!-- 新增实体数据弹窗 -->
-    <dm_dialog_add :cf="cfAddDialogEntity" @after-add="afterAddEntity" v-if="readyAddDialogEntity"></dm_dialog_add>
+    <dm_dialog_add
+      :cf="cfAddDialogEntity"
+      @after-add="afterAddEntity"
+      v-if="readyAddDialogEntity"
+    ></dm_dialog_add>
 
     <!--转移分组弹窗-->
     <el-dialog
@@ -75,15 +90,27 @@
       v-if="isShowDialogTransG"
     >
       <div class>
-        <el-input type="text" placeholder="请输入模板分组Id" v-model="idTansG"></el-input>
+        <el-input
+          type="text"
+          placeholder="请输入模板分组Id"
+          v-model="idTansG"
+        ></el-input>
         <div class="TAC PT8">
           <el-button type="primary" @click="transGroup">转移</el-button>
         </div>
       </div>
     </el-dialog>
-    <div class v-if="$sys.userId==13691916429">
-      <el-link type="info" :href="getEditLink" target="_blank" v-if="$route.query.edit!=1">编辑</el-link>
-      <el-link type="info" :href="getNotEditLink" target="_blank" v-else>预览</el-link>
+    <div class v-if="$sys.userId == 13691916429 && mode != 'simple'">
+      <el-link
+        type="info"
+        :href="getEditLink"
+        target="_blank"
+        v-if="$route.query.edit != 1"
+        >编辑</el-link
+      >
+      <el-link type="info" :href="getNotEditLink" target="_blank" v-else
+        >预览</el-link
+      >
     </div>
   </div>
 </template>
@@ -98,6 +125,7 @@ export default {
   },
   mixins: [MIX.base, MIX.listGroupData],
   props: {
+    mode: {},//模式：simple：简化版-用于树形展开显示时
     prop_groupId: {},//***属性过来的groupId，这种是组件形式而不是路由形式！！！！
     cf: {
       default: function () {
@@ -174,6 +202,8 @@ export default {
 
 
 
+
+
       this.$message.success('转移成功');
       this.$refs.listData.getDataList(); //列表更新
       this.isShowDialogTransG = false;
@@ -201,10 +231,18 @@ export default {
       let { cfList } = this.cf
       if (cfList) {//如果列表配置存在
         Object.assign(this.cfList, cfList);//合并对象
+
       }
+      console.log(`this.cfList:`, this.cfList);
 
+      if (this.mode == 'simple') {//如果是简洁模式
 
-
+        Object.assign(this.cfList, {
+          isShowCheckedBox: false,//选择框
+          isShowToolBar: false,//批量操作栏
+          isShowPageLink: false,//分页链接
+        });//合并对象
+      }
 
     },
 

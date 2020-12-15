@@ -31,6 +31,7 @@
             :index="menuEach.index"
             :route="menuEach.route"
             v-if="menuEach.route"
+            :title="menuEach.title"
             :key="index"
           >
             <i :class="menuEach.icon"></i>
@@ -46,6 +47,7 @@
             <el-menu-item
               style="padding-left:37px;"
               :index="item.index"
+              :title="item.title"
               :route="item.route"
               v-for="item in menuEach.menuItem"
               :key="item.index"
@@ -63,9 +65,7 @@ export default {
 
   computed: {
     //计算属性
-
     activeMenuIndex() {
-      //
       //当前激活的菜单index
       return this.$store.state.activeMenuIndex; //从vuex的store里面读取值
     }
@@ -76,7 +76,12 @@ export default {
     isCollapseFun() {
       this.isCollapse = !this.isCollapse;
     },
-    selectItem(a, b, c) {
+    selectItem(a,b,vmItem) {
+
+      let {title}=vmItem.$attrs
+      this.$store.commit("changeActiveMenuName", title); //菜单聚焦
+
+      console.log(`arguments:`, arguments);
     }
   },
 

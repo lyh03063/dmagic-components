@@ -28,7 +28,7 @@
 <script>
 export default {
   mixins: [MIX.base, MIX.form_item_new],
-  name: "js_code_curr",//
+  name: "css_code_curr",//
   props: {
 
     cf: {
@@ -47,7 +47,7 @@ export default {
       ready: true,
       HtmlErrMessage: null,//语法错误提示代码
 
-      jsCodeId: null,
+    
 
 
     };

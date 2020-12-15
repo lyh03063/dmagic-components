@@ -1,6 +1,6 @@
 <template>
-  <div class style="padding: 10px">
-    <div class="DPF PB10 PT6">
+  <div class="out" style="padding: 10px">
+    <div class="DPF PB10 PT6" v-if="mode!='simple'">
       <!--如果是路由组件模式，显示标题-->
       <h1 class="title FX1" v-if="!prop_groupId">{{ groupDoc.title || "标题" }}</h1>
       <!--收藏按钮-->
@@ -25,7 +25,9 @@
         :data-type="groupDoc.dataType"
         v-if="isSpecial"
       ></component>
+      <!--传递mode-->
       <dm_detail_group_common
+      :mode="mode"
         :groupId="groupId"
         :data-type="groupDoc.dataType"
         @update_count="update_count"
@@ -35,7 +37,7 @@
         v-else
       ></dm_detail_group_common>
     </template>
-    <div class="PSF B0 R0 BC_fff W200 H20 LH_20 C_999 FS12 PL10">
+    <div class="PSF B0 R0 BC_fff W200 H20 LH_20 C_999 FS12 PL10" v-if="mode!='simple'">
       系统编号：{{ systemId }}
     </div>
   </div>
@@ -54,6 +56,7 @@ export default {
     };
   },
   props: {
+    mode:{},//模式：simple：简化版-用于树形展开显示时
     prop_groupId: {},//***属性过来的groupId，这种是组件形式而不是路由形式！！！！
     cf: {
       default: function () {
@@ -131,5 +134,9 @@ export default {
   text-align: center;
   line-height: 1;
   padding: 0 0 10px 0;
+}
+ .out >>> .el-table__expanded-cell[class*=cell]{
+    padding: 15px 5px 15px 20px;
+   
 }
 </style>

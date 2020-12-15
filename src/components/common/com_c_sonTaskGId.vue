@@ -1,6 +1,13 @@
 <template>
   <div>
-    <com_c_sonData class :doc="doc" :cf="cf" @click.native="fnClick"></com_c_sonData>
+    <!-- 传递事件list-event-in -->
+    <com_c_sonData
+      class
+      :doc="doc"
+      :cf="cf"
+      @click.native="fnClick"
+      @list-event-in="(param)=>$emit('list-event-in',param)"
+    ></com_c_sonData>
   </div>
 </template>
 

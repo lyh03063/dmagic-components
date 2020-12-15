@@ -71,14 +71,11 @@ PUB._paramAjaxAddon = { _systemId: "sys_api" }
 
 import manage from "./App.vue";
 import system from "./system.vue";
-
 // 3. 创建 router 实例，然后传 `routes` 配置
 const router = new VueRouter({
     routes: [
         { path: '/', redirect: '/manage' },
-
         {
-
             path: '/system/:sysId/', component: system, props: { ttt: 111 },
             children: [//子路由
                 { path: 'login', component: dm_login },
@@ -88,20 +85,10 @@ const router = new VueRouter({
                 {
                     path: 'manage', component: dm_manage, props: { ttt: 2222 },//manage
                     children: [//子路由
-
-
                         { path: 'detail_html_api', component: detail_html_api, },
-                     
-
-
                         ...PUB.arrRouteManage,
-
-
                     ]
-
                 },
-
-
             ]
         },
         {
@@ -115,7 +102,6 @@ const router = new VueRouter({
                 ...PUB.arrRouteManage
             ]
         },
-
         {
             path: '/group_home/:gid', component: group_home,
             children: [//子路由
@@ -142,16 +128,13 @@ const router = new VueRouter({
                 { path: 'test', component: test },
                 { path: 'demo_show', component: demo_show },
                 { path: 'detail_audio', component: detail_audio },
-
                 { path: 'detail_bankruptcy_case', component: detail_bankruptcy_case },
                 { path: 'detail_html_api', component: detail_html_api },
                 ...PUB.arrRouteManage,
-
             ]
         },
         { path: '/detail_group', component: detail_group, },
         { path: '/detail_data', component: detail_data },
-
         { path: '/open/auto_layout', component: auto_layout },
         { path: '/js_file_edit', component: js_file_edit },
         { path: '/js_code_edit', component: js_code_edit },
@@ -171,7 +154,6 @@ router.beforeEach((to, from, next) => {
     let $sys = util.getLocalStorageObj(systemId); //调用：{从LocalStorage获取一个对象的函数}
     PUB.keyPower = `${systemId}_power`;
     window.rolePower = util.getLocalStorageObj(PUB.keyPower);
-    
     // 如果用户未登录，跳转登录页面
     if ($sys.isLogin != 1) {//Q1：未登录
         if (to.path.includes('/site/') || to.path.includes('/site_m/') || to.path.includes('/open/')|| to.path.includes('/detail_data')) {//QK1：to路径中包含/site/表示网站首页

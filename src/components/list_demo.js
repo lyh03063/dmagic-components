@@ -16,6 +16,25 @@ PUB.listCF.list_demo = {
   listIndex: "list_demo", //vuex对应的字段~
   focusMenu: true, //进行菜单聚焦
   expand: true, //是否展开行
+  // expandsCom:"dm_expand_son_group",//展开显示组件名-公共组件
+  //expands展开行的显示字段配置
+  expands: [
+    {
+      label: "",
+      prop: "name",
+      slot: "slot_form_expand_articleTitle"
+    },
+    {
+      label: "分类名称",
+      prop: "articleCategory",
+      requireProp: ["articleContent"], //依赖文章详情，列表需返回该字段
+      width: 150,
+      formatter11111: function (rowData) {
+        let name = lodash.get(rowData, "categoryDoc.name");
+        return name;
+      }
+    }
+  ],
   //操作列配置
   columnOperate: {
     "min-width": 200
@@ -153,25 +172,7 @@ PUB.listCF.list_demo = {
     detail: "/crossDetail?page=info_piece",
     delete: "/crossDelete?page=info_piece" //删除接口
   },
-
-  //expands展开行的显示字段配置
-  expands: [
-    {
-      label: "",
-      prop: "name",
-      slot: "slot_form_expand_articleTitle"
-    },
-    {
-      label: "分类名称",
-      prop: "articleCategory",
-      requireProp: ["articleContent"], //依赖文章详情，列表需返回该字段
-      width: 150,
-      formatter11111: function (rowData) {
-        let name = lodash.get(rowData, "categoryDoc.name");
-        return name;
-      }
-    }
-  ],
+ 
   //-------列配置数组-------
   columns: [
     COLUMNS.name_fixed,

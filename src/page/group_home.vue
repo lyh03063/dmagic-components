@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div class="float-tips" v-if="$sys.env=='dev'">非生产</div>
+    <div class="float-tips" v-if="$sys.env == 'dev'">非生产</div>
     <el-container>
       <el-header class="home-head-box">
         <el-row>
-          <div class="FL MT13 C_fff MR10 FS24">{{groupDoc.title}}</div>
+          <div class="FL MT13 C_fff MR10 FS24">{{ groupDoc.title }}</div>
 
           <div class="FR MT20 C_fff">
             <dm_user_role></dm_user_role>
@@ -12,9 +12,10 @@
           <div class="FR MT20 MR30">
             <a
               target="_blank"
-              style="color:#fff"
+              style="color: #fff"
               :href="`#/detail_group?groupId=${$route.params.gid}`"
-            >编辑导航</a>
+              >编辑导航</a
+            >
           </div>
         </el-row>
       </el-header>
@@ -28,31 +29,34 @@
       <div class="g-left-box">
         <dm_left_menu :cf="listMenu"></dm_left_menu>
       </div>
-      <div class="g-right-box">
+      <div class="g-right-box" v-if="readyGroup">
+        <!--横切导航-->
+        <dm_tab_bar class="MT10 ML10"></dm_tab_bar>
         <keep-alive>
-          <router-view :key="routerKey" style="padding:10px"></router-view>
+          <router-view :key="routerKey" style="padding: 10px"></router-view>
         </keep-alive>
       </div>
     </div>
 
-    <div class="PSF B0 L0 BC_fff W200 H20 LH_20 C_999 FS12 PL10">系统编号：{{systemId}}</div>
+    <div class="PSF B0 L0 BC_fff W200 H20 LH_20 C_999 FS12 PL10">
+      系统编号：{{ systemId }}
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   mixins: [MIX.base],
-  components: {
-
-  },
+  components: {},
   props: {},
   data() {
     return {
-      systemId: null,//系统Id
+      readyGroup:false,
+      systemId: null, //系统Id
       routerKey: "key1",
       listMenu: null,
       groupDoc: {},
-      groupId: null
+      groupId: null,
     };
   },
   watch: {
@@ -60,7 +64,7 @@ export default {
       this.setActiveMenu(); //调用：{设置聚焦菜单函数}
     },
     // immediate: true,
-    deep: true
+    deep: true,
   },
 
   methods: {
@@ -72,7 +76,7 @@ export default {
     },
     //函数：{分组数据转换菜单数据函数}
     convertMenuData(list) {
-      return list.map(doc => {
+      return list.map((doc) => {
         let { targetDoc, sonList } = doc;
         let { _id, title } = targetDoc;
         let jsonBack = { index: _id, title }; //返回的数据对象-菜单配置项
@@ -91,7 +95,7 @@ export default {
     //函数：{ajax获取列表函数}
     async getDataList() {
       let {
-        data: { list }
+        data: { list },
       } = await axios({
         //请求接口
         method: "post",
@@ -99,8 +103,8 @@ export default {
         data: {
           _systemId: "$all",
           groupId: this.groupId,
-          arrType: ["group"]
-        }
+          arrType: ["group"],
+        },
       });
       this.listMenu = this.convertMenuData(list); //调用：{分组数据转换菜单数据函数}-递归
     },
@@ -111,29 +115,35 @@ export default {
         url: `${PUB.domain}/info/commonDetail`,
         data: {
           _id: this.groupId,
-          _systemId: "$all"
-        } //传递参数
+          _systemId: "$all",
+        }, //传递参数
       });
       this.groupDoc = data.doc;
       document.title = this.groupDoc.title; //修改浏览器标题栏文字
       this.systemId = this.groupDoc._systemId;
 
       //修改PUB._paramAjaxAddon***
-      PUB._paramAjaxAddon = { _systemId: this.systemId || "sys_apiaaaa" }
-      if (this.groupDoc.iconSrc) {//如果{icon地址}存在
-        util.changeFavicon(this.groupDoc.iconSrc)//函数：{改变网页标题图标的函数}
+      PUB._paramAjaxAddon = { _systemId: this.systemId || "sys_apiaaaa" };
+
+
+     
+      if (this.groupDoc.iconSrc) {
+        //如果{icon地址}存在
+        util.changeFavicon(this.groupDoc.iconSrc); //函数：{改变网页标题图标的函数}
       }
-    }
+    },
   },
   async created() {
     this.groupId = this.$route.params.gid;
     await this.getGroupDoc(); //调用：{获取分组详情函数}
     await this.getDataList(); //调用：{ajax获取列表函数}
     this.setActiveMenu(); //调用：{设置聚焦菜单函数}-要等菜单加载完
-  }
+
+     PUB.menuTabBarKey = `group_${this.groupId}`//横切导航的key
+     this.readyGroup=true
+  },
 };
 </script>
-
 
 <style scoped>
 .head {

@@ -3,10 +3,31 @@
     <a
       class="n-a"
       href="javascript:;"
-      @click="showSonData"
+      @click.exact="showSonData"
+      @click.ctrl="showSonDataDialog"
       v-if="doc[this.cf.column]"
-    >查看({{doc[this.cf.columnCount]}})</a>
-    <a class="n-a" style="color:#ccc" href="javascript:;" @click="addSonDataG" v-else>添加</a>
+      >查看({{ doc[this.cf.columnCount] }})</a
+    >
+    <a
+      class="n-a MR5"
+      style="color: #ccc"
+      href="javascript:;"
+      @click="addSonDataG"
+      
+      v-else
+      >添加</a
+    >
+
+    <!-- <span class="" v-if="doc[this.cf.columnCount] > 0">
+      
+      <a v-if="isExpand" class="n-a" style="color: #ccc" href="javascript:;" @click="unexpand"
+        >折叠</a
+      >
+      <a v-else class="n-a" style="color: #ccc" href="javascript:;" @click="expand"
+        >展开</a
+      >
+    </span> -->
+
     <!--子数据弹窗列表-->
     <el-dialog
       custom-class="n-el-dialog"
@@ -18,8 +39,11 @@
       v-bind:visible.sync="isShowDialog"
       v-if="isShowDialog"
     >
-      <dm_detail_group :prop_groupId="doc[this.cf.column]" @update_count="update_count"></dm_detail_group>
-      <div class="TAR FS10 C_999">分组id:{{doc[this.cf.column]}}</div>
+      <dm_detail_group
+        :prop_groupId="doc[this.cf.column]"
+        @update_count="update_count"
+      ></dm_detail_group>
+      <div class="TAR FS10 C_999">分组id:{{ doc[this.cf.column] }}</div>
     </el-dialog>
   </div>
 </template>
@@ -37,6 +61,7 @@ export default {
   },
   data() {
     return {
+      isExpand: false,
       ready: false,
       isShowDialog: false,
     };
@@ -48,6 +73,16 @@ export default {
     }
   },
   methods: {
+    //函数：{展开拓展行函数}
+    expand: async function () {
+      this.isExpand = true;
+      this.$emit("list-event-in", { eventType: "expand_row", doc: this.doc });
+    },
+    //函数：{折叠拓展行函数}
+    unexpand: async function () {
+      this.isExpand = false;
+      this.$emit("list-event-in", { eventType: "unexpand_row", doc: this.doc });
+    },
     //函数：{分组数据量变更事件函数}-这个应该要处理掉，不过留着关系也不大
     update_count: async function (countData) {
       let dataTypeParent = this.cf.dataTypeParent || this.cf.dataType//父级数据类型
@@ -58,9 +93,19 @@ export default {
       });
       this.doc[this.cf.columnCount] = countData//修改当前数据,实时更新显示数字
     },
-    //函数：{显示子数据弹窗列表函数}
+    //函数：{显示/隐藏拓展行函数}
     showSonData: async function () {
+      if (this.isExpand) {
+        this.unexpand()
+      } else {
+        this.expand()
+
+      }
+    },
+     //函数：{显示子数据弹窗列表函数}
+    showSonDataDialog: async function () {
       this.isShowDialog = true; this.ready = true;
+     
     },
     //函数：{添加子数据分组ID并弹窗显示}-注意这里这里一连串的操作
     addSonDataG: async function () {

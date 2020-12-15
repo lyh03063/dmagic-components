@@ -58,8 +58,10 @@ export default {
     PUB._paramAjaxAddon = {
       _systemId: this.sysId
     }
-    this.getDocSystem()//调用：{ajax获取系统doc函数}
 
+     PUB.menuTabBarKey = `tabbar_${this.sysId}`//横切导航的key
+    this.getDocSystem()//调用：{ajax获取系统doc函数}
+  
   }
 };
 </script>

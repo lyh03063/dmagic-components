@@ -3,6 +3,8 @@
     <el-button plain @click="setAddInit" size="mini" ref="aaa">设置formDataAddInit</el-button>
     <label class="n-button plain DPIB" for="id_btn_list_demo_add">替身按钮-新增</label>
 
+    
+
     <el-button plain @click="setChildComponent" size="mini">触发列表内的子组件的方法</el-button>
 
     <dm_debug_list>
@@ -161,7 +163,10 @@ export default {
     },
 
     fold(row) {
-      T.$refs.list1.$refs.table.toggleRowExpansion(row, false);
+      T.$refs.listMain.$refs.table.toggleRowExpansion(row, false);
+    },
+    unfold(row) {
+      T.$refs.listMain.$refs.table.toggleRowExpansion(row, false);
     },
     afterDelete(param, param1) {
     },

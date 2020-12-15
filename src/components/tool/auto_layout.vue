@@ -24,7 +24,7 @@
         <!-- <el-button plain @click="test" size="mini">test</el-button> -->
       </div>
       <div class="FX1">
-        <!--END:视图宽度-->
+        <!--视图宽度-->
         <div class="C_fff DPIB MR8">
           宽
           <input
@@ -69,7 +69,6 @@
           :dataId="demoId"
           v-if="demoId && $sys.userId"
         ></com_btn_collect>
-
         <el-button
           type="primary"
           @click="saveDemo"
@@ -94,7 +93,7 @@
       <dm_drag_box_width class :cf="cfDragBox">
         <template #left>
           <div class>
-            <!--END:iframe视窗-->
+            <!--iframe视窗-->
             <!-- scrolling="no" -->
             <div class="MR10">
               <iframe
@@ -132,6 +131,25 @@
                   >
                 </div>
               </div>
+
+              <!-- TODO:编辑html标签的弹窗 -->
+              <dm_popper_html_tag :cf="cfPopperHtmlTag" ref="popperHtmlTag">
+              </dm_popper_html_tag>
+              <!-- TODO:编辑html属性的弹窗 -->
+              <dm_popper_html_prop :cf="cfPopperHtmlProp" ref="popperHtmlProp">
+              </dm_popper_html_prop>
+
+              <!-- TODO:编辑html属性值的弹窗 -->
+              <dm_popper_html_pval :cf="cfPopperHtmlPVal" ref="popperHtmlPVal">
+              </dm_popper_html_pval>
+
+              <!-- TODO:编辑html内容的弹窗 -->
+              <dm_popper_html_content
+                :cf="cfPopperHtmlContent"
+                ref="popperHtmlContent"
+              >
+              </dm_popper_html_content>
+
               <!-- tabs -->
               <el-tabs v-model="activeName" type="card" @tab-click="tabClick">
                 <el-tab-pane
@@ -161,12 +179,16 @@
                     </div>
                   </div>
                   <div class="box_scroll box_html_set PL20">
-                    <!-- END:Html:row_html_tag组件 -->
+                    <!-- Html:row_html_tag组件 -->
                     <dm_row_html_tag
                       class
                       v-model="arrHtml"
                       ref="rowhtml"
                       @add_son_com="addSonCom"
+                      @popper_html_tag="popperHtmlTag"
+                      @popper_html_prop="popperHtmlProp"
+                      @popper_html_pval="popperHtmlPVal"
+                      @popper_html_content="popperHtmlContent"
                     ></dm_row_html_tag>
                   </div>
                 </el-tab-pane>
@@ -197,12 +219,16 @@
                     </div>
                   </div>
                   <div class="box_scroll box_html_set">
-                    <!-- END:Html:row_html_tag组件 -->
+                    <!-- Html:row_html_tag组件 -->
                     <dm_row_html_tag
                       class
                       v-model="arrHtmlHead"
                       ref="rowhtmlHead"
                       @add_son_com="addSonCom"
+                      @popper_html_tag="popperHtmlTag"
+                      @popper_html_prop="popperHtmlProp"
+                      @popper_html_pval="popperHtmlPVal"
+                      @popper_html_content="popperHtmlContent"
                     ></dm_row_html_tag>
                   </div>
                 </el-tab-pane>
@@ -257,7 +283,7 @@
                                 v-if="!vm_pannel.cfIn.showContent"
                                 v-html="cssCodeShort(docEntity)"
                               ></span>
-                              <!-- END:Html:复制CSS到剪贴板按钮 -->
+                              <!-- Html:复制CSS到剪贴板按钮 -->
                               <el-link
                                 class="ML5 MR10"
                                 @click="copyCssCode(docEntity)"
@@ -349,7 +375,7 @@
                     </div>
                   </dm_list_flex_res>
                 </el-tab-pane>
-                <!--END:基础信息表单-->
+                <!--基础信息表单-->
                 <el-tab-pane
                   label="基础信息"
                   name="tab_base"
@@ -415,7 +441,7 @@
         ></dm_dynamic_form>
       </div>
     </el-dialog>
-    <!--END:粘贴html代码弹窗-->
+    <!--粘贴html代码弹窗-->
     <el-dialog
       custom-class="n-el-dialog"
       width="65%"
@@ -434,7 +460,7 @@
         ></dm_dynamic_form>
       </div>
     </el-dialog>
-    <!--END:粘贴Css代码弹窗-->
+    <!--粘贴Css代码弹窗-->
     <el-dialog
       custom-class="n-el-dialog"
       width="65%"
@@ -488,6 +514,10 @@ export default {
   //FIXME:data配置
   data() {
     return {
+      cfPopperHtmlTag: {},//标签编辑弹窗的配置对象
+      cfPopperHtmlProp: {},//属性编辑弹窗的配置对象
+      cfPopperHtmlPVal: {},//属性值编辑弹窗的配置对象
+      cfPopperHtmlContent: {},//html内容编辑弹窗的配置对象
       hasModify: false,//数据是否被修改
       cfLDataVersion: {
         'findJsonAddon': { _idRel: "" },
@@ -711,9 +741,49 @@ export default {
       },
       // immediate: true,
     },
-
   },
   methods: {
+
+    //函数：{关闭所有Popper弹窗函数}
+    closeAllPopper: async function () {
+      this.$refs.popperHtmlProp.hide()
+      this.$refs.popperHtmlPVal.hide()
+      this.$refs.popperHtmlContent.hide()
+      this.$refs.popperHtmlTag.hide()
+    },
+    //TODO:函数：{弹出属性编辑popper弹窗函数}
+    popperHtmlProp: async function (param) {
+      this.closeAllPopper()//调用：{关闭所有Popper弹窗函数}
+      console.log(`popperHtmlProp-out`);
+
+      this.cfPopperHtmlProp = param
+      await this.$nextTick();//延迟到视图更新-因为上面是对象形式的变化
+      this.$refs.popperHtmlProp.show()
+    },
+    //TODO:函数：{弹出属性编辑popper弹窗函数}
+    popperHtmlPVal: async function (param) {
+      this.closeAllPopper()//调用：{关闭所有Popper弹窗函数}
+      console.log(`popperHtmlPVal-out`);
+
+      this.cfPopperHtmlPVal = param
+      await this.$nextTick();//延迟到视图更新-因为上面是对象形式的变化
+      this.$refs.popperHtmlPVal.show()
+    },
+    //TODO:函数：{弹出属性编辑popper弹窗函数}
+    popperHtmlContent: async function (param) {
+      this.closeAllPopper()//调用：{关闭所有Popper弹窗函数}
+      console.log(`popperHtmlContent-out`);
+      this.cfPopperHtmlContent = param
+      await this.$nextTick();//延迟到视图更新-因为上面是对象形式的变化
+      this.$refs.popperHtmlContent.show()
+    },
+    //TODO:函数：{弹出标签编辑popper弹窗函数}
+    popperHtmlTag: async function (param) {
+      this.closeAllPopper()//调用：{关闭所有Popper弹窗函数}
+      this.cfPopperHtmlTag = param
+      await this.$nextTick();//延迟到视图更新-因为上面是对象形式的变化
+      this.$refs.popperHtmlTag.show()
+    },
     //函数：{arrHtmlHead变动后的后续处理函数}
     afterArrHtmlHeadChange: function () {
       let arrHtml = lodash.get(this, `arrHtmlHead[0].children`);
@@ -722,7 +792,6 @@ export default {
       if (this.modeShowHtml == 'actual' && this.isHotUpdate) {
         this.updateIframe()//调用：{更新iframe函数}
       }
-
     },
     //函数：{arrHtml变动后的后续处理函数}
     afterArrHtmlChange: function () {
@@ -733,11 +802,9 @@ export default {
       if (this.modeShowHtml == 'actual' && this.isHotUpdate) {
         this.updateIframe()//调用：{更新iframe函数}
       }
-
     },
-    //END:函数：{设置标签页关闭时的事件}
+    //函数：{设置标签页关闭时的事件}
     setBeforeunload: function () {
-
       if (!this.$window) return
       if (this.hasModify) {//Q1：内容有改动
         this.$window.off("beforeunload").on("beforeunload", function () {
@@ -748,16 +815,16 @@ export default {
         this.$window.off("beforeunload")
       }
     },
-    //END:函数：{选项卡点击的函数}
+    //函数：{选项卡点击的函数}
     tabClick: function ({ name }) {
       $("body").attr("tab", this.activeName)
     },
-    //END:函数：{显示粘贴html代码弹窗函数}
+    //函数：{显示粘贴html代码弹窗函数}
     dialogPasteHtml: async function (arrTarget) {
       this.isShowDialogPasteHtml = true;
       this.arrTarget = arrTarget
     },
-    //END:函数：{提交粘贴html代码表单函数}
+    //函数：{提交粘贴html代码表单函数}
     submitFormPasteHtml: async function (arrTarget) {
       let { formDataPasteHtml } = this
       let { htmlCode } = formDataPasteHtml
@@ -773,11 +840,11 @@ export default {
       this.$message.success('粘贴Html成功');
       this.isShowDialogPasteHtml = false;
     },
-    //END:函数：{显示粘贴Css代码弹窗函数}
+    //函数：{显示粘贴Css代码弹窗函数}
     dialogPasteCss: async function (arrTarget) {
       this.isShowDialogPasteCss = true;
     },
-    //END:函数：{提交粘贴Css代码弹窗函数}
+    //函数：{提交粘贴Css代码弹窗函数}
     submitFormPasteCss: async function (arrTarget) {
       let { formDataPasteCss } = this
       let { cssCode } = formDataPasteCss
@@ -788,7 +855,7 @@ export default {
       this.$message.success('粘贴Css成功');
       this.isShowDialogPasteCss = false;
     },
-    //END:函数：{将一组Css代码复制到剪贴板函数}
+    //函数：{将一组Css代码复制到剪贴板函数}
     copyCssCode: function (docEntity) {
       // let objNeed = { arrCss: [docEntity] }
       // var strObjNeed = JSON.stringify(objNeed);//Json对象转换Json字符串
@@ -802,7 +869,7 @@ export default {
       let fnBuild = PUB.listCFAddon.front_demo.methods.singleBtnClick;
       fnBuild.call(this, "buildHtmlFile", this.docDemo)
     },
-    //END:JS：宽度文本框变化后的回调函数
+    //JS：宽度文本框变化后的回调函数
     //函数：{宽度文本框变化后的回调函数}
     changeWidth: function (e) {
       let n = Number(e.target.value)
@@ -811,7 +878,7 @@ export default {
     //函数：{测试函数}
     test: async function () {
     },
-    //END:函数：{更新iframe函数}
+    //函数：{更新iframe函数}
     updateIframe: async function () {
       if (this.modeShowHtml == 'actual') {//如果是真实模式
         let { cssCode, htmlCode, htmlCodeHasId, htmlCodeHead, htmlCodeHeadHasId, jsCodeTop } = this
@@ -868,7 +935,7 @@ export default {
         let clickStatus = await this.$confirm(`${strSelectorR}出现样式定义重复，这部分样式将不引用，如果是样式冲突问题，请取消操作并先处理好！`).catch(() => { });
         if (clickStatus != "confirm") return
       }
-      //END:JS-适应子组件插入位置
+      //JS-适应子组件插入位置
       if (this.objEleParent) {//Q1:{当前父元素对象}存在
         this.objEleParent.children.unshift(...arrHtml)
         this.objEleParent = null;//将{当前父元素对象}设置为null
@@ -880,7 +947,7 @@ export default {
       this.arrCss.push(...arrCssNeed)//Css代码更新
       this.$message.success('切换demo成功');
     },
-    //END:JS:添加子组件回调
+    //JS:添加子组件回调
     //函数：{添加子组件按钮点击后的回调函数}
     addSonCom: async function (docEntity) {
       this.objEleParent = docEntity//当前父元素对象赋值
@@ -1006,10 +1073,7 @@ export default {
         this.ajaxGetNoteList(); //调用：{ajax获取关联笔记列表}
       }
       this.readyDemo = true;//{是否准备好初始demo数据}设为真
-
-
       util.ajaxAddVisitRecord({ tagPage: "auto_layout", dataId: this.demoId, })//变量：{ajax添加访客记录函数}
-
       // await util.timeout(500); //延迟
       this.startWatch = true;//{开始监听变动}设为真
     },
@@ -1020,17 +1084,15 @@ export default {
     },
   },
   async created() {
-
     Vue.vm_auto_layout = this;//缓存当前实例，供子组件获取
-
     // //函数：{防抖版arrHtml变动后的后续处理函数}
-    this.debouncedAfterArrHtmlChange = lodash.debounce(this.afterArrHtmlChange, 2000)
+    this.debouncedAfterArrHtmlChange = lodash.debounce(this.afterArrHtmlChange, 1000)
     // //函数：{防抖版arrHtmlHead变动后的后续处理函数}
-    this.debouncedAfterArrHtmlHeadChange = lodash.debounce(this.afterArrHtmlHeadChange, 2000)
-
+    this.debouncedAfterArrHtmlHeadChange = lodash.debounce(this.afterArrHtmlHeadChange, 1000)
     $("body").attr("tab", this.activeName)//body设置tab属性
     await util.loadJs({ url: PUB.urlJS.html_tag })//加载html相关JS
     await util.loadJs({ url: PUB.urlJS.css_prop })//加载css相关JS
+      await util.loadJs({ url: PUB.urlJS.popper })//加载popper.js
     this.readyResource = true
     let { demoId, vid } = this.$route.query
     this.demoId = demoId;//
@@ -1043,41 +1105,30 @@ export default {
       this.afterArrHtmlChange()//调用：{arrHtml变动后的后续处理函数}
       this.afterArrHtmlHeadChange()//调用：{防抖版arrHtmlHead变动后的后续处理函数}
       this.updateIframe()//调用：{更新iframe函数}
-
-
       //动态监听当前字典的属性名****
       this.$watch(`arrHtml`, function () {
         console.log(`arrHtml变动########`);
         this.debouncedAfterArrHtmlChange()//调用：{防抖版arrHtml变动后的后续处理函数}
       },
-        { deep: true,immediate: false }
+        { deep: true, immediate: false }
       );
-
-       //动态监听当前字典的属性名****
+      //动态监听当前字典的属性名****
       this.$watch(`arrHtmlHead`, function () {
         console.log(`arrHtmlHead变动########`);
         this.debouncedAfterArrHtmlHeadChange()//调用：{防抖版arrHtmlHead变动后的后续处理函数}
       },
-        { deep: true,immediate: false }
+        { deep: true, immediate: false }
       );
-
-
-      
-
-
-
-
-
     }
   },
   async mounted() {
-
     util.changeFavicon(`//qn-dmagic.dmagic.cn/202007171024372424_67675_layout.png`)//函数：{改变网页标题图标的函数}
     window.arr_$targetIndex = []//聚焦的元素链索引数组
     //绑定关闭页面事件，弹窗提醒
     // window.onbeforeunload = function (e) {
     // }
     this.$window = $(window)//缓存$Window对象
+  
   }
 };
 </script>
@@ -1206,6 +1257,7 @@ export default {
   border: 1px #999 solid;
   border-radius: 50%;
   background-color: #fff;
+  z-index: 2;
 }
 /****************************处理切换tabs时内部popover的显示和隐藏-START****************************/
 .tab_body_popover,
@@ -1232,4 +1284,11 @@ body[tab="tab_head"] .tab_head_popover {
   border-right-color: #999;
 }
 /****************************处理切换popover弹窗样式-END****************************/
+
+.showBigIn .el-textarea__inner {
+  color: #fff;
+  font-size: 15px;
+  font-family: Consolas, "Courier New", monospace;
+  background-color: #333;
+}
 </style>
