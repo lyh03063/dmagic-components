@@ -1,5 +1,6 @@
 <template>
-  <div id="app">
+  <div >
+
     <dm_debug_list>
       <dm_debug_item v-model="dataConfig" />
     </dm_debug_list>
@@ -36,7 +37,7 @@
           <el-menu-item
             :index="item.name"
             :route="
-              item.route ? item.route : `/manage/demo_show?com=${item.name}`
+              item.route ? item.route : `/manage_app/demo_show?com=${item.name}`
             "
             v-for="item in menuEach.menuItem"
             :key="item.name"

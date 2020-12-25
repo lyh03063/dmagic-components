@@ -2,83 +2,88 @@
 import dm_test from '@/components/common/test'
 
 
-import dm_dynamic_form from '../components/list-data/dynamic-form.vue'
-import dm_list_data from '../components/list-data/list-data.vue'
+import dm_dynamic_form from '@/components/list-data/dynamic-form.vue'
+import dm_list_data from '@/components/list-data/list-data.vue'
 
-import dm_ajax_populate from '../components/common/ajax_populate/ajax_populate.vue'
+import dm_ajax_populate from '@/components/common/ajax_populate/ajax_populate.vue'
 
-import dm_select_list_data from '../components/form_item/select_list_data/select_list_data.vue'
-import dm_select_ajax_lazy from '../components/form_item/select_ajax_lazy.vue'
+import dm_select_list_data from '@/components/form_item/select_list_data/select_list_data.vue'
+import dm_select_ajax_lazy from '@/components/form_item/select_ajax_lazy.vue'
 
-import dm_form_item from '../components/form_item/form_item.vue'
-import dm_collection from '../components/form_item/collection.vue'
-import dm_tree_data from '../components/form_item/tree_data.vue'
-import dm_object from '../components/form_item/object.vue'
-import dm_select_area from '../components/form_item/select_area.vue'
-import dm_form_css from '../components/form_item/form_css.vue'
-import dm_json_editor from '../components/form_item/json_editor.vue'
-import dm_input_css_prop from '../components/form_item/input_css_prop.vue'
-import dm_input_html_tag from '../components/form_item/input_html_tag.vue'
-import dm_input_style_prop from '../components/form_item/input_style_prop.vue'
-import dm_auto_css_prop from '../components/form_item/auto_css_prop.vue'
-import dm_auto_html_tag from '../components/form_item/auto_html_tag.vue'
-import dm_option_input from '../components/form_item/option_input.vue'
+import dm_form_item from '@/components/form_item/form_item.vue'
+import dm_collection from '@/components/form_item/collection.vue'
+import dm_tree_data from '@/components/form_item/tree_data.vue'
+import dm_object from '@/components/form_item/object.vue'
+import dm_select_area from '@/components/form_item/select_area.vue'
+import dm_form_css from '@/components/form_item/form_css.vue'
+import dm_json_editor from '@/components/form_item/json_editor.vue'
+import dm_input_css_prop from '@/components/form_item/input_css_prop.vue'
+import dm_input_html_tag from '@/components/form_item/input_html_tag.vue'
+import dm_input_style_prop from '@/components/form_item/input_style_prop.vue'
+import dm_auto_css_prop from '@/components/form_item/auto_css_prop.vue'
+import dm_auto_html_tag from '@/components/form_item/auto_html_tag.vue'
+import dm_option_input from '@/components/form_item/option_input.vue'
 
-import dm_dialog_edit from '../components/list-data/dialog_edit.vue'
+import dm_dialog_edit from '@/components/list-data/dialog_edit.vue'
 
-import dm_com_row_js_code from '../components/common/com_row_js_code.vue'
-import dm_com_row_css_code from '../components/common/com_row_css_code.vue'
-import dm_form_vue_sfc from '../components/common/form_vue_sfc.vue'
-
-
-import dm_ele from '../components/common/ele.vue'
-
-import dm_aplayer from '../components/common/aplayer.vue'
-import dm_drag_box_width from '../components/common/drag_box_width.vue'
-import dm_popper from '../components/common/popper.vue'
-import dm_tab_bar from '../components/common/tab_bar.vue'
-import dm_expand_son_group from '../components/common/expand_son_group.vue'
+import dm_com_row_js_code from '@/components/common/com_row_js_code.vue'
+import dm_com_row_css_code from '@/components/common/com_row_css_code.vue'
+import dm_form_vue_sfc from '@/components/common/form_vue_sfc.vue'
 
 
-import dm_dialog_add from '../components/list-data/dialog_add.vue'
-import dm_detail_group_common from '../components/list-data/detail_group_common.vue'
-import dm_list_common from '../components/list-data/list_common.vue'
-import dm_detail_group from '../components/list-data/detail_group.vue'
-import dm_detail_g_list from '../components/list-data/detail_g_list.vue'
-import dm_pannel_d_g_list from '../components/list-data/pannel_d_g_list.vue'
-import dm_pannel_d_g_list_html_api from '../components/list-data/pannel_d_g_list_html_api.vue'
-import dm_rel_list_data from '../components/list-data/rel_list_data.vue'
-import dm_pannel_rel_list_data from '../components/list-data/pannel_rel_list_data.vue'
-import dm_list_simple from '../components/list-data/list_simple.vue'
-import dm_detail_son_data from '../components/list-data/detail_son_data.vue'
-import dm_list_visit_history from '../components/list-data/list_visit_history.vue'
-import dm_list_visit_often from '../components/list-data/list_visit_often.vue'
-import dm_list_data_version from '../components/list-data/list_data_version.vue'
-import dm_list_data_collect from '../components/list-data/list_data_collect.vue'
+import dm_ele from '@/components/common/ele.vue'
+
+import dm_aplayer from '@/components/common/aplayer.vue'
+import dm_drag_box_width from '@/components/common/drag_box_width.vue'
+import dm_popper from '@/components/common/popper.vue'
+import dm_tab_bar from '@/components/common/tab_bar.vue'
+import dm_expand_son_group from '@/components/common/expand_son_group.vue'
+
+
+import dm_dialog_add from '@/components/list-data/dialog_add.vue'
+import dm_detail_group_common from '@/components/list-data/detail_group_common.vue'
+import dm_list_common from '@/components/list-data/list_common.vue'
+import dm_detail_group from '@/components/list-data/detail_group.vue'
+import dm_detail_g_list from '@/components/list-data/detail_g_list.vue'
+import dm_pannel_d_g_list from '@/components/list-data/pannel_d_g_list.vue'
+import dm_pannel_d_g_list_html_api from '@/components/list-data/pannel_d_g_list_html_api.vue'
+import dm_rel_list_data from '@/components/list-data/rel_list_data.vue'
+import dm_pannel_rel_list_data from '@/components/list-data/pannel_rel_list_data.vue'
+import dm_list_simple from '@/components/list-data/list_simple.vue'
+import dm_detail_son_data from '@/components/list-data/detail_son_data.vue'
+import dm_list_visit_history from '@/components/list-data/list_visit_history.vue'
+import dm_list_visit_often from '@/components/list-data/list_visit_often.vue'
+import dm_list_data_version from '@/components/list-data/list_data_version.vue'
+import dm_list_data_collect from '@/components/list-data/list_data_collect.vue'
+
+
+import dm_list_group_common from '@/components/list-data/list_group_common.vue'
+
+
 //以下两个要用到scss
-import dm_manage_home from '../components/manage/listHome.vue'
-import dm_modify_password from '../components/manage/modify_password.vue'
+import dm_manage_home from '@/components/manage/listHome.vue'
+import dm_modify_password from '@/components/manage/modify_password.vue'
 
 
 
 
 
-import dm_detail_audio from '../components/detail/detail_audio.vue'
-import dm_group_audio from '../components/detail/group_audio.vue'
-import dm_detail_html_api from '../components/detail/detail_html_api.vue'
-import dm_detail_data from '../components/detail/detail_data.vue'
-import dm_pannel_son_note from '../components/detail/pannel_son_note.vue'
+import dm_detail_audio from '@/components/detail/detail_audio.vue'
+import dm_group_audio from '@/components/detail/group_audio.vue'
+import dm_detail_html_api from '@/components/detail/detail_html_api.vue'
+import dm_detail_data from '@/components/detail/detail_data.vue'
+import dm_pannel_son_note from '@/components/detail/pannel_son_note.vue'
 
 
 
-import dm_built_file_from_temp from '../components/bussiness/built_file_from_temp.vue'
-import dm_detail_bankruptcy_case from '../components/bussiness/detail_bankruptcy_case.vue'
+import dm_built_file_from_temp from '@/components/bussiness/built_file_from_temp.vue'
+import dm_detail_bankruptcy_case from '@/components/bussiness/detail_bankruptcy_case.vue'
 
 
-import dm_c_operate_g_file from '../components/column/operate_g_file.vue'
-import dm_c_operate_g from '../components/column/operate_g.vue'
-import dm_c_operate_normal from '../components/column/operate_normal.vue'
-import dm_c_party_case from '../components/column/party_case.vue'
+import dm_c_operate_g_file from '@/components/column/operate_g_file.vue'
+import dm_c_operate_g from '@/components/column/operate_g.vue'
+import dm_c_operate_normal from '@/components/column/operate_normal.vue'
+import dm_c_party_case from '@/components/column/party_case.vue'
 
 import { codemirror } from "vue-codemirror";
 import "codemirror/lib/codemirror.css";//暂时不做懒加载，因为会影响到全屏css
@@ -126,49 +131,50 @@ import "codemirror/addon/display/fullscreen.js"; //全屏Js
 
 
 
-import dm_code from '../components/form_item/codemirror.vue'
-import dm_collection_html_prop from '../components/form_item/collection_html_prop.vue'
+import dm_code from '@/components/form_item/codemirror.vue'
+import dm_collection_html_prop from '@/components/form_item/collection_html_prop.vue'
 
-import dm_auto_layout from '../components/tool/auto_layout.vue'
-import dm_dialog_select_demo from '../components/tool/dialog_select_demo.vue'
-import dm_dialog_css_prop from '../components/tool/dialog_css_prop.vue'
+import dm_auto_layout from '@/components/tool/auto_layout.vue'
+import dm_dialog_select_demo from '@/components/tool/dialog_select_demo.vue'
+import dm_dialog_css_prop from '@/components/tool/dialog_css_prop.vue'
 
-import dm_dialog_html_tag from '../components/tool/dialog_html_tag.vue'
-
-
-import dm_single_class_edit from '../components/tool/single_class_edit.vue'
-import dm_row_html_tag from '../components/tool/row_html_tag.vue'
-import dm_popper_html_tag from '../components/tool/popper_html_tag.vue'
-import dm_popper_html_prop from '../components/tool/popper_html_prop.vue'
-import dm_popper_html_pval from '../components/tool/popper_html_pval.vue'
-import dm_popper_html_content from '../components/tool/popper_html_content.vue'
-
-import dm_row_css_code from '../components/tool/row_css_code.vue'
-
-import dm_js_file_edit from '../components/tool/js_file_edit.vue'
-import dm_js_code_edit from '../components/tool/js_code_edit.vue'
-import dm_css_code_edit from '../components/tool/css_code_edit.vue'
-import dm_js_code_curr from '../components/tool/js_code_curr.vue'
-import dm_css_code_curr from '../components/tool/css_code_curr.vue'
-import dm_html_code_curr from '../components/tool/html_code_curr.vue'
-import dm_score_panel from '../components/tool/score_panel.vue'
-import com_score_panel from '../components/tool/com_score_panel.vue'
-
-import dm_familiarity_select from '../components/tool/familiarity_select.vue'
-import dm_note_familiarity_select from '../components/tool/note_familiarity_select.vue'
+import dm_dialog_html_tag from '@/components/tool/dialog_html_tag.vue'
 
 
-import dm_card_note_normal from '../components/card/note_normal.vue'
-import dm_card_note_history from '../components/card/note_history.vue'
-import dm_card_data_version from '../components/card/data_version.vue'
-import dm_card_note_often from '../components/card/note_often.vue'
-import dm_card_front_demo from '../components/card/front_demo.vue'
-import dm_card_data_collect from '../components/card/data_collect.vue'
+import dm_single_class_edit from '@/components/tool/single_class_edit.vue'
+import dm_row_html_tag from '@/components/tool/row_html_tag.vue'
+import dm_popper_html_tag from '@/components/tool/popper_html_tag.vue'
+import dm_popper_html_prop from '@/components/tool/popper_html_prop.vue'
+import dm_popper_html_pval from '@/components/tool/popper_html_pval.vue'
+import dm_popper_html_content from '@/components/tool/popper_html_content.vue'
 
-import dm_card_js_code_hs from '../components/card/js_code_hs.vue'
-import dm_card_auto_layout_hs from '../components/card/auto_layout_hs.vue'
-import dm_card_js_code_often from '../components/card/js_code_often.vue'
-import dm_card_front_demo_often from '../components/card/front_demo_often.vue'
+import dm_row_css_code from '@/components/tool/row_css_code.vue'
+
+import dm_js_file_edit from '@/components/tool/js_file_edit.vue'
+import dm_js_code_edit from '@/components/tool/js_code_edit.vue'
+import dm_css_code_edit from '@/components/tool/css_code_edit.vue'
+import dm_js_code_curr from '@/components/tool/js_code_curr.vue'
+import dm_css_code_curr from '@/components/tool/css_code_curr.vue'
+import dm_html_code_curr from '@/components/tool/html_code_curr.vue'
+import dm_score_panel from '@/components/tool/score_panel.vue'
+import com_score_panel from '@/components/tool/com_score_panel.vue'
+
+import dm_familiarity_select from '@/components/tool/familiarity_select.vue'
+import dm_note_familiarity_select from '@/components/tool/note_familiarity_select.vue'
+
+
+import dm_card_note_normal from '@/components/card/note_normal.vue'
+import dm_card_note_history from '@/components/card/note_history.vue'
+import dm_card_data_version from '@/components/card/data_version.vue'
+import dm_card_note_often from '@/components/card/note_often.vue'
+import dm_card_front_demo from '@/components/card/front_demo.vue'
+import dm_card_data_collect from '@/components/card/data_collect.vue'
+import dm_card_data_g from '@/components/card/data_g.vue'
+
+import dm_card_js_code_hs from '@/components/card/js_code_hs.vue'
+import dm_card_auto_layout_hs from '@/components/card/auto_layout_hs.vue'
+import dm_card_js_code_often from '@/components/card/js_code_often.vue'
+import dm_card_front_demo_often from '@/components/card/front_demo_often.vue'
 //列-完成度显示
 import com_complete from '@/components/common/com_complete.vue'
 //列-图片预览
@@ -263,9 +269,34 @@ import dm_login from '@/login.vue'
 import dm_manage_base from '@/manage.vue'
 
 
+ /****************************组件库的一些页面级组件-START****************************/
+ import form_demo from '@/page/form_demo.vue'; //导入form_demo
+import form_demo2 from '@/page/form_demo2.vue'; //导入form_demo
+import list_demo from '@/page/list_demo.vue'; //导入list_demo
+import list_static_demo from '@/page/list_static_demo.vue'; //导入list_static_demo
+import list_common_demo from '@/page/list_common_demo.vue'; //导入list_common_demo
+import upload_qiniu from '@/page/upload_qiniu.vue'; //导入upload_qiniu
+import test from '@/page/test.vue'; //导入test
+import demo_show from '@/page/demo_show.vue'; //导入demo_show
+// import detail_audio from './components/detail/detail_audio.vue'; //导入demo_showsrc\components\detail\detail_audio.vue
+
+
+
+import manage_app from "@/App.vue";
+import system_app from "@/system.vue";
+ /****************************组件库的一些页面级组件-END****************************/
+
+
+
+
+
+
 const Components = {
-  dm_test,
-  dm_json_editor, dm_input_css_prop, dm_input_html_tag,
+  form_demo, form_demo2, list_demo, list_static_demo, 
+  list_common_demo, upload_qiniu, test, demo_show, 
+  manage_app,system_app,
+
+  dm_test,dm_json_editor, dm_input_css_prop, dm_input_html_tag,
   dm_ajax_populate, dm_input_style_prop, dm_auto_css_prop, dm_auto_html_tag,
   dm_dynamic_form, dm_list_data, dm_select_ajax_lazy,
   dm_codemirror: codemirror, dm_code, dm_form_css, dm_collection_html_prop,
@@ -284,13 +315,13 @@ const Components = {
   dm_dialog_css_prop, dm_dialog_html_tag,dm_popper_html_tag,dm_popper_html_prop,
   dm_popper_html_pval, dm_popper_html_content,
   dm_js_file_edit, dm_js_code_edit, dm_js_code_curr, dm_css_code_curr,
-  dm_html_code_curr,
-  dm_score_panel, dm_row_css_code,dm_css_code_edit,
+  dm_html_code_curr,dm_score_panel, dm_row_css_code,dm_css_code_edit,
   dm_familiarity_select, dm_note_familiarity_select,
   com_score_panel, dm_card_note_normal, dm_card_note_history, dm_card_note_often,
-  dm_card_front_demo, dm_card_data_version, dm_card_data_collect,
+  dm_card_front_demo, dm_card_data_version, dm_card_data_collect,dm_card_data_g,
   dm_card_js_code_hs,dm_card_auto_layout_hs,  dm_card_js_code_often,dm_card_front_demo_often,
-  dm_list_visit_history, dm_list_visit_often, dm_list_data_version, dm_list_data_collect,
+  dm_list_visit_history, dm_list_visit_often, dm_list_data_version,
+   dm_list_data_collect,dm_list_group_common,
   com_complete, com_imagePreview, com_item_complete_search, com_f_item_listSpecPrice, com_c_item_payStatus,
   com_listGoods, com_addressObj, com_column_operate_rel_data, com_column_operate_entity_data,
    com_c_countSonTask,com_c_relData,

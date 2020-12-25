@@ -317,7 +317,7 @@ PUB.menuDemo = [
         name: "sys_case",
         title: "案管专用",
         menuItem: [
-            { name: "detail_bankruptcy_case", title: "案件详情", route: "/manage/detail_bankruptcy_case?caseId=5edc65048d6ed44d5cf18aab" },
+            { name: "detail_bankruptcy_case", title: "案件详情", route: "/manage_app/detail_bankruptcy_case?caseId=5edc65048d6ed44d5cf18aab" },
 
         ]
     },
@@ -374,9 +374,9 @@ PUB.menuDemo = [
             { name: "list_visit_often_demo", title: "列表-最近常用", },
             { name: "list_visit_history_demo", title: "列表-历史记录", },
             { name: "list_demo_hide_table", title: "列表-隐藏表格", },
-            { name: "list_demo", title: "list_demo1", route: "/manage/list_demo" },
-            { name: "list_static_demo", title: "list_static_demo", route: "/manage/list_static_demo" },
-            { name: "list_common_demo", title: "list_common_demo", route: "/manage/list_common_demo" },
+            { name: "list_demo", title: "list_demo1", route: "/manage_app/list_demo" },
+            { name: "list_static_demo", title: "list_static_demo", route: "/manage_app/list_static_demo" },
+            { name: "list_common_demo", title: "list_common_demo", route: "/manage_app/list_common_demo" },
             { name: "list_demo_detail_g_list", title: "detail_g_list详情关联数据列表" },
             { name: "select_file_template", title: "案管-选择文件模板" },
             { name: "list_demo_pannel_rel", title: "案管-详情关联列表-涉诉信息" },
@@ -405,8 +405,8 @@ PUB.menuDemo = [
         name: "form",
         title: "表单",
         menuItem: [
-            { name: "form_demo", title: "表单1", route: "/manage/form_demo" },
-            { name: "form_demo2", title: "表单2", route: "/manage/form_demo2" },
+            { name: "form_demo", title: "表单1", route: "/manage_app/form_demo" },
+            { name: "form_demo2", title: "表单2", route: "/manage_app/form_demo2" },
 
 
         ]
@@ -451,8 +451,8 @@ PUB.menuDemo = [
             { name: "option_input_demo", title: "候选值组件" },
             { name: "draggable_demo", title: "draggable_demo" },
             { name: "row_html_tag_demo", title: "html集合组件测试" },
-            { name: "upload_qiniu", title: "upload_qiniu", route: "/manage/upload_qiniu" },
-            { name: "test", title: "test", route: "/manage/test" },
+            { name: "upload_qiniu", title: "upload_qiniu", route: "/manage_app/upload_qiniu" },
+            { name: "test", title: "test", route: "/manage_app/test" },
             { name: "object_demo", title: "对象demo" },
            
             { name: "goods_cart", title: "购物车" },
