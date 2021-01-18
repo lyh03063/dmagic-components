@@ -105,9 +105,7 @@ export default {
       return PUB.menuDemo
     },
     activeMenuIndex() {
-      // //
-      // return '2'
-      // //当前激活的菜单index
+     
       return this.$store.state.activeMenuIndex; //从vuex的store里面读取值
     },
     cfData: function () {
@@ -128,7 +126,6 @@ export default {
       handler(newVal, oldVal) {
         //来自vuex的当前行数据
         // this.$store.state.listState[this.cf.listIndex].row;
-
         this.$store.commit("setCfData", this.dataConfig);
       },
 

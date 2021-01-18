@@ -25,7 +25,7 @@
 <script>
 export default {
   name: "object_item",
-  mixins: [MIX.form_item_new],
+  mixins: [MIX.form_item],
   //用于列表模糊查询的组件
   props: {
     cf: {

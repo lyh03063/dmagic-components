@@ -265,7 +265,7 @@ export default {
 }
 
 .box_scroll >>> .CodeMirror {
-  height: 200px;
+  height: 400px;
 }
 
 .error_box {

@@ -19,8 +19,10 @@ PUB._paramAjaxAddon = { _systemId: "sys_api" }
 
 
 
-import Vuex from 'vuex' //导入vuex模块
-Vue.use(Vuex) //应用组件
+util.setVuexDefault()//调用：{设置vuex函数}
+
+
+
 
 
 
