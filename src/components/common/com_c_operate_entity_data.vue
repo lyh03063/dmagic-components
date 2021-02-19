@@ -5,6 +5,7 @@
       width="190"
       trigger="hover"
       v-model="visible"
+      :open-delay="300"
       v-if="$power('groupDataList.all.modify')"
     >
       <!--候选值列表-->
@@ -60,7 +61,7 @@
       </a>
     </template>
 
-    <el-popover class placement="right" width="auto" trigger="hover">
+    <el-popover class placement="right" width="auto" trigger="hover" :open-delay="300">
       <div class v-if="$power('groupDataList.all.modify')">
         <el-button icon="el-icon-edit" circle @click="emit('edit_entity')" size="mini"></el-button>
 

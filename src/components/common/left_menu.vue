@@ -1,15 +1,15 @@
 <template>
-  <div :class="['out-box',{'collapse':isCollapse}]">
+  <div :class="['out-box', { collapse: isCollapse }]">
     <dm_debug_list>
       <dm_debug_item v-model="cf" text="cf" />
     </dm_debug_list>
 
-    <el-aside class :style="[isCollapse?open:close]">
+    <el-aside class :style="[isCollapse ? open : close]">
       <div
         class="C_fff TAR PR10 bar"
-        style="background:rgb(84, 92, 100);border-top:1px solid #999"
+        style="background: rgb(84, 92, 100); border-top: 1px solid #999"
         @click="isCollapseFun"
-        :style="[isCollapse?open1:close]"
+        :style="[isCollapse ? open1 : close]"
       >
         <span v-if="isCollapse">&gt; &gt;</span>
         <span v-else>&lt; &lt;</span>
@@ -25,7 +25,7 @@
         :collapse="isCollapse"
         @select="selectItem"
       >
-        <template v-for="(menuEach,index) in cf">
+        <template v-for="(menuEach, index) in cf">
           <!--一级菜单带route，表示无子菜单-->
           <el-menu-item
             :index="menuEach.index"
@@ -35,23 +35,26 @@
             :key="index"
           >
             <i :class="menuEach.icon"></i>
-            <span slot="title">{{menuEach.title}}</span>
+            <span slot="title">{{ menuEach.title }}</span>
           </el-menu-item>
           <!--一级菜单不带route，表示有子菜单-->
           <el-submenu :index="menuEach.index" :key="index" v-else>
             <template slot="title">
               <i :class="menuEach.icon"></i>
-              <span>{{menuEach.title}}</span>
+              <span>{{ menuEach.title }}</span>
             </template>
 
             <el-menu-item
-              style="padding-left:37px;"
+              style="padding-left: 37px"
               :index="item.index"
               :title="item.title"
               :route="item.route"
               v-for="item in menuEach.menuItem"
               :key="item.index"
-            >{{item.title}}</el-menu-item>
+            >
+              <i :class="item.icon"></i>
+              {{ item.title }}</el-menu-item
+            >
           </el-submenu>
         </template>
       </el-menu>
@@ -76,9 +79,9 @@ export default {
     isCollapseFun() {
       this.isCollapse = !this.isCollapse;
     },
-    selectItem(a,b,vmItem) {
+    selectItem(a, b, vmItem) {
 
-      let {title}=vmItem.$attrs
+      let { title } = vmItem.$attrs
       this.$store.commit("changeActiveMenuName", title); //菜单聚焦
 
       console.log(`arguments:`, arguments);
@@ -93,7 +96,7 @@ export default {
         transition: "0.5s"
       },
       close: {
-        width: "202px",
+        // width: "202px",
         transition: "0.5s"
       },
       open1: {
@@ -105,11 +108,11 @@ export default {
   }
 };
 </script >
-<style scoped>
+<style scoped lang="scss">
 .out-box {
   background: rgb(84, 92, 100);
   min-width: 201px;
-  max-width: 201px;
+  // max-width: 201px;
   height: calc(100vh - 60px);
   transition: 0.5s;
   overflow-y: auto;

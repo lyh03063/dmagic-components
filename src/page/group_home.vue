@@ -6,16 +6,47 @@
         <el-row>
           <div class="FL MT13 C_fff MR10 FS24">{{ groupDoc.title }}</div>
 
-          <div class="FR MT20 C_fff">
-            <dm_user_role></dm_user_role>
-          </div>
-          <div class="FR MT20 MR30">
+          <div class="FR MT20 C_fff"></div>
+          <div class="FR DPFC">
+            <div class="PT10 MR20">
+              <el-input
+                style="width: 160px"
+                @keypress.enter.native="searchData"
+                placeholder="专题内搜索"
+                v-model="keyword"
+              >
+                <i
+                  slot="suffix"
+                  class="Cur1 el-input__icon el-icon-search"
+                  @click="searchData"
+                ></i>
+              </el-input>
+            </div>
             <a
+              class="MR10"
               target="_blank"
               style="color: #fff"
               :href="`#/detail_group?groupId=${$route.params.gid}`"
               >编辑导航</a
             >
+
+            <a
+              class="MR10"
+              target="_blank"
+              style="color: #fff"
+              :href="`#/list_group_common?gid=${$route.params.gid}`"
+              >树状专题</a
+            >
+
+            <a
+              class="MR10"
+              style="color: #999"
+              href="javascript:;"
+              @click="updateSearchCache"
+              >更新搜索缓存</a
+            >
+
+            <dm_user_role></dm_user_role>
           </div>
         </el-row>
       </el-header>
@@ -32,9 +63,17 @@
       <div class="g-right-box" v-if="readyGroup">
         <!--横切导航-->
         <dm_tab_bar class="MT10 ML10"></dm_tab_bar>
-        <keep-alive>
-          <router-view :key="routerKey" style="padding: 10px"></router-view>
+
+        <!-- <div class="">$route.meta.keepAlive-{{ $route.meta.keepAlive }}</div> -->
+        <!-- 注意这里的keep-alive是有条件的，要在路由里设置meta.keepAlive为true，另外之前的key也必须保留，否则只有参数变化时不更新 -->
+        <keep-alive v-if="$route.meta.keepAlive">
+          <router-view style="padding: 10px" :key="routerKey"></router-view>
         </keep-alive>
+        <router-view
+          v-else
+          style="padding: 10px"
+          :key="routerKey"
+        ></router-view>
       </div>
     </div>
 
@@ -51,7 +90,8 @@ export default {
   props: {},
   data() {
     return {
-      readyGroup:false,
+      keyword: "",
+      readyGroup: false,
       systemId: null, //系统Id
       routerKey: "key1",
       listMenu: null,
@@ -68,6 +108,35 @@ export default {
   },
 
   methods: {
+    //函数：{更新搜索缓存函数}
+    async updateSearchCache() {
+      const loading = this.$loading({//打开全局锁屏loading
+        lock: true,
+        text: "执行中",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)"
+      });
+
+      let { data } = await axios({
+        //请求接口
+        method: "post",
+        url: `${PUB.domain}/info/updateArrAncestors`,
+        data: {
+          _systemId: "sys_api",
+          gid: this.groupId,
+        },
+      });
+      loading.close(); //关闭loding
+      this.$message.success('更新搜索缓存成功');
+
+
+
+    },
+    //函数：{关键词查询函数}
+    searchData() {
+      this.$router.push({ name: "search_result_for_group", query: { keyword: this.keyword } });
+      // location.href = `#/study_home/search_result?keyword=${this.keyword}`;
+    },
     //函数：{设置聚焦菜单函数}
     async setActiveMenu() {
       this.routerKey = document.URL; //路由key，确保路由能响应
@@ -76,11 +145,26 @@ export default {
     },
     //函数：{分组数据转换菜单数据函数}
     convertMenuData(list) {
+
+
+
+
+
+
+
+
+
+
+
       return list.map((doc) => {
         let { targetDoc, sonList } = doc;
-        let { _id, title } = targetDoc;
-        let jsonBack = { index: _id, title }; //返回的数据对象-菜单配置项
-        let menuItem;
+
+        let { _id, title, dataType } = targetDoc;
+
+        let icon = lodash.get(DYDICT.dictDataType, `${dataType}.icon`, "el-icon-top-right");
+
+        let jsonBack = { index: _id, title, icon }; //返回的数据对象-菜单配置项
+
         //Q1：{sonList}存在
         if (util.isNotEmptyArr(sonList)) {
           jsonBack.menuItem = this.convertMenuData(sonList); //调用：{分组数据转换菜单数据函数}-递归
@@ -126,7 +210,7 @@ export default {
       PUB._paramAjaxAddon = { _systemId: this.systemId || "sys_apiaaaa" };
 
 
-     
+
       if (this.groupDoc.iconSrc) {
         //如果{icon地址}存在
         util.changeFavicon(this.groupDoc.iconSrc); //函数：{改变网页标题图标的函数}
@@ -134,13 +218,14 @@ export default {
     },
   },
   async created() {
+    this.keyword = this.$route.query.keyword;//初始化关键词
     this.groupId = this.$route.params.gid;
     await this.getGroupDoc(); //调用：{获取分组详情函数}
     await this.getDataList(); //调用：{ajax获取列表函数}
     this.setActiveMenu(); //调用：{设置聚焦菜单函数}-要等菜单加载完
 
-     PUB.menuTabBarKey = `group_${this.groupId}`//横切导航的key
-     this.readyGroup=true
+    PUB.menuTabBarKey = `group_${this.groupId}`//横切导航的key
+    this.readyGroup = true
   },
 };
 </script>

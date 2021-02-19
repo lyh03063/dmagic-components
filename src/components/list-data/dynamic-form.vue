@@ -116,7 +116,7 @@ export default {
         return {
           btns: [
             { text: "提交", event: "submit", type: "primary", validate: true },
-            { text: "取消", event: "cancel" }
+            { text: "关闭", event: "cancel" }
           ]
           // col_span: 0
         };

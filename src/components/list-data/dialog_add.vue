@@ -12,7 +12,7 @@
       :close-on-click-modal="false"
       :append-to-body="true"
     >
-        {{cfFormAdd}}
+   
       <div class>
         <dm_debug_list level-up="2">
           <dm_debug_item v-model="cf" text="配置" />
@@ -187,7 +187,7 @@ export default {
           idKey: "_id", watch: {},
           btns: [
             { text: "新增", event: "submit", type: "primary", validate: true },
-            { text: "取消", event: "cancel" }
+            { text: "关闭", event: "cancel" }
           ]
         };
         let { copyId } = this.cf//复制的数据id

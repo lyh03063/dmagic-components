@@ -448,6 +448,7 @@ PUB.menuDemo = [
         name: "other",
         title: "其他",
         menuItem: [
+            { name: "list_group_common", title: "新版分组笔记列表" },
             { name: "option_input_demo", title: "候选值组件" },
             { name: "draggable_demo", title: "draggable_demo" },
             { name: "row_html_tag_demo", title: "html集合组件测试" },

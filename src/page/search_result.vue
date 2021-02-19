@@ -1,23 +1,33 @@
 <template>
-  <div> 
+  <div>
     <dm_debug_list>
       <dm_debug_item v-model="activeName" text="activeName" />
     </dm_debug_list>
 
     <div class v-if="ready">
-      <div class="LH50 TAC H50 C_999" v-if="!activeName">没有匹配的搜索结果！</div>
+      <div class="LH50 TAC H50 C_999" v-if="!activeName">
+        没有匹配的搜索结果！
+      </div>
       <el-tabs v-model="activeName" v-else>
         <el-tab-pane
           :name="item.name"
-          :label="`${$dictLable('dataType',item.name)}（${item.count}）`"
+          :label="`${$dictLable('dictDataType', item.name)}（${item.count}）`"
           v-for="item in arrTypeShow"
           :key="item.name"
         >
-          <div class="DataBox" v-for="doc in dataResult[item.name].list" :key="doc._id">
-            <a class="n-a" :href="'#/detail_data?dataId=' +doc._id" target="_blank">
-              <span>{{getText(doc)}}</span>
-              <span style="color:red">{{getHighLightText(doc)}}</span>
-              <span>{{getEndText(doc)}}</span>
+          <div
+            class="DataBox"
+            v-for="doc in dataResult[item.name].list"
+            :key="doc._id"
+          >
+            <a
+              class="n-a"
+              :href="'#/detail_data?dataId=' + doc._id"
+              target="_blank"
+            >
+              <span>{{ getText(doc) }}</span>
+              <span style="color: red">{{ getHighLightText(doc) }}</span>
+              <span>{{ getEndText(doc) }}</span>
             </a>
           </div>
         </el-tab-pane>
@@ -36,9 +46,11 @@ let arrType = [
   "html_api",
   "css_api",
   "js_api",
-  "url"
+  "url",
+  "task"
 ];
 export default {
+  name:"search_result",
   mixins: [MIX.base],
   data() {
     return {
@@ -51,7 +63,7 @@ export default {
     };
   },
   watch: {
-    $route: function(newUrl, oldUrl) {
+    $route: function (newUrl, oldUrl) {
       if (newUrl != oldUrl) {
         this.getList(); //调用：{获取列表函数}
       }
@@ -79,17 +91,23 @@ export default {
     //函数：{获取列表函数}
     async getList() {
       let keyword = this.$route.query.keyword;
+
+      let params = {
+        _systemId: "sys_api",
+        keyword,
+        arrDateType: arrType
+      }
+      if (this.$route.params.gid) {//如果带分组范围id，补充参数
+        params.gIdRange = this.$route.params.gid
+
+      }
       this.keywordData = keyword;
       let {
         data: { dataResult }
       } = await axios({
         method: "post",
         url: `${PUB.domain}/info/search_info`,
-        data: {
-          _systemId: "sys_api",
-          keyword,
-          arrDateType: arrType
-        }
+        data: params
       });
 
       this.dataResult = dataResult;

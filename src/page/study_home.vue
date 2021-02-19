@@ -102,7 +102,7 @@ export default {
   },
 
   methods: {
-    //函数：{搜索}
+    //函数：{关键词查询函数}
     searchData() {
       location.href = `#/study_home/search_result?keyword=${this.keyword}`;
     },
@@ -125,6 +125,7 @@ export default {
     document.title = `前端学习网`; //修改浏览器标题栏文字
     util.changeFavicon(`http://qn-dmagic.dmagic.cn/icon_study.png`)//函数：{改变网页标题图标的函数}
     PUB._paramAjaxAddon = { _systemId: "sys_api" }
+    this.keyword = this.$route.query.keyword;//初始化关键词
   }
 };
 </script>

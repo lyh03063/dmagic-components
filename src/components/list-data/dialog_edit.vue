@@ -178,7 +178,7 @@ export default {
         duration: 1500,
         type: "success",
       });
-      this.cf.visible = false; //关闭弹窗
+      // this.cf.visible = false; //关闭弹窗
       //如果{增删改操作后是否自动刷新}为真
       if (this.cf.isRefreshAfterModify) {
         this.vm_list.getDataList(); //更新数据列表-暂时去掉
@@ -207,8 +207,8 @@ export default {
         watch: {},
         urlInit: "/info/commonDetail",
         btns: [
-          { text: "修改", event: "submit", type: "primary", validate: true },
-          { text: "取消", event: "cancel" },
+          { text: "保存", event: "submit", type: "primary", validate: true },
+          { text: "关闭", event: "cancel" },
         ],
       };
 

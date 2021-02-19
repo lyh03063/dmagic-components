@@ -129,7 +129,7 @@ export default {
           formItems: this.cf.formItems,
           btns: [
             { text: "新增", event: "submit", type: "primary", validate: true },
-            { text: "取消", event: "cancel" }
+            { text: "关闭", event: "cancel" }
           ]
         }
       },
@@ -151,8 +151,8 @@ export default {
           urlInit: lodash.get(this.cf, `url.detail`),
           formItems: this.cf.formItems,
           btns: [
-            { text: "修改", event: "submit", type: "primary", validate: true },
-            { text: "取消", event: "cancel" }
+            { text: "保存并关闭", event: "submit", type: "primary", validate: true },
+            { text: "关闭", event: "cancel" }
           ]
         }
       },
@@ -163,7 +163,7 @@ export default {
         formItems: this.cf.formItems,
         btns: [
           { text: "新增", event: "submit", type: "primary", validate: true },
-          { text: "取消", event: "cancel" }
+          { text: "关闭", event: "cancel" }
         ]
       },
 

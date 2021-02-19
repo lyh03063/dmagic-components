@@ -170,6 +170,8 @@ import dm_card_note_often from '@/components/card/note_often.vue'
 import dm_card_front_demo from '@/components/card/front_demo.vue'
 import dm_card_data_collect from '@/components/card/data_collect.vue'
 import dm_card_data_g from '@/components/card/data_g.vue'
+import dm_card_data_normal from '@/components/card/data_g_normal.vue'
+import dm_card_data_task from '@/components/card/data_g_task.vue'
 
 import dm_card_js_code_hs from '@/components/card/js_code_hs.vue'
 import dm_card_auto_layout_hs from '@/components/card/auto_layout_hs.vue'
@@ -193,6 +195,7 @@ import com_addressObj from '@/components/common/com_d_item_addressObj.vue'
 
 import com_column_operate_rel_data from '@/components/common/com_c_operate_rel_data.vue'
 import com_column_operate_entity_data from '@/components/common/com_c_operate_entity_data.vue'
+import com_c_operate_entity_2 from '@/components/common/com_c_operate_entity_2.vue'
 
 
 import com_c_countSonTask from '@/components/common/com_c_countSonTask.vue'
@@ -244,7 +247,7 @@ import page_head from '@/components/site/page_head.vue'
 import page_menu from '@/components/site/page_menu.vue'
 import pannel_list_article_date from '@/components/site/pannel_list_article_date.vue'
 
-import dm_left_menu from '@/components/NavMenu/NavMenu'
+import dm_left_menu from '@/components/common/left_menu'
 import dm_user_role from "@/components/common/role"
 import dm_video_player from "@/components/common/video_player"
 
@@ -319,12 +322,13 @@ const Components = {
   dm_familiarity_select, dm_note_familiarity_select,
   com_score_panel, dm_card_note_normal, dm_card_note_history, dm_card_note_often,
   dm_card_front_demo, dm_card_data_version, dm_card_data_collect,dm_card_data_g,
+  dm_card_data_task,dm_card_data_normal,
   dm_card_js_code_hs,dm_card_auto_layout_hs,  dm_card_js_code_often,dm_card_front_demo_often,
   dm_list_visit_history, dm_list_visit_often, dm_list_data_version,
    dm_list_data_collect,dm_list_group_common,
   com_complete, com_imagePreview, com_item_complete_search, com_f_item_listSpecPrice, com_c_item_payStatus,
   com_listGoods, com_addressObj, com_column_operate_rel_data, com_column_operate_entity_data,
-   com_c_countSonTask,com_c_relData,
+  com_c_operate_entity_2,com_c_countSonTask,com_c_relData,
   com_c_sonData, com_c_sonTaskGId, com_c_sonNoteGId, com_c_g_person_file, com_c_g_person_url,
   com_c_g_person_image, com_c_g_person_album, com_c_g_album_image, com_c_g_company_url, com_c_g_company_person,
   com_c_g_company_file, com_c_g_company_image, com_c_g_company_album,

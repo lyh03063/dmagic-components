@@ -82,7 +82,6 @@ export default {
       PUB._systemId = _systemId
       PUB.keyPower = `${_systemId}_power`;
 
-
       let { data } = await axios({
         //请求接口
         method: "post",
@@ -100,7 +99,7 @@ export default {
       let roleId = lodash.get(data, `doc.role`); //变量：{角色Id}
       let nickName = lodash.get(data, `doc.nickName`); //变量：{角色Id}
 
-      let sysData = {};
+      let sysData = {};//变量：{系统数据}
       sysData.userId = userId;
       sysData.roleId = roleId;
       sysData.nickName = nickName;
@@ -111,8 +110,8 @@ export default {
         sysData.isLogin = 1;
 
 
-        let { data } = await axios({
-          //请求接口
+        let { data } = await axios({//请求接口-角色
+          
           method: "post",
           url: `${PUB.domain}/info/commonDetail`,
           data: {

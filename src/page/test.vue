@@ -1,6 +1,5 @@
 <template>
   <div>
-    <dm_list_group_common gid="5e5f49b5a56e720593572973"></dm_list_group_common>
 
 
 

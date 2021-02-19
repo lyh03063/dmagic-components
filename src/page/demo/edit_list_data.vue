@@ -51,7 +51,7 @@ export default {
           ],
           btns: [
             { text: "修改", event: "submit", type: "primary", validate: true },
-            { text: "取消", event: "cancel" }
+            { text: "关闭", event: "cancel" }
           ]
         }
       },

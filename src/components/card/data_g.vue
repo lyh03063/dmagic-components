@@ -1,39 +1,48 @@
 <template>
   <div class="item-box TAC">
     <div class="DPFC">
-      <span class="C_999" v-if="dataTypeP"
-        >[{{ dataTypeP }}<span v-if="doc.dataType"> - {{ doc.dataType }}</span
-        >]</span
-      >
-      <span class="MR10">{{ doc.title }}</span>
+      <!--图标-->
+      <div class="">
+        <div
+          class="box_g_icon MR10 DPFC"
+          v-if="dataTypeP == 'group'"
+          @click="isShowChildren = !isShowChildren"
+        >
+          <i class="C_999 el-icon-minus FS12 Scale80" v-if="isShowChildren"></i>
+          <i class="C_999 el-icon-plus FS12 Scale80" v-else></i>
+          <i
+            class="C_999 FS12 PS4"
+            :class="iconChildren"
+            v-if="doc.dataType"
+            :title="doc.dataType"
+          ></i>
+        </div>
+        <i class="C_999 FS14 MR10" :class="icon" v-else></i>
+      </div>
+
+      <!--不同数据类型的卡片组件-->
+      <component :is="comCard" :doc="doc"></component>
 
       <a class="MR10" target="_blank" :href="getDetailLink(doc)">详情</a>
-      <!--气泡弹窗-->
-      <el-popover
-        placement="right"
-        width="200"
-        trigger="hover"
-        :open-delay="300"
-      >
-        <div class="">
-          <i class="MR10 btn_mimi el-icon-edit">修改111</i>
-          <i class="MR10 btn_mimi el-icon-delete">删除引用</i>
-          <i class="MR10 btn_mimi el-icon-delete">删除实体</i>
-        </div>
+      <!-- <el-button class="MR10" plain @click="fnAdd" size="mini">+新增同级</el-button> -->
 
-        <i class="DPIB FS20 C_999 el-icon-setting" slot="reference"></i>
-      </el-popover>
+      <!-- @single-action="" -->
+      <!--操作栏-->
+      <com_c_operate_entity_2
+        :doc="doc"
+        :dataTypeP="dataTypeP"
+        @single-action="(param) => $emit('single-action', param)"
+        class=""
+      ></com_c_operate_entity_2>
 
-      <div class="ML10">
-        <a href="javascript:;" @click="isShowChildren = !isShowChildren"
-          >(数据量:{{ doc.countData }})</a
-        >
+      <div class="ML10 C_999" v-if="dataTypeP == 'group'">
+        （数据量:{{ doc.countData }}）
       </div>
     </div>
 
     <div class="ML20" v-if="dataTypeP == 'group' && isShowChildren">
       <!--递归-->
-      <dm_list_group_common :gid="doc._idRel2"></dm_list_group_common>
+      <dm_list_group_common :groupId="doc._idRel2"></dm_list_group_common>
     </div>
   </div>
 </template>
@@ -54,23 +63,45 @@ export default {
   },
   data() {
     return {
+
+
+
+
       isShowChildren: false,
+
     };
   },
   computed: {
+    //卡片组件名
+    comCard: function () {
 
+      let comCard = lodash.get(DYDICT.dictDataType, `${this.dataTypeP}.comCard`);
+      comCard = comCard || "dm_card_data_normal"
+      return comCard;
+    },
+    icon: function () {
+      return lodash.get(DYDICT.dictDataType, `${this.dataTypeP}.icon`, "el-icon-top-right");
+    },
+    iconChildren: function () {
+      return lodash.get(DYDICT.dictDataType, `${this.doc.dataType}.icon`, "el-icon-top-right");
+    }
 
   },
 
   methods: {
-    //函数：{000函数}
+
+
+    //函数：{跳转详情页函数}
     getDetailLink: function (doc) {
       let { dataType } = doc
-      let link = "xxxx"
-      if (this.dataTypeP == "group") {//Q1:分组
+      let { dataTypeP } = this
+      let link = `#/detail_data?dataId=${doc._idRel2}`
+      if (dataTypeP == "group") {//Q1:分组
         link = `#/detail_group?groupId=${doc._idRel2}`
-      } else if (this.dataTypeP == "front_demo") { //Q2:前端demo
+      } else if (dataTypeP == "front_demo") { //Q2:前端demo
         link = `#/open/auto_layout?demoId=${doc._idRel2}`
+      } else if (dataTypeP == "url") { //Q3:网址
+        link = `${doc.link}`
       }
       return link
 
@@ -93,23 +124,21 @@ export default {
 
 <style scoped>
 .item-box {
-  border-bottom: 1px #ddd solid;
   background: #fff;
   padding: 5px 0;
   text-align: left;
 }
+.item-box:not(:last-child) {
+  border-bottom: 1px #ddd solid;
+}
 
-/* 小操作按钮 */
-.btn_mimi {
-  font-style: normal;
-  border: 1px #ddd solid;
-  color: #777;
-  border-radius: 5px;
-  padding: 3px 6px;
-  font-size: 12px;
-  text-decoration: none;
-  margin: 0 5px 0 0;
-  background-color: #fff;
+.box_g_icon {
+  border: 1px #ccc solid;
+  width: 28px;
+  height: 16px;
+  line-height: 14px;
+
+  border-radius: 0 5px 0 0;
   cursor: pointer;
 }
 </style>

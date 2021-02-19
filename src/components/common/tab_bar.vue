@@ -55,8 +55,9 @@ export default {
   },
   watch: {
     $route: async function (newVal, oldVal) {
-      let { fullPath } = newVal;
+      let { fullPath, } = newVal;
       this.activeTab(fullPath); //调用：{聚焦tab函数}
+
     },
     // immediate: true,
     deep: true,
@@ -64,6 +65,21 @@ export default {
   methods: {
     //函数：{聚焦tab函数}
     activeTab: async function (fullPath) {
+      let { name } = this.$route;
+
+      if (name == "search_result_for_group") {//如果是搜索结果页的特殊处理--待优化，可合并到下方
+        let existObj = this.arrTabs.find(d => d.name == "search_result_for_group")
+        if (existObj) {
+          existObj.fullPath = fullPath//修改tab地址
+        } else {
+          this.arrTabs.push({ title: "搜索结果", fullPath, name });//加入新tab
+        }
+        this.editableTabsValue = fullPath;//聚焦
+        return
+      }
+
+
+
       let target = this.arrTabs.find((d) => d.fullPath == fullPath); //当前路由匹配的tab
       if (target) {
       } else {
@@ -79,7 +95,7 @@ export default {
       }
       console.log(`this.$route:###`, this.$route);
 
-      this.editableTabsValue = fullPath;
+      this.editableTabsValue = fullPath;//聚焦
     },
     //函数：{tab点击函数}
     fnTabClick: async function (vmTab) {
