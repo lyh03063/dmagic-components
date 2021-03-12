@@ -49,6 +49,7 @@
             v-if="item.uiType == 'slot'"
             :name="item.slot"
             :data="$data"
+            :props="$props"
           ></slot>
           <!--组件形式，配置ref用于外部控制-->
           <component
@@ -58,6 +59,7 @@
             :ref="item.ref"
             @list-event-in="comListEventIn"
             :data="$data"
+            :props="$props"
           ></component>
           <a
             class="MR10"

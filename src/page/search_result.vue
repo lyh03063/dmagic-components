@@ -20,11 +20,7 @@
             v-for="doc in dataResult[item.name].list"
             :key="doc._id"
           >
-            <a
-              class="n-a"
-              :href="'#/detail_data?dataId=' + doc._id"
-              target="_blank"
-            >
+            <a class="n-a" :href="getLink(doc)" target="_blank">
               <span>{{ getText(doc) }}</span>
               <span style="color: red">{{ getHighLightText(doc) }}</span>
               <span>{{ getEndText(doc) }}</span>
@@ -50,7 +46,7 @@ let arrType = [
   "task"
 ];
 export default {
-  name:"search_result",
+  name: "search_result",
   mixins: [MIX.base],
   data() {
     return {
@@ -87,6 +83,25 @@ export default {
     //函数：{获取末尾文本的函数}
     getEndText(doc) {
       return doc.title.substr(this.endIndex);
+    },
+    //函数：{获取链接地址函数}
+    getLink(doc) {
+     let arrTypeGoLink = ["url"]
+      let link = '#/detail_data?dataId=' + doc._id
+      if (doc.link && arrTypeGoLink.includes(doc._dataType)) {
+        debugger
+        link = doc.link
+      }
+
+      if(doc._dataType=="front_demo"){
+
+        if(doc.link){
+          link = doc.link
+        }else{
+            link = `#/open/auto_layout?demoId=${doc._id}`
+        }
+      }
+      return link
     },
     //函数：{获取列表函数}
     async getList() {

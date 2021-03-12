@@ -1,13 +1,14 @@
 <template>
-  <div class style="padding:20px">
+  <div class style="padding: 20px">
     <dm_debug_list>
       <dm_debug_item v-model="listData" text="listData" />
     </dm_debug_list>
     <h1 class="FS24 TAC111">
-      {{groupDoc.title}}
+      {{ groupDoc.title }}
       <span class="FS14">
         【总分：
-        <span class="C_f30">{{scoreAverage}}</span>】
+        <span class="C_f30">{{ scoreAverage }}</span
+        >】
       </span>
 
       <a
@@ -15,7 +16,8 @@
         class="FS12 n-a FR"
         :href="`#/study_home/detail_group?groupId=${this.groupId}`"
         v-if="$power('groupDataList.all.modify')"
-      >编辑</a>
+        >编辑</a
+      >
       <!-- <el-button plain @click="getDataList" size="mini">刷新</el-button> -->
     </h1>
     <dm_loading height="100" v-if="!listData"></dm_loading>
@@ -27,9 +29,14 @@
             class="FS12"
             :href="`#/study_home/detail_group?groupId=${docBig.targetDoc._id}`"
             v-if="$power('groupDataList.all.modify')"
-          >编辑</a>
+            >编辑</a
+          >
         </template>
-        <dm_list_flex_res class="MT10" :list="docBig.sonList" #default="{item:docSmall}">
+        <dm_list_flex_res
+          class="MT10"
+          :list="docBig.sonList"
+          #default="{ item: docSmall }"
+        >
           <el-link
             class="small_group_link"
             type="primary"
@@ -39,11 +46,19 @@
             <el-card shadow="hover" :body-style="{ padding: '10px' }">
               <el-row :gutter="10" type="flex">
                 <el-col>
-                  <p class="FS14">{{docSmall.targetDoc.title}}</p>
+                  <p class="FS14">{{ docSmall.targetDoc.title }}</p>
 
-                  <p class="FS12 C_999">数量：{{docSmall.targetDoc.countData}}</p>
+                  <p class="FS12 C_999">
+                    数量：{{ docSmall.targetDoc.countData }}
+                  </p>
                 </el-col>
-                <el-col style="width:70px" v-if="docSmall.targetDoc.dataType=='note'">
+                <el-col
+                  style="width: 70px"
+                  v-if="
+                    docSmall.targetDoc.dataType == 'note' ||
+                    docSmall.targetDoc.dataType == 'vedio'
+                  "
+                >
                   <el-progress
                     type="circle"
                     :percentage="formatScore(docSmall)"
@@ -88,7 +103,7 @@ export default {
 
       //拼接{需要查询分数的分组id}-取二级数据
       this.listData.forEach(docBig => {
-        let { sonList=[] } = docBig;
+        let { sonList = [] } = docBig;
         let arrGroupIdNeed = sonList.map(docSmall => docSmall._idRel2);
         arrGroupId.push(...arrGroupIdNeed);
       });
@@ -162,8 +177,8 @@ export default {
       this.groupDoc = data.doc;
       this.componentName = `detail_group_${this.groupDoc.dataType}`;
       document.title = this.groupDoc.title; //修改浏览器标题栏文字
-      let iconSrc=this.groupDoc.iconSrc||`http://qn-dmagic.dmagic.cn/icon_study.png`
-        util.changeFavicon(iconSrc)//函数：{改变网页标题图标的函数}
+      let iconSrc = this.groupDoc.iconSrc || `http://qn-dmagic.dmagic.cn/icon_study.png`
+      util.changeFavicon(iconSrc)//函数：{改变网页标题图标的函数}
 
       this.ready = true;
     },

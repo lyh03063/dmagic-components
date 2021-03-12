@@ -53,7 +53,7 @@
           <el-button plain @click="isShowEditJs = false" size="mini"
             >关闭</el-button
           >
-          <el-button plain @click="saveACode" size="mini">保存</el-button>
+          <el-button plain @click="saveACode" size="mini" :class="{not_save:notSave}">保存</el-button>
         </template>
       </dm_js_code_curr>
     </div>
@@ -98,7 +98,8 @@ export default {
       cfCode: {
         cfCodeMirror: {}
 
-      }
+      },
+      notSave:false//未保存
     };
   },
   computed: {
@@ -117,6 +118,15 @@ export default {
 
 
   },
+  watch: {
+    "docComplete.jsCode": {
+      handler(newVal, oldVal) {
+        console.log('docComplete.jsCode');
+        this.notSave=true;//“未保存”状态
+      },
+    
+    }
+  },
   methods: {
 
     //函数：{选择函数}
@@ -134,17 +144,18 @@ export default {
 
       }
       this.ajaxSaveACode()//调用：{ajax保存一块代码函数}
+      this.notSave=false;//清除“未保存”状态
 
 
     },
     //函数：{ajax保存一块代码函数}
     ajaxSaveACode: async function () {
-      let { jsCode,objVCom } = this.docComplete
+      let { jsCode, objVCom } = this.docComplete
       await axios({//修改接口-当前父任务
         method: "post", url: `${PUB.domain}/info/commonModify`,
         data: {
           _id: this.docComplete._id, _systemId: "$all",
-          _data: { jsCode,objVCom }
+          _data: { jsCode, objVCom }
         }
       });
       this.$message.success('保存成功!');
@@ -186,4 +197,7 @@ export default {
 </script>
 
 <style scoped>
+.not_save{
+  outline: 2px #f60 solid;
+}
 </style>

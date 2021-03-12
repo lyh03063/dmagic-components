@@ -38,7 +38,7 @@
       </span>
     </el-popover>
     <!-- {{groupDoc}} -->
-    <!-- Q1:如果存在dataType是group-->
+    <!-- Q1:如果dataType是group-->
     <a
       class="MR8"
       target="_blank"
@@ -47,13 +47,19 @@
     >
       <el-button size="mini">查看分组</el-button>
     </a>
-    <!--Q2: 如果不存在dataType是link或front_demo-->
+    <!--Q2: 如果dataType是link或front_demo-->
     <template v-else-if="groupDoc.dataType=='front_demo'||groupDoc.dataType=='url'">
       <a class="ML8 MR8" target="_blank" :href="linkDemo(doc)">
         <el-button size="mini">打开链接</el-button>
       </a>
     </template>
-    <!-- Q3:其他情况-->
+    <!--Q3: 如果dataType是js文件-->
+    <template v-else-if="groupDoc.dataType=='js_file'">
+      <a class="ML8 MR8" target="_blank" :href="`#/system/sys_api/js_file_edit?jsFileId=${doc._idRel2}`">
+        <el-button size="mini">编辑js</el-button>
+      </a>
+    </template>
+    <!-- Q4:其他情况-->
     <template v-else>
       <el-button icon="el-icon-notebook-2 " circle @click="emit('detail')" size="mini"></el-button>
       <a class="ML8 MR8" target="_blank" :href="`#/detail_data?dataId=${doc._idRel2}`">

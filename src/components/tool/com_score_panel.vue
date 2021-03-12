@@ -32,7 +32,7 @@ export default {
 
   },
   //用于列表模糊查询的组件
-  props: ["data"],
+  props: ["data","props"],//接收data和props
   data() {
     return {
       listIndex: "",
@@ -51,10 +51,6 @@ export default {
     async filterData() {
       // this.$emit("searchList");
       this.$emit("list-event-in", { eventType: "filterDataByFamiliarity" });
-
-
-
-
     },
   },
   created() {
@@ -62,7 +58,9 @@ export default {
     this.listIndex = `list_${_dataType}`
     if (_dataType == "relation") {//如果是关系表！！！
       this.idKey = "_idRel2"
-      this.listIndex = `detail_group_note`
+      //****从外部传来的prop中获取到listIndex-非分组列表的也可以按此规则进行优化！！！
+      let listIndex = lodash.get(this.props, `cf.listIndex`,`detail_group_note`);
+      this.listIndex = listIndex
     }
   }
 };

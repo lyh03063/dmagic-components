@@ -28,21 +28,21 @@ util.setVuexDefault()//调用：{设置vuex函数}
 
 import main from './main.vue'
 
-let eleApp= document.querySelector("#app")
+let eleApp = document.querySelector("#app")
 
 
-if(eleApp){
-let configVue = {
-    el: '#app',
-    render: h => h(main),
-}
+if (eleApp) {
+    let configVue = {
+        el: '#app',
+        render: h => h(main),
+    }
 
-if (typeof router == 'undefined') {//Q1：路由不存在
-    let router = new VueRouter({ routes: [] })
-    configVue.router = router
-} else {//Q2：路由存在
-    configVue.router = router
-}
+    if (typeof router == 'undefined') {//Q1：路由不存在
+        let router = new VueRouter({ routes: [] })
+        configVue.router = router
+    } else {//Q2：路由存在
+        configVue.router = router
+    }
 
-new Vue(configVue)//创建vue实例
+    new Vue(configVue)//创建vue实例
 }

@@ -1,24 +1,53 @@
 <template>
-  <div class="out">
+  <div class="out" style="max-width:calc(100vw - 320px)">
     <dm_debug_list>
       <dm_debug_item v-model="arrTabs" />
     </dm_debug_list>
 
     <!-- {{ editableTabsValue }} -->
+    <!-- closable -->
+       <!-- editable  -->
     <el-tabs
       v-model="editableTabsValue"
       type="card"
-      closable
       @edit="handleTabsEdit"
       @tab-click="fnTabClick"
     >
+      <!-- :label="item.title" -->
       <el-tab-pane
-        :key="item.name"
-        v-for="item in arrTabs"
-        :label="item.title"
+        :key="item.fullPath"
+        v-for="(item, index) in arrTabs"
         :name="item.fullPath"
         :fullPath="item.fullPath"
+       
       >
+        <span slot="label" @mouseenter="indexMouseenter = index">
+          <div class="">
+            
+            <!--下拉框-->
+            <el-dropdown
+              @command="handleCommand"
+               placement="bottom"
+              
+             
+            >
+            <div class="" >  {{ item.title }}</div>
+          
+              <!-- <span class="C_999">
+                <i class="el-icon-caret-bottom"></i>
+              </span> -->
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item command="deleteSelf">删除</el-dropdown-item>
+                <el-dropdown-item command="deleteOthers"
+                  >删除其他tab</el-dropdown-item
+                >
+                <el-dropdown-item command="deleteAll"
+                  >删除所有tab</el-dropdown-item
+                >
+              </el-dropdown-menu>
+            </el-dropdown>
+          </div>
+        </span>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -37,6 +66,7 @@ export default {
   },
   data() {
     return {
+      indexMouseenter: null,//鼠标进入的项
       editableTabsValue: "/system/sys_chendongxu/manage/list_common?type=goods",
       arrTabs: [
         // {
@@ -50,7 +80,6 @@ export default {
         //   fullPath: "/system/sys_chendongxu/manage/list_common?type=goods_category",
         // },
       ],
-      tabIndex: 2,
     };
   },
   watch: {
@@ -63,6 +92,22 @@ export default {
     deep: true,
   },
   methods: {
+    handleCommand(command) {
+
+      if ((command == "deleteSelf")) {//Q1：{指令}}是删除当前tab
+        this.arrTabs.splice(this.indexMouseenter, 1)
+
+      } else if ((command == "deleteAll")) {//Q2：{指令}}是删除所有
+        this.arrTabs = []
+
+      } else if ((command == "deleteOthers")) {//Q3：{指令}}是删删除其他tab
+      let arrSelf=this.arrTabs.splice(this.indexMouseenter, 1)
+      this.arrTabs = []
+        this.arrTabs = arrSelf
+
+      }
+      util.setLocalStorageObj(PUB.menuTabBarKey, this.arrTabs); //调用：{设置一个对象到LocalStorage}
+    },
     //函数：{聚焦tab函数}
     activeTab: async function (fullPath) {
       let { name } = this.$route;
