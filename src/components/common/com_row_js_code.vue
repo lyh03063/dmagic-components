@@ -6,13 +6,44 @@
         <span class="C_999">[{{ countRelJs }}]</span>
       </div>
       <div class>
-        <span class="C_3a0 FS14">{{ docComplete.title }}</span>
+        <div class="add-tag " v-if="titleEditing">
+          <span>{{ docComplete.title }}</span>
+          <input
+            placeholder="输入标题"
+            v-model="docComplete.title"
+            @change="saveTitle"
+            @blur="titleEditing = false"
+            v-focus
+          />
+        </div>
+        <span class="C_3a0 FS14" @click="goEditTitle" v-else>{{
+          docComplete.title
+        }}</span>
+
+        <!-- <dm_edit_div @input="saveTitle"  v-model="docComplete.title" ></dm_edit_div> -->
+
+        <!-- <div class="my-input" contenteditable="true" @keyup="saveTitle"></div> -->
 
         <span v-if="docComplete.jsCode" class="C_999 FS12"
           >：[{{ bytes(docComplete.jsCode) }}b]</span
         >
-        <span v-if="docComplete.desc" class="C_333 FS14"
-          >：{{ docComplete.desc }}</span
+        <div class="add-tag " v-if="descEditing">
+          <span>{{ docComplete.desc }}</span>
+          <input
+            placeholder="输入描述"
+            v-model="docComplete.desc"
+            @change="saveDesc"
+            @blur="descEditing = false"
+            v-focus
+          />
+        </div>
+        <!-- v-if="docComplete.desc" -->
+        <span v-else  class="C_333 FS14" @click="goEditDesc"
+          >   
+          <span class="C_666" v-if="docComplete.desc">{{ docComplete.desc }}</span>
+           <span class="C_ccc" v-else>暂无描述</span>
+           
+           </span
         >
 
         <el-link
@@ -53,7 +84,13 @@
           <el-button plain @click="isShowEditJs = false" size="mini"
             >关闭</el-button
           >
-          <el-button plain @click="saveACode" size="mini" :class="{not_save:notSave}">保存</el-button>
+          <el-button
+            plain
+            @click="saveACode"
+            size="mini"
+            :class="{ not_save: notSave }"
+            >保存</el-button
+          >
         </template>
       </dm_js_code_curr>
     </div>
@@ -92,6 +129,8 @@ export default {
   data() {
 
     return {
+      descEditing: false,//编辑描述中
+      titleEditing: false,//编辑标题中
       vm_select_list_data: null,
       isShowEditJs: false,//是否显示js代码块编辑表单
       isShowSon: false,
@@ -99,7 +138,7 @@ export default {
         cfCodeMirror: {}
 
       },
-      notSave:false//未保存
+      notSave: false//未保存
     };
   },
   computed: {
@@ -122,13 +161,44 @@ export default {
     "docComplete.jsCode": {
       handler(newVal, oldVal) {
         console.log('docComplete.jsCode');
-        this.notSave=true;//“未保存”状态
+        this.notSave = true;//“未保存”状态
       },
-    
+
     }
   },
   methods: {
+    //函数：{ajax保存描述函数}
+    saveDesc: async function (ev) {
+      await axios({//修改接口-当前父任务
+        method: "post", url: `${PUB.domain}/info/commonModify`,
+        data: {
+          _id: this.docComplete._id, _systemId: "$all",
+          _data: { desc: this.docComplete.desc, }
+        }
+      });
+      this.$message.success('保存描述成功!');
 
+    },
+    //函数：{切换编辑代码块描述函数}
+    goEditDesc: async function () {
+      this.descEditing = true;
+    },
+    //函数：{ajax保存标题函数}
+    saveTitle: async function (ev) {
+      await axios({//修改接口-当前父任务
+        method: "post", url: `${PUB.domain}/info/commonModify`,
+        data: {
+          _id: this.docComplete._id, _systemId: "$all",
+          _data: { title: this.docComplete.title, }
+        }
+      });
+      this.$message.success('保存标题成功!');
+
+    },
+    //函数：{切换编辑代码块标题函数}
+    goEditTitle: async function () {
+      this.titleEditing = true;
+    },
     //函数：{选择函数}
     fnSelect: async function () {
       this.vm_select_list_data.showDialog()//打开选择列表弹窗
@@ -144,7 +214,7 @@ export default {
 
       }
       this.ajaxSaveACode()//调用：{ajax保存一块代码函数}
-      this.notSave=false;//清除“未保存”状态
+      this.notSave = false;//清除“未保存”状态
 
 
     },
@@ -196,8 +266,45 @@ export default {
 };
 </script>
 
-<style scoped>
-.not_save{
+<style scoped lang="scss">
+.not_save {
   outline: 2px #f60 solid;
+}
+
+.my-input {
+  color: #66757f;
+  display: inline-block;
+  height: 22px;
+  min-width: 20px;
+  max-width: 100px;
+}
+
+.add-tag {
+  display: inline-block;
+  color: #333;
+  border: 1px #ddd solid;
+  padding: 0;
+  position: relative;
+
+  span {
+    display: inline-block;
+    min-width: 124px;
+    height: 100%;
+    padding: 0 20px;
+  }
+
+  input {
+    display: inline-block;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    caret-color: #426bf2;
+    ::-webkit-input-placeholder {
+      color: #aaa;
+    }
+    border-style: none;
+    padding: 0 5px;
+  }
 }
 </style>

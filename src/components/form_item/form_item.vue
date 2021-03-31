@@ -4,12 +4,17 @@
         <dm_debug_item v-model="valueNeed" />
     </dm_debug_list>-->
     <!--component自定义组件-用于派成的权限树--->
-    <component
+    <div class=""  v-if="item.component" >
+  
+      <component
       :is="item.component"
       v-model="valueNeed[item.prop]"
       :formData="valueNeed"
-      v-if="item.component"
+      v-bind="item.cfAddon"
+      :options="cf.options"
     ></component>
+    </div>
+    
     <!--slot自定义组件-注意是isReadyFormData为真时才开始渲染-->
     <slot :name="item.slot" :formData="valueNeed" v-else-if="item.slot"></slot>
     <!--下拉框-->

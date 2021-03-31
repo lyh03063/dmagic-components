@@ -13,7 +13,7 @@
                 style="width: 160px"
                 @keypress.enter.native="searchData"
                 placeholder="专题内搜索"
-                v-model="keyword"
+                v-model.trim="keyword"
               >
                 <i
                   slot="suffix"
@@ -22,6 +22,15 @@
                 ></i>
               </el-input>
             </div>
+            <!-- href="javascript:;"  @click="searchTask" -->
+            <a
+              class="MR10"
+              style="color: #fff"
+              target="_blank"
+              :href="`#group_task_panel/doing?gid=${$route.params.gid}`"
+              >任务看板</a
+            >
+
             <a
               class="MR10"
               target="_blank"
@@ -111,20 +120,11 @@ export default {
     //函数：{更新搜索缓存函数}
     async updateSearchCache() {
       const loading = this.$loading({//打开全局锁屏loading
-        lock: true,
-        text: "执行中",
-        spinner: "el-icon-loading",
-        background: "rgba(0, 0, 0, 0.7)"
+        lock: true, text: "执行中", spinner: "el-icon-loading", background: "rgba(0, 0, 0, 0.7)"
       });
-
-      let { data } = await axios({
-        //请求接口
-        method: "post",
-        url: `${PUB.domain}/info/updateArrAncestors`,
-        data: {
-          _systemId: "sys_api",
-          gid: this.groupId,
-        },
+      let { data } = await axios({ //请求接口
+        method: "post", url: `${PUB.domain}/info/updateArrAncestors`,
+        data: { _systemId: "sys_api", gid: this.groupId, },
       });
       loading.close(); //关闭loding
       this.$message.success('更新搜索缓存成功');
@@ -137,6 +137,12 @@ export default {
       this.$router.push({ name: "search_result_for_group", query: { keyword: this.keyword } });
       // location.href = `#/study_home/search_result?keyword=${this.keyword}`;
     },
+
+    //函数：{查询任务函数}
+    searchTask() {
+      this.$router.push({ name: "group_task_panel", query: {} });
+      // location.href = `#/study_home/search_result?keyword=${this.keyword}`;
+    },
     //函数：{设置聚焦菜单函数}
     async setActiveMenu() {
       this.routerKey = document.URL; //路由key，确保路由能响应
@@ -145,16 +151,6 @@ export default {
     },
     //函数：{分组数据转换菜单数据函数}
     convertMenuData(list) {
-
-
-
-
-
-
-
-
-
-
 
       return list.map((doc) => {
         let { targetDoc, sonList } = doc;
@@ -178,29 +174,16 @@ export default {
     },
     //函数：{ajax获取列表函数}
     async getDataList() {
-      let {
-        data: { list },
-      } = await axios({
-        //请求接口
-        method: "post",
-        url: `${PUB.domain}/info/getCommonGroupList`,
-        data: {
-          _systemId: "$all",
-          groupId: this.groupId,
-          arrType: ["group"],
-        },
+      let { data: { list }, } = await axios({ //请求接口
+        method: "post", url: `${PUB.domain}/info/getCommonGroupList`,
+        data: { _systemId: "$all", groupId: this.groupId, arrType: ["group"], },
       });
       this.listMenu = this.convertMenuData(list); //调用：{分组数据转换菜单数据函数}-递归
     },
     async getGroupDoc() {
-      let { data } = await axios({
-        //请求接口
-        method: "post",
-        url: `${PUB.domain}/info/commonDetail`,
-        data: {
-          _id: this.groupId,
-          _systemId: "$all",
-        }, //传递参数
+      let { data } = await axios({//请求接口
+        method: "post", url: `${PUB.domain}/info/commonDetail`,
+        data: { _id: this.groupId, _systemId: "$all", }, //传递参数
       });
       this.groupDoc = data.doc;
       document.title = this.groupDoc.title; //修改浏览器标题栏文字
@@ -208,9 +191,6 @@ export default {
 
       //修改PUB._paramAjaxAddon***
       PUB._paramAjaxAddon = { _systemId: this.systemId || "sys_apiaaaa" };
-
-
-
       if (this.groupDoc.iconSrc) {
         //如果{icon地址}存在
         util.changeFavicon(this.groupDoc.iconSrc); //函数：{改变网页标题图标的函数}

@@ -114,7 +114,6 @@ export default {
       }
       if (this.$route.params.gid) {//如果带分组范围id，补充参数
         params.gIdRange = this.$route.params.gid
-
       }
       this.keywordData = keyword;
       let {

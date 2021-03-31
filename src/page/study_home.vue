@@ -44,7 +44,7 @@
           style="width:160px"
           @keypress.enter.native="searchData"
           placeholder="请输入内容"
-          v-model="keyword"
+          v-model.trim="keyword"
         >
           <i slot="suffix" class="Cur1 el-input__icon el-icon-search" @click="searchData"></i>
         </el-input>
@@ -104,7 +104,8 @@ export default {
   methods: {
     //函数：{关键词查询函数}
     searchData() {
-      location.href = `#/study_home/search_result?keyword=${this.keyword}`;
+    
+       this.$router.push({ name: "study_search_result",query:{keyword:this.keyword} });
     },
     //函数：{设置聚焦菜单函数}
     setActiveMenu() {

@@ -161,7 +161,7 @@ import com_score_panel from '@/components/tool/com_score_panel.vue'
 
 import dm_familiarity_select from '@/components/tool/familiarity_select.vue'
 import dm_note_familiarity_select from '@/components/tool/note_familiarity_select.vue'
-
+import dm_task_panel from '@/components/tool/task_panel.vue'
 
 import dm_card_note_normal from '@/components/card/note_normal.vue'
 import dm_card_note_history from '@/components/card/note_history.vue'
@@ -179,6 +179,9 @@ import dm_card_js_code_often from '@/components/card/js_code_often.vue'
 import dm_card_front_demo_often from '@/components/card/front_demo_often.vue'
 //列-完成度显示
 import com_complete from '@/components/common/com_complete.vue'
+import dm_percent_radio from '@/components/form_item/percent_radio.vue'
+import dm_grid_radio from '@/components/form_item/grid_radio.vue'
+import dm_priority_radio from '@/components/form_item/priority_radio.vue'
 //列-图片预览
 import com_imagePreview from '@/components/common/com_imagePreview.vue'
 //查询表单-完成度
@@ -250,6 +253,7 @@ import pannel_list_article_date from '@/components/site/pannel_list_article_date
 import dm_left_menu from '@/components/common/left_menu'
 import dm_user_role from "@/components/common/role"
 import dm_video_player from "@/components/common/video_player"
+import dm_edit_div from "@/components/common/edit_div"
 
 
 
@@ -262,6 +266,7 @@ import study_home from '@/page/study_home'
 import study_user from '@/page/study_user'
 import dm_system from '@/page/system/system'
 import dm_manage from '@/page/system/manage'
+import dm_group_task_panel from '@/page/group_task_panel'
 
 import site_home from '@/page/site/home.vue'
 import site_list_course from '@/page/site/list_course.vue'
@@ -319,14 +324,15 @@ const Components = {
   dm_popper_html_pval, dm_popper_html_content,
   dm_js_file_edit, dm_js_code_edit, dm_js_code_curr, dm_css_code_curr,
   dm_html_code_curr,dm_score_panel, dm_row_css_code,dm_css_code_edit,
-  dm_familiarity_select, dm_note_familiarity_select,
+  dm_familiarity_select, dm_note_familiarity_select,dm_task_panel,dm_group_task_panel,
   com_score_panel, dm_card_note_normal, dm_card_note_history, dm_card_note_often,
   dm_card_front_demo, dm_card_data_version, dm_card_data_collect,dm_card_data_g,
   dm_card_data_task,dm_card_data_normal,
   dm_card_js_code_hs,dm_card_auto_layout_hs,  dm_card_js_code_often,dm_card_front_demo_often,
   dm_list_visit_history, dm_list_visit_often, dm_list_data_version,
    dm_list_data_collect,dm_list_group_common,
-  com_complete, com_imagePreview, com_item_complete_search, com_f_item_listSpecPrice, com_c_item_payStatus,
+  com_complete,  dm_percent_radio,dm_grid_radio,dm_priority_radio,
+   com_imagePreview, com_item_complete_search, com_f_item_listSpecPrice, com_c_item_payStatus,
   com_listGoods, com_addressObj, com_column_operate_rel_data, com_column_operate_entity_data,
   com_c_operate_entity_2,com_c_countSonTask,com_c_relData,
   com_c_sonData, com_c_sonTaskGId, com_c_sonNoteGId, com_c_g_person_file, com_c_g_person_url,
@@ -342,7 +348,7 @@ const Components = {
   search_result, detail_g_card_link, detail_group_g_card, group_home,
   study_home, study_user, dm_manage,
   dm_system, site_home, site_list_course, site_main,
-  dm_login, dm_manage_base
+  dm_login, dm_manage_base,dm_edit_div
 }
 
 

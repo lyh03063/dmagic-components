@@ -4,7 +4,8 @@
       <dm_debug_item v-model="docJs" />
     </dm_debug_list>
     <div class="H46 DPF BC_333 PL15 MB5" style="background:rgb(84, 92, 100);">
-      <div class="LH40 C_fff FS20 MR20 FX1">{{docJs.title}}</div>
+      <div class="LH40 C_fff FS20 MR20 ">{{docJs.title}}</div>
+      <div class="LH40 C_ddd FS20 MR20 FX1">{{docJs.fileName}}</div>
       <div class="PT8 PR15">
         <el-button plain @click="save" size="mini">保存</el-button>
         <el-button plain @click="buildDebugJs" size="mini">生成测试文件</el-button>

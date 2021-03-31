@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <!--新增数据表单弹窗-->
     <el-dialog
       class="n-el-dialog"
@@ -12,17 +11,55 @@
       :close-on-click-modal="false"
       :append-to-body="true"
     >
-   
       <div class>
         <dm_debug_list level-up="2">
           <dm_debug_item v-model="cf" text="配置" />
           <dm_debug_item v-model="formAdd" text="新增表单的绑定数据" />
-          <dm_debug_item v-model="cf.formDataAddInit" text="新增表单的初始数据" />
+          <dm_debug_item
+            v-model="cf.formDataAddInit"
+            text="新增表单的初始数据"
+          />
         </dm_debug_list>
       </div>
 
+      <div class="PS4 W100" style="left: 87px; top: -36px">
+        <el-popover
+          placement="top-start"
+          width="200"
+          trigger="hover"
+          :open-delay="300"
+        >
+          <!--候选值列表-->
+          <a class="MR6" @click="setTempData(0)" href="javascript:;"
+            >0.3h-已完成
+          </a>
+          <br />
+          <a class="MR6" href="javascript:;" @click="setTempData(1)"
+            >0.5h-已完成
+          </a>
+          <br />
+          <a class="MR6" href="javascript:;" @click="setTempData(2)"
+            >1h-已完成 </a
+          ><br />
+          <a class="MR6" href="javascript:;" @click="setTempData(3)"
+            >1h-未完成 </a
+          ><br />
+          <a class="MR6" href="javascript:;" @click="setTempData(4)"
+            >无时间-未完成
+          </a>
+          <el-button slot="reference" icon="el-icon-more" size="mini"
+            >数据模板</el-button
+          >
+        </el-popover>
+      </div>
+
       <!--表单提示语-->
-      <div class v-html="$lodash.get(cf.cfTips, `text`)" v-if="cf.cfTips" :style="getTipsStyle()"></div>
+      <div
+        class
+        v-html="$lodash.get(cf.cfTips, `text`)"
+        v-if="cf.cfTips"
+        :style="getTipsStyle()"
+      ></div>
       <dm_dynamic_form
         v-model="IN_formAdd"
         :cf="cf.cfFormAdd"
@@ -30,7 +67,10 @@
         @cancel="closeDialogAddFun"
         :needDeleteId="true"
       >
-        <template v-slot:[item.slot]="{formData}" v-for="item in cf.cfFormAdd.formItems">
+        <template
+          v-slot:[item.slot]="{ formData }"
+          v-for="item in cf.cfFormAdd.formItems"
+        >
           <!--根据cf.formItems循环输出插槽--新增修改表单弹窗-->
           <slot :name="item.slot" :formData="formData" v-if="item.slot"></slot>
         </template>
@@ -95,6 +135,53 @@ export default {
     }
   },
   methods: {
+    //函数：{设置表单模板数据函数}
+    setTempData: function (i) {
+
+      let arrTemp = [{
+        "actualTime": 0.3,
+        "predictTime": 0.3,
+        "personCharge": ["13691916429"],
+        "complete": 1,
+        "prior": 3,
+        "taskType": 1,
+        "title": "xxxx",
+      },
+
+      {
+        "actualTime": 0.5,
+        "predictTime": 0.5,
+        "personCharge": ["13691916429"],
+        "complete": 1,
+        "prior": 3,
+        "taskType": 1,
+        "title": "xxxx",
+      }, {
+        "actualTime": 1,
+        "predictTime": 1,
+        "personCharge": ["13691916429"],
+        "complete": 1,
+        "prior": 3,
+        "taskType": 1,
+        "title": "xxxx",
+      }, {
+        "actualTime": 1,
+        "predictTime": 1,
+        "personCharge": ["13691916429"],
+        "prior": 2,
+        "taskType": 1,
+        "title": "xxxx",
+      }, {
+       
+        "personCharge": ["13691916429"],
+        "prior": 3,
+        "taskType": 1,
+        "title": "xxxx",
+      }
+      ]
+      this.IN_formAdd = { ...this.IN_formAdd, ...arrTemp[i] }
+
+    },
     handelItem: util.handelItem,
     //TODO:ajax新增数据的函数
     async addData(_data) {

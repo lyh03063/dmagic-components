@@ -1,12 +1,12 @@
 <template>
-  <div class="out" style="max-width:calc(100vw - 320px)">
+  <div class="out" style="max-width: calc(100vw - 320px)">
     <dm_debug_list>
       <dm_debug_item v-model="arrTabs" />
     </dm_debug_list>
 
     <!-- {{ editableTabsValue }} -->
     <!-- closable -->
-       <!-- editable  -->
+    <!-- editable  -->
     <el-tabs
       v-model="editableTabsValue"
       type="card"
@@ -19,23 +19,18 @@
         v-for="(item, index) in arrTabs"
         :name="item.fullPath"
         :fullPath="item.fullPath"
-       
       >
         <span slot="label" @mouseenter="indexMouseenter = index">
-          <div class="">
-            
-            <!--下拉框-->
+          <div @contextmenu.prevent="rightClick(index)">
+            <!--下拉框trigger配置一个无效事件****-->
             <el-dropdown
               @command="handleCommand"
-               placement="bottom"
-              
-             
+              placement="bottom"
+              trigger="xxxx"
+              :ref="`dropdown_${index}`"
             >
-            <div class="" >  {{ item.title }}</div>
-          
-              <!-- <span class="C_999">
-                <i class="el-icon-caret-bottom"></i>
-              </span> -->
+              <div class="">{{ item.title }}</div>
+
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item command="deleteSelf">删除</el-dropdown-item>
                 <el-dropdown-item command="deleteOthers"
@@ -92,6 +87,12 @@ export default {
     deep: true,
   },
   methods: {
+    rightClick(index) {
+      // alert(`rightClick`);
+      let comDopdown = this.$refs[`dropdown_${index}`][0]//注意这里要加[0]
+      // console.log(`com:`, com);
+      comDopdown.show();     // 这步最关键，让下拉菜单显示
+    },
     handleCommand(command) {
 
       if ((command == "deleteSelf")) {//Q1：{指令}}是删除当前tab
@@ -101,8 +102,8 @@ export default {
         this.arrTabs = []
 
       } else if ((command == "deleteOthers")) {//Q3：{指令}}是删删除其他tab
-      let arrSelf=this.arrTabs.splice(this.indexMouseenter, 1)
-      this.arrTabs = []
+        let arrSelf = this.arrTabs.splice(this.indexMouseenter, 1)
+        this.arrTabs = []
         this.arrTabs = arrSelf
 
       }
@@ -113,11 +114,20 @@ export default {
       let { name } = this.$route;
 
       if (name == "search_result_for_group") {//如果是搜索结果页的特殊处理--待优化，可合并到下方
-        let existObj = this.arrTabs.find(d => d.name == "search_result_for_group")
+        let existObj = this.arrTabs.find(d => d.name == name)
         if (existObj) {
           existObj.fullPath = fullPath//修改tab地址
         } else {
           this.arrTabs.push({ title: "搜索结果", fullPath, name });//加入新tab
+        }
+        this.editableTabsValue = fullPath;//聚焦
+        return
+      } else if (name == "group_task_panel") {
+        let existObj = this.arrTabs.find(d => d.name == name)
+        if (existObj) {
+          existObj.fullPath = fullPath//修改tab地址
+        } else {
+          this.arrTabs.push({ title: "任务看板", fullPath, name });//加入新tab
         }
         this.editableTabsValue = fullPath;//聚焦
         return

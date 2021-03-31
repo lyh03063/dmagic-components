@@ -71,8 +71,7 @@ export default {
     //函数：{格式化JS函数}
     formatJs: async function () {
       let CM = this.$refs.codeMCurr.$refs.codeM.codemirror//获取到codemirror对象
-      let codeS = CM.getValue()
-
+   
       let { data } = await axios({//请求接口
         method: "post", url: `${PUB.domain}/formatCode`,
         data: { code: this.valueNeed,type:"js" }

@@ -56,14 +56,15 @@
     </div>
 
     <!-- <h1>{{dataTypeLabel}}详情</h1> -->
-    <div class="detail_box">
+    <div class="detail_box" >
       <!-- 使用v-once指令进行性能优化 -->
       <div
+      ref="detail"
         class
-        v-html="doc._detail"
+        v-html="detailHtml"
         v-highlight
-        v-if="doc._detail"
-        v-once
+        v-if="detailHtml"
+     
       ></div>
       <dm_pannel
         class="MB20"
@@ -180,6 +181,8 @@ export default {
   },
   data() {
     return {
+      detailHtml:null,
+  
       ready: false,//是否准备完毕
       //编辑数据弹窗配置
       cfEditDialog: {
@@ -360,6 +363,7 @@ export default {
         } //传递参数
       });
       this.doc = data.doc;
+      this.detailHtml=this.doc._detail
 
 
       //变量：{ajax添加访客记录函数}
@@ -379,18 +383,11 @@ export default {
       FN.listCFaddItemSystemId(PUB.listCF[`list_${_dataType}`])//调用：{补充_systemId列表字段配置函数}
       /*****************根据数据类型修改弹窗编辑数据组件配置-END*****************/
       this.ready = true;
+     
       //根据关键词请求关联数据的ajax固定参数
       this.paramByKeyword = {
-        _systemId,
-        _id: this.dataId,
-        selectJson: {
-          _id: 1,
-          title: 1,
-          desc: 1,
-          keyword: 1,
-          link: 1,
-          vedio: 1
-        }
+        _systemId, _id: this.dataId,
+        selectJson: { _id: 1, title: 1, desc: 1, keyword: 1, link: 1, vedio: 1 }
       };
       if (keyword) {
         this.ajaxGetNoteList(); //调用：{ajax获取关联笔记列表}
@@ -400,6 +397,8 @@ export default {
         this.ajaxGetJsApiList(); //调用：{ajax获取关联Js-API列表}
         this.ajaxGetVedioList(); //调用：{ajax获取关联视频列表}
       }
+
+      
 
     }
   },

@@ -31,6 +31,7 @@
       @inited="initedListData"
       @single-btn-click="singleEvent"
       @bacth-btn-click="bacthEvent"
+      @after-delete="afterDelete"
       @after-search="afterSearch"
       @list-event-in="handleListEventIn"
       @sort_by_drag="sort_by_drag"
@@ -162,8 +163,9 @@ export default {
     transGroup: async function () {
       if (!this.idTansG) return this.$message.error('分组id必填');
 
+      let arrDataId = []//变量：{实体数据id数组}
       await Promise.all(this.docsSelected.map(async doc => {
-
+        arrDataId.push(doc._idRel2)//数组添加元素：{实体数据id数组}
         //使用ajax方法修改
         await axios({//修改接口-当前父数据
           method: "post", url: `${PUB.domain}/info/commonModify`,
@@ -173,6 +175,15 @@ export default {
         });
 
       }))
+      {
+        axios({
+          //请求接口-批量更新多条数据的父级链条
+          method: "post",
+          url: `${PUB.domain}/info/batchUpdateArrAncestors`,
+          data: { arrDataId } //传递参数
+        });
+      }
+
 
       let dictUpdateRelCount = {
         detail_group_task: {
